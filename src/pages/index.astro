@@ -1,0 +1,105 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import TypingHero from "@components/TypingHero.astro";
+import ContributionGraph from "@components/ContributionGraph.astro";
+import ContactLinks from "@components/ContactLinks.astro";
+import LearningMap from "@components/LearningMap.astro";
+import Section from "@components/Section.astro";
+import Timeline from "@components/Timeline.astro";
+import ProjectCard from "@components/ProjectCard.astro";
+import { profile } from "@data/profile";
+import { news, experiences, publications, awards, skills } from "@data/cv";
+
+const allProjects = (await getCollection("projects"))
+  .filter((item) => item.data.featured)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 4);
+
+const slugFromId = (id: string) => id.replace(/\.md$/, "");
+---
+
+<BaseLayout>
+  <TypingHero />
+
+  <Section title="About Me" eyebrow="Profile">
+    <div class="glass-card prose-card">
+      <p>{profile.bio}</p>
+      <p>
+        I keep this public homepage focused on research, projects, open-source activity, and reproducible artifacts.
+      </p>
+      <div class="tag-list">
+        {profile.interests.map((interest) => <span>{interest}</span>)}
+      </div>
+    </div>
+  </Section>
+
+  <ContactLinks />
+
+  <Section title="News" eyebrow="Recent updates">
+    <div class="news-list">
+      {news.map((item) => (
+        <article>
+          <time>{item.date}</time>
+          <p>{item.text}</p>
+        </article>
+      ))}
+    </div>
+  </Section>
+
+  <Section title="Selected Research and Experience" eyebrow="Timeline">
+    <Timeline items={experiences.slice(0, 5)} />
+  </Section>
+
+  <Section title="Selected Publications and Manuscripts" eyebrow="Research output">
+    <div class="publication-list">
+      {publications.map((item) => (
+        <article class="publication-card">
+          <div>
+            <h3>{item.title}</h3>
+            <p class="muted">{item.role} · {item.status} · {item.year}</p>
+          </div>
+          <div class="tag-list">
+            {item.tags.map((tag) => <span>{tag}</span>)}
+          </div>
+        </article>
+      ))}
+    </div>
+  </Section>
+
+  <ContributionGraph />
+
+  <Section title="Featured Projects" eyebrow="Builds and artifacts">
+    <div class="card-grid">
+      {allProjects.map((item) => <ProjectCard item={item} href={`/projects/${slugFromId(item.id)}/`} />)}
+    </div>
+  </Section>
+
+  <Section title="Learning Map" eyebrow="Knowledge progress">
+    <LearningMap />
+  </Section>
+
+  <Section title="Awards and Skills" eyebrow="Signals">
+    <div class="two-column">
+      <div class="glass-card">
+        <h3>Selected Honors</h3>
+        <ul class="clean-list">
+          {awards.map((award) => <li>{award}</li>)}
+        </ul>
+      </div>
+      <div class="glass-card">
+        <h3>Skills</h3>
+        <div class="skill-groups">
+          {skills.map((group) => (
+            <section>
+              <h4>{group.group}</h4>
+              <div class="tag-list">
+                {group.items.map((item) => <span>{item}</span>)}
+              </div>
+            </section>
+          ))}
+        </div>
+      </div>
+    </div>
+  </Section>
+</BaseLayout>

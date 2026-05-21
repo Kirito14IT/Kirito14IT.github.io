@@ -1,0 +1,31 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@layouts/BaseLayout.astro";
+
+const posts = (await getCollection("blog"))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const slugFromId = (id: string) => id.replace(/\.md$/, "");
+---
+
+<BaseLayout title="Blog | Krico">
+  <header class="page-header">
+    <p class="eyebrow">Notes</p>
+    <h1>Blog</h1>
+    <p>Technical notes, reading logs, and project retrospectives. The first post is a launch note for this site.</p>
+  </header>
+
+  <div class="post-list">
+    {posts.map((post) => (
+      <a class="post-card" href={`/blog/${slugFromId(post.id)}/`}>
+        <time>{post.data.date.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "2-digit" })}</time>
+        <h2>{post.data.title}</h2>
+        <p>{post.data.description}</p>
+        <div class="tag-list">
+          {post.data.tags.map((tag) => <span>{tag}</span>)}
+        </div>
+      </a>
+    ))}
+  </div>
+</BaseLayout>

@@ -1,0 +1,29 @@
+---
+import { profile } from "@data/profile";
+---
+
+<section class="contact-panel glass-card">
+  <div>
+    <p class="eyebrow">Contact and Representative Links</p>
+    <h3>Open to academic discussion and collaboration</h3>
+    <p>{profile.contactNote}</p>
+  </div>
+
+  <div class="direct-link-list">
+    {profile.links.map((link) => (
+      <a href={link.url} target={link.url.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer">
+        <strong>{link.label}</strong>
+        <span>{link.displayUrl || link.url}</span>
+      </a>
+    ))}
+  </div>
+
+  <div class="representative-links">
+    {profile.representativeLinks.map((link) => (
+      <a href={link.url} target="_blank" rel="noopener noreferrer">
+        <span>{link.label}</span>
+        <code>{link.displayUrl}</code>
+      </a>
+    ))}
+  </div>
+</section>

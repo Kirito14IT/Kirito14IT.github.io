@@ -1,0 +1,16 @@
+{
+  "name": "kirito14it-github-io",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "validate": "node scripts/validate-content.mjs"
+  },
+  "dependencies": {
+    "astro": "^6.3.7",
+    "typescript": "^6.0.3"
+  }
+}

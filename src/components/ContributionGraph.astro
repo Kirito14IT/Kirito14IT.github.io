@@ -1,0 +1,148 @@
+---
+import { profile } from "@data/profile";
+---
+
+<section class="section-stack">
+  <div class="section-heading-row">
+    <div class="section-heading">
+      <p>Live Open Source Signal</p>
+      <h2>GitHub Commit Activity</h2>
+    </div>
+    <a class="text-link" href={profile.github} target="_blank" rel="noopener noreferrer">Open GitHub -></a>
+  </div>
+
+  <article class="contrib-card" data-contrib-root data-username={profile.githubUsername}>
+    <div class="contrib-header">
+      <div>
+        <p class="muted">Last 12 months</p>
+        <strong data-contrib-summary>Loading public contribution graph...</strong>
+      </div>
+      <p class="muted" data-contrib-total>Syncing</p>
+    </div>
+    <div class="contrib-months" data-contrib-months></div>
+    <div class="contrib-body">
+      <div class="contrib-axis" aria-hidden="true">
+        <span>Mon</span>
+        <span>Wed</span>
+        <span>Fri</span>
+      </div>
+      <div class="contrib-columns" data-contrib-columns role="img" aria-label="GitHub contribution calendar"></div>
+    </div>
+    <div class="contrib-legend" aria-hidden="true">
+      <span>Less</span>
+      <span class="contrib-cell level-0"></span>
+      <span class="contrib-cell level-1"></span>
+      <span class="contrib-cell level-2"></span>
+      <span class="contrib-cell level-3"></span>
+      <span class="contrib-cell level-4"></span>
+      <span>More</span>
+    </div>
+    <p class="muted" data-contrib-note>
+      Live contributions are fetched from a public GitHub contribution API and may be cached.
+    </p>
+  </article>
+</section>
+
+<script>
+  const contributionRoots = document.querySelectorAll("[data-contrib-root]");
+  const monthFormatter = new Intl.DateTimeFormat("en-US", { month: "short", timeZone: "UTC" });
+  const numberFormatter = new Intl.NumberFormat("en-US");
+
+  const toUtcDate = (value) => {
+    const date = new Date(`${value}T00:00:00Z`);
+    return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+  };
+
+  const addUtcDays = (value, days) => {
+    const next = new Date(value);
+    next.setUTCDate(next.getUTCDate() + days);
+    return next;
+  };
+
+  const formatDay = (value) => value.toISOString().slice(0, 10);
+
+  const buildWeeks = (contributions) => {
+    if (!Array.isArray(contributions) || contributions.length === 0) return [];
+    const sorted = [...contributions].sort((a, b) => a.date.localeCompare(b.date));
+    const counts = new Map(sorted.map((item) => [item.date, item]));
+    const firstDate = toUtcDate(sorted[0].date);
+    const lastDate = toUtcDate(sorted[sorted.length - 1].date);
+    const calendarStart = addUtcDays(firstDate, -firstDate.getUTCDay());
+    const calendarEnd = addUtcDays(lastDate, 6 - lastDate.getUTCDay());
+    const weeks = [];
+    let cursor = calendarStart;
+    let buffer = [];
+
+    while (cursor <= calendarEnd) {
+      const date = formatDay(cursor);
+      const entry = counts.get(date) || { date, count: 0, level: 0 };
+      const inRange = date >= sorted[0].date && date <= sorted[sorted.length - 1].date;
+      buffer.push({ date, count: entry.count || 0, level: entry.level || 0, inRange });
+
+      if (buffer.length === 7) {
+        const labelSource =
+          buffer.find((day) => day.inRange && toUtcDate(day.date).getUTCDate() === 1) ||
+          (weeks.length === 0 ? buffer.find((day) => day.inRange) : undefined);
+        weeks.push({ label: labelSource ? monthFormatter.format(toUtcDate(labelSource.date)) : "", days: buffer });
+        buffer = [];
+      }
+      cursor = addUtcDays(cursor, 1);
+    }
+    return weeks;
+  };
+
+  const renderGraph = (root, payload) => {
+    const summary = root.querySelector("[data-contrib-summary]");
+    const total = root.querySelector("[data-contrib-total]");
+    const months = root.querySelector("[data-contrib-months]");
+    const columns = root.querySelector("[data-contrib-columns]");
+    const note = root.querySelector("[data-contrib-note]");
+    const contributions = payload?.contributions || [];
+    const weeks = buildWeeks(contributions);
+    const totalLastYear = payload?.total?.lastYear || 0;
+    const activeDays = contributions.filter((item) => (item.count || 0) > 0).length;
+
+    if (!weeks.length || !months || !columns) {
+      if (summary) summary.textContent = "Unable to load live contribution data.";
+      if (total) total.textContent = "Open GitHub for latest data";
+      if (note) note.textContent = "The external contribution source is unavailable right now.";
+      return;
+    }
+
+    months.style.setProperty("--weeks", String(weeks.length));
+    months.innerHTML = "<span></span>";
+    columns.innerHTML = "";
+
+    weeks.forEach((week) => {
+      const label = document.createElement("span");
+      label.textContent = week.label;
+      months.appendChild(label);
+
+      const column = document.createElement("div");
+      column.className = "contrib-week";
+      week.days.forEach((day) => {
+        const cell = document.createElement("span");
+        cell.className = `contrib-cell level-${day.level}${day.inRange ? "" : " outside"}`;
+        cell.title = `${day.date} - ${day.count} contribution${day.count === 1 ? "" : "s"}`;
+        column.appendChild(cell);
+      });
+      columns.appendChild(column);
+    });
+
+    if (summary) summary.textContent = `${numberFormatter.format(totalLastYear)} contributions in the last year`;
+    if (total) total.textContent = `${numberFormatter.format(activeDays)} active days shown`;
+    if (note) note.textContent = "Live contributions are fetched from your public GitHub profile graph and may be cached for about one hour.";
+  };
+
+  contributionRoots.forEach((root) => {
+    const username = root.getAttribute("data-username");
+    if (!username) return;
+    fetch(`https://github-contributions-api.jogruber.de/v4/${encodeURIComponent(username)}?y=last`)
+      .then((response) => {
+        if (!response.ok) throw new Error(String(response.status));
+        return response.json();
+      })
+      .then((payload) => renderGraph(root, payload))
+      .catch(() => renderGraph(root, null));
+  });
+</script>

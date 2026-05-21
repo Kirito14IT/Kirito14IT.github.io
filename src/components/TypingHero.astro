@@ -1,0 +1,66 @@
+---
+import { profile } from "@data/profile";
+import NeuralField from "@components/NeuralField.astro";
+---
+
+<section class="hero-panel">
+  <NeuralField />
+  <div class="anime-stickers" aria-hidden="true">
+    <span class="sticker sticker-1">AI</span>
+    <span class="sticker sticker-2">SEC</span>
+    <span class="sticker sticker-3">RL</span>
+  </div>
+  <div class="hero-kicker">
+    <span></span>
+    <strong>Research Focus</strong>
+  </div>
+  <h2>I am researching</h2>
+  <div class="typing-line" aria-live="polite">
+    <span class="typing-target" data-typing-words={JSON.stringify(profile.focusWords)}></span>
+    <span class="typing-cursor"></span>
+  </div>
+  <p>{profile.tagline}</p>
+  <div class="hero-actions">
+    <a class="button primary" href="/projects/">View Projects</a>
+    <a class="button ghost" href="/cv/">Open CV</a>
+  </div>
+</section>
+
+<script>
+  const typingTargets = document.querySelectorAll("[data-typing-words]");
+
+  typingTargets.forEach((target) => {
+    const raw = target.getAttribute("data-typing-words") || "[]";
+    const words = JSON.parse(raw);
+    let wordIndex = 0;
+    let value = "";
+    let deleting = false;
+
+    const tick = () => {
+      const current = words[wordIndex] || { text: "", color: "#2563eb" };
+      const text = current.text;
+      target.style.color = current.color;
+
+      if (!deleting) {
+        value = text.slice(0, value.length + 1);
+        target.textContent = value;
+        if (value === text) {
+          deleting = true;
+          window.setTimeout(tick, 1400);
+          return;
+        }
+      } else {
+        value = text.slice(0, Math.max(0, value.length - 1));
+        target.textContent = value;
+        if (value.length === 0) {
+          deleting = false;
+          wordIndex = (wordIndex + 1) % words.length;
+        }
+      }
+
+      window.setTimeout(tick, deleting ? 42 : 86);
+    };
+
+    tick();
+  });
+</script>

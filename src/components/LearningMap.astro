@@ -1,0 +1,18 @@
+---
+import { learningProgress } from "@data/cv";
+---
+
+<div class="learning-grid">
+  {learningProgress.map((item, index) => (
+    <article class="learning-card" style={`--value: ${item.percent}; --delay: ${index * 80}ms`}>
+      <div class="learning-card-head">
+        <h3>{item.area}</h3>
+        <strong>{item.percent}%</strong>
+      </div>
+      <div class="progress-track" aria-label={`${item.area} learning progress ${item.percent} percent`}>
+        <span class="progress-fill"></span>
+      </div>
+      <p>{item.summary}</p>
+    </article>
+  ))}
+</div>

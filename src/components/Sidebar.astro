@@ -1,0 +1,54 @@
+---
+import { profile } from "@data/profile";
+
+const navItems = [
+  { label: "Home", href: "/" },
+  { label: "CV", href: "/cv/" },
+  { label: "Projects", href: "/projects/" },
+  { label: "Blog", href: "/blog/" }
+];
+---
+
+<aside class="sidebar">
+  <a class="profile-card" href="/" aria-label={`${profile.name} home`}>
+    <img class="avatar" src={profile.avatarUrl} alt={`${profile.name} avatar`} width="92" height="92" />
+    <div>
+      <p class="eyebrow">Academic Homepage</p>
+      <h1>{profile.name}</h1>
+      <p>{profile.legalName}</p>
+    </div>
+  </a>
+
+  <section class="sidebar-section">
+    <p class="sidebar-heading">Profile</p>
+    <p class="sidebar-copy">{profile.title}</p>
+    <p class="sidebar-copy">{profile.institution}</p>
+    <p class="sidebar-copy">{profile.location}</p>
+  </section>
+
+  <nav class="sidebar-section" aria-label="Primary navigation">
+    <p class="sidebar-heading">Navigation</p>
+    <div class="sidebar-links">
+      {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
+    </div>
+  </nav>
+
+  <section class="sidebar-section">
+    <p class="sidebar-heading">Focus</p>
+    <div class="tag-list compact">
+      {profile.interests.map((interest) => <span>{interest}</span>)}
+    </div>
+  </section>
+
+  <section class="sidebar-section">
+    <p class="sidebar-heading">Links</p>
+    <div class="sidebar-links">
+      {profile.links.map((link) => (
+        <a class="sidebar-link-detail" href={link.url} target={link.url.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer">
+          <strong>{link.label}</strong>
+          <span>{link.displayUrl || link.url}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+</aside>

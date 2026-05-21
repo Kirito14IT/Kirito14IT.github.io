@@ -1,0 +1,30 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "@layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  return posts
+    .filter((post) => !post.data.draft)
+    .map((post) => ({ params: { slug: post.id.replace(/\.md$/, "") }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<BaseLayout title={`${post.data.title} | Krico`} description={post.data.description}>
+  <article class="article-page">
+    <header class="page-header">
+      <p class="eyebrow">{post.data.date.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "2-digit" })}</p>
+      <h1>{post.data.title}</h1>
+      <p>{post.data.description}</p>
+      <div class="tag-list">
+        {post.data.tags.map((tag) => <span>{tag}</span>)}
+      </div>
+    </header>
+    <div class="markdown-body">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

@@ -1,0 +1,22 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import ProjectCard from "@components/ProjectCard.astro";
+
+const projects = (await getCollection("projects"))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const slugFromId = (id: string) => id.replace(/\.md$/, "");
+---
+
+<BaseLayout title="Projects | Krico">
+  <header class="page-header">
+    <p class="eyebrow">Research and engineering</p>
+    <h1>Projects</h1>
+    <p>Selected work from AI safety, LLM agents, software security, computer vision, and climate research.</p>
+  </header>
+
+  <div class="card-grid">
+    {projects.map((item) => <ProjectCard item={item} href={`/projects/${slugFromId(item.id)}/`} />)}
+  </div>
+</BaseLayout>

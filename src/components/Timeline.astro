@@ -1,0 +1,32 @@
+---
+const { items } = Astro.props;
+---
+
+<div class="timeline">
+  {items.map((item: any) => (
+    <article class="timeline-item">
+      <div class="timeline-date">{item.period || item.date}</div>
+      <div class="timeline-card">
+        <h3>{item.title || item.text}</h3>
+        {item.organization && <p class="muted">{item.organization}</p>}
+        {item.tags && (
+          <div class="tag-list">
+            {item.tags.map((tag: string) => <span>{tag}</span>)}
+          </div>
+        )}
+        {item.bullets && (
+          <ul>
+            {item.bullets.map((bullet: string) => <li>{bullet}</li>)}
+          </ul>
+        )}
+        {item.links && (
+          <div class="inline-links">
+            {item.links.map((link: any) => (
+              <a href={link.url} target="_blank" rel="noopener noreferrer">{link.label}</a>
+            ))}
+          </div>
+        )}
+      </div>
+    </article>
+  ))}
+</div>

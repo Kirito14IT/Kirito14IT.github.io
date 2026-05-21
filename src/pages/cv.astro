@@ -1,0 +1,64 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Section from "@components/Section.astro";
+import Timeline from "@components/Timeline.astro";
+import LearningMap from "@components/LearningMap.astro";
+import { education, experiences, publications, awards, skills } from "@data/cv";
+---
+
+<BaseLayout title="CV | Krico">
+  <header class="page-header">
+    <p class="eyebrow">Web CV</p>
+    <h1>Curriculum Vitae</h1>
+    <p>A public, web-native CV focused on research, projects, internships, awards, and reproducible artifacts.</p>
+  </header>
+
+  <Section title="Education">
+    <Timeline items={education.map((item) => ({ ...item, title: item.degree, organization: `${item.institution} · ${item.school}` }))} />
+  </Section>
+
+  <Section title="Research and Internship Experience">
+    <Timeline items={experiences} />
+  </Section>
+
+  <Section title="Publications and Manuscripts">
+    <div class="publication-list">
+      {publications.map((item) => (
+        <article class="publication-card">
+          <div>
+            <h3>{item.title}</h3>
+            <p class="muted">{item.role} · {item.status} · {item.year}</p>
+          </div>
+          <div class="tag-list">
+            {item.tags.map((tag) => <span>{tag}</span>)}
+          </div>
+        </article>
+      ))}
+    </div>
+  </Section>
+
+  <Section title="Awards">
+    <div class="glass-card">
+      <ul class="clean-list">
+        {awards.map((award) => <li>{award}</li>)}
+      </ul>
+    </div>
+  </Section>
+
+  <Section title="Skills">
+    <div class="skill-groups glass-card">
+      {skills.map((group) => (
+        <section>
+          <h3>{group.group}</h3>
+          <div class="tag-list">
+            {group.items.map((item) => <span>{item}</span>)}
+          </div>
+        </section>
+      ))}
+    </div>
+  </Section>
+
+  <Section title="Learning Map">
+    <LearningMap />
+  </Section>
+</BaseLayout>

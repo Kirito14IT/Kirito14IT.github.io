@@ -1,0 +1,11 @@
+---
+const { title, eyebrow, class: className = "" } = Astro.props;
+---
+
+<section class={`section-stack ${className}`}>
+  <div class="section-heading">
+    {eyebrow && <p>{eyebrow}</p>}
+    <h2>{title}</h2>
+  </div>
+  <slot />
+</section>

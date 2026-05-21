@@ -1,0 +1,40 @@
+---
+import Sidebar from "@components/Sidebar.astro";
+import { profile } from "@data/profile";
+import "@styles/global.css";
+
+const {
+  title = `${profile.name} | Academic Homepage`,
+  description = profile.tagline
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="author" content={profile.legalName} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={profile.siteUrl} />
+    <meta name="theme-color" content="#f8fbff" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <div class="site-background" aria-hidden="true">
+      <span class="mesh mesh-a"></span>
+      <span class="mesh mesh-b"></span>
+      <span class="mesh mesh-c"></span>
+      <span class="grid-paper"></span>
+    </div>
+    <div class="site-shell">
+      <Sidebar />
+      <main class="main-content">
+        <slot />
+      </main>
+    </div>
+  </body>
+</html>

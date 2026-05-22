@@ -29,12 +29,14 @@ const {
       <span class="mesh mesh-b"></span>
       <span class="mesh mesh-c"></span>
       <span class="grid-paper"></span>
+    </div>
+    <div class="meteor-layer" aria-hidden="true">
       <div class="meteor-shower">
-        {Array.from({ length: 18 }, (_, index) => {
-          const x = (index * 11) % 112;
-          const y = (index % 9) * 9 - 18;
-          const duration = 7 + (index % 6) * 1.15;
-          const delay = index * -0.78;
+        {Array.from({ length: 24 }, (_, index) => {
+          const x = (index * 9) % 118;
+          const y = (index % 10) * 8 - 22;
+          const duration = 5.6 + (index % 7) * 0.8;
+          const delay = index * -0.48;
           return <span style={`--x: ${x}vw; --y: ${y}vh; --duration: ${duration}s; --delay: ${delay}s`}></span>;
         })}
       </div>

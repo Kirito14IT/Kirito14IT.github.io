@@ -6,9 +6,9 @@ import NeuralField from "@components/NeuralField.astro";
 <section class="hero-panel">
   <NeuralField />
   <div class="anime-stickers" aria-hidden="true">
-    <span class="sticker sticker-1">AI</span>
-    <span class="sticker sticker-2">SEC</span>
-    <span class="sticker sticker-3">RL</span>
+    <span class="sticker sticker-1" data-draggable-sticker>AI</span>
+    <span class="sticker sticker-2" data-draggable-sticker>SEC</span>
+    <span class="sticker sticker-3" data-draggable-sticker>RL</span>
   </div>
   <div class="hero-kicker">
     <span></span>
@@ -61,5 +61,56 @@ import NeuralField from "@components/NeuralField.astro";
     };
 
     tick();
+  });
+
+  const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+  document.querySelectorAll("[data-draggable-sticker]").forEach((sticker) => {
+    let dragState = null;
+
+    const moveSticker = (event) => {
+      if (!dragState) return;
+      const heroRect = dragState.hero.getBoundingClientRect();
+      const x = clamp(event.clientX - heroRect.left - dragState.offsetX, 18, heroRect.width - dragState.width - 18);
+      const y = clamp(event.clientY - heroRect.top - dragState.offsetY, 18, heroRect.height - dragState.height - 18);
+      sticker.style.left = `${x}px`;
+      sticker.style.top = `${y}px`;
+      sticker.style.right = "auto";
+      sticker.style.bottom = "auto";
+    };
+
+    sticker.addEventListener("pointerdown", (event) => {
+      const hero = sticker.closest(".hero-panel");
+      if (!hero) return;
+      const heroRect = hero.getBoundingClientRect();
+      const stickerRect = sticker.getBoundingClientRect();
+      dragState = {
+        hero,
+        offsetX: event.clientX - stickerRect.left,
+        offsetY: event.clientY - stickerRect.top,
+        width: stickerRect.width,
+        height: stickerRect.height
+      };
+      sticker.classList.add("is-dragging");
+      sticker.style.left = `${stickerRect.left - heroRect.left}px`;
+      sticker.style.top = `${stickerRect.top - heroRect.top}px`;
+      sticker.style.right = "auto";
+      sticker.style.bottom = "auto";
+      sticker.setPointerCapture(event.pointerId);
+      moveSticker(event);
+    });
+
+    sticker.addEventListener("pointermove", moveSticker);
+
+    sticker.addEventListener("pointerup", (event) => {
+      dragState = null;
+      sticker.classList.remove("is-dragging");
+      if (sticker.hasPointerCapture(event.pointerId)) sticker.releasePointerCapture(event.pointerId);
+    });
+
+    sticker.addEventListener("pointercancel", () => {
+      dragState = null;
+      sticker.classList.remove("is-dragging");
+    });
   });
 </script>

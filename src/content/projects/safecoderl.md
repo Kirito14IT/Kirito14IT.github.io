@@ -11,7 +11,7 @@ SafeCodeRL studies how to reduce vulnerable code generation while maintaining fu
 
 **Paper labels:** SCI Zone 3; CCF C.
 
-![SafeCodeRL framework](/figures/safecoderl-framework.svg)
+![SafeCodeRL framework](/figures/safecoderl-framework.png)
 
 The project proposes a collaborative workflow across multiple agents and introduces a constraint-aware policy optimization component. The manuscript reports a substantial reduction in high-risk vulnerable outputs while preserving the utility of generated code.
 

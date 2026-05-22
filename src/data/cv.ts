@@ -107,7 +107,7 @@ export const publications = [
     year: "2026",
     tags: ["AI Safety", "LLM", "Code Generation"],
     ratings: ["SCI Zone 3", "CCF C"],
-    frameworkImage: "/figures/safecoderl-framework.svg",
+    frameworkImage: "/figures/safecoderl-framework.png",
     frameworkAlt: "SafeCodeRL framework diagram showing IoT/CPS contexts, a five-agent closed loop, constraint-aware optimization, and training pipeline."
   },
   {
@@ -117,7 +117,7 @@ export const publications = [
     year: "2026",
     tags: ["Computer Vision", "State Space Model"],
     ratings: ["SCI Zone 1", "CCF B"],
-    frameworkImage: "/figures/sfmambanet-framework.svg",
+    frameworkImage: "/figures/sfmambanet-framework.png",
     frameworkAlt: "SFMambaNet framework diagram showing pruning blocks, local spectral-geometric feature extraction, spectral-global aggregation, and verification."
   },
   {

@@ -36,8 +36,10 @@ const requiredPublicSnippets = [
   "CCF B",
   "SCI Zone 3",
   "CCF C",
-  "/figures/sfmambanet-framework.svg",
-  "/figures/safecoderl-framework.svg"
+  "/figures/sfmambanet-framework.png",
+  "/figures/safecoderl-framework.png",
+  "data-draggable-sticker",
+  "meteor-layer"
 ];
 
 const missing = requiredFiles.filter((file) => !fs.existsSync(path.join(root, file)));

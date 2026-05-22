@@ -48,6 +48,15 @@ a {
   pointer-events: none;
 }
 
+.meteor-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  overflow: hidden;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+
 .mesh {
   position: absolute;
   width: 42rem;
@@ -91,37 +100,69 @@ a {
 
 .meteor-shower {
   position: absolute;
-  inset: -20vh -12vw 0 -12vw;
+  inset: -28vh -16vw 0 -16vw;
   overflow: hidden;
-  opacity: 0.82;
+  opacity: 0.92;
 }
 
 .meteor-shower span {
   position: absolute;
   top: var(--y);
   left: var(--x);
-  width: clamp(90px, 12vw, 190px);
-  height: 2px;
+  width: clamp(170px, 22vw, 360px);
+  height: 4px;
   border-radius: 999px;
-  background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(123, 206, 255, 0.18), rgba(255, 255, 255, 0.9));
+  background: linear-gradient(
+    90deg,
+    rgba(9, 42, 120, 0),
+    rgba(38, 88, 205, 0.22) 28%,
+    rgba(64, 128, 255, 0.76) 72%,
+    rgba(255, 255, 255, 0.98)
+  );
   box-shadow:
-    0 0 18px rgba(117, 190, 255, 0.38),
-    0 0 34px rgba(219, 39, 119, 0.16);
+    0 0 22px rgba(55, 112, 255, 0.52),
+    0 0 54px rgba(73, 49, 185, 0.34),
+    0 0 92px rgba(219, 39, 119, 0.18);
   transform: rotate(-28deg) translate3d(0, 0, 0);
   animation: meteor-fall var(--duration) linear infinite;
   animation-delay: var(--delay);
 }
 
+.meteor-shower span::before {
+  content: "";
+  position: absolute;
+  right: -8px;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 1), rgba(89, 145, 255, 0.82) 45%, rgba(89, 145, 255, 0) 72%);
+  transform: translateY(-50%);
+  filter: blur(0.2px);
+}
+
+.meteor-shower span::after {
+  content: "";
+  position: absolute;
+  right: 26px;
+  top: 50%;
+  width: 72%;
+  height: 18px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(18, 49, 132, 0), rgba(72, 112, 255, 0.18), rgba(255, 255, 255, 0.42));
+  transform: translateY(-50%);
+  filter: blur(7px);
+}
+
 .meteor-shower span:nth-child(3n) {
-  width: clamp(120px, 15vw, 230px);
+  width: clamp(210px, 26vw, 420px);
   background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(177, 134, 255, 0.22), rgba(255, 255, 255, 0.86));
+    linear-gradient(90deg, rgba(25, 12, 84, 0), rgba(110, 58, 220, 0.28), rgba(194, 123, 255, 0.82), rgba(255, 255, 255, 0.98));
 }
 
 .meteor-shower span:nth-child(5n) {
-  opacity: 0.54;
-  animation-duration: 12s;
+  opacity: 0.78;
+  animation-duration: calc(var(--duration) + 2.2s);
 }
 
 @keyframes meteor-fall {
@@ -471,23 +512,35 @@ a {
   box-shadow: 0 16px 34px rgba(124, 58, 237, 0.22);
   transform: rotate(-10deg);
   animation: floaty 5s ease-in-out infinite;
+  pointer-events: auto;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+
+.sticker.is-dragging {
+  z-index: 8;
+  cursor: grabbing;
+  animation: none;
+  transform: rotate(-4deg) scale(1.04);
 }
 
 .sticker-1 {
-  top: 92px;
-  right: 82px;
+  top: 150px;
+  right: 88px;
 }
 
 .sticker-2 {
   right: 28px;
-  bottom: 82px;
+  bottom: 92px;
   background: linear-gradient(135deg, var(--cyan), var(--blue));
   animation-delay: -1.4s;
 }
 
 .sticker-3 {
-  left: 58%;
-  bottom: 46px;
+  top: 126px;
+  left: 52%;
+  bottom: auto;
   background: linear-gradient(135deg, var(--green), var(--cyan));
   animation-delay: -2.8s;
 }

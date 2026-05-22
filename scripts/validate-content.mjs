@@ -28,7 +28,16 @@ const requiredPublicSnippets = [
   "data-neural-field",
   "learningProgress",
   "International Organization Internship",
-  "Please feel free to reach out by email"
+  "Please feel free to reach out by email",
+  "meteor-shower",
+  ".typing-target::after",
+  "max-height: calc(100dvh - 32px)",
+  "SCI Zone 1",
+  "CCF B",
+  "SCI Zone 3",
+  "CCF C",
+  "/figures/sfmambanet-framework.svg",
+  "/figures/safecoderl-framework.svg"
 ];
 
 const missing = requiredFiles.filter((file) => !fs.existsSync(path.join(root, file)));

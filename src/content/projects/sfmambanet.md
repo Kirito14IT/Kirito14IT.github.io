@@ -9,6 +9,10 @@ featured: true
 
 SFMambaNet investigates efficient global context modeling for correspondence pruning.
 
+**Paper labels:** SCI Zone 1; CCF B.
+
+![SFMambaNet framework](/figures/sfmambanet-framework.svg)
+
 The project introduces spectral-frequency awareness into a selective state space architecture. This direction aims to avoid the quadratic scaling of Transformer-style global attention while keeping strong global modeling capacity.
 
 My work included literature review, idea formulation, experiments, and manuscript writing under faculty supervision.

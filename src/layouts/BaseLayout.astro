@@ -29,6 +29,15 @@ const {
       <span class="mesh mesh-b"></span>
       <span class="mesh mesh-c"></span>
       <span class="grid-paper"></span>
+      <div class="meteor-shower">
+        {Array.from({ length: 18 }, (_, index) => {
+          const x = (index * 11) % 112;
+          const y = (index % 9) * 9 - 18;
+          const duration = 7 + (index % 6) * 1.15;
+          const delay = index * -0.78;
+          return <span style={`--x: ${x}vw; --y: ${y}vh; --duration: ${duration}s; --delay: ${delay}s`}></span>;
+        })}
+      </div>
     </div>
     <div class="site-shell">
       <Sidebar />

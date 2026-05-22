@@ -58,10 +58,21 @@ const slugFromId = (id: string) => id.replace(/\.md$/, "");
           <div>
             <h3>{item.title}</h3>
             <p class="muted">{item.role} · {item.status} · {item.year}</p>
+            {item.ratings && (
+              <div class="rating-pills">
+                {item.ratings.map((rating) => <span>{rating}</span>)}
+              </div>
+            )}
           </div>
           <div class="tag-list">
             {item.tags.map((tag) => <span>{tag}</span>)}
           </div>
+          {item.frameworkImage && (
+            <figure class="framework-preview">
+              <img src={item.frameworkImage} alt={item.frameworkAlt} loading="lazy" />
+              <figcaption>Framework overview</figcaption>
+            </figure>
+          )}
         </article>
       ))}
     </div>

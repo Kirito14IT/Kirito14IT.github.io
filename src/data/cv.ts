@@ -105,14 +105,20 @@ export const publications = [
     status: "arXiv preprint and under review",
     role: "First author",
     year: "2026",
-    tags: ["AI Safety", "LLM", "Code Generation"]
+    tags: ["AI Safety", "LLM", "Code Generation"],
+    ratings: ["SCI Zone 3", "CCF C"],
+    frameworkImage: "/figures/safecoderl-framework.svg",
+    frameworkAlt: "SafeCodeRL framework diagram showing IoT/CPS contexts, a five-agent closed loop, constraint-aware optimization, and training pipeline."
   },
   {
     title: "SFMambaNet: Spectral-Frequency Enhanced Selective State Space Model for Correspondence Pruning",
     status: "arXiv preprint and under review",
     role: "First author",
     year: "2026",
-    tags: ["Computer Vision", "State Space Model"]
+    tags: ["Computer Vision", "State Space Model"],
+    ratings: ["SCI Zone 1", "CCF B"],
+    frameworkImage: "/figures/sfmambanet-framework.svg",
+    frameworkAlt: "SFMambaNet framework diagram showing pruning blocks, local spectral-geometric feature extraction, spectral-global aggregation, and verification."
   },
   {
     title: "Research Support in Analysing Mangrove Responses to Climate Change: The Interplay of Anthropogenic Impacts and Blue Carbon Mitigation",

@@ -64,27 +64,38 @@ import NeuralField from "@components/NeuralField.astro";
   });
 
   const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+  let activeSticker = null;
+
+  const moveSticker = (event) => {
+    if (!activeSticker) return;
+    event.preventDefault();
+    const heroRect = activeSticker.hero.getBoundingClientRect();
+    const x = clamp(event.clientX - heroRect.left - activeSticker.offsetX, 18, heroRect.width - activeSticker.width - 18);
+    const y = clamp(event.clientY - heroRect.top - activeSticker.offsetY, 18, heroRect.height - activeSticker.height - 18);
+    activeSticker.element.style.left = `${x}px`;
+    activeSticker.element.style.top = `${y}px`;
+    activeSticker.element.style.right = "auto";
+    activeSticker.element.style.bottom = "auto";
+  };
+
+  const stopDraggingSticker = (event) => {
+    if (!activeSticker) return;
+    activeSticker.element.classList.remove("is-dragging");
+    if (event && activeSticker.element.hasPointerCapture(event.pointerId)) {
+      activeSticker.element.releasePointerCapture(event.pointerId);
+    }
+    activeSticker = null;
+  };
 
   document.querySelectorAll("[data-draggable-sticker]").forEach((sticker) => {
-    let dragState = null;
-
-    const moveSticker = (event) => {
-      if (!dragState) return;
-      const heroRect = dragState.hero.getBoundingClientRect();
-      const x = clamp(event.clientX - heroRect.left - dragState.offsetX, 18, heroRect.width - dragState.width - 18);
-      const y = clamp(event.clientY - heroRect.top - dragState.offsetY, 18, heroRect.height - dragState.height - 18);
-      sticker.style.left = `${x}px`;
-      sticker.style.top = `${y}px`;
-      sticker.style.right = "auto";
-      sticker.style.bottom = "auto";
-    };
-
     sticker.addEventListener("pointerdown", (event) => {
       const hero = sticker.closest(".hero-panel");
       if (!hero) return;
+      event.preventDefault();
       const heroRect = hero.getBoundingClientRect();
       const stickerRect = sticker.getBoundingClientRect();
-      dragState = {
+      activeSticker = {
+        element: sticker,
         hero,
         offsetX: event.clientX - stickerRect.left,
         offsetY: event.clientY - stickerRect.top,
@@ -99,18 +110,9 @@ import NeuralField from "@components/NeuralField.astro";
       sticker.setPointerCapture(event.pointerId);
       moveSticker(event);
     });
-
-    sticker.addEventListener("pointermove", moveSticker);
-
-    sticker.addEventListener("pointerup", (event) => {
-      dragState = null;
-      sticker.classList.remove("is-dragging");
-      if (sticker.hasPointerCapture(event.pointerId)) sticker.releasePointerCapture(event.pointerId);
-    });
-
-    sticker.addEventListener("pointercancel", () => {
-      dragState = null;
-      sticker.classList.remove("is-dragging");
-    });
   });
+
+  document.addEventListener("pointermove", moveSticker, { passive: false });
+  document.addEventListener("pointerup", stopDraggingSticker);
+  document.addEventListener("pointercancel", stopDraggingSticker);
 </script>

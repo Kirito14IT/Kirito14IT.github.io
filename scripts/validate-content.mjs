@@ -39,7 +39,10 @@ const requiredPublicSnippets = [
   "/figures/sfmambanet-framework.png",
   "/figures/safecoderl-framework.png",
   "data-draggable-sticker",
-  "meteor-layer"
+  "meteor-layer",
+  "Array.from({ length: 16 }",
+  "document.addEventListener(\"pointermove\", moveSticker",
+  "z-index: 4;"
 ];
 
 const missing = requiredFiles.filter((file) => !fs.existsSync(path.join(root, file)));

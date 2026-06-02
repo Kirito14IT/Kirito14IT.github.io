@@ -102,7 +102,7 @@ export const experiences = [
 export const publications = [
   {
     title: "SafeCodeRL: A Multi-Agent Reinforcement Learning Framework for Safety-Constrained LLM Code Generation",
-    status: "arXiv preprint and under review",
+    status: "Published on June 2, 2026",
     role: "First author",
     year: "2026",
     tags: ["AI Safety", "LLM", "Code Generation"],

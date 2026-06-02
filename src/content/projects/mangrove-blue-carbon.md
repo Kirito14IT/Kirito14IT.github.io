@@ -9,6 +9,8 @@ featured: true
 
 This project was produced during an **International Organization Internship** with Morobe Development Foundation Inc. through the UNV platform.
 
+![Conceptual model of mangrove carbon dynamics](/figures/mangrove-carbon-dynamics.png)
+
 The review manuscript synthesizes literature on:
 
 - mangrove carbon sequestration and blue carbon policy;

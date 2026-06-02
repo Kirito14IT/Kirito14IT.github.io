@@ -125,7 +125,9 @@ export const publications = [
     status: "review manuscript",
     role: "Author",
     year: "2026",
-    tags: ["Climate Change", "Blue Carbon", "UNV"]
+    tags: ["Climate Change", "Blue Carbon", "UNV"],
+    frameworkImage: "/figures/mangrove-carbon-dynamics.png",
+    frameworkAlt: "Conceptual model of carbon dynamics in mature mangrove ecosystems, showing net primary productivity, carbon sequestration, carbon efflux, and tidal carbon export pathways."
   }
 ];
 

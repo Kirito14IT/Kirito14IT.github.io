@@ -13,6 +13,16 @@ export const education = [
 
 export const news = [
   {
+    date: "June 2026",
+    text:
+      "Started AAAI 2027-oriented research on multimodal phishing website detection, supporting literature review, novelty analysis, experiment design, model fine-tuning, and experimental validation."
+  },
+  {
+    date: "June 2026",
+    text:
+      "Joined Prof. Ma's team on an enterprise-oriented multi-agent secure collaboration project, contributing to requirements analysis, system design, implementation, and testing."
+  },
+  {
     date: "May 2026",
     text:
       "Completed an International Organization Internship through the UNV platform on mangrove responses to climate change and produced a review manuscript on blue carbon mitigation."

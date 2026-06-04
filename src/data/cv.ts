@@ -83,7 +83,8 @@ export const experiences = [
       "Completed an International Organization Internship through the UNV platform, supporting research on mangrove responses to climate change scenarios and blue carbon mitigation.",
       "Synthesized literature on sea-level rise, coastal squeeze, nutrient loading, carbon sequestration, and national climate policy.",
       "Produced a review manuscript titled Research Support in Analysing Mangrove Responses to Climate Change: The Interplay of Anthropogenic Impacts and Blue Carbon Mitigation."
-    ]
+    ],
+    links: [{ label: "UNV", url: "https://www.unv.org/" }]
   },
   {
     title: "First-author Research, SafeCodeRL",

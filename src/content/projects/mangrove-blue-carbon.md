@@ -3,7 +3,9 @@ title: "International Organization Internship: Mangrove Responses to Climate Cha
 date: 2026-05-21
 summary: "A UNV research internship output on sea-level rise, nutrient loading, coastal squeeze, and blue carbon mitigation."
 tags: ["UNV", "Climate Change", "Blue Carbon", "Scientific Writing"]
-links: []
+links:
+  - label: "UNV"
+    url: "https://www.unv.org/"
 featured: true
 ---
 

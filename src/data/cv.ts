@@ -105,6 +105,7 @@ export const experiences = [
   },
   {
     title: "First-author Research, SFMambaNet",
+    titleUrl: "https://doi.org/10.48550/arXiv.2606.04493",
     organization: "Multimedia Intelligent Computing and Security Lab",
     period: "Sep 2025 - Feb 2026",
     tags: ["State Space Models", "Computer Vision", "Correspondence Pruning"],
@@ -143,6 +144,7 @@ export const publications = [
     status: "review manuscript",
     role: "Author",
     year: "2026",
+    url: "https://www.unv.org/",
     tags: ["Climate Change", "Blue Carbon", "UNV"],
     frameworkImage: "/figures/mangrove-carbon-dynamics.png",
     frameworkAlt: "Conceptual model of carbon dynamics in mature mangrove ecosystems, showing net primary productivity, carbon sequestration, carbon efflux, and tidal carbon export pathways."

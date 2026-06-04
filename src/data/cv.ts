@@ -98,7 +98,7 @@ export const experiences = [
     title: "First-author Research, SafeCodeRL",
     organization: "Independent research collaboration",
     period: "Feb 2026 - Present",
-    tags: ["AI Safety", "Reinforcement Learning", "LLM Code Generation"],
+    tags: ["AI Safety", "Multi-Agent Systems", "Constrained RL", "Secure Code Generation", "LLM Code Generation", "IoT/CPS Security", "Trustworthy AI"],
     bullets: [
       "Proposed SafeCodeRL, a multi-agent framework for dynamic safety constraints in LLM code generation.",
       "Designed a closed-loop collaboration workflow across five agents and a PPO-style constraint-aware policy.",
@@ -125,7 +125,7 @@ export const publications = [
     status: "Published on June 2, 2026",
     role: "First author",
     year: "2026",
-    tags: ["AI Safety", "LLM", "Code Generation"],
+    tags: ["AI Safety", "Multi-Agent Systems", "Constrained Reinforcement Learning", "Secure Code Generation", "LLM", "IoT/CPS Security", "Trustworthy AI", "Vulnerability Mitigation"],
     ratings: ["SCI Zone 3", "CCF C"],
     frameworkImage: "/figures/safecoderl-framework.png",
     frameworkAlt: "SafeCodeRL framework diagram showing IoT/CPS contexts, a five-agent closed loop, constraint-aware optimization, and training pipeline."

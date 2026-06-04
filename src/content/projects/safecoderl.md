@@ -2,7 +2,7 @@
 title: "SafeCodeRL: Safety-Constrained LLM Code Generation"
 date: 2026-02-01
 summary: "A multi-agent reinforcement learning framework for dynamic security constraints in LLM code generation."
-tags: ["AI Safety", "LLM", "Reinforcement Learning", "Code Generation"]
+tags: ["AI Safety", "Multi-Agent Systems", "Constrained Reinforcement Learning", "Secure Code Generation", "LLM", "IoT/CPS Security", "Trustworthy AI", "Sensor Networks", "Edge Computing", "Vulnerability Mitigation"]
 links: []
 featured: true
 ---

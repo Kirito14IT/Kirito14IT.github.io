@@ -6,6 +6,12 @@ tags: ["UNV", "Climate Change", "Blue Carbon", "Scientific Writing"]
 links:
   - label: "UNV"
     url: "https://www.unv.org/"
+  - label: "Task Assignment PDF"
+    url: "https://kirito14it.github.io/documents/unv/task-assignment.pdf"
+  - label: "Internship Certificate PDF"
+    url: "https://kirito14it.github.io/documents/unv/internship-certificate.pdf"
+  - label: "Thank-you Letter PDF"
+    url: "https://kirito14it.github.io/documents/unv/thank-you-letter.pdf"
 featured: true
 ---
 

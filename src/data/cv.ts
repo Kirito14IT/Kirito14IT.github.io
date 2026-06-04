@@ -84,7 +84,12 @@ export const experiences = [
       "Synthesized literature on sea-level rise, coastal squeeze, nutrient loading, carbon sequestration, and national climate policy.",
       "Produced a review manuscript titled Research Support in Analysing Mangrove Responses to Climate Change: The Interplay of Anthropogenic Impacts and Blue Carbon Mitigation."
     ],
-    links: [{ label: "UNV", url: "https://www.unv.org/" }]
+    links: [
+      { label: "UNV", url: "https://www.unv.org/" },
+      { label: "Task Assignment PDF", url: "/documents/unv/task-assignment.pdf" },
+      { label: "Internship Certificate PDF", url: "/documents/unv/internship-certificate.pdf" },
+      { label: "Thank-you Letter PDF", url: "/documents/unv/thank-you-letter.pdf" }
+    ]
   },
   {
     title: "First-author Research, SafeCodeRL",

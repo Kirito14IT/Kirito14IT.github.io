@@ -7,7 +7,15 @@ const { items } = Astro.props;
     <article class="timeline-item">
       <div class="timeline-date">{item.period || item.date}</div>
       <div class="timeline-card">
-        <h3>{item.title || item.text}</h3>
+        <h3>
+          {item.titleUrl ? (
+            <a class="timeline-title-link" href={item.titleUrl} target="_blank" rel="noopener noreferrer">
+              {item.title || item.text}
+            </a>
+          ) : (
+            item.title || item.text
+          )}
+        </h3>
         {item.organization && <p class="muted">{item.organization}</p>}
         {item.tags && (
           <div class="tag-list">

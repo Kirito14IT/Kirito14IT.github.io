@@ -1,9 +1,11 @@
 ---
-title: "International Organization Internship: Mangrove Responses to Climate Change"
+title: "International Organization Internship: UNDP-administered UNV Mangrove Research"
 date: 2026-05-21
-summary: "A UNV research internship output on sea-level rise, nutrient loading, coastal squeeze, and blue carbon mitigation."
-tags: ["UNV", "Climate Change", "Blue Carbon", "Scientific Writing"]
+summary: "A UNDP-administered UNV research internship output on sea-level rise, nutrient loading, coastal squeeze, and blue carbon mitigation."
+tags: ["UNDP", "UNV", "Climate Change", "Blue Carbon", "Scientific Writing"]
 links:
+  - label: "UNDP"
+    url: "https://www.undp.org/"
   - label: "UNV"
     url: "https://www.unv.org/"
   - label: "Task Assignment PDF"
@@ -15,7 +17,9 @@ links:
 featured: true
 ---
 
-This project was produced during an **International Organization Internship** with Morobe Development Foundation Inc. through the UNV platform.
+This project was produced during an **International Organization Internship** with Morobe Development Foundation Inc. through the **UNDP-administered United Nations Volunteers (UNV)** platform.
+
+The United Nations Volunteers (UNV) programme is administered by the United Nations Development Programme (UNDP).
 
 ![Conceptual model of mangrove carbon dynamics](/figures/mangrove-carbon-dynamics.png)
 

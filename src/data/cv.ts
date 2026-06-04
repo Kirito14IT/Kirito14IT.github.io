@@ -25,7 +25,7 @@ export const news = [
   {
     date: "May 2026",
     text:
-      "Completed an International Organization Internship through the UNV platform on mangrove responses to climate change and produced a review manuscript on blue carbon mitigation."
+      "Completed an International Organization Internship through the UNDP-administered UNV platform on mangrove responses to climate change and produced a review manuscript on blue carbon mitigation."
   },
   {
     date: "Apr 2026",
@@ -75,17 +75,19 @@ export const experiences = [
     ]
   },
   {
-    title: "International Organization Internship, UNV Online Research Intern",
-    titleUrl: "https://www.unv.org/",
+    title: "International Organization Internship, UNDP-administered UNV Online Research Intern",
+    titleUrl: "https://www.undp.org/",
     organization: "Morobe Development Foundation Inc., Papua New Guinea",
     period: "Jan 31, 2026 - May 21, 2026",
-    tags: ["UNV", "Climate Change", "Blue Carbon"],
+    tags: ["UNDP", "UNV", "Climate Change", "Blue Carbon"],
     bullets: [
-      "Completed an International Organization Internship through the UNV platform, supporting research on mangrove responses to climate change scenarios and blue carbon mitigation.",
+      "Completed an International Organization Internship through the UNDP-administered United Nations Volunteers (UNV) platform, supporting research on mangrove responses to climate change scenarios and blue carbon mitigation.",
+      "The United Nations Volunteers (UNV) programme is administered by the United Nations Development Programme (UNDP).",
       "Synthesized literature on sea-level rise, coastal squeeze, nutrient loading, carbon sequestration, and national climate policy.",
       "Produced a review manuscript titled Research Support in Analysing Mangrove Responses to Climate Change: The Interplay of Anthropogenic Impacts and Blue Carbon Mitigation."
     ],
     links: [
+      { label: "UNDP", url: "https://www.undp.org/" },
       { label: "UNV", url: "https://www.unv.org/" },
       { label: "Task Assignment PDF", url: "/documents/unv/task-assignment.pdf" },
       { label: "Internship Certificate PDF", url: "/documents/unv/internship-certificate.pdf" },
@@ -144,8 +146,8 @@ export const publications = [
     status: "review manuscript",
     role: "Author",
     year: "2026",
-    url: "https://www.unv.org/",
-    tags: ["Climate Change", "Blue Carbon", "UNV"],
+    url: "https://www.undp.org/",
+    tags: ["UNDP", "UNV", "Climate Change", "Blue Carbon"],
     frameworkImage: "/figures/mangrove-carbon-dynamics.png",
     frameworkAlt: "Conceptual model of carbon dynamics in mature mangrove ecosystems, showing net primary productivity, carbon sequestration, carbon efflux, and tidal carbon export pathways."
   }

@@ -110,7 +110,7 @@ export const experiences = [
     titleUrl: "https://doi.org/10.48550/arXiv.2606.04493",
     organization: "Multimedia Intelligent Computing and Security Lab",
     period: "Sep 2025 - Feb 2026",
-    tags: ["State Space Models", "Computer Vision", "Correspondence Pruning"],
+    tags: ["Computer Vision", "Correspondence Pruning", "Mamba", "State Space Models", "Frequency Domain", "Two-View Geometry", "Outlier Rejection"],
     bullets: [
       "Proposed SFMambaNet, a spectral-frequency enhanced selective state space model for correspondence pruning.",
       "Explored frequency-aware global context modeling as an efficient alternative to quadratic-complexity Transformer designs.",
@@ -136,7 +136,7 @@ export const publications = [
     role: "First author",
     year: "2026",
     url: "https://doi.org/10.48550/arXiv.2606.04493",
-    tags: ["Computer Vision", "State Space Model"],
+    tags: ["Computer Vision", "Correspondence Pruning", "Mamba", "State Space Model", "Frequency Domain", "Graph Neural Networks", "Two-View Geometry"],
     ratings: ["SCI Zone 1", "CCF B"],
     frameworkImage: "/figures/sfmambanet-framework.png",
     frameworkAlt: "SFMambaNet framework diagram showing pruning blocks, local spectral-geometric feature extraction, spectral-global aggregation, and verification."

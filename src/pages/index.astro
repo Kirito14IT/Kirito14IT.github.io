@@ -56,7 +56,15 @@ const slugFromId = (id: string) => id.replace(/\.md$/, "");
       {publications.map((item) => (
         <article class="publication-card">
           <div>
-            <h3>{item.title}</h3>
+            <h3>
+              {item.url ? (
+                <a class="publication-title-link" href={item.url} target="_blank" rel="noopener noreferrer">
+                  {item.title}
+                </a>
+              ) : (
+                item.title
+              )}
+            </h3>
             <p class="muted">{item.role} · {item.status} · {item.year}</p>
             {item.ratings && (
               <div class="rating-pills">

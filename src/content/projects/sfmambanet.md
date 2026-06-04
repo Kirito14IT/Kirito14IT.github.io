@@ -3,7 +3,9 @@ title: "SFMambaNet: Spectral-Frequency Correspondence Pruning"
 date: 2025-09-01
 summary: "A spectral-frequency enhanced selective state space model for efficient visual correspondence pruning."
 tags: ["Computer Vision", "State Space Models", "Correspondence Pruning"]
-links: []
+links:
+  - label: "arXiv / DOI"
+    url: "https://doi.org/10.48550/arXiv.2606.04493"
 featured: true
 ---
 

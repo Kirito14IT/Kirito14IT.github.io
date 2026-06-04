@@ -125,6 +125,7 @@ export const publications = [
     status: "arXiv preprint and under review",
     role: "First author",
     year: "2026",
+    url: "https://doi.org/10.48550/arXiv.2606.04493",
     tags: ["Computer Vision", "State Space Model"],
     ratings: ["SCI Zone 1", "CCF B"],
     frameworkImage: "/figures/sfmambanet-framework.png",

@@ -1,0 +1,759 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>XSafeClaw · Stargazer Atlas</title>
+    <style>
+      :root {
+        --bg: #070b16;
+        --panel: rgba(12, 18, 35, 0.8);
+        --panel-strong: rgba(14, 22, 42, 0.92);
+        --line: rgba(126, 156, 216, 0.16);
+        --gold: #e9c46f;
+        --cyan: #58d5c7;
+        --text: #dbe6f6;
+        --muted: #7e8ba6;
+        --danger: #f36d7a;
+        --serif: Georgia, "Times New Roman", "STZhongsong", "SimSun", serif;
+        --sans: "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background:
+          radial-gradient(960px 540px at 24% 0%, rgba(55, 83, 155, 0.35), transparent 62%),
+          radial-gradient(860px 520px at 82% 92%, rgba(88, 213, 199, 0.08), transparent 64%),
+          linear-gradient(180deg, rgba(8, 12, 24, 0.92), rgba(4, 7, 15, 1));
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      #map {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+      }
+
+      .header {
+        position: absolute;
+        top: 28px;
+        left: 34px;
+        z-index: 10;
+        width: min(560px, calc(100vw - 380px));
+        pointer-events: none;
+      }
+
+      .kicker {
+        margin-bottom: 10px;
+        color: #a78e5e;
+        font-size: 11px;
+        letter-spacing: 0.42em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0;
+        color: #f4ead2;
+        font-family: var(--serif);
+        font-size: 36px;
+        font-weight: 650;
+        line-height: 1.12;
+      }
+
+      h1 span {
+        color: var(--gold);
+      }
+
+      .subtitle {
+        margin-top: 10px;
+        color: var(--muted);
+        font-size: 13px;
+        letter-spacing: 0.04em;
+      }
+
+      .rule {
+        width: 72px;
+        height: 1px;
+        margin-top: 18px;
+        background: linear-gradient(90deg, var(--gold), transparent);
+      }
+
+      .stats {
+        position: absolute;
+        top: 180px;
+        left: 34px;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .chip {
+        min-width: 218px;
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        padding: 10px 16px;
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        background: var(--panel);
+        backdrop-filter: blur(12px);
+      }
+
+      .chip b {
+        color: #f4ead2;
+        font-family: var(--serif);
+        font-size: 24px;
+        font-weight: 650;
+      }
+
+      .chip span {
+        color: var(--muted);
+        font-size: 12px;
+        letter-spacing: 0.1em;
+      }
+
+      .chip i {
+        margin-left: auto;
+        color: var(--cyan);
+        font-size: 11px;
+        font-style: normal;
+      }
+
+      .panel {
+        position: absolute;
+        top: 28px;
+        right: 28px;
+        bottom: 88px;
+        z-index: 10;
+        width: 340px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: var(--panel);
+        backdrop-filter: blur(16px);
+      }
+
+      .tabs {
+        display: flex;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .tabs button,
+      .view-toggle button,
+      .back {
+        font-family: var(--sans);
+        cursor: pointer;
+      }
+
+      .tabs button {
+        flex: 1;
+        padding: 13px 0 11px;
+        border: 0;
+        border-bottom: 2px solid transparent;
+        background: transparent;
+        color: var(--muted);
+        font-size: 13px;
+        letter-spacing: 0.18em;
+      }
+
+      .tabs button.active {
+        border-bottom-color: var(--gold);
+        color: var(--gold);
+      }
+
+      .list,
+      .detail {
+        flex: 1;
+        overflow-y: auto;
+      }
+
+      .list::-webkit-scrollbar,
+      .detail::-webkit-scrollbar {
+        width: 5px;
+      }
+
+      .list::-webkit-scrollbar-thumb,
+      .detail::-webkit-scrollbar-thumb {
+        border-radius: 4px;
+        background: rgba(126, 156, 216, 0.24);
+      }
+
+      .row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 18px;
+        cursor: pointer;
+      }
+
+      .row:hover {
+        background: rgba(233, 196, 111, 0.07);
+      }
+
+      .rank {
+        width: 24px;
+        flex: 0 0 auto;
+        color: #a78e5e;
+        font-family: var(--serif);
+        font-size: 13px;
+        text-align: right;
+      }
+
+      .name {
+        min-width: 0;
+        flex: 1;
+      }
+
+      .name .primary,
+      .name .secondary {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .name .primary {
+        color: #e7eefb;
+        font-size: 13px;
+      }
+
+      .name .secondary {
+        margin-top: 1px;
+        color: var(--muted);
+        font-size: 10.5px;
+      }
+
+      .bar {
+        height: 3px;
+        margin-top: 5px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--gold), rgba(88, 213, 199, 0.78));
+      }
+
+      .count {
+        min-width: 28px;
+        color: var(--gold);
+        font-family: var(--serif);
+        font-size: 15px;
+        text-align: right;
+      }
+
+      .detail {
+        display: none;
+        padding: 18px 20px;
+      }
+
+      .detail.show {
+        display: block;
+      }
+
+      .back {
+        margin-bottom: 14px;
+        padding: 5px 14px;
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        background: transparent;
+        color: var(--muted);
+        font-size: 11px;
+        letter-spacing: 0.14em;
+      }
+
+      .detail h2 {
+        margin: 0;
+        color: #f4ead2;
+        font-family: var(--serif);
+        font-size: 24px;
+        font-weight: 650;
+      }
+
+      .detail .meta {
+        margin: 4px 0 16px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .detail h3 {
+        margin: 16px 0 8px;
+        color: #a78e5e;
+        font-size: 11px;
+        letter-spacing: 0.26em;
+        text-transform: uppercase;
+      }
+
+      .org {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 5px 0;
+        border-bottom: 1px dashed rgba(126, 156, 216, 0.12);
+        font-size: 12.5px;
+      }
+
+      .org em {
+        min-width: 0;
+        overflow: hidden;
+        color: #e7eefb;
+        font-style: normal;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .org b {
+        flex: 0 0 auto;
+        color: var(--gold);
+        font-family: var(--serif);
+      }
+
+      .empty {
+        padding: 6px 0;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .view-toggle {
+        position: absolute;
+        left: 34px;
+        bottom: 84px;
+        z-index: 10;
+        display: flex;
+        gap: 8px;
+      }
+
+      .view-toggle button {
+        padding: 9px 22px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: var(--panel);
+        color: var(--muted);
+        font-size: 12px;
+        letter-spacing: 0.2em;
+      }
+
+      .view-toggle button.active {
+        border-color: #a78e5e;
+        color: var(--gold);
+        box-shadow: 0 0 18px rgba(233, 196, 111, 0.12);
+      }
+
+      .legend {
+        position: absolute;
+        right: 30px;
+        bottom: 56px;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        color: var(--muted);
+        font-size: 11px;
+      }
+
+      .legend .dot {
+        display: inline-block;
+        margin-right: 6px;
+        border-radius: 999px;
+        background: radial-gradient(circle at 35% 35%, #ffe9b8, var(--gold) 60%, rgba(233, 196, 111, 0.22));
+        vertical-align: middle;
+      }
+
+      .foot {
+        position: absolute;
+        left: 34px;
+        bottom: 30px;
+        z-index: 10;
+        max-width: calc(100vw - 420px);
+        color: var(--muted);
+        font-size: 11px;
+        letter-spacing: 0.06em;
+      }
+
+      .foot a {
+        color: var(--cyan);
+        text-decoration: none;
+      }
+
+      .error {
+        color: var(--danger);
+      }
+
+      @media (max-width: 920px) {
+        body {
+          overflow: auto;
+        }
+
+        #map {
+          height: 72vh;
+          min-height: 520px;
+        }
+
+        .header,
+        .stats,
+        .panel,
+        .view-toggle,
+        .legend,
+        .foot {
+          position: relative;
+          inset: auto;
+          width: auto;
+          max-width: none;
+          margin: 18px;
+        }
+
+        .header {
+          padding-top: 18px;
+        }
+
+        h1 {
+          font-size: 28px;
+        }
+
+        .stats {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .chip {
+          min-width: 0;
+        }
+
+        .panel {
+          height: 520px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map" aria-label="XSafeClaw stargazer world map"></div>
+
+    <header class="header">
+      <div class="kicker">XSafeClaw · Stargazer Atlas</div>
+      <h1>安全智能体 <span>★</span> 星图</h1>
+      <div class="subtitle">XSafeClaw Star 用户的地理分布与高校 / 企业图谱</div>
+      <div class="rule"></div>
+    </header>
+
+    <section class="stats" id="stats" aria-label="Atlas statistics"></section>
+
+    <aside class="panel" aria-label="Atlas rankings">
+      <div class="tabs" id="tabs">
+        <button type="button" data-tab="city" class="active">城 市</button>
+        <button type="button" data-tab="school">高 校</button>
+        <button type="button" data-tab="company">企 业</button>
+      </div>
+      <div class="list" id="list"></div>
+      <div class="detail" id="detail"></div>
+    </aside>
+
+    <nav class="view-toggle" aria-label="Map view">
+      <button type="button" id="worldView" class="active">全 球</button>
+      <button type="button" id="chinaView">中 国</button>
+    </nav>
+
+    <div class="legend">
+      <span><span class="dot" style="width: 7px; height: 7px"></span>1 人</span>
+      <span><span class="dot" style="width: 13px; height: 13px"></span>5 人</span>
+      <span><span class="dot" style="width: 19px; height: 19px"></span>15+ 人</span>
+    </div>
+
+    <footer class="foot" id="foot"></footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@4.9.0/map/js/world.js"></script>
+    <script src="data.js"></script>
+    <script>
+      const atlas = window.ATLAS;
+      const stats = document.getElementById("stats");
+      const list = document.getElementById("list");
+      const detail = document.getElementById("detail");
+      const tabs = document.getElementById("tabs");
+      const foot = document.getElementById("foot");
+      const worldView = document.getElementById("worldView");
+      const chinaView = document.getElementById("chinaView");
+      const mapEl = document.getElementById("map");
+      let tab = "city";
+      let chart;
+
+      function formatNumber(value) {
+        return Number(value || 0).toLocaleString();
+      }
+
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;");
+      }
+
+      function renderStats() {
+        const cards = [
+          [atlas.totalStars, "总 STAR 数", "★"],
+          [atlas.located, "可定位 Star 用户", `${atlas.countryCount} 个国家与地区`],
+          [atlas.schoolCount, "高校与科研机构", ""],
+          [atlas.companyCount, "企业与组织", ""],
+        ];
+        stats.innerHTML = cards
+          .map(
+            ([value, label, note]) =>
+              `<div class="chip"><b>${formatNumber(value)}</b><span>${label}</span><i>${note}</i></div>`,
+          )
+          .join("");
+      }
+
+      function renderFooter() {
+        foot.innerHTML =
+          `数据来源：GitHub Stargazers API（<a href="https://github.com/${atlas.repo}">${atlas.repo}</a>）` +
+          `&nbsp;·&nbsp;生成于 ${atlas.generated}` +
+          `&nbsp;·&nbsp;仅发布聚合统计，不发布 raw 用户列表`;
+      }
+
+      function cityData() {
+        return atlas.cities.map((city) => ({
+          name: city.zh,
+          value: [city.lng, city.lat, city.count],
+          raw: city,
+        }));
+      }
+
+      function pointSize(count) {
+        const max = Math.max(1, atlas.cities[0]?.count || 1);
+        return 7 + Math.sqrt(count / max) * 25;
+      }
+
+      function tooltip(city) {
+        const orgLine = (items, label) =>
+          items.length
+            ? `<div style="margin-top:7px;font-size:10px;letter-spacing:.18em;color:#a78e5e">${label}</div>` +
+              items
+                .slice(0, 4)
+                .map(
+                  ([name, count]) =>
+                    `<div style="font-size:11.5px;color:#dbe6f6">${escapeHtml(name)} <span style="color:#e9c46f">· ${count}</span></div>`,
+                )
+                .join("")
+            : "";
+        return (
+          `<div style="font-family:Georgia,serif;font-size:16px;color:#f4ead2">${escapeHtml(city.zh)}</div>` +
+          `<div style="font-size:12px;color:#58d5c7;margin-top:2px">★ ${city.count} 位 Star 用户</div>` +
+          orgLine(city.schools, "高校") +
+          orgLine(city.companies, "企业") +
+          `<div style="margin-top:7px;font-size:10.5px;color:#7e8ba6">点击查看机构统计</div>`
+        );
+      }
+
+      function renderMap() {
+        if (!window.echarts || !atlas) {
+          mapEl.innerHTML = '<p class="error">星图资源加载失败。</p>';
+          return;
+        }
+        chart = echarts.init(mapEl);
+        const values = cityData();
+        const countryMax = Math.max(1, ...Object.values(atlas.countries || {}));
+        const regions = Object.entries(atlas.countries || {}).map(([name, count]) => ({
+          name,
+          itemStyle: {
+            areaColor:
+              count === countryMax
+                ? "#1c2c5a"
+                : `rgba(36,58,118,${0.24 + 0.52 * Math.sqrt(count / countryMax)})`,
+          },
+        }));
+        chart.setOption({
+          backgroundColor: "transparent",
+          tooltip: {
+            trigger: "item",
+            backgroundColor: "rgba(8,13,28,.94)",
+            borderColor: "rgba(233,196,111,.36)",
+            borderWidth: 1,
+            padding: [10, 14],
+            extraCssText: "border-radius:10px;backdrop-filter:blur(8px);max-width:280px",
+            formatter: (params) => (params.data?.raw ? tooltip(params.data.raw) : null),
+          },
+          geo: {
+            map: "world",
+            roam: true,
+            center: [18, 24],
+            zoom: 1.12,
+            zoomLimit: { min: 0.9, max: 14 },
+            itemStyle: {
+              areaColor: "#0d1430",
+              borderColor: "rgba(100,135,204,.32)",
+              borderWidth: 0.6,
+            },
+            emphasis: { disabled: true },
+            label: { show: false },
+            regions,
+          },
+          series: [
+            {
+              name: "cities",
+              type: "scatter",
+              coordinateSystem: "geo",
+              data: values,
+              symbolSize: (value) => pointSize(value[2]),
+              itemStyle: {
+                color: {
+                  type: "radial",
+                  x: 0.35,
+                  y: 0.35,
+                  r: 1,
+                  colorStops: [
+                    { offset: 0, color: "rgba(255,233,184,.95)" },
+                    { offset: 0.55, color: "rgba(233,196,111,.86)" },
+                    { offset: 1, color: "rgba(233,196,111,.16)" },
+                  ],
+                },
+                shadowBlur: 12,
+                shadowColor: "rgba(233,196,111,.48)",
+              },
+              emphasis: { scale: 1.38 },
+              z: 4,
+            },
+            {
+              name: "top",
+              type: "effectScatter",
+              coordinateSystem: "geo",
+              data: values.slice(0, 8),
+              symbolSize: (value) => pointSize(value[2]),
+              rippleEffect: { brushType: "stroke", scale: 2.5, period: 5 },
+              itemStyle: {
+                color: "rgba(233,196,111,.92)",
+                shadowBlur: 16,
+                shadowColor: "rgba(233,196,111,.62)",
+              },
+              label: {
+                show: true,
+                position: "right",
+                distance: 7,
+                formatter: (params) => (params.dataIndex < window.__labelCount ? params.data.raw.zh : ""),
+                color: "#eadab5",
+                fontSize: 11,
+                fontFamily: "Georgia, STZhongsong, serif",
+                textShadowColor: "rgba(0,0,0,.85)",
+                textShadowBlur: 4,
+              },
+              z: 5,
+            },
+          ],
+        });
+        chart.on("click", (params) => {
+          if (params.data?.raw) showCity(params.data.raw.name, false);
+        });
+        window.addEventListener("resize", () => chart.resize());
+      }
+
+      function setView(world) {
+        worldView.classList.toggle("active", world);
+        chinaView.classList.toggle("active", !world);
+        window.__labelCount = world ? 3 : 8;
+        chart.setOption({
+          geo: { center: world ? [18, 24] : [105, 35.5], zoom: world ? 1.12 : 3.8 },
+          series: [{}, { label: { formatter: (params) => (params.dataIndex < window.__labelCount ? params.data.raw.zh : "") } }],
+        });
+      }
+
+      function renderList() {
+        detail.classList.remove("show");
+        list.style.display = "block";
+        if (tab === "city") {
+          const max = Math.max(1, atlas.cities[0]?.count || 1);
+          list.innerHTML = atlas.cities
+            .map(
+              (city, index) => `
+              <div class="row" data-city="${escapeHtml(city.name)}">
+                <div class="rank">${index + 1}</div>
+                <div class="name">
+                  <div class="primary">${escapeHtml(city.zh)}${city.country !== "China" ? ` <span class="secondary">${escapeHtml(city.country)}</span>` : ""}</div>
+                  <div class="bar" style="width:${Math.max(4, (100 * city.count) / max)}%"></div>
+                </div>
+                <div class="count">${city.count}</div>
+              </div>`,
+            )
+            .join("");
+          list.querySelectorAll("[data-city]").forEach((row) => {
+            row.addEventListener("click", () => showCity(row.dataset.city, true));
+          });
+          return;
+        }
+
+        const rows = tab === "school" ? atlas.schools : atlas.companies;
+        const max = Math.max(1, rows[0]?.count || 1);
+        list.innerHTML = rows
+          .map((item, index) => {
+            const zhMain = /[\u4e00-\u9fff]/.test(item.zh);
+            const title = zhMain ? item.zh : item.en;
+            const subtitle = `${zhMain && item.zh !== item.en ? `${item.en} · ` : ""}${item.city || ""}`;
+            return `
+              <div class="row">
+                <div class="rank">${index + 1}</div>
+                <div class="name">
+                  <div class="primary">${escapeHtml(title)}</div>
+                  <div class="secondary">${escapeHtml(subtitle)}</div>
+                  <div class="bar" style="width:${Math.max(4, (100 * item.count) / max)}%"></div>
+                </div>
+                <div class="count">${item.count}</div>
+              </div>`;
+          })
+          .join("");
+      }
+
+      function showCity(name, moveMap) {
+        const city = atlas.cities.find((item) => item.name === name);
+        if (!city) return;
+        const orgs = (items, title) =>
+          `<h3>${title}</h3>` +
+          (items.length
+            ? items.map(([name, count]) => `<div class="org"><em>${escapeHtml(name)}</em><b>${count}</b></div>`).join("")
+            : '<div class="empty">暂无公开资料</div>');
+        list.style.display = "none";
+        detail.classList.add("show");
+        detail.innerHTML = `
+          <button type="button" class="back">← 返回榜单</button>
+          <h2>${escapeHtml(city.zh)}</h2>
+          <div class="meta">${city.name !== city.zh ? `${escapeHtml(city.name)} · ` : ""}${escapeHtml(city.country)} · ★ ${city.count} 位 Star 用户</div>
+          ${orgs(city.schools, "高校与科研机构")}
+          ${orgs(city.companies, "企业与组织")}`;
+        detail.querySelector(".back").addEventListener("click", renderList);
+        if (moveMap && chart) {
+          chart.setOption({ geo: { center: [city.lng, city.lat], zoom: Math.max(4.5, chart.getOption().geo[0].zoom) } });
+        }
+      }
+
+      tabs.querySelectorAll("button").forEach((button) => {
+        button.addEventListener("click", () => {
+          tab = button.dataset.tab;
+          tabs.querySelectorAll("button").forEach((item) => item.classList.toggle("active", item === button));
+          renderList();
+        });
+      });
+
+      worldView.addEventListener("click", () => setView(true));
+      chinaView.addEventListener("click", () => setView(false));
+
+      window.__labelCount = 3;
+      renderStats();
+      renderFooter();
+      renderMap();
+      renderList();
+    </script>
+  </body>
+</html>

@@ -104,6 +104,15 @@ class BuildAtlasTest(unittest.TestCase):
         self.assertNotIn("全球安全星域", html)
         self.assertTrue(ATLAS_ICON.exists())
 
+    def test_static_atlas_page_draws_south_china_sea_dashed_boundary(self):
+        html = ATLAS_PAGE.read_text(encoding="utf-8")
+
+        self.assertIn("southChinaSeaDashes", html)
+        self.assertIn("south-china-sea-dash", html)
+        self.assertIn('type: "lines"', html)
+        self.assertIn('type: "dashed"', html)
+        self.assertIn("南海诸岛", html)
+
 
 if __name__ == "__main__":
     unittest.main()

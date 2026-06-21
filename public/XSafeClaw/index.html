@@ -977,6 +977,19 @@
         return 6 + Math.sqrt(count / max) * 30;
       }
 
+      function southChinaSeaDashes() {
+        return [
+          { coords: [[109.4, 20.4], [111.1, 18.1]] },
+          { coords: [[113.1, 16.8], [114.5, 14.3]] },
+          { coords: [[115.6, 12.5], [116.1, 10.0]] },
+          { coords: [[115.8, 8.2], [114.6, 6.4]] },
+          { coords: [[112.9, 5.1], [110.7, 4.2]] },
+          { coords: [[108.7, 5.0], [106.8, 7.2]] },
+          { coords: [[105.7, 9.3], [105.8, 11.9]] },
+          { coords: [[106.4, 14.2], [107.9, 17.0]] },
+        ];
+      }
+
       function tooltip(city) {
         const orgLine = (items, label) =>
           items.length
@@ -1050,6 +1063,38 @@
             regions,
           },
           series: [
+            {
+              name: "south-china-sea-dash",
+              type: "lines",
+              coordinateSystem: "geo",
+              data: southChinaSeaDashes(),
+              silent: true,
+              lineStyle: {
+                color: "rgba(65,242,230,.78)",
+                width: 1.5,
+                type: "dashed",
+                opacity: 0.86,
+              },
+              zlevel: 2,
+            },
+            {
+              name: "south-china-sea-label",
+              type: "scatter",
+              coordinateSystem: "geo",
+              data: [{ name: "南海诸岛", value: [113.4, 10.8, 0] }],
+              symbolSize: 1,
+              silent: true,
+              itemStyle: { color: "rgba(65,242,230,0)" },
+              label: {
+                show: true,
+                formatter: "{b}",
+                position: "right",
+                color: "rgba(143,162,183,.86)",
+                fontSize: 10,
+                fontWeight: 700,
+              },
+              zlevel: 2,
+            },
             {
               name: "signal-field",
               type: "scatter",

@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>XSafeClaw · Sentinel Atlas</title>
     <style>
+      @import url("https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap");
+
       :root {
         --void: #05070d;
         --deck: rgba(8, 14, 23, 0.82);
@@ -16,9 +18,12 @@
         --amber: #ffb357;
         --coral: #ff6b6b;
         --lime: #9cff73;
-        --text: #edf7ff;
-        --muted: #8fa2b7;
-        --dim: #587086;
+        --text: #bff6ee;
+        --cream: #f3d88b;
+        --bubble: #f0a8ff;
+        --muted: #8ec7cf;
+        --dim: #6295a0;
+        --comic: "ZCOOL KuaiLe", "Comic Sans MS", "Comic Neue", "Segoe Print", "PingFang SC", "Microsoft YaHei", cursive, sans-serif;
         --sans: "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
       }
 
@@ -33,7 +38,7 @@
         margin: 0;
         background: var(--void);
         color: var(--text);
-        font-family: var(--sans);
+        font-family: var(--comic);
       }
 
       body {
@@ -240,11 +245,13 @@
         align-items: center;
         gap: 8px;
         margin: 0;
-        color: var(--text);
+        color: var(--cream);
+        font-family: var(--comic);
         font-size: 31px;
         font-weight: 800;
         line-height: 1.08;
         letter-spacing: 0;
+        text-shadow: 0 0 14px rgba(255, 179, 87, 0.18);
       }
 
       .security-mark {
@@ -258,6 +265,7 @@
 
       .title-accent {
         color: var(--amber);
+        text-shadow: 0 0 16px rgba(255, 179, 87, 0.36);
       }
 
       .subtitle {
@@ -311,7 +319,8 @@
 
       .chip b {
         display: block;
-        color: var(--text);
+        color: var(--cream);
+        font-family: var(--comic);
         font-size: 26px;
         font-weight: 800;
         line-height: 1.1;
@@ -386,7 +395,7 @@
 
       .radar-copy strong {
         display: block;
-        color: var(--text);
+        color: var(--cream);
         font-size: 13px;
         letter-spacing: 0.08em;
       }
@@ -420,7 +429,7 @@
       .view-dock button,
       .tabs button,
       .back {
-        font-family: var(--sans);
+        font-family: var(--comic);
         cursor: pointer;
       }
 
@@ -436,7 +445,7 @@
 
       .view-dock button.active {
         background: linear-gradient(135deg, rgba(65, 242, 230, 0.18), rgba(217, 109, 255, 0.1));
-        color: var(--text);
+        color: var(--cream);
         box-shadow: inset 0 0 0 1px rgba(65, 242, 230, 0.2);
       }
 
@@ -473,7 +482,8 @@
 
       .console-head h2 {
         margin: 6px 0 0;
-        color: var(--text);
+        color: var(--cream);
+        font-family: var(--comic);
         font-size: 18px;
         font-weight: 800;
         letter-spacing: 0;
@@ -566,7 +576,7 @@
       }
 
       .name .primary {
-        color: var(--text);
+        color: var(--cream);
         font-size: 13px;
         font-weight: 700;
       }
@@ -578,9 +588,11 @@
       }
 
       .bar {
-        height: 4px;
+        height: 5px;
         margin-top: 7px;
+        border-radius: 999px;
         background: linear-gradient(90deg, var(--signal), var(--plasma), var(--amber));
+        box-shadow: 0 0 12px rgba(65, 242, 230, 0.18);
       }
 
       .count {
@@ -611,7 +623,7 @@
 
       .detail h2 {
         margin: 0;
-        color: var(--text);
+        color: var(--cream);
         font-size: 22px;
         font-weight: 800;
       }
@@ -643,7 +655,7 @@
       .org em {
         min-width: 0;
         overflow: hidden;
-        color: var(--text);
+        color: var(--cream);
         font-style: normal;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -673,7 +685,7 @@
         display: inline-block;
         margin-right: 6px;
         border-radius: 50%;
-        background: radial-gradient(circle, #ffffff 0 10%, var(--signal) 35%, rgba(65, 242, 230, 0.2) 75%);
+        background: radial-gradient(circle, #f7e7ad 0 10%, var(--signal) 35%, rgba(65, 242, 230, 0.2) 75%);
         vertical-align: middle;
         box-shadow: 0 0 16px rgba(65, 242, 230, 0.35);
       }
@@ -977,19 +989,6 @@
         return 6 + Math.sqrt(count / max) * 30;
       }
 
-      function southChinaSeaDashes() {
-        return [
-          { coords: [[109.4, 20.4], [111.1, 18.1]] },
-          { coords: [[113.1, 16.8], [114.5, 14.3]] },
-          { coords: [[115.6, 12.5], [116.1, 10.0]] },
-          { coords: [[115.8, 8.2], [114.6, 6.4]] },
-          { coords: [[112.9, 5.1], [110.7, 4.2]] },
-          { coords: [[108.7, 5.0], [106.8, 7.2]] },
-          { coords: [[105.7, 9.3], [105.8, 11.9]] },
-          { coords: [[106.4, 14.2], [107.9, 17.0]] },
-        ];
-      }
-
       function tooltip(city) {
         const orgLine = (items, label) =>
           items.length
@@ -998,12 +997,12 @@
                 .slice(0, 4)
                 .map(
                   ([name, count]) =>
-                    `<div style="font-size:11.5px;color:#edf7ff">${escapeHtml(name)} <span style="color:#ffb357">· ${count}</span></div>`,
+                    `<div style="font-size:11.5px;color:#bff6ee">${escapeHtml(name)} <span style="color:#ffb357">· ${count}</span></div>`,
                 )
                 .join("")
             : "";
         return (
-          `<div style="font-size:16px;font-weight:800;color:#edf7ff">${escapeHtml(city.zh)}</div>` +
+          `<div style="font-size:16px;font-weight:800;color:#f3d88b">${escapeHtml(city.zh)}</div>` +
           `<div style="font-size:12px;color:#41f2e6;margin-top:3px">★ ${city.count} 位 Star 用户</div>` +
           orgLine(city.schools, "高校") +
           orgLine(city.companies, "企业") +
@@ -1063,38 +1062,6 @@
             regions,
           },
           series: [
-            {
-              name: "south-china-sea-dash",
-              type: "lines",
-              coordinateSystem: "geo",
-              data: southChinaSeaDashes(),
-              silent: true,
-              lineStyle: {
-                color: "rgba(65,242,230,.78)",
-                width: 1.5,
-                type: "dashed",
-                opacity: 0.86,
-              },
-              zlevel: 2,
-            },
-            {
-              name: "south-china-sea-label",
-              type: "scatter",
-              coordinateSystem: "geo",
-              data: [{ name: "南海诸岛", value: [113.4, 10.8, 0] }],
-              symbolSize: 1,
-              silent: true,
-              itemStyle: { color: "rgba(65,242,230,0)" },
-              label: {
-                show: true,
-                formatter: "{b}",
-                position: "right",
-                color: "rgba(143,162,183,.86)",
-                fontSize: 10,
-                fontWeight: 700,
-              },
-              zlevel: 2,
-            },
             {
               name: "signal-field",
               type: "scatter",

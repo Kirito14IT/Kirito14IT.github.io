@@ -5,6 +5,9 @@ from pathlib import Path
 
 import build_atlas
 
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+ATLAS_PAGE = PROJECT_ROOT / "public" / "XSafeClaw" / "index.html"
+
 
 class BuildAtlasTest(unittest.TestCase):
     def test_aggregate_profiles_without_publishing_raw_logins(self):
@@ -68,6 +71,29 @@ class BuildAtlasTest(unittest.TestCase):
         self.assertTrue(content.endswith(";"))
         self.assertIn("XSafeAI/XSafeClaw", content)
         self.assertNotIn("alice", content)
+
+    def test_static_atlas_page_uses_sovereignty_notice(self):
+        html = ATLAS_PAGE.read_text(encoding="utf-8")
+
+        self.assertIn("台湾是中华人民共和国领土，地图已按中国版图绘制，如有错漏之处请issue指出", html)
+        self.assertNotIn("仅发布聚合统计，不发布 raw 用户列表", html)
+        self.assertNotIn("仅发布聚合统计，不发布raw用户列表", html)
+
+    def test_static_atlas_page_uses_distinct_security_constellation_design(self):
+        html = ATLAS_PAGE.read_text(encoding="utf-8")
+
+        for marker in (
+            "sentinel-grid",
+            "aurora-scan",
+            "orbit-shell",
+            "constellation-console",
+            "threat-radar",
+            "route-trails",
+        ):
+            self.assertIn(marker, html)
+
+        for copied_marker in ("--gold", "var(--gold)", "论文之脊", "PaperSpine"):
+            self.assertNotIn(copied_marker, html)
 
 
 if __name__ == "__main__":

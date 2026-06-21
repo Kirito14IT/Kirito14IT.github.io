@@ -7,6 +7,7 @@ import build_atlas
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 ATLAS_PAGE = PROJECT_ROOT / "public" / "XSafeClaw" / "index.html"
+ATLAS_ICON = PROJECT_ROOT / "public" / "XSafeClaw" / "shield-check.svg"
 
 
 class BuildAtlasTest(unittest.TestCase):
@@ -94,6 +95,14 @@ class BuildAtlasTest(unittest.TestCase):
 
         for copied_marker in ("--gold", "var(--gold)", "论文之脊", "PaperSpine"):
             self.assertNotIn(copied_marker, html)
+
+    def test_static_atlas_page_uses_agent_security_title_and_svg_icon(self):
+        html = ATLAS_PAGE.read_text(encoding="utf-8")
+
+        self.assertIn("智能体安全", html)
+        self.assertIn("shield-check.svg", html)
+        self.assertNotIn("全球安全星域", html)
+        self.assertTrue(ATLAS_ICON.exists())
 
 
 if __name__ == "__main__":

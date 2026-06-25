@@ -17,12 +17,27 @@ const allProjects = (await getCollection("projects"))
   .slice(0, 4);
 
 const slugFromId = (id: string) => id.replace(/\.md$/, "");
+
+const homeJumpLinks = [
+  { label: "Homepage", href: "#home" },
+  { label: "About Me", href: "#about" },
+  { label: "News", href: "#news" },
+  { label: "Research Experience", href: "#research-experience" },
+  { label: "Publications", href: "#publications" },
+  { label: "Projects", href: "#projects" },
+  { label: "Awards", href: "#awards-skills" }
+];
 ---
 
 <BaseLayout>
+  <div id="home" class="anchor-sentinel"></div>
+  <nav class="quick-jump-nav" aria-label="Homepage section shortcuts">
+    {homeJumpLinks.map((link) => <a href={link.href}>{link.label}</a>)}
+  </nav>
+
   <TypingHero />
 
-  <Section title="About Me" eyebrow="Profile">
+  <Section id="about" title="About Me" eyebrow="Profile">
     <div class="glass-card prose-card">
       <p>{profile.bio}</p>
       <p>
@@ -34,24 +49,24 @@ const slugFromId = (id: string) => id.replace(/\.md$/, "");
     </div>
   </Section>
 
-  <ContactLinks />
+  <ContactLinks id="contact" />
 
-  <Section title="News" eyebrow="Recent updates">
+  <Section id="news" title="News" eyebrow="Recent updates">
     <div class="news-list">
       {news.map((item) => (
         <article>
           <time>{item.date}</time>
-          <p>{item.text}</p>
+          {item.html ? <p set:html={item.html} /> : <p>{item.text}</p>}
         </article>
       ))}
     </div>
   </Section>
 
-  <Section title="Selected Research and Experience" eyebrow="Timeline">
+  <Section id="research-experience" title="Selected Research and Experience" eyebrow="Timeline">
     <Timeline items={experiences.slice(0, 5)} />
   </Section>
 
-  <Section title="Selected Publications and Manuscripts" eyebrow="Research output">
+  <Section id="publications" title="Selected Publications and Manuscripts" eyebrow="Research output">
     <div class="publication-list">
       {publications.map((item) => (
         <article class="publication-card">
@@ -88,17 +103,17 @@ const slugFromId = (id: string) => id.replace(/\.md$/, "");
 
   <ContributionGraph />
 
-  <Section title="Featured Projects" eyebrow="Builds and artifacts">
+  <Section id="projects" title="Featured Projects" eyebrow="Builds and artifacts">
     <div class="card-grid">
       {allProjects.map((item) => <ProjectCard item={item} href={`/projects/${slugFromId(item.id)}/`} />)}
     </div>
   </Section>
 
-  <Section title="Learning Map" eyebrow="Knowledge progress">
+  <Section id="learning-map" title="Learning Map" eyebrow="Knowledge progress">
     <LearningMap />
   </Section>
 
-  <Section title="Awards and Skills" eyebrow="Signals">
+  <Section id="awards-skills" title="Awards and Skills" eyebrow="Signals">
     <div class="two-column">
       <div class="glass-card">
         <h3>Selected Honors</h3>

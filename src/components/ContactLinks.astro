@@ -1,8 +1,10 @@
 ---
 import { profile } from "@data/profile";
+
+const { id } = Astro.props;
 ---
 
-<section class="contact-panel glass-card">
+<section id={id} class="contact-panel glass-card">
   <div>
     <p class="eyebrow">Contact and Representative Links</p>
     <h3>Open to academic discussion and collaboration</h3>

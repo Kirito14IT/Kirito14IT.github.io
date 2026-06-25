@@ -1,4 +1,7 @@
 const yizhangLiuProfileUrl = "https://ccds.fzu.edu.cn/info/1207" + "/11276.htm";
+const xsafeclawUrl = "https://github.com/XSafeAI/XSafeClaw";
+const teaiUrl = "https://teai.fudan.edu.cn/";
+const xingjunMaUrl = "http://xingjunma.com/";
 
 export const education = [
   {
@@ -21,8 +24,8 @@ export const news = [
   },
   {
     date: "June 2026",
-    text:
-      "Joined Prof. Ma's team on an enterprise-oriented multi-agent secure collaboration project, contributing to requirements analysis, system design, implementation, and testing."
+    html:
+      `Joined <a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">Dr. Xingjun Ma</a>'s team at <a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">TEAI, Fudan University</a> on an enterprise-oriented multi-agent secure collaboration project, contributing to requirements analysis, system design, implementation, and testing.`
   },
   {
     date: "May 2026",
@@ -31,8 +34,8 @@ export const news = [
   },
   {
     date: "Apr 2026",
-    text:
-      "Joined the XSafeClaw agent safety project and worked on runtime integration, controlled tool calls, and safety audit workflows."
+    html:
+      `Joined the <a href="${xsafeclawUrl}" target="_blank" rel="noopener noreferrer">XSafeClaw</a> agent safety project at <a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">TEAI, Fudan University</a> and worked on runtime integration, controlled tool calls, and safety audit workflows.`
   },
   {
     date: "Feb 2026",
@@ -54,16 +57,28 @@ export const news = [
 export const experiences = [
   {
     title: "Research Intern, XSafeClaw Agent Runtime Safety",
-    organization: "Fudan Trusted Embodied AI Institute",
+    titleUrl: xsafeclawUrl,
+    organization: "Institute of Trustworthy Embodied AI (TEAI), Fudan University",
+    organizationUrl: teaiUrl,
     period: "Apr 2026 - Present",
-    tags: ["Agent Safety", "Runtime Governance", "Open Source"],
+    tags: ["TEAI", "Agent Safety", "Runtime Governance", "Open Source"],
     bullets: [
-      "Worked on XSafeClaw, an open-source safety platform for local and multi-runtime agent systems.",
+      {
+        html:
+          `Worked on <a href="${xsafeclawUrl}" target="_blank" rel="noopener noreferrer">XSafeClaw</a>, an open-source safety platform for local and multi-runtime agent systems, at <a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">TEAI, Fudan University</a>.`
+      },
+      {
+        html:
+          `Worked under the guidance of <a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">Dr. Xingjun Ma</a>, a Young Researcher and doctoral supervisor at Fudan University.`
+      },
       "Implemented runtime integration for nanobot-style local agent sessions, including session discovery, controlled tool calls, and unified platform display.",
-      "Contributed to risk control workflows, validation, and documentation for explainable agent governance.",
-      "The public XSafeClaw repository had 150 GitHub stars when this site plan was prepared."
+      "Contributed to risk control workflows, validation, and documentation for explainable agent governance."
     ],
-    links: [{ label: "XSafeClaw", url: "https://github.com/XSafeAI/XSafeClaw" }]
+    links: [
+      { label: "XSafeClaw", url: xsafeclawUrl },
+      { label: "TEAI", url: teaiUrl },
+      { label: "Dr. Xingjun Ma", url: xingjunMaUrl }
+    ]
   },
   {
     title: "Research Intern, VulnSeeker",

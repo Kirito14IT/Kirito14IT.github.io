@@ -6,10 +6,16 @@ tags: ["Agent Safety", "Runtime Governance", "Open Source"]
 links:
   - label: "GitHub"
     url: "https://github.com/XSafeAI/XSafeClaw"
+  - label: "TEAI"
+    url: "https://teai.fudan.edu.cn/"
+  - label: "Dr. Xingjun Ma"
+    url: "http://xingjunma.com/"
 featured: true
 ---
 
-XSafeClaw is an agent safety platform for local and multi-runtime agent systems. It connects runtime trajectory collection, tool-call inspection, human approval, and risk auditing into a unified safety access layer.
+[XSafeClaw](https://github.com/XSafeAI/XSafeClaw) is an agent safety platform for local and multi-runtime agent systems. It connects runtime trajectory collection, tool-call inspection, human approval, and risk auditing into a unified safety access layer.
+
+This work is conducted at the [Institute of Trustworthy Embodied AI (TEAI), Fudan University](https://teai.fudan.edu.cn/) under the guidance of [Dr. Xingjun Ma](http://xingjunma.com/), a Young Researcher and doctoral supervisor at Fudan University.
 
 My work focused on nanobot-style runtime integration:
 

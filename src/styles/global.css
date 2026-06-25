@@ -28,6 +28,10 @@ html {
   scroll-behavior: smooth;
 }
 
+:target {
+  scroll-margin-top: 94px;
+}
+
 body {
   margin: 0;
   color: var(--ink);
@@ -342,6 +346,56 @@ a {
 
 .main-content {
   min-width: 0;
+}
+
+.anchor-sentinel {
+  position: relative;
+  top: -24px;
+}
+
+.quick-jump-nav {
+  position: sticky;
+  top: 18px;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 0 18px;
+  padding: 8px;
+  overflow-x: auto;
+  border: 1px solid rgba(255, 255, 255, 0.78);
+  border-radius: 999px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(244, 250, 255, 0.78)),
+    radial-gradient(circle at 20% 0%, rgba(37, 99, 235, 0.14), transparent 34%);
+  box-shadow: 0 18px 50px rgba(42, 67, 112, 0.16);
+  backdrop-filter: blur(22px);
+  scrollbar-width: none;
+}
+
+.quick-jump-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.quick-jump-nav a {
+  flex: 0 0 auto;
+  padding: 8px 12px;
+  border-radius: 999px;
+  color: #31445f;
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  transition: color 180ms ease, background 180ms ease, transform 180ms ease;
+}
+
+.quick-jump-nav a:hover {
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--blue), var(--violet));
+  transform: translateY(-1px);
 }
 
 .hero-panel {
@@ -833,6 +887,19 @@ a {
   text-decoration: underline;
 }
 
+.news-list a,
+.markdown-body a {
+  color: #1f5fbf;
+  font-weight: 700;
+  text-decoration: none;
+  text-underline-offset: 0.18em;
+}
+
+.news-list a:hover,
+.markdown-body a:hover {
+  text-decoration: underline;
+}
+
 .muted {
   color: var(--muted);
 }
@@ -1129,6 +1196,11 @@ a {
     position: static;
   }
 
+  .quick-jump-nav {
+    top: 10px;
+    width: 100%;
+  }
+
   .timeline-item,
   .two-column,
   .contact-panel {
@@ -1182,6 +1254,15 @@ a {
   .hero-panel {
     min-height: 420px;
     border-radius: 28px;
+  }
+
+  .quick-jump-nav {
+    border-radius: 24px;
+  }
+
+  .quick-jump-nav a {
+    padding: 7px 10px;
+    font-size: 0.68rem;
   }
 
   .hero-panel::before {

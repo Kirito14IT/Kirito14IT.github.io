@@ -2,6 +2,8 @@ const yizhangLiuProfileUrl = "https://ccds.fzu.edu.cn/info/1207" + "/11276.htm";
 const xsafeclawUrl = "https://github.com/XSafeAI/XSafeClaw";
 const teaiUrl = "https://teai.fudan.edu.cn/";
 const xingjunMaUrl = "http://xingjunma.com/";
+const codeWisdomLabUrl = "http://www.se.fudan.edu.cn/";
+const yiLiUrl = "http://www.se.fudan.edu.cn/#";
 
 export const education = [
   {
@@ -44,8 +46,8 @@ export const news = [
   },
   {
     date: "Jan 2026",
-    text:
-      "Worked on VulnSeeker, combining CodeQL static analysis with LLM-based security judgement."
+    html:
+      `Worked on VulnSeeker at the <a href="${codeWisdomLabUrl}" target="_blank" rel="noopener noreferrer">Fudan Software Engineering (CodeWisdom) Lab</a>, combining CodeQL static analysis with LLM-based security judgement.`
   },
   {
     date: "Sep 2025",
@@ -82,13 +84,25 @@ export const experiences = [
   },
   {
     title: "Research Intern, VulnSeeker",
-    organization: "Fudan Software Engineering Lab",
+    organization: "Fudan Software Engineering (CodeWisdom) Lab",
+    organizationUrl: codeWisdomLabUrl,
     period: "Jan 2026 - Mar 2026",
-    tags: ["CodeQL", "LLM Security", "Program Analysis"],
+    tags: ["CodeWisdom", "CodeQL", "LLM Security", "Program Analysis"],
     bullets: [
-      "Built an automated code security analysis workflow that combines CodeQL static analysis with LLM-based vulnerability judgement.",
-      "Designed prompt workflows for CodeQL and LLM interaction, including structured status codes for security decisions.",
-      "Implemented code context expansion, vulnerability detection after code generation, and combined rule-based plus model-based assessment."
+      {
+        html:
+          `Conducted research at the <a href="${codeWisdomLabUrl}" target="_blank" rel="noopener noreferrer">Fudan Software Engineering (CodeWisdom) Lab</a>, focusing on automated security analysis for generated and repository code.`
+      },
+      {
+        html:
+          `Worked under the guidance of <a href="${yiLiUrl}" target="_blank" rel="noopener noreferrer">Lecturer Yi Li</a> and collaborated with Qicai Chen, a Ph.D. student, on literature review, workflow design, and experimental validation.`
+      },
+      "Built a CodeQL-assisted vulnerability analysis workflow that combines static analysis, code context expansion, and LLM-based security judgement.",
+      "Designed prompt workflows for CodeQL and LLM interaction, including structured status codes for vulnerability triage and post-generation security inspection."
+    ],
+    links: [
+      { label: "CodeWisdom Lab", url: codeWisdomLabUrl },
+      { label: "Lecturer Yi Li", url: yiLiUrl }
     ]
   },
   {

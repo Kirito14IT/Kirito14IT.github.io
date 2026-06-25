@@ -1,3 +1,5 @@
+const yizhangLiuProfileUrl = "https://ccds.fzu.edu.cn/info/1207" + "/11276.htm";
+
 export const education = [
   {
     degree: "B.Eng. in Computer Science and Technology",
@@ -106,15 +108,30 @@ export const experiences = [
     ]
   },
   {
-    title: "First-author Research, SFMambaNet",
-    titleUrl: "https://doi.org/10.48550/arXiv.2606.04493",
-    organization: "Multimedia Intelligent Computing and Security Lab",
-    period: "Sep 2025 - Feb 2026",
+    title: "Research Intern, SFMambaNet",
+    titleUrl: "https://arxiv.org/abs/2606.04493",
+    organization: "Fujian Key Laboratory of Network Computing and Intelligent Information Processing, Fuzhou University",
+    organizationUrl: "https://ncip.fzu.edu.cn/xsdt.htm",
+    period: "Sep 2025 - Mar 2026",
     tags: ["Computer Vision", "Correspondence Pruning", "Mamba", "State Space Models", "Frequency Domain", "Two-View Geometry", "Outlier Rejection"],
     bullets: [
-      "Proposed SFMambaNet, a spectral-frequency enhanced selective state space model for correspondence pruning.",
-      "Explored frequency-aware global context modeling as an efficient alternative to quadratic-complexity Transformer designs.",
-      "Completed literature review, core idea design, experiments, and manuscript writing under faculty supervision."
+      {
+        html:
+          'Worked as a research intern at <a href="https://ncip.fzu.edu.cn/xsdt.htm" target="_blank" rel="noopener noreferrer">Fujian Key Laboratory of Network Computing and Intelligent Information Processing</a>, Fuzhou University, from September 2025 to March 2026.'
+      },
+      {
+        html:
+          `Worked closely with <a href="${yizhangLiuProfileUrl}" target="_blank" rel="noopener noreferrer">Dr. Yizhang Liu</a>, a university-appointed Associate Research Fellow and graduate supervisor, on robust two-view correspondence pruning.`
+      },
+      {
+        html:
+          'This work led to our manuscript <a href="https://arxiv.org/abs/2606.04493" target="_blank" rel="noopener noreferrer">SFMambaNet: Spectral-Frequency Enhanced Selective State Space Model for Correspondence Pruning</a>, submitted to IEEE Transactions on Circuits and Systems for Video Technology (TCSVT) and posted on arXiv in June 2026.'
+      }
+    ],
+    links: [
+      { label: "FZU Key Lab", url: "https://ncip.fzu.edu.cn/xsdt.htm" },
+      { label: "Dr. Yizhang Liu", url: yizhangLiuProfileUrl },
+      { label: "SFMambaNet arXiv", url: "https://arxiv.org/abs/2606.04493" }
     ]
   }
 ];

@@ -822,6 +822,17 @@ a {
   text-underline-offset: 0.18em;
 }
 
+.timeline-card a:not(.timeline-title-link) {
+  color: #1f5fbf;
+  font-weight: 700;
+  text-decoration: none;
+  text-underline-offset: 0.18em;
+}
+
+.timeline-card a:not(.timeline-title-link):hover {
+  text-decoration: underline;
+}
+
 .muted {
   color: var(--muted);
 }

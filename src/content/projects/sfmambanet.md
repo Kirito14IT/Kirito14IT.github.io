@@ -17,4 +17,4 @@ SFMambaNet investigates efficient global context modeling for correspondence pru
 
 The project introduces spectral-frequency awareness into a selective state space architecture. This direction aims to avoid the quadratic scaling of Transformer-style global attention while keeping strong global modeling capacity.
 
-My work included literature review, idea formulation, experiments, and manuscript writing under faculty supervision.
+This work was conducted during a research internship at the [Fujian Key Laboratory of Network Computing and Intelligent Information Processing](https://ncip.fzu.edu.cn/xsdt.htm), Fuzhou University, under the supervision of Dr. Yizhang Liu. The manuscript was submitted to IEEE Transactions on Circuits and Systems for Video Technology (TCSVT) and posted on arXiv in June 2026.

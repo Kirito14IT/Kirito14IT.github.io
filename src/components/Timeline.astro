@@ -16,7 +16,17 @@ const { items } = Astro.props;
             item.title || item.text
           )}
         </h3>
-        {item.organization && <p class="muted">{item.organization}</p>}
+        {item.organization && (
+          <p class="muted">
+            {item.organizationUrl ? (
+              <a href={item.organizationUrl} target="_blank" rel="noopener noreferrer">
+                {item.organization}
+              </a>
+            ) : (
+              item.organization
+            )}
+          </p>
+        )}
         {item.tags && (
           <div class="tag-list">
             {item.tags.map((tag: string) => <span>{tag}</span>)}
@@ -24,7 +34,11 @@ const { items } = Astro.props;
         )}
         {item.bullets && (
           <ul>
-            {item.bullets.map((bullet: string) => <li>{bullet}</li>)}
+            {item.bullets.map((bullet: any) => (
+              <li>
+                {bullet.html ? <span set:html={bullet.html} /> : bullet}
+              </li>
+            ))}
           </ul>
         )}
         {item.links && (

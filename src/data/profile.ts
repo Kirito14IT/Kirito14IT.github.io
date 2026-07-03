@@ -35,6 +35,11 @@ export const profile = {
     { label: "Email", url: "mailto:2657751462@qq.com", displayUrl: "2657751462@qq.com" },
     { label: "GitHub", url: "https://github.com/Kirito14IT", displayUrl: "https://github.com/Kirito14IT" },
     {
+      label: "Google Scholar",
+      url: "https://scholar.google.com/citations?user=MyweXYYAAAAJ&hl=en",
+      displayUrl: "scholar.google.com/citations?user=MyweXYYAAAAJ"
+    },
+    {
       label: "XSafeClaw",
       url: "https://github.com/XSafeAI/XSafeClaw",
       displayUrl: "https://github.com/XSafeAI/XSafeClaw"

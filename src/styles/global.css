@@ -336,6 +336,45 @@ a {
   color: #1f334d;
 }
 
+.scholar-link {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(66, 133, 244, 0.32) !important;
+  background:
+    linear-gradient(135deg, rgba(66, 133, 244, 0.14), rgba(255, 255, 255, 0.84)) !important;
+}
+
+.scholar-link::after {
+  content: "";
+  position: absolute;
+  inset: auto -16% -45% auto;
+  width: 120px;
+  height: 120px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(66, 133, 244, 0.22), transparent 68%);
+  pointer-events: none;
+}
+
+.scholar-link strong::before,
+.scholar-link > span:first-child::before {
+  content: "GS";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 22px;
+  margin-right: 8px;
+  border-radius: 8px;
+  color: #ffffff;
+  background: linear-gradient(135deg, #4285f4, #1a73e8);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  vertical-align: 1px;
+  box-shadow: 0 10px 20px rgba(66, 133, 244, 0.22);
+}
+
 .sidebar-link-detail span {
   color: #6d7d95;
   font-family: var(--mono);

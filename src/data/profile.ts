@@ -36,8 +36,8 @@ export const profile = {
     { label: "GitHub", url: "https://github.com/Kirito14IT", displayUrl: "https://github.com/Kirito14IT" },
     {
       label: "Google Scholar",
-      url: "https://scholar.google.com/citations?user=MyweXYYAAAAJ&hl=en",
-      displayUrl: "scholar.google.com/citations?user=MyweXYYAAAAJ"
+      url: "https://scholar.google.com/citations?user=MyweXYYAAAAJ",
+      displayUrl: "Academic publications and citations"
     },
     {
       label: "XSafeClaw",
@@ -46,6 +46,11 @@ export const profile = {
     }
   ],
   representativeLinks: [
+    {
+      label: "Academic Profile: Google Scholar",
+      url: "https://scholar.google.com/citations?user=MyweXYYAAAAJ",
+      displayUrl: "Google Scholar Profile"
+    },
     {
       label: "Representative Open-Source Work: XSafeClaw",
       url: "https://github.com/XSafeAI/XSafeClaw",

@@ -42,7 +42,10 @@ const requiredPublicSnippets = [
   "meteor-layer",
   "Array.from({ length: 16 }",
   "document.addEventListener(\"pointermove\", moveSticker",
-  "z-index: 4;"
+  "z-index: 4;",
+  "https://scholar.google.com/citations?user=MyweXYYAAAAJ",
+  "Academic publications and citations",
+  "scholar-link"
 ];
 
 const missing = requiredFiles.filter((file) => !fs.existsSync(path.join(root, file)));

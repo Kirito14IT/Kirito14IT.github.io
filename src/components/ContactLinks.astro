@@ -13,7 +13,7 @@ const { id } = Astro.props;
 
   <div class="direct-link-list">
     {profile.links.map((link) => (
-      <a href={link.url} target={link.url.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer">
+      <a class={link.label === "Google Scholar" ? "scholar-link" : undefined} href={link.url} target={link.url.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer">
         <strong>{link.label}</strong>
         <span>{link.displayUrl || link.url}</span>
       </a>
@@ -22,7 +22,7 @@ const { id } = Astro.props;
 
   <div class="representative-links">
     {profile.representativeLinks.map((link) => (
-      <a href={link.url} target="_blank" rel="noopener noreferrer">
+      <a class={link.label.includes("Google Scholar") ? "scholar-link" : undefined} href={link.url} target="_blank" rel="noopener noreferrer">
         <span>{link.label}</span>
         <code>{link.displayUrl}</code>
       </a>

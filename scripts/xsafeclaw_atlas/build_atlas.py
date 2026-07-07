@@ -464,12 +464,31 @@ def write_data_js(atlas: dict[str, Any], output: Path = DEFAULT_OUTPUT) -> None:
     )
 
 
+def use_cached_data(reason: BaseException | str, output: Path = DEFAULT_OUTPUT) -> bool:
+    """Keep the last committed atlas when GitHub API refresh is unavailable.
+
+    The atlas is an optional visualization artifact. A temporary API 403/429,
+    network timeout, or public API policy change should not block the whole
+    GitHub Pages deployment when a committed data file already exists.
+    """
+    if not output.exists():
+        return False
+    print(
+        f"Warning: XSafeClaw atlas refresh failed; using cached {output.relative_to(PROJECT_ROOT)}. "
+        f"Reason: {reason}",
+        file=sys.stderr,
+    )
+    return True
+
+
 def main() -> int:
     token = os.environ.get("GITHUB_TOKEN", "").strip() or None
-    profiles = fetch_profiles(token)
+    try:
+        profiles = fetch_profiles(token)
+    except (OSError, urllib.error.HTTPError) as exc:
+        return 0 if use_cached_data(exc) else 1
     if not profiles:
-        print("No stargazer profiles fetched.", file=sys.stderr)
-        return 1
+        return 0 if use_cached_data("no stargazer profiles fetched") else 1
     atlas = aggregate_profiles(profiles)
     write_data_js(atlas)
     print(

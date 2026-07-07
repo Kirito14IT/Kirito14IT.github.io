@@ -1,6 +1,7 @@
 import json
 import tempfile
 import unittest
+import urllib.error
 from pathlib import Path
 
 import build_atlas
@@ -72,6 +73,32 @@ class BuildAtlasTest(unittest.TestCase):
         self.assertTrue(content.endswith(";"))
         self.assertIn("XSafeAI/XSafeClaw", content)
         self.assertNotIn("alice", content)
+
+    def test_main_uses_cached_data_when_github_api_is_forbidden(self):
+        original_output = build_atlas.DEFAULT_OUTPUT
+        original_fetch_profiles = build_atlas.fetch_profiles
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                cache = Path(tmp) / "data.js"
+                cache.write_text("window.ATLAS={\"repo\":\"XSafeAI/XSafeClaw\"};", encoding="utf-8")
+                build_atlas.DEFAULT_OUTPUT = cache
+
+                def raise_forbidden(_token):
+                    raise urllib.error.HTTPError(
+                        "https://api.github.com/repos/XSafeAI/XSafeClaw/stargazers",
+                        403,
+                        "Forbidden",
+                        {},
+                        None,
+                    )
+
+                build_atlas.fetch_profiles = raise_forbidden
+
+                self.assertEqual(build_atlas.main(), 0)
+                self.assertEqual(cache.read_text(encoding="utf-8"), "window.ATLAS={\"repo\":\"XSafeAI/XSafeClaw\"};")
+        finally:
+            build_atlas.DEFAULT_OUTPUT = original_output
+            build_atlas.fetch_profiles = original_fetch_profiles
 
     def test_static_atlas_page_uses_sovereignty_notice(self):
         html = ATLAS_PAGE.read_text(encoding="utf-8")

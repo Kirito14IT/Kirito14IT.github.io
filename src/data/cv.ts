@@ -2,6 +2,7 @@ const yizhangLiuProfileUrl = "https://ccds.fzu.edu.cn/info/1207" + "/11276.htm";
 const xsafeclawUrl = "https://github.com/XSafeAI/XSafeClaw";
 const teaiUrl = "https://teai.fudan.edu.cn/";
 const xingjunMaUrl = "http://xingjunma.com/";
+const tipUrl = "https://signalprocessingsociety.org/publications-resources/ieee-transactions-image-processing";
 const jingfengZhangUrl = "https://zjfheart.github.io/";
 const gassUrl = "https://www.gass.ac.cn/gass/index.html";
 const scamWebUrl = "https://anonymous.4open.science/r/ScamWeb-B710";
@@ -191,12 +192,13 @@ export const experiences = [
       },
       {
         html:
-          'This work led to our manuscript <a href="https://arxiv.org/abs/2606.04493" target="_blank" rel="noopener noreferrer">SFMambaNet: Spectral-Frequency Enhanced Selective State Space Model for Correspondence Pruning</a>, submitted to IEEE Transactions on Circuits and Systems for Video Technology (TCSVT) and posted on arXiv in June 2026.'
+          `This work led to our manuscript <a href="https://arxiv.org/abs/2606.04493" target="_blank" rel="noopener noreferrer">SFMambaNet: Spectral-Frequency Enhanced Selective State Space Model for Correspondence Pruning</a>, currently under review at <a href="${tipUrl}" target="_blank" rel="noopener noreferrer">IEEE Transactions on Image Processing (TIP)</a> and available as an arXiv preprint.`
       }
     ],
     links: [
       { label: "FZU Key Lab", url: "https://ncip.fzu.edu.cn/xsdt.htm" },
       { label: "Dr. Yizhang Liu", url: yizhangLiuProfileUrl },
+      { label: "IEEE TIP", url: tipUrl },
       { label: "SFMambaNet arXiv", url: "https://arxiv.org/abs/2606.04493" }
     ]
   }
@@ -226,12 +228,12 @@ export const publications = [
   },
   {
     title: "SFMambaNet: Spectral-Frequency Enhanced Selective State Space Model for Correspondence Pruning",
-    status: "arXiv preprint and under review",
+    status: "arXiv preprint; under review at IEEE Transactions on Image Processing (TIP)",
     role: "First author",
     year: "2026",
     url: "https://doi.org/10.48550/arXiv.2606.04493",
     tags: ["Computer Vision", "Correspondence Pruning", "Mamba", "State Space Model", "Frequency Domain", "Graph Neural Networks", "Two-View Geometry"],
-    ratings: ["SCI Zone 1", "CCF B"],
+    ratings: ["SCI Zone 1", "CCF A"],
     frameworkImage: "/figures/sfmambanet-framework.png",
     frameworkAlt: "SFMambaNet framework diagram showing pruning blocks, local spectral-geometric feature extraction, spectral-global aggregation, and verification."
   },

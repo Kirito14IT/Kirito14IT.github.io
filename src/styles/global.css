@@ -492,21 +492,24 @@ a {
   background: #8394ad;
 }
 
+.hero-panel h2,
+.typing-line {
+  font-size: clamp(2.2rem, 4vw, 4.1rem);
+}
+
 .hero-panel h2 {
   margin: 0 0 8px;
-  font-size: clamp(2.2rem, 4vw, 4.1rem);
   line-height: 1;
   letter-spacing: -0.04em;
 }
 
 .typing-line {
-  min-height: 150px;
+  min-height: clamp(92px, 9vw, 124px);
   display: block;
   font-family: var(--display);
-  font-size: clamp(2.8rem, 7vw, 6.6rem);
   font-weight: 800;
-  line-height: 0.96;
-  letter-spacing: -0.06em;
+  line-height: 1;
+  letter-spacing: -0.04em;
 }
 
 .typing-target {
@@ -1255,7 +1258,7 @@ a {
   }
 
   .typing-line {
-    min-height: 112px;
+    min-height: 96px;
   }
 
   .sticker {

@@ -48,7 +48,7 @@ import { education, experiences, publications, awards, skills } from "@data/cv";
           {item.frameworkImage && (
             <figure class="framework-preview">
               <img src={item.frameworkImage} alt={item.frameworkAlt} loading="lazy" />
-              <figcaption>Framework overview</figcaption>
+              <figcaption>{item.frameworkCaption || "Framework overview"}</figcaption>
             </figure>
           )}
         </article>

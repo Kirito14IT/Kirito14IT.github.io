@@ -63,7 +63,7 @@ const homeJumpLinks = [
   </Section>
 
   <Section id="research-experience" title="Selected Research and Experience" eyebrow="Timeline">
-    <Timeline items={experiences.slice(0, 5)} />
+    <Timeline items={experiences} />
   </Section>
 
   <Section id="publications" title="Selected Publications and Manuscripts" eyebrow="Research output">
@@ -93,7 +93,7 @@ const homeJumpLinks = [
           {item.frameworkImage && (
             <figure class="framework-preview">
               <img src={item.frameworkImage} alt={item.frameworkAlt} loading="lazy" />
-              <figcaption>Framework overview</figcaption>
+              <figcaption>{item.frameworkCaption || "Framework overview"}</figcaption>
             </figure>
           )}
         </article>

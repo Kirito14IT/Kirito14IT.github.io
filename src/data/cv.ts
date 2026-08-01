@@ -2,6 +2,9 @@ const yizhangLiuProfileUrl = "https://ccds.fzu.edu.cn/info/1207" + "/11276.htm";
 const xsafeclawUrl = "https://github.com/XSafeAI/XSafeClaw";
 const teaiUrl = "https://teai.fudan.edu.cn/";
 const xingjunMaUrl = "http://xingjunma.com/";
+const jingfengZhangUrl = "https://zjfheart.github.io/";
+const gassUrl = "https://www.gass.ac.cn/gass/index.html";
+const scamWebUrl = "https://anonymous.4open.science/r/ScamWeb-B710";
 const codeWisdomLabUrl = "http://www.se.fudan.edu.cn/";
 const yiLiUrl = "http://www.se.fudan.edu.cn/#";
 
@@ -20,9 +23,14 @@ export const education = [
 
 export const news = [
   {
-    date: "June 2026",
-    text:
-      "Started AAAI 2027-oriented research on multimodal phishing website detection, supporting literature review, novelty analysis, experiment design, model fine-tuning, and experimental validation."
+    date: "Aug 2026",
+    html:
+      `Submitted <a href="${scamWebUrl}" target="_blank" rel="noopener noreferrer">ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages</a> to AAAI 2027 after completing research on multimodal data curation, grounded annotation, benchmark design, and training-free fraud understanding.`
+  },
+  {
+    date: "July 2026",
+    html:
+      `Joined <a href="${jingfengZhangUrl}" target="_blank" rel="noopener noreferrer">Prof. Jingfeng Zhang</a>'s RISE-AI Lab as a visiting student at <a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">TEAI, Fudan University</a> and began ICLR 2027-targeted research on a benchmark for persistent-memory poisoning in agents. The work adopts a victim-centered perspective to design evaluation cases and examines who ultimately bears the loss after an agent is compromised.`
   },
   {
     date: "June 2026",
@@ -35,9 +43,9 @@ export const news = [
       "Completed an International Organization Internship through the UNDP-administered UNV platform on mangrove responses to climate change and produced a review manuscript on blue carbon mitigation."
   },
   {
-    date: "Apr 2026",
+    date: "Mar - Jun 2026",
     html:
-      `Joined the <a href="${xsafeclawUrl}" target="_blank" rel="noopener noreferrer">XSafeClaw</a> agent safety project at <a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">TEAI, Fudan University</a> and worked on runtime integration, controlled tool calls, and safety audit workflows.`
+      `Worked on the <a href="${xsafeclawUrl}" target="_blank" rel="noopener noreferrer">XSafeClaw</a> agent safety project at <a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">TEAI, Fudan University</a>, focusing on runtime integration, controlled tool calls, and safety audit workflows.`
   },
   {
     date: "Feb 2026",
@@ -58,11 +66,40 @@ export const news = [
 
 export const experiences = [
   {
+    title: "Research Intern, ScamWeb Multimodal Fraud Benchmark",
+    titleUrl: scamWebUrl,
+    organization: "Institute of Trustworthy Embodied AI (TEAI), Fudan University & The Third Research Institute of the Ministry of Public Security",
+    period: "Apr 2026 - Aug 2026",
+    tags: ["AAAI 2027", "Multimodal Benchmark", "Cybersecurity", "Grounded Understanding", "Trustworthy AI"],
+    bullets: [
+      {
+        html:
+          `Conducted joint research at the <a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">Institute of Trustworthy Embodied AI (TEAI), Fudan University</a> and <a href="${gassUrl}" target="_blank" rel="noopener noreferrer">The Third Research Institute of the Ministry of Public Security</a>.`
+      },
+      {
+        html:
+          `Worked under the guidance of <a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">Dr. Xingjun Ma</a> and collaborated with postdoctoral researcher Dr. Nan Li on the full research lifecycle.`
+      },
+      "Co-developed ScamWeb, a multimodal and multilingual benchmark containing more than 10,000 curated webpages across 25 cyber-enabled fraud subtypes, including 3,416 expert-annotated fraudulent webpages with evidence regions and human-written rationales.",
+      "Contributed to data collection and cleaning, fraud taxonomy and expert annotation protocol design, the ScamDet multimodal pipeline and prompts, evaluation metrics, full-scale experiments, manuscript writing, result analysis, and project implementation.",
+      {
+        html:
+          `The completed work, <a href="${scamWebUrl}" target="_blank" rel="noopener noreferrer">ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages</a>, has been submitted to AAAI 2027.`
+      }
+    ],
+    links: [
+      { label: "ScamWeb Anonymous Repository", url: scamWebUrl },
+      { label: "TEAI", url: teaiUrl },
+      { label: "Third Research Institute of MPS", url: gassUrl },
+      { label: "Dr. Xingjun Ma", url: xingjunMaUrl }
+    ]
+  },
+  {
     title: "Research Intern, XSafeClaw Agent Runtime Safety",
     titleUrl: xsafeclawUrl,
     organization: "Institute of Trustworthy Embodied AI (TEAI), Fudan University",
     organizationUrl: teaiUrl,
-    period: "Apr 2026 - Present",
+    period: "Mar 2026 - Jun 2026",
     tags: ["TEAI", "Agent Safety", "Runtime Governance", "Open Source"],
     bullets: [
       {
@@ -166,6 +203,17 @@ export const experiences = [
 ];
 
 export const publications = [
+  {
+    title: "ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages",
+    status: "Under review at AAAI 2027",
+    role: "Co-first author",
+    year: "2026",
+    url: scamWebUrl,
+    tags: ["Multimodal Benchmark", "Cyber-enabled Fraud", "Grounded Understanding", "Evidence Localization", "LLM-VLM", "Trustworthy AI"],
+    frameworkImage: "/figures/scamweb-dataset-overview.png",
+    frameworkAlt: "ScamWeb dataset overview showing data sources, webpage collection and recovery, processed multimodal artifacts, expert annotations, dataset composition, and representative samples.",
+    frameworkCaption: "Dataset and annotation overview"
+  },
   {
     title: "SafeCodeRL: A Multi-Agent Reinforcement Learning Framework for Safety-Constrained LLM Code Generation",
     status: "Published on June 2, 2026",

@@ -17,6 +17,7 @@ const forbiddenPatterns = [
   /\brank\b/i,
   /\b\d+\s*\/\s*\d+\b/,
   /\b\d{11}\b/,
+  /Apr 2026 - Present/,
   /Jungong Road/i,
   /No\.580/i,
   /Building\s+2/i,
@@ -45,7 +46,20 @@ const requiredPublicSnippets = [
   "z-index: 4;",
   "https://scholar.google.com/citations?user=MyweXYYAAAAJ",
   "Academic publications and citations",
-  "scholar-link"
+  "scholar-link",
+  "Mar 2026 - Jun 2026",
+  "July 2026",
+  "https://zjfheart.github.io/",
+  "RISE-AI Lab",
+  "ICLR 2027",
+  "victim-centered",
+  "Apr 2026 - Aug 2026",
+  "https://www.gass.ac.cn/gass/index.html",
+  "https://anonymous.4open.science/r/ScamWeb-B710",
+  "ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages",
+  "/figures/scamweb-dataset-overview.png",
+  "Dataset and annotation overview",
+  ".hero-panel h2,\n.typing-line"
 ];
 
 const missing = requiredFiles.filter((file) => !fs.existsSync(path.join(root, file)));

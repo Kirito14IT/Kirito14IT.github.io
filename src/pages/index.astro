@@ -54,7 +54,16 @@ const homeJumpLinks = [
   <Section id="news" title="News" eyebrow="Recent updates">
     <div class="news-list">
       {news.map((item) => (
-        <article>
+        <article
+          class:list={{ "news-jump-card": Boolean(item.jumpTo) }}
+        >
+          {item.jumpTo && (
+            <a
+              class="news-card-jump"
+              href={item.jumpTo}
+              aria-label={`${item.date} update: jump to competition awards`}
+            ></a>
+          )}
           <time>{item.date}</time>
           {item.html ? <p set:html={item.html} /> : <p>{item.text}</p>}
         </article>

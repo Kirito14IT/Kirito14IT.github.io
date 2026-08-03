@@ -7,7 +7,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "validate": "node scripts/validate-content.mjs"
+    "validate": "node scripts/validate-content.mjs",
+    "validate:rendered": "node scripts/validate-rendered-site.mjs",
+    "test": "npm run validate && npm run build && npm run validate:rendered"
   },
   "dependencies": {
     "astro": "^6.3.7",

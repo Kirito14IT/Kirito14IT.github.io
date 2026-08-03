@@ -1,5 +1,6 @@
 ---
 import { profile } from "@data/profile";
+import AcmerLogo from "@components/AcmerLogo.astro";
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -10,10 +11,10 @@ const navItems = [
 ---
 
 <aside class="sidebar">
-  <a class="profile-card" href="/" aria-label={`${profile.name} home`}>
+  <a class="profile-card" data-profile-card href="/" aria-label={`${profile.name} home`}>
     <img class="avatar" src={profile.avatarUrl} alt={`${profile.name} avatar`} width="92" height="92" />
-    <div>
-      <p class="eyebrow">Academic Homepage</p>
+    <AcmerLogo />
+    <div class="profile-identity">
       <h1>{profile.name}</h1>
       <p>{profile.legalName}</p>
     </div>

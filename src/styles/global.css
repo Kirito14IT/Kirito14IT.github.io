@@ -248,9 +248,12 @@ a {
 }
 
 .profile-card {
+  position: relative;
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 18px;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  column-gap: 16px;
+  row-gap: 2px;
   align-items: center;
   border-radius: var(--radius-xl);
   padding: 22px;
@@ -258,12 +261,108 @@ a {
 }
 
 .avatar {
+  grid-column: 1;
+  grid-row: 1 / span 2;
   width: 92px;
   height: 92px;
   border-radius: 28px;
   object-fit: cover;
   border: 4px solid rgba(255, 255, 255, 0.78);
   box-shadow: 0 18px 34px rgba(37, 99, 235, 0.16);
+}
+
+.profile-identity {
+  grid-column: 2;
+  grid-row: 2;
+  min-width: 0;
+  align-self: end;
+}
+
+.acmer-logo {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+  width: min(160px, 100%);
+  margin: -6px -4px 0 0;
+  pointer-events: none;
+  filter: drop-shadow(0 12px 16px rgba(37, 99, 235, 0.18));
+  transform-origin: center;
+  animation: acmer-float 3.8s ease-in-out infinite;
+  will-change: transform;
+}
+
+.acmer-logo svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.acmer-wordmark {
+  fill: url(#acmer-word);
+  font-family: var(--mono);
+  font-weight: 900;
+  font-size: 34px;
+  letter-spacing: -0.1em;
+}
+
+.acmer-bracket,
+.acmer-circuit,
+.acmer-baseline {
+  fill: none;
+  stroke: url(#acmer-border);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.acmer-bracket {
+  stroke-width: 3.5;
+}
+
+.acmer-circuit {
+  stroke-width: 1.5;
+  stroke-dasharray: 5 5;
+  opacity: 0.72;
+  animation: acmer-signal 5s linear infinite;
+}
+
+.acmer-baseline {
+  stroke-width: 2;
+  opacity: 0.34;
+}
+
+.acmer-node,
+.acmer-cursor {
+  fill: #f97316;
+}
+
+.acmer-node-b {
+  fill: #db2777;
+}
+
+.acmer-cursor {
+  animation: acmer-cursor-blink 1.15s steps(2, start) infinite;
+}
+
+@keyframes acmer-float {
+  0%, 100% {
+    transform: translate3d(0, 1px, 0) rotate(-0.8deg);
+  }
+  50% {
+    transform: translate3d(0, -7px, 0) rotate(0.8deg);
+  }
+}
+
+@keyframes acmer-signal {
+  to {
+    stroke-dashoffset: -30;
+  }
+}
+
+@keyframes acmer-cursor-blink {
+  50% {
+    opacity: 0.2;
+  }
 }
 
 .profile-card h1 {
@@ -789,6 +888,49 @@ a {
   border: 1px solid var(--line);
 }
 
+.news-jump-card {
+  position: relative;
+  isolation: isolate;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.news-jump-card:hover,
+.news-jump-card:focus-within {
+  transform: translateY(-2px);
+  border-color: rgba(37, 99, 235, 0.3);
+  box-shadow: 0 16px 34px rgba(42, 67, 112, 0.12);
+}
+
+.news-jump-card:focus-within {
+  outline: 3px solid rgba(37, 99, 235, 0.2);
+  outline-offset: 3px;
+}
+
+.news-card-jump {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+.news-card-jump:focus-visible {
+  outline: none;
+}
+
+.news-jump-card time,
+.news-jump-card p {
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.news-jump-card p a {
+  position: relative;
+  z-index: 3;
+  pointer-events: auto;
+}
+
 .publication-card {
   display: grid;
   gap: 12px;
@@ -1270,7 +1412,10 @@ a {
   .meteor-shower span,
   .mesh,
   .sticker,
-  .typing-target::after {
+  .typing-target::after,
+  .acmer-logo,
+  .acmer-circuit,
+  .acmer-cursor {
     animation: none;
   }
 
@@ -1284,13 +1429,18 @@ a {
     padding-top: 12px;
   }
 
-  .profile-card {
-    grid-template-columns: 1fr;
-  }
-
   .avatar {
     width: 78px;
     height: 78px;
+  }
+
+  .profile-card {
+    column-gap: 14px;
+    padding: 18px;
+  }
+
+  .acmer-logo {
+    width: min(152px, 100%);
   }
 
   .hero-panel {

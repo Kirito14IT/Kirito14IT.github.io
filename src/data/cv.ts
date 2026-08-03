@@ -6,8 +6,16 @@ const tipUrl = "https://signalprocessingsociety.org/publications-resources/ieee-
 const jingfengZhangUrl = "https://zjfheart.github.io/";
 const gassUrl = "https://www.gass.ac.cn/gass/index.html";
 const scamWebUrl = "https://anonymous.4open.science/r/ScamWeb-B710";
+const usstAcmUrl = "https://cec.usst.edu.cn/2019/" + "0523/c6556a148258/page.htm";
 const codeWisdomLabUrl = "http://www.se.fudan.edu.cn/";
 const yiLiUrl = "http://www.se.fudan.edu.cn/#";
+
+export type NewsItem = {
+  date: string;
+  text?: string;
+  html?: string;
+  jumpTo?: string;
+};
 
 export const education = [
   {
@@ -22,7 +30,7 @@ export const education = [
   }
 ];
 
-export const news = [
+export const news: NewsItem[] = [
   {
     date: "Aug 2026",
     html:
@@ -31,12 +39,12 @@ export const news = [
   {
     date: "July 2026",
     html:
-      `Joined <a href="${jingfengZhangUrl}" target="_blank" rel="noopener noreferrer">Prof. Jingfeng Zhang</a>'s RISE-AI Lab as a visiting student at <a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">TEAI, Fudan University</a> and began ICLR 2027-targeted research on a benchmark for persistent-memory poisoning in agents. The work adopts a victim-centered perspective to design evaluation cases and examines who ultimately bears the loss after an agent is compromised.`
+      `Joined <a href="${jingfengZhangUrl}" target="_blank" rel="noopener noreferrer">Advisor Jingfeng Zhang</a>'s RISE-AI Lab as a visiting student at <a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">TEAI, Fudan University</a> and began ICLR 2027-targeted research on a benchmark for persistent-memory poisoning in agents. The work adopts a victim-centered perspective to design evaluation cases and examines who ultimately bears the loss after an agent is compromised.`
   },
   {
     date: "June 2026",
     html:
-      `Joined <a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">Dr. Xingjun Ma</a>'s team at <a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">TEAI, Fudan University</a> on an enterprise-oriented multi-agent secure collaboration project, contributing to requirements analysis, system design, implementation, and testing.`
+      `Joined <a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">Advisor Xingjun Ma</a>'s team at <a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">TEAI, Fudan University</a> on an enterprise-oriented multi-agent secure collaboration project, contributing to requirements analysis, system design, implementation, and testing.`
   },
   {
     date: "May 2026",
@@ -62,6 +70,12 @@ export const news = [
     date: "Sep 2025",
     text:
       "Started SFMambaNet research on spectral-frequency enhanced state space models for correspondence pruning."
+  },
+  {
+    date: "May 2023 - Jul 2025",
+    jumpTo: "#awards-skills",
+    html:
+      `Joined the <a href="${usstAcmUrl}" target="_blank" rel="noopener noreferrer">ACM Programming Training Team at the University of Shanghai for Science and Technology</a> as an ACMer, building strong foundations in algorithms, data structures, and contest problem solving. Earned honors including a Silver Award at the 2025 CCPC Shanghai Collegiate Programming Contest and a National Second Prize in the 2025 LanQiao Cup C/C++ competition.`
   }
 ];
 
@@ -79,7 +93,7 @@ export const experiences = [
       },
       {
         html:
-          `Worked under the guidance of <a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">Dr. Xingjun Ma</a> and collaborated with postdoctoral researcher Dr. Nan Li on the full research lifecycle.`
+          `Worked under the guidance of <a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">Advisor Xingjun Ma</a> and collaborated with postdoctoral researcher Dr. Nan Li on the full research lifecycle.`
       },
       "Co-developed ScamWeb, a multimodal and multilingual benchmark containing more than 10,000 curated webpages across 25 cyber-enabled fraud subtypes, including 3,416 expert-annotated fraudulent webpages with evidence regions and human-written rationales.",
       "Contributed to data collection and cleaning, fraud taxonomy and expert annotation protocol design, the ScamDet multimodal pipeline and prompts, evaluation metrics, full-scale experiments, manuscript writing, result analysis, and project implementation.",
@@ -92,7 +106,7 @@ export const experiences = [
       { label: "ScamWeb Anonymous Repository", url: scamWebUrl },
       { label: "TEAI", url: teaiUrl },
       { label: "Third Research Institute of MPS", url: gassUrl },
-      { label: "Dr. Xingjun Ma", url: xingjunMaUrl }
+      { label: "Advisor Xingjun Ma", url: xingjunMaUrl }
     ]
   },
   {
@@ -109,7 +123,7 @@ export const experiences = [
       },
       {
         html:
-          `Worked under the guidance of <a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">Dr. Xingjun Ma</a>, a Young Researcher and doctoral supervisor at Fudan University.`
+          `Worked under the guidance of <a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">Advisor Xingjun Ma</a>, a Young Researcher and doctoral supervisor at Fudan University.`
       },
       "Implemented runtime integration for nanobot-style local agent sessions, including session discovery, controlled tool calls, and unified platform display.",
       "Contributed to risk control workflows, validation, and documentation for explainable agent governance."
@@ -117,7 +131,7 @@ export const experiences = [
     links: [
       { label: "XSafeClaw", url: xsafeclawUrl },
       { label: "TEAI", url: teaiUrl },
-      { label: "Dr. Xingjun Ma", url: xingjunMaUrl }
+      { label: "Advisor Xingjun Ma", url: xingjunMaUrl }
     ]
   },
   {

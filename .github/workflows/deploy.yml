@@ -43,6 +43,9 @@ jobs:
       - name: Build site
         run: npm run build
 
+      - name: Validate rendered site
+        run: npm run validate:rendered
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:

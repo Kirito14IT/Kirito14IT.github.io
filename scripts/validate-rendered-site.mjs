@@ -24,6 +24,7 @@ const checks = [
   ["ACM training-team period is rendered in News", homepage.includes("May 2023 - Jul 2025")],
   ["ACM training-team link is rendered in News", homepage.includes("https://cec.usst.edu.cn/2019/0523/c6556a148258/page.htm")],
   ["ACMer identity is rendered in News", homepage.includes("ACMer")],
+  ["RAICOM national first prize is rendered in ACM News", acmNewsCard.includes("National First Prize in the 2025 RAICOM Robot Developer Competition")],
   ["ACM News card links to the Awards section", acmNewsCard.includes('class="news-card-jump"') && acmNewsCard.includes('href="#awards-skills"')],
   ["advisor titles are rendered consistently", homepage.includes("Advisor Jingfeng Zhang") && homepage.includes("Advisor Xingjun Ma")],
   ["academic honorifics are removed for the two advisors", !homepage.includes("Prof. Jingfeng Zhang") && !homepage.includes("Dr. Xingjun Ma")]

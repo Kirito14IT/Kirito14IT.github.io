@@ -75,7 +75,7 @@ export const news: NewsItem[] = [
     date: "May 2023 - Jul 2025",
     jumpTo: "#awards-skills",
     html:
-      `Joined the <a href="${usstAcmUrl}" target="_blank" rel="noopener noreferrer">ACM Programming Training Team at the University of Shanghai for Science and Technology</a> as an ACMer, building strong foundations in algorithms, data structures, and contest problem solving. Earned honors including a Silver Award at the 2025 CCPC Shanghai Collegiate Programming Contest and a National Second Prize in the 2025 LanQiao Cup C/C++ competition.`
+      `Joined the <a href="${usstAcmUrl}" target="_blank" rel="noopener noreferrer">ACM Programming Training Team at the University of Shanghai for Science and Technology</a> as an ACMer, building strong foundations in algorithms, data structures, and contest problem solving. Earned honors including a National First Prize in the 2025 RAICOM Robot Developer Competition, a Silver Award at the 2025 CCPC Shanghai Collegiate Programming Contest, and a National Second Prize in the 2025 LanQiao Cup C/C++ competition.`
   }
 ];
 

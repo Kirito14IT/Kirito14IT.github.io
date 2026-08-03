@@ -1,6 +1,6 @@
 ---
 title: "International Organization Internship: UNDP-administered UNV Mangrove Research"
-date: 2026-05-21
+date: 2026-04-30
 summary: "A UNDP-administered UNV research internship output on sea-level rise, nutrient loading, coastal squeeze, and blue carbon mitigation."
 tags: ["UNDP", "UNV", "Climate Change", "Blue Carbon", "Scientific Writing"]
 links:

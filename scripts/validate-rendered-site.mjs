@@ -26,6 +26,8 @@ const checks = [
   ["ACMer identity is rendered in News", homepage.includes("ACMer")],
   ["RAICOM national first prize is rendered in ACM News", acmNewsCard.includes("National First Prize in the 2025 RAICOM Robot Developer Competition")],
   ["ACM News card links to the Awards section", acmNewsCard.includes('class="news-card-jump"') && acmNewsCard.includes('href="#awards-skills"')],
+  ["international organization internship News period is Jan to Apr 2026", homepage.includes("Jan - Apr 2026")],
+  ["international organization internship timeline period is Jan to Apr 2026", homepage.includes("Jan 2026 - Apr 2026")],
   ["advisor titles are rendered consistently", homepage.includes("Advisor Jingfeng Zhang") && homepage.includes("Advisor Xingjun Ma")],
   ["academic honorifics are removed for the two advisors", !homepage.includes("Prof. Jingfeng Zhang") && !homepage.includes("Dr. Xingjun Ma")]
 ];

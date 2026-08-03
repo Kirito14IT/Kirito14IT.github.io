@@ -47,7 +47,7 @@ export const news: NewsItem[] = [
       `Joined <a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">Advisor Xingjun Ma</a>'s team at <a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">TEAI, Fudan University</a> on an enterprise-oriented multi-agent secure collaboration project, contributing to requirements analysis, system design, implementation, and testing.`
   },
   {
-    date: "May 2026",
+    date: "Jan - Apr 2026",
     text:
       "Completed an International Organization Internship through the UNDP-administered UNV platform on mangrove responses to climate change and produced a review manuscript on blue carbon mitigation."
   },
@@ -161,7 +161,7 @@ export const experiences = [
     title: "International Organization Internship, UNDP-administered UNV Online Research Intern",
     titleUrl: "https://www.undp.org/",
     organization: "Morobe Development Foundation Inc., Papua New Guinea",
-    period: "Jan 31, 2026 - May 21, 2026",
+    period: "Jan 2026 - Apr 2026",
     tags: ["UNDP", "UNV", "Climate Change", "Blue Carbon"],
     bullets: [
       "Completed an International Organization Internship through the UNDP-administered United Nations Volunteers (UNV) platform, supporting research on mangrove responses to climate change scenarios and blue carbon mitigation.",

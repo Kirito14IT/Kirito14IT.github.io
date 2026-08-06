@@ -5,11 +5,12 @@ import TypingHero from "@components/TypingHero.astro";
 import ContributionGraph from "@components/ContributionGraph.astro";
 import ContactLinks from "@components/ContactLinks.astro";
 import LearningMap from "@components/LearningMap.astro";
+import ServiceList from "@components/ServiceList.astro";
 import Section from "@components/Section.astro";
 import Timeline from "@components/Timeline.astro";
 import ProjectCard from "@components/ProjectCard.astro";
 import { profile } from "@data/profile";
-import { news, experiences, publications, awards, skills } from "@data/cv";
+import { news, experiences, publications, awards, skills, services } from "@data/cv";
 
 const allProjects = (await getCollection("projects"))
   .filter((item) => item.data.featured)
@@ -25,7 +26,8 @@ const homeJumpLinks = [
   { label: "Research Experience", href: "#research-experience" },
   { label: "Publications", href: "#publications" },
   { label: "Projects", href: "#projects" },
-  { label: "Awards", href: "#awards-skills" }
+  { label: "Awards", href: "#awards-skills" },
+  { label: "Services", href: "#services" }
 ];
 ---
 
@@ -144,5 +146,9 @@ const homeJumpLinks = [
         </div>
       </div>
     </div>
+  </Section>
+
+  <Section id="services" title="Services" eyebrow="Academic community">
+    <ServiceList items={services} />
   </Section>
 </BaseLayout>

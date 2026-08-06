@@ -3,7 +3,8 @@ import BaseLayout from "@layouts/BaseLayout.astro";
 import Section from "@components/Section.astro";
 import Timeline from "@components/Timeline.astro";
 import LearningMap from "@components/LearningMap.astro";
-import { education, experiences, publications, awards, skills } from "@data/cv";
+import ServiceList from "@components/ServiceList.astro";
+import { education, experiences, publications, awards, skills, services } from "@data/cv";
 ---
 
 <BaseLayout title="CV | Krico">
@@ -62,6 +63,10 @@ import { education, experiences, publications, awards, skills } from "@data/cv";
         {awards.map((award) => <li>{award}</li>)}
       </ul>
     </div>
+  </Section>
+
+  <Section title="Services">
+    <ServiceList items={services} />
   </Section>
 
   <Section title="Skills">

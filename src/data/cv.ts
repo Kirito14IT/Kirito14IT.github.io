@@ -17,6 +17,13 @@ export type NewsItem = {
   jumpTo?: string;
 };
 
+export type ServiceItem = {
+  year: string;
+  category: string;
+  role: string;
+  description: string;
+};
+
 export const education = [
   {
     degree: "B.Eng. in Computer Science and Technology",
@@ -40,6 +47,11 @@ export const news: NewsItem[] = [
     date: "July 2026",
     html:
       `Joined <a href="${jingfengZhangUrl}" target="_blank" rel="noopener noreferrer">Advisor Jingfeng Zhang</a>'s RISE-AI Lab as a visiting student at <a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">TEAI, Fudan University</a> and began ICLR 2027-targeted research on a benchmark for persistent-memory poisoning in agents. The work adopts a victim-centered perspective to design evaluation cases and examines who ultimately bears the loss after an agent is compromised.`
+  },
+  {
+    date: "July 2026",
+    text:
+      "Began serving as a reviewer for NeurIPS 2026, contributing to the peer-review process for research in machine learning and artificial intelligence."
   },
   {
     date: "June 2026",
@@ -289,9 +301,20 @@ export const awards = [
   "National First Prize, RAICOM Robot Developer Competition, 2025",
   "National Second Prize, LanQiao Cup C/C++ Programming Contest, 2025",
   "Silver Award, CCPC Shanghai Collegiate Programming Contest, 2025",
+  "National Encouragement Scholarship, Three-time Recipient",
   "National Third Prize, National English Competition for College Students, 2025",
   "Shanghai First Prize, National College Student Mathematics Competition, 2024",
   "First-author software copyright for a robust deep-learning watermark mobile application"
+];
+
+export const services: ServiceItem[] = [
+  {
+    year: "2026",
+    category: "Peer Review",
+    role: "Reviewer, NeurIPS 2026",
+    description:
+      "Contributing to rigorous peer evaluation for research in machine learning and artificial intelligence."
+  }
 ];
 
 export const skills = [

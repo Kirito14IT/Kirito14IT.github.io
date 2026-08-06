@@ -1,0 +1,129 @@
+---
+import { execFileSync } from "node:child_process";
+import { profile } from "@data/profile";
+
+const { showVisitCounter = false } = Astro.props as { showVisitCounter?: boolean };
+
+let updateSource = "git";
+let updatedAtRaw = "";
+
+try {
+  updatedAtRaw = execFileSync("git", ["show", "-s", "--format=%cI", "HEAD"], {
+    cwd: process.cwd(),
+    encoding: "utf8"
+  }).trim();
+} catch {
+  updateSource = "build";
+  updatedAtRaw = new Date().toISOString();
+}
+
+let updatedAt = new Date(updatedAtRaw);
+if (Number.isNaN(updatedAt.valueOf())) {
+  updateSource = "build";
+  updatedAt = new Date();
+}
+
+const updatedIso = updatedAt.toISOString();
+const updatedLabel = new Intl.DateTimeFormat("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+  timeZone: "Asia/Shanghai"
+}).format(updatedAt);
+const updatedExactLabel = new Intl.DateTimeFormat("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+  hour: "2-digit",
+  minute: "2-digit",
+  hour12: false,
+  timeZone: "Asia/Shanghai",
+  timeZoneName: "short"
+}).format(updatedAt);
+
+const visitorBadgeUrl = new URL("https://api.visitorbadge.io/api/visitors");
+visitorBadgeUrl.searchParams.set("path", profile.siteUrl);
+visitorBadgeUrl.searchParams.set("label", "visits");
+visitorBadgeUrl.searchParams.set("labelColor", "#e8f6ff");
+visitorBadgeUrl.searchParams.set("countColor", "#2563eb");
+visitorBadgeUrl.searchParams.set("style", "flat");
+visitorBadgeUrl.searchParams.set("labelStyle", "lower");
+---
+
+<footer class="site-footer" data-site-footer>
+  <p class="last-updated" data-last-updated data-update-source={updateSource}>
+    <span class="footer-update-dot" aria-hidden="true"></span>
+    <span>Last updated:</span>
+    <time datetime={updatedIso} title={updatedExactLabel}>{updatedLabel}</time>
+  </p>
+
+  {showVisitCounter && (
+    <div class="visit-counter" data-visit-counter>
+      <button
+        class="visit-counter-toggle"
+        type="button"
+        aria-label="Show total homepage visits"
+        aria-expanded="false"
+        aria-controls="homepage-visit-count"
+        title="Show total homepage visits"
+        data-visit-toggle
+      >
+        <svg class="visit-eye visit-eye-closed" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 3l18 18"></path>
+          <path d="M10.6 10.7a2 2 0 0 0 2.7 2.7"></path>
+          <path d="M9.4 5.3A10.7 10.7 0 0 1 12 5c6 0 9.5 7 9.5 7a15 15 0 0 1-2.1 3.1"></path>
+          <path d="M6.2 6.2C3.8 8 2.5 12 2.5 12S6 19 12 19c1.5 0 2.9-.4 4.1-1"></path>
+        </svg>
+        <svg class="visit-eye visit-eye-open" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M2.5 12S6 5 12 5s9.5 7 9.5 7S18 19 12 19s-9.5-7-9.5-7Z"></path>
+          <circle cx="12" cy="12" r="2.5"></circle>
+        </svg>
+      </button>
+      <span
+        id="homepage-visit-count"
+        class="visit-count-value"
+        aria-hidden="true"
+        data-visit-count-value
+      >
+        <img
+          src={visitorBadgeUrl.toString()}
+          alt="Total homepage visits"
+          width="76"
+          height="20"
+          loading="eager"
+          fetchpriority="low"
+          referrerpolicy="no-referrer"
+          data-visit-badge
+        />
+        <span class="visit-count-fallback" hidden data-visit-fallback>Unavailable</span>
+      </span>
+    </div>
+  )}
+</footer>
+
+{showVisitCounter && (
+  <script>
+    document.querySelectorAll<HTMLElement>("[data-visit-counter]").forEach((counter) => {
+      const toggle = counter.querySelector<HTMLButtonElement>("[data-visit-toggle]");
+      const value = counter.querySelector<HTMLElement>("[data-visit-count-value]");
+      const badge = counter.querySelector<HTMLImageElement>("[data-visit-badge]");
+      const fallback = counter.querySelector<HTMLElement>("[data-visit-fallback]");
+
+      if (!toggle || !value) return;
+
+      toggle.addEventListener("click", () => {
+        const reveal = toggle.getAttribute("aria-expanded") !== "true";
+        counter.classList.toggle("is-revealed", reveal);
+        toggle.setAttribute("aria-expanded", String(reveal));
+        toggle.setAttribute("aria-label", reveal ? "Hide total homepage visits" : "Show total homepage visits");
+        toggle.title = reveal ? "Hide total homepage visits" : "Show total homepage visits";
+        value.setAttribute("aria-hidden", String(!reveal));
+      });
+
+      badge?.addEventListener("error", () => {
+        badge.hidden = true;
+        if (fallback) fallback.hidden = false;
+      });
+    });
+  </script>
+)}

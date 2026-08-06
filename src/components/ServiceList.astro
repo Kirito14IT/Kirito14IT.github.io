@@ -1,0 +1,21 @@
+---
+import type { ServiceItem } from "@data/cv";
+
+const { items } = Astro.props as { items: ServiceItem[] };
+---
+
+<div class="service-list">
+  {items.map((item) => (
+    <article class="service-card">
+      <div class="service-meta">
+        <time>{item.year}</time>
+        <span>{item.category}</span>
+      </div>
+      <div class="service-copy">
+        <h3>{item.role}</h3>
+        <p>{item.description}</p>
+      </div>
+      <span class="service-watermark" aria-hidden="true">REVIEW</span>
+    </article>
+  ))}
+</div>

@@ -1,5 +1,6 @@
 ---
 import Sidebar from "@components/Sidebar.astro";
+import SiteFooter from "@components/SiteFooter.astro";
 import { profile } from "@data/profile";
 import "@styles/global.css";
 
@@ -7,6 +8,7 @@ const {
   title = `${profile.name} | Academic Homepage`,
   description = profile.tagline
 } = Astro.props;
+const showVisitCounter = Astro.url.pathname === "/" || Astro.url.pathname === "/index.html";
 ---
 
 <!doctype html>
@@ -49,6 +51,7 @@ const {
       <Sidebar />
       <main class="main-content">
         <slot />
+        <SiteFooter showVisitCounter={showVisitCounter} />
       </main>
     </div>
   </body>

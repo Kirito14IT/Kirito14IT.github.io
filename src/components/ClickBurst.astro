@@ -33,10 +33,10 @@
     for (let index = 0; index < particleCount; index += 1) {
       const bubble = document.createElement("i");
       const angle = phase + (Math.PI * 2 * index) / particleCount + (Math.random() - 0.5) * 0.28;
-      const distance = 44 + Math.random() * 46;
+      const distance = 26.4 + Math.random() * 27.6;
       const size = 7 + Math.random() * 9;
-      const duration = 690 + Math.random() * 90;
-      const delay = Math.random() * 34;
+      const duration = 1050 + Math.random() * 150;
+      const delay = Math.random() * 24;
 
       bubble.className = "click-bubble";
       bubble.style.setProperty("--dx", `${Math.cos(angle) * distance}px`);
@@ -59,7 +59,7 @@
     burst.append(fragment);
     layer.append(burst);
     activeBursts.add(burst);
-    window.setTimeout(() => removeBurst(burst), 900);
+    window.setTimeout(() => removeBurst(burst), 1320);
   };
 
   document.addEventListener("pointerdown", (event) => {

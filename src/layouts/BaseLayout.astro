@@ -2,6 +2,8 @@
 import Sidebar from "@components/Sidebar.astro";
 import SiteFooter from "@components/SiteFooter.astro";
 import LanguageSwitcher from "@components/LanguageSwitcher.astro";
+import ThemeToggle from "@components/ThemeToggle.astro";
+import ClickBurst from "@components/ClickBurst.astro";
 import { getProfile } from "@data/profile";
 import { getUi, localizedPath, stripLocalePrefix, type Locale } from "@i18n/index";
 import "@styles/global.css";
@@ -26,7 +28,7 @@ const hasToolbarNavigation = Astro.slots.has("toolbar");
 ---
 
 <!doctype html>
-<html lang={copy.htmlLang} data-locale={locale} data-counterpart-path={counterpartPath}>
+<html lang={copy.htmlLang} data-locale={locale} data-counterpart-path={counterpartPath} data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -50,6 +52,8 @@ const hasToolbarNavigation = Astro.slots.has("toolbar");
       (() => {
         try {
           const root = document.documentElement;
+          const preferredTheme = window.localStorage.getItem("krico-theme");
+          root.dataset.theme = preferredTheme === "dark" ? "dark" : "light";
           const currentLocale = root.dataset.locale;
           const preferredLocale = window.localStorage.getItem("krico-locale");
           const counterpart = root.dataset.counterpartPath;
@@ -80,6 +84,7 @@ const hasToolbarNavigation = Astro.slots.has("toolbar");
         })}
       </div>
     </div>
+    <ClickBurst />
     <div class="site-shell">
       <Sidebar locale={locale} />
       <main class="main-content">
@@ -92,7 +97,10 @@ const hasToolbarNavigation = Astro.slots.has("toolbar");
             <a href={localizedPath(locale, "/blog/")}>{copy.nav.blog}</a>
           </nav>
           {hasToolbarNavigation && <div class="toolbar-navigation"><slot name="toolbar" /></div>}
-          <LanguageSwitcher locale={locale} pathname={Astro.url.pathname} />
+          <div class="toolbar-controls">
+            <LanguageSwitcher locale={locale} pathname={Astro.url.pathname} />
+            <ThemeToggle locale={locale} />
+          </div>
         </div>
         <slot />
         <SiteFooter locale={locale} showVisitCounter={showVisitCounter} />

@@ -1,0 +1,69 @@
+<div class="click-effect-layer" aria-hidden="true" data-click-effect-layer></div>
+
+<script>
+  const layer = document.querySelector<HTMLElement>("[data-click-effect-layer]");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const palette = ["#60a5fa", "#22d3ee", "#34d399", "#fbbf24", "#fb7185", "#f472b6", "#a78bfa"];
+  const activeBursts = new Set<HTMLElement>();
+  const maxBursts = 4;
+
+  const removeBurst = (burst: HTMLElement) => {
+    if (!activeBursts.has(burst)) return;
+    activeBursts.delete(burst);
+    burst.remove();
+  };
+
+  const createBurst = (x: number, y: number) => {
+    if (!layer || reducedMotion.matches || document.visibilityState !== "visible") return;
+
+    if (activeBursts.size >= maxBursts) {
+      const oldest = activeBursts.values().next().value as HTMLElement | undefined;
+      if (oldest) removeBurst(oldest);
+    }
+
+    const burst = document.createElement("span");
+    burst.className = "click-burst";
+    burst.style.left = `${x}px`;
+    burst.style.top = `${y}px`;
+
+    const fragment = document.createDocumentFragment();
+    const particleCount = 9 + Math.floor(Math.random() * 4);
+    const phase = Math.random() * Math.PI * 2;
+
+    for (let index = 0; index < particleCount; index += 1) {
+      const bubble = document.createElement("i");
+      const angle = phase + (Math.PI * 2 * index) / particleCount + (Math.random() - 0.5) * 0.28;
+      const distance = 44 + Math.random() * 46;
+      const size = 7 + Math.random() * 9;
+      const duration = 690 + Math.random() * 90;
+      const delay = Math.random() * 34;
+
+      bubble.className = "click-bubble";
+      bubble.style.setProperty("--dx", `${Math.cos(angle) * distance}px`);
+      bubble.style.setProperty("--dy", `${Math.sin(angle) * distance}px`);
+      bubble.style.setProperty("--bubble-size", `${size}px`);
+      bubble.style.setProperty("--bubble-color", palette[Math.floor(Math.random() * palette.length)]);
+      bubble.style.setProperty("--bubble-duration", `${duration}ms`);
+      bubble.style.setProperty("--bubble-delay", `${delay}ms`);
+      fragment.append(bubble);
+    }
+
+    const ring = document.createElement("i");
+    ring.className = "click-burst-ring";
+    fragment.append(ring);
+
+    const sparkle = document.createElement("i");
+    sparkle.className = "click-burst-sparkle";
+    fragment.append(sparkle);
+
+    burst.append(fragment);
+    layer.append(burst);
+    activeBursts.add(burst);
+    window.setTimeout(() => removeBurst(burst), 900);
+  };
+
+  document.addEventListener("pointerdown", (event) => {
+    if (!event.isPrimary || (event.pointerType === "mouse" && event.button !== 0)) return;
+    createBurst(event.clientX, event.clientY);
+  }, { passive: true });
+</script>

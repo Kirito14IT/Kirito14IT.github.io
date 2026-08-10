@@ -39,6 +39,7 @@ export const ui = {
     htmlLang: "en",
     localeName: "English",
     switchTitle: "Switch to Chinese",
+    theme: { switchToDark: "Switch to dark theme", switchToLight: "Switch to light theme" },
     nav: { home: "Home", cv: "CV", projects: "Projects", blog: "Blog" },
     sidebar: { profile: "Profile", navigation: "Navigation", focus: "Focus", links: "Links" },
     homeJump: {
@@ -141,6 +142,7 @@ export const ui = {
     htmlLang: "zh-CN",
     localeName: "中文",
     switchTitle: "切换到英文",
+    theme: { switchToDark: "切换到深色主题", switchToLight: "切换到浅色主题" },
     nav: { home: "首页", cv: "简历", projects: "项目", blog: "博客" },
     sidebar: { profile: "个人信息", navigation: "导航", focus: "研究方向", links: "链接" },
     homeJump: {

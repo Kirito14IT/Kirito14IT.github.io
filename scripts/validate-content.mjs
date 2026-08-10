@@ -7,6 +7,8 @@ const requiredFiles = [
   "src/data/profile.ts",
   "src/data/cv.ts",
   "src/i18n/index.ts",
+  "src/components/ThemeToggle.astro",
+  "src/components/ClickBurst.astro",
   "src/views/HomePage.astro",
   "src/pages/index.astro",
   "src/pages/cv.astro",
@@ -81,6 +83,14 @@ const requiredPublicSnippets = [
   "export const locales: Locale[] = [\"en\", \"zh\"]",
   "data-language-switch",
   "krico-locale",
+  "data-theme-toggle",
+  "krico-theme",
+  "Switch to dark theme",
+  "切换到深色主题",
+  "data-click-effect-layer",
+  "click-bubble-burst",
+  "const maxBursts = 4",
+  "const particleCount = 9 + Math.floor(Math.random() * 4)",
   "translationKey: \"website-launch\"",
   "translationKey: \"xsafeclaw\""
 ];

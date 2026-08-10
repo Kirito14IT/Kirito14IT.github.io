@@ -35,8 +35,8 @@
       const angle = phase + (Math.PI * 2 * index) / particleCount + (Math.random() - 0.5) * 0.28;
       const distance = 26.4 + Math.random() * 27.6;
       const size = 7 + Math.random() * 9;
-      const duration = 1050 + Math.random() * 150;
-      const delay = Math.random() * 24;
+      const duration = 1150 + Math.random() * 150;
+      const delay = Math.random() * 8;
 
       bubble.className = "click-bubble";
       bubble.style.setProperty("--dx", `${Math.cos(angle) * distance}px`);
@@ -48,10 +48,6 @@
       fragment.append(bubble);
     }
 
-    const ring = document.createElement("i");
-    ring.className = "click-burst-ring";
-    fragment.append(ring);
-
     const sparkle = document.createElement("i");
     sparkle.className = "click-burst-sparkle";
     fragment.append(sparkle);
@@ -59,7 +55,7 @@
     burst.append(fragment);
     layer.append(burst);
     activeBursts.add(burst);
-    window.setTimeout(() => removeBurst(burst), 1320);
+    window.setTimeout(() => removeBurst(burst), 1420);
   };
 
   document.addEventListener("pointerdown", (event) => {

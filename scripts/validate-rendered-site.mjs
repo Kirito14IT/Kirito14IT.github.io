@@ -63,6 +63,7 @@ const checks = [
   ["theme toggle is localized", homepage.includes('data-theme-toggle') && homepage.includes('aria-label="Switch to dark theme"') && zhHomepage.includes('aria-label="切换到深色主题"')],
   ["theme preference persistence is rendered", homepage.includes("krico-theme") && zhHomepage.includes("krico-theme")],
   ["global click effect layer is rendered", homepage.includes('data-click-effect-layer') && zhHomepage.includes('data-click-effect-layer')],
+  ["click effect has no center ring", !homepage.includes("click-burst-ring") && !zhHomepage.includes("click-burst-ring")],
   ["canonical and language alternates are rendered", homepage.includes('hreflang="zh-CN"') && zhHomepage.includes('hreflang="en"')],
   ["meteor count is reduced to eight", meteorCount === 8],
   ["profile card exposes a stable rendered marker", profileCard.length > 0],

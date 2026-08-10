@@ -92,8 +92,9 @@ const requiredPublicSnippets = [
   "const maxBursts = 4",
   "const particleCount = 9 + Math.floor(Math.random() * 4)",
   "const distance = 26.4 + Math.random() * 27.6",
-  "const duration = 1050 + Math.random() * 150",
-  "window.setTimeout(() => removeBurst(burst), 1320)",
+  "const duration = 1150 + Math.random() * 150",
+  "const delay = Math.random() * 8",
+  "window.setTimeout(() => removeBurst(burst), 1420)",
   "translationKey: \"website-launch\"",
   "translationKey: \"xsafeclaw\""
 ];

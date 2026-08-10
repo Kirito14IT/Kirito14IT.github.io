@@ -95,6 +95,7 @@ const requiredPublicSnippets = [
   "const duration = 1150 + Math.random() * 150",
   "const delay = Math.random() * 8",
   "window.setTimeout(() => removeBurst(burst), 1420)",
+  "cubic-bezier(0.25, 0.46, 0.45, 0.94)",
   "translationKey: \"website-launch\"",
   "translationKey: \"xsafeclaw\""
 ];

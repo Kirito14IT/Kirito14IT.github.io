@@ -1,4 +1,6 @@
 ---
+locale: "en"
+translationKey: "website-launch"
 title: "Building a Public Academic Homepage"
 date: 2026-05-22
 description: "A short launch note describing why this website uses GitHub Pages, Astro, and a web-native CV."

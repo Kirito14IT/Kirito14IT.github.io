@@ -1,0 +1,45 @@
+---
+import { alternateLocale, getUi, localizedPath, type Locale } from "@i18n/index";
+
+const { locale, pathname } = Astro.props as { locale: Locale; pathname: string };
+const copy = getUi(locale);
+const targetLocale = alternateLocale(locale);
+const targetPath = localizedPath(targetLocale, pathname);
+---
+
+<a
+  class="language-switcher"
+  href={targetPath}
+  hreflang={targetLocale === "zh" ? "zh-CN" : "en"}
+  lang={copy.htmlLang}
+  title={copy.switchTitle}
+  aria-label={copy.switchTitle}
+  data-language-switch
+  data-target-locale={targetLocale}
+>
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <circle cx="12" cy="12" r="9"></circle>
+    <path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9S14.4 18.5 12 21M12 3C9.6 5.5 8.4 8.5 8.4 12S9.6 18.5 12 21"></path>
+  </svg>
+  <span>{copy.localeName}</span>
+</a>
+
+<script>
+  document.querySelectorAll<HTMLAnchorElement>("[data-language-switch]").forEach((link) => {
+    const targetLocale = link.dataset.targetLocale;
+    const target = new URL(link.href, window.location.origin);
+    target.search = window.location.search;
+    target.hash = window.location.hash;
+    link.href = target.toString();
+
+    link.addEventListener("click", () => {
+      if (targetLocale === "en" || targetLocale === "zh") {
+        try {
+          window.localStorage.setItem("krico-locale", targetLocale);
+        } catch {
+          // The ordinary language link remains functional when storage is unavailable.
+        }
+      }
+    });
+  });
+</script>

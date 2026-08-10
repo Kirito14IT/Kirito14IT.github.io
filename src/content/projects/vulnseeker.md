@@ -1,4 +1,6 @@
 ---
+locale: "en"
+translationKey: "vulnseeker"
 title: "VulnSeeker: CodeQL and LLM Security Analysis"
 date: 2026-01-01
 summary: "An automated security analysis pipeline developed at the Fudan Software Engineering (CodeWisdom) Lab, combining CodeQL static analysis and LLM-based vulnerability judgement."

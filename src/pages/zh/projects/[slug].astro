@@ -3,11 +3,11 @@ import { getCollection } from "astro:content";
 import ProjectDetailPage from "@views/ProjectDetailPage.astro";
 
 export async function getStaticPaths() {
-  const projects = await getCollection("projects", ({ data }) => data.locale === "en");
+  const projects = await getCollection("projects", ({ data }) => data.locale === "zh");
   return projects.map((project) => ({ params: { slug: project.data.translationKey }, props: { project } }));
 }
 
 const { project } = Astro.props;
 ---
 
-<ProjectDetailPage project={project} locale="en" />
+<ProjectDetailPage project={project} locale="zh" />

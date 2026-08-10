@@ -1,33 +1,66 @@
 ---
 import Sidebar from "@components/Sidebar.astro";
 import SiteFooter from "@components/SiteFooter.astro";
-import { profile } from "@data/profile";
+import LanguageSwitcher from "@components/LanguageSwitcher.astro";
+import { getProfile } from "@data/profile";
+import { getUi, localizedPath, stripLocalePrefix, type Locale } from "@i18n/index";
 import "@styles/global.css";
 
 const {
-  title = `${profile.name} | Academic Homepage`,
-  description = profile.tagline
-} = Astro.props;
-const showVisitCounter = Astro.url.pathname === "/" || Astro.url.pathname === "/index.html";
+  locale = "en",
+  title,
+  description
+} = Astro.props as { locale?: Locale; title?: string; description?: string };
+const profile = getProfile(locale);
+const copy = getUi(locale);
+const pageTitle = title || (locale === "zh" ? `${profile.name} | 学术主页` : `${profile.name} | Academic Homepage`);
+const pageDescription = description || profile.tagline;
+const basePath = stripLocalePrefix(Astro.url.pathname);
+const englishPath = localizedPath("en", basePath);
+const chinesePath = localizedPath("zh", basePath);
+const currentPath = localizedPath(locale, basePath);
+const counterpartPath = localizedPath(locale === "en" ? "zh" : "en", basePath);
+const canonicalUrl = new URL(currentPath, profile.siteUrl).toString();
+const showVisitCounter = basePath === "/" || basePath === "/index.html";
+const hasToolbarNavigation = Astro.slots.has("toolbar");
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={copy.htmlLang} data-locale={locale} data-counterpart-path={counterpartPath}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content={description} />
+    <meta name="description" content={pageDescription} />
     <meta name="author" content={profile.legalName} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={profile.siteUrl} />
+    <meta property="og:url" content={canonicalUrl} />
     <meta name="theme-color" content="#f8fbff" />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" hreflang="en" href={new URL(englishPath, profile.siteUrl).toString()} />
+    <link rel="alternate" hreflang="zh-CN" href={new URL(chinesePath, profile.siteUrl).toString()} />
+    <link rel="alternate" hreflang="x-default" href={new URL(englishPath, profile.siteUrl).toString()} />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <title>{title}</title>
+    <title>{pageTitle}</title>
+    <script is:inline>
+      (() => {
+        try {
+          const root = document.documentElement;
+          const currentLocale = root.dataset.locale;
+          const preferredLocale = window.localStorage.getItem("krico-locale");
+          const counterpart = root.dataset.counterpartPath;
+          if ((preferredLocale === "en" || preferredLocale === "zh") && preferredLocale !== currentLocale && counterpart) {
+            window.location.replace(`${counterpart}${window.location.search}${window.location.hash}`);
+          }
+        } catch {
+          // Keep the requested static route when browser storage is unavailable.
+        }
+      })();
+    </script>
   </head>
   <body>
     <div class="site-background" aria-hidden="true">
@@ -38,20 +71,31 @@ const showVisitCounter = Astro.url.pathname === "/" || Astro.url.pathname === "/
     </div>
     <div class="meteor-layer" aria-hidden="true">
       <div class="meteor-shower">
-        {Array.from({ length: 16 }, (_, index) => {
+        {Array.from({ length: 8 }, (_, index) => {
           const x = (index * 17) % 126;
           const y = (index % 8) * 12 - 24;
-          const duration = 6.2 + (index % 6) * 0.85;
-          const delay = index * -0.62;
+          const duration = 12.4 + (index % 6) * 1.7;
+          const delay = index * -1.24;
           return <span style={`--x: ${x}vw; --y: ${y}vh; --duration: ${duration}s; --delay: ${delay}s`}></span>;
         })}
       </div>
     </div>
     <div class="site-shell">
-      <Sidebar />
+      <Sidebar locale={locale} />
       <main class="main-content">
+        <div class:list={["page-toolbar", { "has-navigation": hasToolbarNavigation }]}>
+          <nav class="mobile-site-navigation" aria-label={copy.sidebar.navigation}>
+            <a class="mobile-site-brand" href={localizedPath(locale, "/")}>Krico</a>
+            <a href={localizedPath(locale, "/")}>{copy.nav.home}</a>
+            <a href={localizedPath(locale, "/cv/")}>{copy.nav.cv}</a>
+            <a href={localizedPath(locale, "/projects/")}>{copy.nav.projects}</a>
+            <a href={localizedPath(locale, "/blog/")}>{copy.nav.blog}</a>
+          </nav>
+          {hasToolbarNavigation && <div class="toolbar-navigation"><slot name="toolbar" /></div>}
+          <LanguageSwitcher locale={locale} pathname={Astro.url.pathname} />
+        </div>
         <slot />
-        <SiteFooter showVisitCounter={showVisitCounter} />
+        <SiteFooter locale={locale} showVisitCounter={showVisitCounter} />
       </main>
     </div>
   </body>

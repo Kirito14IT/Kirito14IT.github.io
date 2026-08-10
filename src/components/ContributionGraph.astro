@@ -1,52 +1,66 @@
 ---
-import { profile } from "@data/profile";
+import { getProfile } from "@data/profile";
+import { getUi, type Locale } from "@i18n/index";
+
+const { locale } = Astro.props as { locale: Locale };
+const profile = getProfile(locale);
+const copy = getUi(locale);
+const dynamicCopy = {
+  unavailable: copy.contribution.unavailable,
+  openLatest: copy.contribution.openLatest,
+  unavailableNote: copy.contribution.unavailableNote,
+  summary: copy.contribution.summary,
+  activeDays: copy.contribution.activeDays,
+  cachedNote: copy.contribution.cachedNote,
+  dayTitle: copy.contribution.dayTitle
+};
 ---
 
 <section class="section-stack">
   <div class="section-heading-row">
     <div class="section-heading">
-      <p>Live Open Source Signal</p>
-      <h2>GitHub Commit Activity</h2>
+      <p>{copy.contribution.eyebrow}</p>
+      <h2>{copy.contribution.title}</h2>
     </div>
-    <a class="text-link" href={profile.github} target="_blank" rel="noopener noreferrer">Open GitHub -></a>
+    <a class="text-link" href={profile.github} target="_blank" rel="noopener noreferrer">{copy.contribution.open}</a>
   </div>
 
-  <article class="contrib-card" data-contrib-root data-username={profile.githubUsername}>
+  <article
+    class="contrib-card"
+    data-contrib-root
+    data-username={profile.githubUsername}
+    data-locale={locale}
+    data-copy={JSON.stringify(dynamicCopy)}
+  >
     <div class="contrib-header">
       <div>
-        <p class="muted">Last 12 months</p>
-        <strong data-contrib-summary>Loading public contribution graph...</strong>
+        <p class="muted">{copy.contribution.last12Months}</p>
+        <strong data-contrib-summary>{copy.contribution.loading}</strong>
       </div>
-      <p class="muted" data-contrib-total>Syncing</p>
+      <p class="muted" data-contrib-total>{copy.contribution.syncing}</p>
     </div>
     <div class="contrib-months" data-contrib-months></div>
     <div class="contrib-body">
       <div class="contrib-axis" aria-hidden="true">
-        <span>Mon</span>
-        <span>Wed</span>
-        <span>Fri</span>
+        {copy.contribution.weekdays.map((day) => <span>{day}</span>)}
       </div>
-      <div class="contrib-columns" data-contrib-columns role="img" aria-label="GitHub contribution calendar"></div>
+      <div class="contrib-columns" data-contrib-columns role="img" aria-label={copy.contribution.calendarLabel}></div>
     </div>
     <div class="contrib-legend" aria-hidden="true">
-      <span>Less</span>
+      <span>{copy.contribution.less}</span>
       <span class="contrib-cell level-0"></span>
       <span class="contrib-cell level-1"></span>
       <span class="contrib-cell level-2"></span>
       <span class="contrib-cell level-3"></span>
       <span class="contrib-cell level-4"></span>
-      <span>More</span>
+      <span>{copy.contribution.more}</span>
     </div>
-    <p class="muted" data-contrib-note>
-      Live contributions are fetched from a public GitHub contribution API and may be cached.
-    </p>
+    <p class="muted" data-contrib-note>{copy.contribution.initialNote}</p>
   </article>
 </section>
 
 <script>
-  const contributionRoots = document.querySelectorAll("[data-contrib-root]");
-  const monthFormatter = new Intl.DateTimeFormat("en-US", { month: "short", timeZone: "UTC" });
-  const numberFormatter = new Intl.NumberFormat("en-US");
+  const contributionRoots = document.querySelectorAll<HTMLElement>("[data-contrib-root]");
 
   const toUtcDate = (value) => {
     const date = new Date(`${value}T00:00:00Z`);
@@ -60,8 +74,10 @@ import { profile } from "@data/profile";
   };
 
   const formatDay = (value) => value.toISOString().slice(0, 10);
+  const fillTemplate = (template, values) =>
+    Object.entries(values).reduce((output, [key, value]) => output.replaceAll(`{${key}}`, String(value)), template);
 
-  const buildWeeks = (contributions) => {
+  const buildWeeks = (contributions, monthFormatter) => {
     if (!Array.isArray(contributions) || contributions.length === 0) return [];
     const sorted = [...contributions].sort((a, b) => a.date.localeCompare(b.date));
     const counts = new Map(sorted.map((item) => [item.date, item]));
@@ -92,20 +108,28 @@ import { profile } from "@data/profile";
   };
 
   const renderGraph = (root, payload) => {
+    const locale = root.dataset.locale === "zh" ? "zh" : "en";
+    const dateLocale = locale === "zh" ? "zh-CN" : "en-US";
+    const copy = JSON.parse(root.dataset.copy || "{}");
+    const monthFormatter = new Intl.DateTimeFormat(dateLocale, {
+      month: locale === "zh" ? "numeric" : "short",
+      timeZone: "UTC"
+    });
+    const numberFormatter = new Intl.NumberFormat(dateLocale);
     const summary = root.querySelector("[data-contrib-summary]");
     const total = root.querySelector("[data-contrib-total]");
-    const months = root.querySelector("[data-contrib-months]");
+    const months = root.querySelector<HTMLElement>("[data-contrib-months]");
     const columns = root.querySelector("[data-contrib-columns]");
     const note = root.querySelector("[data-contrib-note]");
     const contributions = payload?.contributions || [];
-    const weeks = buildWeeks(contributions);
+    const weeks = buildWeeks(contributions, monthFormatter);
     const totalLastYear = payload?.total?.lastYear || 0;
     const activeDays = contributions.filter((item) => (item.count || 0) > 0).length;
 
     if (!weeks.length || !months || !columns) {
-      if (summary) summary.textContent = "Unable to load live contribution data.";
-      if (total) total.textContent = "Open GitHub for latest data";
-      if (note) note.textContent = "The external contribution source is unavailable right now.";
+      if (summary) summary.textContent = copy.unavailable;
+      if (total) total.textContent = copy.openLatest;
+      if (note) note.textContent = copy.unavailableNote;
       return;
     }
 
@@ -123,15 +147,19 @@ import { profile } from "@data/profile";
       week.days.forEach((day) => {
         const cell = document.createElement("span");
         cell.className = `contrib-cell level-${day.level}${day.inRange ? "" : " outside"}`;
-        cell.title = `${day.date} - ${day.count} contribution${day.count === 1 ? "" : "s"}`;
+        cell.title = fillTemplate(copy.dayTitle, {
+          date: day.date,
+          count: numberFormatter.format(day.count),
+          suffix: day.count === 1 ? "" : "s"
+        });
         column.appendChild(cell);
       });
       columns.appendChild(column);
     });
 
-    if (summary) summary.textContent = `${numberFormatter.format(totalLastYear)} contributions in the last year`;
-    if (total) total.textContent = `${numberFormatter.format(activeDays)} active days shown`;
-    if (note) note.textContent = "Live contributions are fetched from your public GitHub profile graph and may be cached for about one hour.";
+    if (summary) summary.textContent = fillTemplate(copy.summary, { count: numberFormatter.format(totalLastYear) });
+    if (total) total.textContent = fillTemplate(copy.activeDays, { count: numberFormatter.format(activeDays) });
+    if (note) note.textContent = copy.cachedNote;
   };
 
   contributionRoots.forEach((root) => {

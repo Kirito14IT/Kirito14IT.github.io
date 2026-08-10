@@ -1,0 +1,142 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import TypingHero from "@components/TypingHero.astro";
+import ContributionGraph from "@components/ContributionGraph.astro";
+import ContactLinks from "@components/ContactLinks.astro";
+import LearningMap from "@components/LearningMap.astro";
+import ServiceList from "@components/ServiceList.astro";
+import Section from "@components/Section.astro";
+import Timeline from "@components/Timeline.astro";
+import ProjectCard from "@components/ProjectCard.astro";
+import { getProfile } from "@data/profile";
+import { getCvData } from "@data/cv";
+import { getUi, localizedPath, type Locale } from "@i18n/index";
+
+const { locale } = Astro.props as { locale: Locale };
+const profile = getProfile(locale);
+const { news, experiences, publications, awards, skills, services } = getCvData(locale);
+const copy = getUi(locale);
+const allProjects = (await getCollection("projects"))
+  .filter((item) => item.data.locale === locale && item.data.featured)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 4);
+
+const homeJumpLinks = [
+  { label: copy.homeJump.homepage, href: "#home" },
+  { label: copy.homeJump.about, href: "#about" },
+  { label: copy.homeJump.news, href: "#news" },
+  { label: copy.homeJump.research, href: "#research-experience" },
+  { label: copy.homeJump.publications, href: "#publications" },
+  { label: copy.homeJump.projects, href: "#projects" },
+  { label: copy.homeJump.awards, href: "#awards-skills" },
+  { label: copy.homeJump.services, href: "#services" }
+];
+---
+
+<BaseLayout locale={locale}>
+  <nav slot="toolbar" class="quick-jump-nav" aria-label={locale === "zh" ? "主页章节导航" : "Homepage section shortcuts"}>
+    {homeJumpLinks.map((link) => <a href={link.href}>{link.label}</a>)}
+  </nav>
+
+  <div id="home" class="anchor-sentinel"></div>
+  <TypingHero locale={locale} />
+
+  <Section id="about" title={copy.sections.about} eyebrow={copy.sections.profile}>
+    <div class="glass-card prose-card">
+      <p>{profile.bio}</p>
+      <div class="tag-list">
+        {profile.interests.map((interest) => <span>{interest}</span>)}
+      </div>
+    </div>
+  </Section>
+
+  <ContactLinks id="contact" locale={locale} />
+
+  <Section id="news" title={copy.sections.news} eyebrow={copy.sections.recentUpdates}>
+    <div class="news-list">
+      {news.map((item) => (
+        <article class:list={{ "news-jump-card": Boolean(item.jumpTo) }}>
+          {item.jumpTo && (
+            <a
+              class="news-card-jump"
+              href={item.jumpTo}
+              aria-label={copy.newsJump.replace("{date}", item.date)}
+            ></a>
+          )}
+          <time>{item.date}</time>
+          {item.html ? <p set:html={item.html} /> : <p>{item.text}</p>}
+        </article>
+      ))}
+    </div>
+  </Section>
+
+  <Section id="research-experience" title={copy.sections.researchExperience} eyebrow={copy.sections.timeline}>
+    <Timeline items={experiences} />
+  </Section>
+
+  <Section id="publications" title={copy.sections.publications} eyebrow={copy.sections.researchOutput}>
+    <div class="publication-list">
+      {publications.map((item) => (
+        <article class="publication-card">
+          <div>
+            <h3>
+              {item.url ? (
+                <a class="publication-title-link" href={item.url} target="_blank" rel="noopener noreferrer">
+                  {item.title}
+                </a>
+              ) : item.title}
+            </h3>
+            <p class="muted">{item.role} · {item.status} · {item.year}</p>
+            {item.ratings && <div class="rating-pills">{item.ratings.map((rating) => <span>{rating}</span>)}</div>}
+          </div>
+          <div class="tag-list">{item.tags.map((tag) => <span>{tag}</span>)}</div>
+          {item.frameworkImage && (
+            <figure class="framework-preview">
+              <img src={item.frameworkImage} alt={item.frameworkAlt} loading="lazy" />
+              <figcaption>{item.frameworkCaption || copy.publication.framework}</figcaption>
+            </figure>
+          )}
+        </article>
+      ))}
+    </div>
+  </Section>
+
+  <ContributionGraph locale={locale} />
+
+  <Section id="projects" title={copy.sections.projects} eyebrow={copy.sections.builds}>
+    <div class="card-grid">
+      {allProjects.map((item) => (
+        <ProjectCard item={item} locale={locale} href={localizedPath(locale, `/projects/${item.data.translationKey}/`)} />
+      ))}
+    </div>
+  </Section>
+
+  <Section id="learning-map" title={copy.sections.learning} eyebrow={copy.sections.knowledge}>
+    <LearningMap locale={locale} />
+  </Section>
+
+  <Section id="awards-skills" title={copy.sections.awardsSkills} eyebrow={copy.sections.signals}>
+    <div class="two-column">
+      <div class="glass-card">
+        <h3>{copy.sections.selectedHonors}</h3>
+        <ul class="clean-list">{awards.map((award) => <li>{award}</li>)}</ul>
+      </div>
+      <div class="glass-card">
+        <h3>{copy.sections.skills}</h3>
+        <div class="skill-groups">
+          {skills.map((group) => (
+            <section>
+              <h4>{group.group}</h4>
+              <div class="tag-list">{group.items.map((item) => <span>{item}</span>)}</div>
+            </section>
+          ))}
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <Section id="services" title={copy.sections.services} eyebrow={copy.sections.academicCommunity}>
+    <ServiceList items={services} locale={locale} />
+  </Section>
+</BaseLayout>

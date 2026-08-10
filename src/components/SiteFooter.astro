@@ -1,8 +1,12 @@
 ---
 import { execFileSync } from "node:child_process";
-import { profile } from "@data/profile";
+import { getProfile } from "@data/profile";
+import { getUi, type Locale } from "@i18n/index";
 
-const { showVisitCounter = false } = Astro.props as { showVisitCounter?: boolean };
+const { showVisitCounter = false, locale } = Astro.props as { showVisitCounter?: boolean; locale: Locale };
+const profile = getProfile(locale);
+const copy = getUi(locale);
+const dateLocale = locale === "zh" ? "zh-CN" : "en-US";
 
 let updateSource = "git";
 let updatedAtRaw = "";
@@ -24,15 +28,15 @@ if (Number.isNaN(updatedAt.valueOf())) {
 }
 
 const updatedIso = updatedAt.toISOString();
-const updatedLabel = new Intl.DateTimeFormat("en-US", {
+const updatedLabel = new Intl.DateTimeFormat(dateLocale, {
   year: "numeric",
-  month: "long",
+  month: locale === "zh" ? "numeric" : "long",
   day: "numeric",
   timeZone: "Asia/Shanghai"
 }).format(updatedAt);
-const updatedExactLabel = new Intl.DateTimeFormat("en-US", {
+const updatedExactLabel = new Intl.DateTimeFormat(dateLocale, {
   year: "numeric",
-  month: "long",
+  month: locale === "zh" ? "numeric" : "long",
   day: "numeric",
   hour: "2-digit",
   minute: "2-digit",
@@ -43,7 +47,7 @@ const updatedExactLabel = new Intl.DateTimeFormat("en-US", {
 
 const visitorBadgeUrl = new URL("https://api.visitorbadge.io/api/visitors");
 visitorBadgeUrl.searchParams.set("path", profile.siteUrl);
-visitorBadgeUrl.searchParams.set("label", "visits");
+visitorBadgeUrl.searchParams.set("label", copy.footer.visitsLabel);
 visitorBadgeUrl.searchParams.set("labelColor", "#e8f6ff");
 visitorBadgeUrl.searchParams.set("countColor", "#2563eb");
 visitorBadgeUrl.searchParams.set("style", "flat");
@@ -53,7 +57,7 @@ visitorBadgeUrl.searchParams.set("labelStyle", "lower");
 <footer class="site-footer" data-site-footer>
   <p class="last-updated" data-last-updated data-update-source={updateSource}>
     <span class="footer-update-dot" aria-hidden="true"></span>
-    <span>Last updated:</span>
+    <span>{copy.footer.updated}</span>
     <time datetime={updatedIso} title={updatedExactLabel}>{updatedLabel}</time>
   </p>
 
@@ -62,10 +66,12 @@ visitorBadgeUrl.searchParams.set("labelStyle", "lower");
       <button
         class="visit-counter-toggle"
         type="button"
-        aria-label="Show total homepage visits"
+        aria-label={copy.footer.showVisits}
         aria-expanded="false"
         aria-controls="homepage-visit-count"
-        title="Show total homepage visits"
+        title={copy.footer.showVisits}
+        data-show-label={copy.footer.showVisits}
+        data-hide-label={copy.footer.hideVisits}
         data-visit-toggle
       >
         <svg class="visit-eye visit-eye-closed" viewBox="0 0 24 24" aria-hidden="true">
@@ -79,15 +85,10 @@ visitorBadgeUrl.searchParams.set("labelStyle", "lower");
           <circle cx="12" cy="12" r="2.5"></circle>
         </svg>
       </button>
-      <span
-        id="homepage-visit-count"
-        class="visit-count-value"
-        aria-hidden="true"
-        data-visit-count-value
-      >
+      <span id="homepage-visit-count" class="visit-count-value" aria-hidden="true" data-visit-count-value>
         <img
           src={visitorBadgeUrl.toString()}
-          alt="Total homepage visits"
+          alt={copy.footer.visitsAlt}
           width="76"
           height="20"
           loading="eager"
@@ -95,7 +96,7 @@ visitorBadgeUrl.searchParams.set("labelStyle", "lower");
           referrerpolicy="no-referrer"
           data-visit-badge
         />
-        <span class="visit-count-fallback" hidden data-visit-fallback>Unavailable</span>
+        <span class="visit-count-fallback" hidden data-visit-fallback>{copy.footer.unavailable}</span>
       </span>
     </div>
   )}
@@ -113,10 +114,13 @@ visitorBadgeUrl.searchParams.set("labelStyle", "lower");
 
       toggle.addEventListener("click", () => {
         const reveal = toggle.getAttribute("aria-expanded") !== "true";
+        const showLabel = toggle.dataset.showLabel || "Show total homepage visits";
+        const hideLabel = toggle.dataset.hideLabel || "Hide total homepage visits";
+        const nextLabel = reveal ? hideLabel : showLabel;
         counter.classList.toggle("is-revealed", reveal);
         toggle.setAttribute("aria-expanded", String(reveal));
-        toggle.setAttribute("aria-label", reveal ? "Hide total homepage visits" : "Show total homepage visits");
-        toggle.title = reveal ? "Hide total homepage visits" : "Show total homepage visits";
+        toggle.setAttribute("aria-label", nextLabel);
+        toggle.title = nextLabel;
         value.setAttribute("aria-hidden", String(!reveal));
       });
 

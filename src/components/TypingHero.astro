@@ -1,6 +1,11 @@
 ---
-import { profile } from "@data/profile";
+import { getProfile } from "@data/profile";
 import NeuralField from "@components/NeuralField.astro";
+import { getUi, localizedPath, type Locale } from "@i18n/index";
+
+const { locale } = Astro.props as { locale: Locale };
+const profile = getProfile(locale);
+const copy = getUi(locale);
 ---
 
 <section class="hero-panel">
@@ -12,16 +17,16 @@ import NeuralField from "@components/NeuralField.astro";
   </div>
   <div class="hero-kicker">
     <span></span>
-    <strong>Research Focus</strong>
+    <strong>{copy.hero.kicker}</strong>
   </div>
-  <h2>I am researching</h2>
+  <h2>{copy.hero.heading}</h2>
   <div class="typing-line" aria-live="polite">
     <span class="typing-target" data-typing-words={JSON.stringify(profile.focusWords)}></span>
   </div>
   <p>{profile.tagline}</p>
   <div class="hero-actions">
-    <a class="button primary" href="/projects/">View Projects</a>
-    <a class="button ghost" href="/cv/">Open CV</a>
+    <a class="button primary" href={localizedPath(locale, "/projects/")}>{copy.hero.projects}</a>
+    <a class="button ghost" href={localizedPath(locale, "/cv/")}>{copy.hero.cv}</a>
   </div>
 </section>
 

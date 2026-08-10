@@ -9,6 +9,8 @@ const linkSchema = z.object({
 const blog = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/blog" }),
   schema: z.object({
+    locale: z.enum(["en", "zh"]),
+    translationKey: z.string(),
     title: z.string(),
     date: z.coerce.date(),
     description: z.string(),
@@ -20,6 +22,8 @@ const blog = defineCollection({
 const projects = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/projects" }),
   schema: z.object({
+    locale: z.enum(["en", "zh"]),
+    translationKey: z.string(),
     title: z.string(),
     date: z.coerce.date(),
     summary: z.string(),

@@ -1,4 +1,6 @@
 ---
+locale: "en"
+translationKey: "watermark-mobile"
 title: "Robust Deep-Learning Watermark Mobile Application"
 date: 2025-09-15
 summary: "A cross-platform image copyright and identity authentication system with a neural watermarking model and mobile image processing."

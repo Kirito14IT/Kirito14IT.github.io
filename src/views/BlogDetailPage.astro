@@ -1,0 +1,21 @@
+---
+import { render } from "astro:content";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import type { Locale } from "@i18n/index";
+
+const { post, locale } = Astro.props as { post: any; locale: Locale };
+const { Content } = await render(post);
+const dateLocale = locale === "zh" ? "zh-CN" : "en-US";
+---
+
+<BaseLayout locale={locale} title={`${post.data.title} | Krico`} description={post.data.description}>
+  <article class="article-page">
+    <header class="page-header">
+      <p class="eyebrow">{post.data.date.toLocaleDateString(dateLocale, { year: "numeric", month: "short", day: "2-digit" })}</p>
+      <h1>{post.data.title}</h1>
+      <p>{post.data.description}</p>
+      <div class="tag-list">{post.data.tags.map((tag: string) => <span>{tag}</span>)}</div>
+    </header>
+    <div class="markdown-body"><Content /></div>
+  </article>
+</BaseLayout>

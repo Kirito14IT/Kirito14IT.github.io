@@ -3,11 +3,11 @@ import { getCollection } from "astro:content";
 import BlogDetailPage from "@views/BlogDetailPage.astro";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog", ({ data }) => data.locale === "en" && !data.draft);
+  const posts = await getCollection("blog", ({ data }) => data.locale === "zh" && !data.draft);
   return posts.map((post) => ({ params: { slug: post.data.translationKey }, props: { post } }));
 }
 
 const { post } = Astro.props;
 ---
 
-<BlogDetailPage post={post} locale="en" />
+<BlogDetailPage post={post} locale="zh" />

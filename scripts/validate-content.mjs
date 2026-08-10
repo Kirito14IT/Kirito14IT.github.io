@@ -6,10 +6,18 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const requiredFiles = [
   "src/data/profile.ts",
   "src/data/cv.ts",
+  "src/i18n/index.ts",
+  "src/views/HomePage.astro",
   "src/pages/index.astro",
   "src/pages/cv.astro",
   "src/pages/projects/index.astro",
-  "src/pages/blog/index.astro"
+  "src/pages/blog/index.astro",
+  "src/pages/zh/index.astro",
+  "src/pages/zh/cv.astro",
+  "src/pages/zh/projects/index.astro",
+  "src/pages/zh/blog/index.astro",
+  "src/content/blog/zh/website-launch.md",
+  "src/content/projects/zh/xsafeclaw.md"
 ];
 
 const forbiddenPatterns = [
@@ -45,7 +53,9 @@ const requiredPublicSnippets = [
   "/figures/safecoderl-framework.png",
   "data-draggable-sticker",
   "meteor-layer",
-  "Array.from({ length: 16 }",
+  "Array.from({ length: 8 }",
+  "const duration = 12.4 + (index % 6) * 1.7",
+  "const delay = index * -1.24",
   "document.addEventListener(\"pointermove\", moveSticker",
   "z-index: 4;",
   "https://scholar.google.com/citations?user=MyweXYYAAAAJ",
@@ -63,7 +73,16 @@ const requiredPublicSnippets = [
   "ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages",
   "/figures/scamweb-dataset-overview.png",
   "Dataset and annotation overview",
-  ".hero-panel h2,\n.typing-line"
+  ".hero-panel h2,\n.typing-line",
+  "I am an undergraduate student in Computer Science and Technology (Class of 2023)",
+  "Institute of Trustworthy Embodied Artificial Intelligence (TEAI), Fudan University",
+  "我是上海理工大学计算机科学与技术专业 2023 级本科生",
+  "研究方向为智能体与人工智能安全",
+  "export const locales: Locale[] = [\"en\", \"zh\"]",
+  "data-language-switch",
+  "krico-locale",
+  "translationKey: \"website-launch\"",
+  "translationKey: \"xsafeclaw\""
 ];
 
 const missing = requiredFiles.filter((file) => !fs.existsSync(path.join(root, file)));

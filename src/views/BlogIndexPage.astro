@@ -1,0 +1,30 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import { getUi, localizedPath, type Locale } from "@i18n/index";
+
+const { locale } = Astro.props as { locale: Locale };
+const copy = getUi(locale);
+const dateLocale = locale === "zh" ? "zh-CN" : "en-US";
+const posts = (await getCollection("blog"))
+  .filter((post) => post.data.locale === locale && !post.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<BaseLayout locale={locale} title={locale === "zh" ? "博客 | Krico" : "Blog | Krico"}>
+  <header class="page-header">
+    <p class="eyebrow">{copy.blogPage.eyebrow}</p>
+    <h1>{copy.blogPage.title}</h1>
+    <p>{copy.blogPage.intro}</p>
+  </header>
+  <div class="post-list">
+    {posts.map((post) => (
+      <a class="post-card" href={localizedPath(locale, `/blog/${post.data.translationKey}/`)}>
+        <time>{post.data.date.toLocaleDateString(dateLocale, { year: "numeric", month: "short", day: "2-digit" })}</time>
+        <h2>{post.data.title}</h2>
+        <p>{post.data.description}</p>
+        <div class="tag-list">{post.data.tags.map((tag) => <span>{tag}</span>)}</div>
+      </a>
+    ))}
+  </div>
+</BaseLayout>

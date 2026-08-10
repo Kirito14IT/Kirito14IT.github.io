@@ -1,0 +1,25 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import ProjectCard from "@components/ProjectCard.astro";
+import { getUi, localizedPath, type Locale } from "@i18n/index";
+
+const { locale } = Astro.props as { locale: Locale };
+const copy = getUi(locale);
+const projects = (await getCollection("projects"))
+  .filter((item) => item.data.locale === locale)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<BaseLayout locale={locale} title={locale === "zh" ? "项目 | Krico" : "Projects | Krico"}>
+  <header class="page-header">
+    <p class="eyebrow">{copy.projectsPage.eyebrow}</p>
+    <h1>{copy.projectsPage.title}</h1>
+    <p>{copy.projectsPage.intro}</p>
+  </header>
+  <div class="card-grid">
+    {projects.map((item) => (
+      <ProjectCard item={item} locale={locale} href={localizedPath(locale, `/projects/${item.data.translationKey}/`)} />
+    ))}
+  </div>
+</BaseLayout>

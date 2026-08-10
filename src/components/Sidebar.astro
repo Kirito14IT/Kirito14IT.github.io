@@ -1,17 +1,21 @@
 ---
-import { profile } from "@data/profile";
 import AcmerLogo from "@components/AcmerLogo.astro";
+import { getProfile } from "@data/profile";
+import { getUi, localizedPath, type Locale } from "@i18n/index";
 
+const { locale } = Astro.props as { locale: Locale };
+const profile = getProfile(locale);
+const copy = getUi(locale);
 const navItems = [
-  { label: "Home", href: "/" },
-  { label: "CV", href: "/cv/" },
-  { label: "Projects", href: "/projects/" },
-  { label: "Blog", href: "/blog/" }
+  { label: copy.nav.home, href: localizedPath(locale, "/") },
+  { label: copy.nav.cv, href: localizedPath(locale, "/cv/") },
+  { label: copy.nav.projects, href: localizedPath(locale, "/projects/") },
+  { label: copy.nav.blog, href: localizedPath(locale, "/blog/") }
 ];
 ---
 
 <aside class="sidebar">
-  <a class="profile-card" data-profile-card href="/" aria-label={`${profile.name} home`}>
+  <a class="profile-card" data-profile-card href={localizedPath(locale, "/")} aria-label={`${profile.name} ${copy.nav.home}`}>
     <img class="avatar" src={profile.avatarUrl} alt={`${profile.name} avatar`} width="92" height="92" />
     <AcmerLogo />
     <div class="profile-identity">
@@ -21,31 +25,31 @@ const navItems = [
   </a>
 
   <section class="sidebar-section">
-    <p class="sidebar-heading">Profile</p>
+    <p class="sidebar-heading">{copy.sidebar.profile}</p>
     <p class="sidebar-copy">{profile.title}</p>
     <p class="sidebar-copy">{profile.institution}</p>
     <p class="sidebar-copy">{profile.location}</p>
   </section>
 
-  <nav class="sidebar-section" aria-label="Primary navigation">
-    <p class="sidebar-heading">Navigation</p>
+  <nav class="sidebar-section" aria-label={copy.sidebar.navigation}>
+    <p class="sidebar-heading">{copy.sidebar.navigation}</p>
     <div class="sidebar-links">
       {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
     </div>
   </nav>
 
   <section class="sidebar-section">
-    <p class="sidebar-heading">Focus</p>
+    <p class="sidebar-heading">{copy.sidebar.focus}</p>
     <div class="tag-list compact">
       {profile.interests.map((interest) => <span>{interest}</span>)}
     </div>
   </section>
 
   <section class="sidebar-section">
-    <p class="sidebar-heading">Links</p>
+    <p class="sidebar-heading">{copy.sidebar.links}</p>
     <div class="sidebar-links">
       {profile.links.map((link) => (
-        <a class={`sidebar-link-detail ${link.label === "Google Scholar" ? "scholar-link" : ""}`} href={link.url} target={link.url.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer">
+        <a class={`sidebar-link-detail ${link.url.includes("scholar.google.com") ? "scholar-link" : ""}`} href={link.url} target={link.url.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer">
           <strong>{link.label}</strong>
           <span>{link.displayUrl || link.url}</span>
         </a>

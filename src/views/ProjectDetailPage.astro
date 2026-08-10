@@ -1,0 +1,29 @@
+---
+import { render } from "astro:content";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import { type Locale } from "@i18n/index";
+
+const { project, locale } = Astro.props as { project: any; locale: Locale };
+const { Content } = await render(project);
+---
+
+<BaseLayout locale={locale} title={`${project.data.title} | Krico`} description={project.data.summary}>
+  <article class="article-page">
+    <header class="page-header">
+      <p class="eyebrow">{locale === "zh" ? `${project.data.date.getFullYear()} 年项目` : `${project.data.date.getFullYear()} Project`}</p>
+      <h1>{project.data.title}</h1>
+      <p>{project.data.summary}</p>
+      <div class="tag-list">{project.data.tags.map((tag: string) => <span>{tag}</span>)}</div>
+      {project.data.links.length > 0 && (
+        <div class="inline-links">
+          {project.data.links.map((link: any) => (
+            <a class="inline-link-detail" href={link.url} target="_blank" rel="noopener noreferrer">
+              <strong>{link.label}</strong><span>{link.url}</span>
+            </a>
+          ))}
+        </div>
+      )}
+    </header>
+    <div class="markdown-body"><Content /></div>
+  </article>
+</BaseLayout>

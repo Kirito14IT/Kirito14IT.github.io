@@ -1,5 +1,9 @@
 ---
-import { learningProgress } from "@data/cv";
+import { getCvData } from "@data/cv";
+import type { Locale } from "@i18n/index";
+
+const { locale } = Astro.props as { locale: Locale };
+const { learningProgress } = getCvData(locale);
 ---
 
 <div class="learning-grid">
@@ -9,7 +13,7 @@ import { learningProgress } from "@data/cv";
         <h3>{item.area}</h3>
         <strong>{item.percent}%</strong>
       </div>
-      <div class="progress-track" aria-label={`${item.area} learning progress ${item.percent} percent`}>
+      <div class="progress-track" aria-label={locale === "zh" ? `${item.area}学习进度 ${item.percent}%` : `${item.area} learning progress ${item.percent} percent`}>
         <span class="progress-fill"></span>
       </div>
       <p>{item.summary}</p>

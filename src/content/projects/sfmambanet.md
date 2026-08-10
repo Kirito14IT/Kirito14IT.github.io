@@ -1,4 +1,6 @@
 ---
+locale: "en"
+translationKey: "sfmambanet"
 title: "SFMambaNet: Spectral-Frequency Correspondence Pruning"
 date: 2025-09-01
 summary: "A spectral-frequency enhanced selective state space model for efficient visual correspondence pruning."

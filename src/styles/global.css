@@ -20,6 +20,11 @@
   --body: "IBM Plex Sans", system-ui, sans-serif;
 }
 
+html[lang="zh-CN"] {
+  --display: "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", SimSun, serif;
+  --body: "Noto Sans CJK SC", "Source Han Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -34,6 +39,7 @@ html {
 
 body {
   margin: 0;
+  overflow-x: hidden;
   color: var(--ink);
   background: linear-gradient(135deg, #f9fcff 0%, #eef7f9 42%, #fff7fb 100%);
   font-family: var(--body);
@@ -171,7 +177,7 @@ a {
 
 .meteor-shower span:nth-child(5n) {
   opacity: 0.78;
-  animation-duration: calc(var(--duration) + 2.2s);
+  animation-duration: calc(var(--duration) + 4.4s);
 }
 
 @keyframes meteor-fall {
@@ -486,21 +492,89 @@ a {
   min-width: 0;
 }
 
+.page-toolbar {
+  position: sticky;
+  top: 18px;
+  z-index: 40;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin: 0 0 18px;
+}
+
+.page-toolbar.has-navigation {
+  justify-content: space-between;
+}
+
+.toolbar-navigation {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.mobile-site-navigation {
+  display: none;
+}
+
+.language-switcher {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 46px;
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  border-radius: 999px;
+  padding: 9px 14px;
+  color: #29405f;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(238, 248, 255, 0.84)),
+    radial-gradient(circle at 18% 0%, rgba(37, 99, 235, 0.14), transparent 42%);
+  box-shadow: 0 16px 42px rgba(42, 67, 112, 0.15);
+  backdrop-filter: blur(22px);
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  font-weight: 800;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 180ms ease, border-color 180ms ease, background 180ms ease, transform 180ms ease;
+}
+
+.language-switcher svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.language-switcher:hover,
+.language-switcher:focus-visible {
+  color: #ffffff;
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--blue), var(--violet));
+  transform: translateY(-1px);
+}
+
+.language-switcher:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.22);
+  outline-offset: 3px;
+}
+
 .anchor-sentinel {
   position: relative;
   top: -24px;
 }
 
 .quick-jump-nav {
-  position: sticky;
-  top: 18px;
-  z-index: 30;
   display: flex;
   align-items: center;
   gap: 6px;
-  width: fit-content;
-  max-width: 100%;
-  margin: 0 0 18px;
+  width: 100%;
+  margin: 0;
   padding: 8px;
   overflow-x: auto;
   border: 1px solid rgba(255, 255, 255, 0.78);
@@ -1594,12 +1668,71 @@ a {
   }
 
   .sidebar {
-    position: static;
+    display: none;
   }
 
-  .quick-jump-nav {
+  .page-toolbar {
     top: 10px;
-    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .page-toolbar.has-navigation {
+    display: grid;
+  }
+
+  .mobile-site-navigation {
+    grid-column: 1;
+    grid-row: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    overflow-x: auto;
+    padding: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.78);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.84);
+    box-shadow: 0 14px 38px rgba(42, 67, 112, 0.14);
+    backdrop-filter: blur(22px);
+    scrollbar-width: none;
+  }
+
+  .mobile-site-navigation::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mobile-site-navigation a {
+    flex: 0 0 auto;
+    padding: 7px 9px;
+    border-radius: 999px;
+    color: #31445f;
+    font-family: var(--mono);
+    font-size: 0.69rem;
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  .mobile-site-navigation a:hover,
+  .mobile-site-navigation a:focus-visible {
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--blue), var(--violet));
+  }
+
+  .mobile-site-brand {
+    color: var(--blue) !important;
+  }
+
+  .toolbar-navigation {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .language-switcher {
+    grid-column: 2;
+    grid-row: 1;
   }
 
   .timeline-item,
@@ -1672,6 +1805,22 @@ a {
 
   .quick-jump-nav {
     border-radius: 24px;
+  }
+
+  .page-toolbar {
+    gap: 7px;
+  }
+
+  .language-switcher {
+    min-height: 42px;
+    gap: 6px;
+    padding: 8px 11px;
+    font-size: 0.68rem;
+  }
+
+  .language-switcher svg {
+    width: 17px;
+    height: 17px;
   }
 
   .quick-jump-nav a {

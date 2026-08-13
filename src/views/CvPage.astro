@@ -49,7 +49,11 @@ const copy = getUi(locale);
   </Section>
 
   <Section title={copy.cv.awards}>
-    <div class="glass-card"><ul class="clean-list">{awards.map((award) => <li>{award}</li>)}</ul></div>
+    <div class="glass-card">
+      <ul class="clean-list">
+        {awards.map((award) => typeof award === "string" ? <li>{award}</li> : <li set:html={award.html} />)}
+      </ul>
+    </div>
   </Section>
 
   <Section title={copy.cv.services}><ServiceList items={services} locale={locale} /></Section>

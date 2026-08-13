@@ -96,6 +96,9 @@ const requiredPublicSnippets = [
   "const delay = Math.random() * 8",
   "window.setTimeout(() => removeBurst(burst), 1420)",
   "cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+  "https://www.socchina.net/home",
+  "9th National College Student Embedded Chip and System Design Competition",
+  "第九届全国大学生嵌入式芯片与系统设计竞赛全国总决赛",
   "translationKey: \"website-launch\"",
   "translationKey: \"xsafeclaw\""
 ];

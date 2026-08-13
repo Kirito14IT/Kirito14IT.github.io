@@ -78,6 +78,8 @@ const checks = [
   ["international organization period remains correct", homepage.includes("Jan - Apr 2026") && cv.includes("Jan 2026 - Apr 2026")],
   ["NeurIPS reviewer service is bilingual", homepage.includes("Reviewer, NeurIPS 2026") && zhHomepage.includes("NeurIPS 2026 审稿人") && zhCv.includes("NeurIPS 2026 审稿人")],
   ["three-time scholarship is bilingual", homepage.includes("National Encouragement Scholarship, Three-time Recipient") && zhHomepage.includes("国家励志奖学金（3 次）")],
+  ["embedded competition news is bilingual and precisely dated", homepage.includes("Aug 13, 2026") && homepage.includes("Received the National First Prize at the National Finals") && zhHomepage.includes("2026年8月13日") && zhHomepage.includes("第九届全国大学生嵌入式芯片与系统设计竞赛全国总决赛")],
+  ["embedded competition award and official link are rendered across home and CV", homepage.includes("9th National College Student Embedded Chip and System Design Competition") && cv.includes("https://www.socchina.net/home") && zhHomepage.includes("https://www.socchina.net/home") && zhCv.includes("全国一等奖（2026年8月13日）")],
   ["last-updated footer is bilingual", homepage.includes("Last updated:") && zhHomepage.includes("最近更新：")],
   ["visitor counter is hidden by default on both homepages", homepage.includes('aria-expanded="false"') && zhHomepage.includes('aria-expanded="false"')],
   ["both languages share the visitor counter path", homepage.includes("https%3A%2F%2Fkirito14it.github.io") && zhHomepage.includes("https%3A%2F%2Fkirito14it.github.io")],

@@ -9,6 +9,7 @@ const jingfengZhangUrl = "https://zjfheart.github.io/";
 const gassUrl = "https://www.gass.ac.cn/gass/index.html";
 const scamWebUrl = "https://anonymous.4open.science/r/ScamWeb-B710";
 const usstAcmUrl = "https://cec.usst.edu.cn/2019/" + "0523/c6556a148258/page.htm";
+const embeddedCompetitionUrl = "https://www.socchina.net/home";
 const codeWisdomLabUrl = "http://www.se.fudan.edu.cn/";
 const yiLiUrl = "http://www.se.fudan.edu.cn/#";
 
@@ -63,7 +64,7 @@ export type CvData = {
   experiences: TimelineItem[];
   publications: PublicationItem[];
   projects: Array<{ title: string; summary: string; tags: string[]; link?: string }>;
-  awards: string[];
+  awards: RichText[];
   services: ServiceItem[];
   skills: Array<{ group: string; items: string[] }>;
   learningProgress: Array<{ area: string; percent: number; summary: string }>;
@@ -83,6 +84,11 @@ const cvEn: CvData = {
     }
   ],
   news: [
+    {
+      date: "Aug 13, 2026",
+      html:
+        `Received the National First Prize at the National Finals of the <a href="${embeddedCompetitionUrl}" target="_blank" rel="noopener noreferrer">9th National College Student Embedded Chip and System Design Competition</a>.`
+    },
     {
       date: "Aug 2026",
       html:
@@ -336,6 +342,10 @@ const cvEn: CvData = {
     }
   ],
   awards: [
+    {
+      html:
+        `National First Prize, National Finals of the <a href="${embeddedCompetitionUrl}" target="_blank" rel="noopener noreferrer">9th National College Student Embedded Chip and System Design Competition</a> — Aug 13, 2026`
+    },
     "National First Prize, RAICOM Robot Developer Competition, 2025",
     "National Second Prize, LanQiao Cup C/C++ Programming Contest, 2025",
     "Silver Award, CCPC Shanghai Collegiate Programming Contest, 2025",
@@ -406,6 +416,11 @@ const cvZh: CvData = {
     }
   ],
   news: [
+    {
+      date: "2026年8月13日",
+      html:
+        `获得<a href="${embeddedCompetitionUrl}" target="_blank" rel="noopener noreferrer">第九届全国大学生嵌入式芯片与系统设计竞赛全国总决赛</a>全国一等奖。`
+    },
     {
       date: "2026年8月",
       html:
@@ -655,6 +670,10 @@ const cvZh: CvData = {
     }
   ],
   awards: [
+    {
+      html:
+        `<a href="${embeddedCompetitionUrl}" target="_blank" rel="noopener noreferrer">第九届全国大学生嵌入式芯片与系统设计竞赛全国总决赛</a>全国一等奖（2026年8月13日）`
+    },
     "2025 年睿抗机器人开发者大赛国家级一等奖",
     "2025 年蓝桥杯 C/C++ 程序设计竞赛全国二等奖",
     "2025 年中国大学生程序设计竞赛（CCPC）上海站银奖",

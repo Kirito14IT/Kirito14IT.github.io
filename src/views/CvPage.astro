@@ -8,7 +8,7 @@ import { getCvData } from "@data/cv";
 import { getUi, type Locale } from "@i18n/index";
 
 const { locale } = Astro.props as { locale: Locale };
-const { education, experiences, publications, awards, skills, services } = getCvData(locale);
+const { education, workExperiences, experiences, publications, awards, skills, services } = getCvData(locale);
 const copy = getUi(locale);
 ---
 
@@ -22,6 +22,8 @@ const copy = getUi(locale);
   <Section title={copy.cv.education}>
     <Timeline items={education.map((item) => ({ ...item, title: item.degree, organization: `${item.institution} · ${item.school}`, bullets: item.details }))} />
   </Section>
+
+  <Section id="work-experience" title={copy.cv.workExperience}><Timeline items={workExperiences} /></Section>
 
   <Section title={copy.cv.experience}><Timeline items={experiences} /></Section>
 

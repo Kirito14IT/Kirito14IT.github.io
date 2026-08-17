@@ -61,6 +61,7 @@ export type ServiceItem = {
 export type CvData = {
   education: TimelineItem[];
   news: NewsItem[];
+  workExperiences: TimelineItem[];
   experiences: TimelineItem[];
   publications: PublicationItem[];
   projects: Array<{ title: string; summary: string; tags: string[]; link?: string }>;
@@ -139,6 +140,20 @@ const cvEn: CvData = {
       jumpTo: "#awards-skills",
       html:
         `Joined the <a href="${usstAcmUrl}" target="_blank" rel="noopener noreferrer">ACM Programming Training Team at the University of Shanghai for Science and Technology</a> as an ACMer, building strong foundations in algorithms, data structures, and contest problem solving. Earned honors including a National First Prize in the 2025 RAICOM Robot Developer Competition, a Silver Award at the 2025 CCPC Shanghai Collegiate Programming Contest, and a National Second Prize in the 2025 LanQiao Cup C/C++ competition.`
+    }
+  ],
+  workExperiences: [
+    {
+      title: "The Third Research Institute of the Ministry of Public Security - Cybersecurity Center (Shanghai), Research Engineer (Online)",
+      period: "Apr 2026 - Present"
+    },
+    {
+      title: "International Organization (United Nations Volunteers) - UNDP, Research Intern (Online)",
+      period: "Jan 2026 - Apr 2026"
+    },
+    {
+      title: "Meituan, Odd Jobs",
+      period: "Jun 2024 - Sep 2024"
     }
   ],
   experiences: [
@@ -469,6 +484,20 @@ const cvZh: CvData = {
         `作为 ACMer 加入<a href="${usstAcmUrl}" target="_blank" rel="noopener noreferrer">上海理工大学 ACM 程序设计集训队</a>，系统训练算法、数据结构与竞赛问题求解能力。期间获得 2025 年睿抗机器人开发者大赛国家级一等奖、2025 年 CCPC 上海站银奖以及 2025 年蓝桥杯 C/C++ 组全国二等奖等奖项。`
     }
   ],
+  workExperiences: [
+    {
+      title: "公安部第三研究所-网安中心部门（上海），科研工程师（线上）",
+      period: "2026年4月 - 至今"
+    },
+    {
+      title: "国际组织（联合国志愿人员组织）- UNDP，研究实习生（线上）",
+      period: "2026年1月 - 2026年4月"
+    },
+    {
+      title: "美团，打零工",
+      period: "2024年6月 - 2024年9月"
+    }
+  ],
   experiences: [
     {
       title: "科研实习生，ScamWeb 多模态诈骗网页基准",
@@ -736,6 +765,7 @@ export const getCvData = (locale: Locale) => cvByLocale[locale];
 export const {
   education,
   news,
+  workExperiences,
   experiences,
   publications,
   projects,

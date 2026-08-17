@@ -27,7 +27,7 @@ const forbiddenPatterns = [
   /\brank\b/i,
   /\b\d+\s*\/\s*\d+\b/,
   /\b\d{11}\b/,
-  /Apr 2026 - Present/,
+  /Research Intern,\s*XSafeClaw[\s\S]{0,500}Apr 2026 - Present/,
   /TCSVT/,
   /IEEE Transactions on Circuits and Systems for Video Technology/,
   /Jungong Road/i,
@@ -99,6 +99,13 @@ const requiredPublicSnippets = [
   "https://www.socchina.net/home",
   "9th National College Student Embedded Chip and System Design Competition",
   "第九届全国大学生嵌入式芯片与系统设计竞赛全国总决赛",
+  "workExperiences",
+  "The Third Research Institute of the Ministry of Public Security - Cybersecurity Center (Shanghai), Research Engineer (Online)",
+  "International Organization (United Nations Volunteers) - UNDP, Research Intern (Online)",
+  "Meituan, Odd Jobs",
+  "公安部第三研究所-网安中心部门（上海），科研工程师（线上）",
+  "国际组织（联合国志愿人员组织）- UNDP，研究实习生（线上）",
+  "美团，打零工",
   "translationKey: \"website-launch\"",
   "translationKey: \"xsafeclaw\""
 ];

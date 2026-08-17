@@ -47,6 +47,8 @@ const acmerLogo = profileCard.match(/<div[^>]*data-acmer-logo[\s\S]*?<\/div>/)?.
 const acmNewsCard = homepage.match(/<article[^>]*class="news-jump-card"[\s\S]*?May 2023 - Jul 2025[\s\S]*?<\/article>/)?.[0] || "";
 const workSection = homepage.match(/<section id="work-experience"[\s\S]*?<\/section>/)?.[0] || "";
 const zhWorkSection = zhHomepage.match(/<section id="work-experience"[\s\S]*?<\/section>/)?.[0] || "";
+const homeShortcutNav = homepage.match(/<nav[^>]*class="quick-jump-nav"[\s\S]*?<\/nav>/)?.[0] || "";
+const zhHomeShortcutNav = zhHomepage.match(/<nav[^>]*class="quick-jump-nav"[\s\S]*?<\/nav>/)?.[0] || "";
 const meteorMarkup = homepage.match(/<div class="meteor-shower">([\s\S]*?)<\/div>/)?.[1] || "";
 const meteorCount = (meteorMarkup.match(/<span style=/g) || []).length;
 
@@ -81,6 +83,8 @@ const checks = [
   ["NeurIPS reviewer service is bilingual", homepage.includes("Reviewer, NeurIPS 2026") && zhHomepage.includes("NeurIPS 2026 审稿人") && zhCv.includes("NeurIPS 2026 审稿人")],
   ["three-time scholarship is bilingual", homepage.includes("National Encouragement Scholarship, Three-time Recipient") && zhHomepage.includes("国家励志奖学金（3 次）")],
   ["work-experience shortcut is bilingual", homepage.includes('href="#work-experience">Work Experience</a>') && zhHomepage.includes('href="#work-experience">工作经历</a>')],
+  ["work-experience shortcut is penultimate before services", homeShortcutNav.indexOf('href="#awards-skills"') < homeShortcutNav.indexOf('href="#work-experience"') && homeShortcutNav.indexOf('href="#work-experience"') < homeShortcutNav.indexOf('href="#services"') && zhHomeShortcutNav.indexOf('href="#awards-skills"') < zhHomeShortcutNav.indexOf('href="#work-experience"') && zhHomeShortcutNav.indexOf('href="#work-experience"') < zhHomeShortcutNav.indexOf('href="#services"')],
+  ["work-experience section is penultimate before services", homepage.indexOf('id="awards-skills"') < homepage.indexOf('id="work-experience"') && homepage.indexOf('id="work-experience"') < homepage.indexOf('id="services"') && zhHomepage.indexOf('id="awards-skills"') < zhHomepage.indexOf('id="work-experience"') && zhHomepage.indexOf('id="work-experience"') < zhHomepage.indexOf('id="services"')],
   ["three concise work experiences are rendered in reverse chronological order", workSection.indexOf("The Third Research Institute of the Ministry of Public Security") >= 0 && workSection.indexOf("The Third Research Institute of the Ministry of Public Security") < workSection.indexOf("International Organization (United Nations Volunteers)") && workSection.indexOf("International Organization (United Nations Volunteers)") < workSection.indexOf("Meituan, Odd Jobs")],
   ["Chinese work experiences and dates are rendered on the homepage and CV", zhWorkSection.includes("公安部第三研究所-网安中心部门（上海），科研工程师（线上）") && zhWorkSection.includes("国际组织（联合国志愿人员组织）- UNDP，研究实习生（线上）") && zhWorkSection.includes("美团，打零工") && zhWorkSection.includes("2024年6月 - 2024年9月") && zhCv.includes('id="work-experience"')],
   ["embedded competition news is bilingual and precisely dated", homepage.includes("Aug 13, 2026") && homepage.includes("Received the National First Prize at the National Finals") && zhHomepage.includes("2026年8月13日") && zhHomepage.includes("第九届全国大学生嵌入式芯片与系统设计竞赛全国总决赛")],

@@ -26,11 +26,11 @@ const homeJumpLinks = [
   { label: copy.homeJump.homepage, href: "#home" },
   { label: copy.homeJump.about, href: "#about" },
   { label: copy.homeJump.news, href: "#news" },
-  { label: copy.homeJump.work, href: "#work-experience" },
   { label: copy.homeJump.research, href: "#research-experience" },
   { label: copy.homeJump.publications, href: "#publications" },
   { label: copy.homeJump.projects, href: "#projects" },
   { label: copy.homeJump.awards, href: "#awards-skills" },
+  { label: copy.homeJump.work, href: "#work-experience" },
   { label: copy.homeJump.services, href: "#services" }
 ];
 ---
@@ -70,10 +70,6 @@ const homeJumpLinks = [
         </article>
       ))}
     </div>
-  </Section>
-
-  <Section id="work-experience" title={copy.sections.workExperience} eyebrow={copy.sections.timeline}>
-    <Timeline items={workExperiences} />
   </Section>
 
   <Section id="research-experience" title={copy.sections.researchExperience} eyebrow={copy.sections.timeline}>
@@ -141,6 +137,10 @@ const homeJumpLinks = [
         </div>
       </div>
     </div>
+  </Section>
+
+  <Section id="work-experience" title={copy.sections.workExperience} eyebrow={copy.sections.timeline}>
+    <Timeline items={workExperiences} />
   </Section>
 
   <Section id="services" title={copy.sections.services} eyebrow={copy.sections.academicCommunity}>

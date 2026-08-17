@@ -633,6 +633,7 @@ a {
 
 .page-toolbar.has-navigation {
   justify-content: space-between;
+  align-items: flex-start;
 }
 
 .toolbar-navigation {
@@ -765,14 +766,16 @@ html[data-theme="dark"] .theme-icon-sun {
 
 .quick-jump-nav {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
+  gap: 5px 6px;
   width: 100%;
   margin: 0;
-  padding: 8px;
-  overflow-x: auto;
+  padding: 7px;
+  overflow: visible;
   border: 1px solid rgba(255, 255, 255, 0.78);
-  border-radius: 999px;
+  border-radius: 26px;
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(244, 250, 255, 0.78)),
     radial-gradient(circle at 20% 0%, rgba(37, 99, 235, 0.14), transparent 34%);
@@ -787,12 +790,17 @@ html[data-theme="dark"] .theme-icon-sun {
 
 .quick-jump-nav a {
   flex: 0 0 auto;
-  padding: 8px 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 7px 10px;
   border-radius: 999px;
   color: #31445f;
   font-family: var(--mono);
   font-size: 0.74rem;
   font-weight: 800;
+  line-height: 1.2;
   letter-spacing: 0.01em;
   text-decoration: none;
   transition: color 180ms ease, background 180ms ease, transform 180ms ease;
@@ -2166,6 +2174,12 @@ html[data-theme="dark"] .page-header {
   .toolbar-navigation {
     grid-column: 1 / -1;
     grid-row: 2;
+  }
+
+  .quick-jump-nav {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
   }
 
   .toolbar-controls {

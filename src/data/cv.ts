@@ -157,7 +157,7 @@ const cvEn: CvData = {
     },
     {
       title: "Meituan, Odd Jobs",
-      period: "Jun 2024 - Sep 2024"
+      period: "Jun 2023 - Sep 2023"
     }
   ],
   experiences: [
@@ -517,7 +517,7 @@ const cvZh: CvData = {
     },
     {
       title: "美团，打零工",
-      period: "2024年6月 - 2024年9月"
+      period: "2023年6月 - 2023年9月"
     }
   ],
   experiences: [

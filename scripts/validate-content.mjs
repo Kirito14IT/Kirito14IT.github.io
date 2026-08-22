@@ -106,6 +106,12 @@ const requiredPublicSnippets = [
   "公安部第三研究所-网安中心部门（上海），科研工程师（线上）",
   "国际组织（联合国志愿人员组织）- UNDP，研究实习生（线上）",
   "美团，打零工",
+  "May 2024 - Jul 2025",
+  "began my ACM journey. Looking forward to the challenges ahead! 🚀",
+  "My chapter as an ACMer officially came to an end.",
+  "2024年5月 - 2025年7月",
+  "开启了我的 ACM 生涯。期待接下来的挑战！🚀",
+  "我的 ACMer 身份正式退役。",
   "translationKey: \"website-launch\"",
   "translationKey: \"xsafeclaw\""
 ];

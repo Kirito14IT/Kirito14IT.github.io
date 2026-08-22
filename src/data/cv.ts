@@ -136,10 +136,14 @@ const cvEn: CvData = {
         "Started SFMambaNet research on spectral-frequency enhanced state space models for correspondence pruning."
     },
     {
-      date: "May 2023 - Jul 2025",
+      date: "Jul 2025",
       jumpTo: "#awards-skills",
+      text: "My chapter as an ACMer officially came to an end."
+    },
+    {
+      date: "May 2024",
       html:
-        `Joined the <a href="${usstAcmUrl}" target="_blank" rel="noopener noreferrer">ACM Programming Training Team at the University of Shanghai for Science and Technology</a> as an ACMer, building strong foundations in algorithms, data structures, and contest problem solving. Earned honors including a National First Prize in the 2025 RAICOM Robot Developer Competition, a Silver Award at the 2025 CCPC Shanghai Collegiate Programming Contest, and a National Second Prize in the 2025 LanQiao Cup C/C++ competition.`
+        `Joined the <a href="${usstAcmUrl}" target="_blank" rel="noopener noreferrer">ACM Programming Training Team at the University of Shanghai for Science and Technology</a> and began my ACM journey. Looking forward to the challenges ahead! 🚀`
     }
   ],
   workExperiences: [
@@ -291,6 +295,20 @@ const cvEn: CvData = {
         { label: "Dr. Yizhang Liu", url: yizhangLiuProfileUrl },
         { label: "IEEE TIP", url: tipUrl },
         { label: "SFMambaNet arXiv", url: "https://arxiv.org/abs/2606.04493" }
+      ]
+    },
+    {
+      title: "ACMer, ACM Programming Training Team",
+      titleUrl: usstAcmUrl,
+      organization: "University of Shanghai for Science and Technology",
+      period: "May 2024 - Jul 2025",
+      tags: ["ACM", "Competitive Programming", "Algorithms", "Data Structures"],
+      bullets: [
+        "Completed systematic training in algorithms, data structures, and contest problem solving.",
+        "Earned a National First Prize in the 2025 RAICOM Robot Developer Competition, a Silver Award at the 2025 CCPC Shanghai Collegiate Programming Contest, and a National Second Prize in the 2025 LanQiao Cup C/C++ competition."
+      ],
+      links: [
+        { label: "ACM Programming Training Team", url: usstAcmUrl }
       ]
     }
   ],
@@ -478,10 +496,14 @@ const cvZh: CvData = {
       text: "启动 SFMambaNet 研究，探索用于对应关系剪枝的谱频增强状态空间模型。"
     },
     {
-      date: "2023年5月 - 2025年7月",
+      date: "2025年7月",
       jumpTo: "#awards-skills",
+      text: "我的 ACMer 身份正式退役。"
+    },
+    {
+      date: "2024年5月",
       html:
-        `作为 ACMer 加入<a href="${usstAcmUrl}" target="_blank" rel="noopener noreferrer">上海理工大学 ACM 程序设计集训队</a>，系统训练算法、数据结构与竞赛问题求解能力。期间获得 2025 年睿抗机器人开发者大赛国家级一等奖、2025 年 CCPC 上海站银奖以及 2025 年蓝桥杯 C/C++ 组全国二等奖等奖项。`
+        `加入<a href="${usstAcmUrl}" target="_blank" rel="noopener noreferrer">上海理工大学 ACM 程序设计集训队</a>，开启了我的 ACM 生涯。期待接下来的挑战！🚀`
     }
   ],
   workExperiences: [
@@ -633,6 +655,20 @@ const cvZh: CvData = {
         { label: "刘一璋博士", url: yizhangLiuProfileUrl },
         { label: "IEEE TIP", url: tipUrl },
         { label: "SFMambaNet arXiv", url: "https://arxiv.org/abs/2606.04493" }
+      ]
+    },
+    {
+      title: "ACMer，ACM 程序设计集训队",
+      titleUrl: usstAcmUrl,
+      organization: "上海理工大学",
+      period: "2024年5月 - 2025年7月",
+      tags: ["ACM", "程序设计竞赛", "算法", "数据结构"],
+      bullets: [
+        "系统训练算法、数据结构与竞赛问题求解能力。",
+        "期间获得 2025 年睿抗机器人开发者大赛国家级一等奖、2025 年 CCPC 上海站银奖以及 2025 年蓝桥杯 C/C++ 组全国二等奖。"
+      ],
+      links: [
+        { label: "ACM 程序设计集训队", url: usstAcmUrl }
       ]
     }
   ],

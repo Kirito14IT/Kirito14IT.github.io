@@ -44,7 +44,10 @@ const zhProject = readRendered("zh", "projects", "xsafeclaw");
 const zhBlog = readRendered("zh", "blog", "website-launch");
 const profileCard = homepage.match(/<a[^>]*data-profile-card[\s\S]*?<\/a>/)?.[0] || "";
 const acmerLogo = profileCard.match(/<div[^>]*data-acmer-logo[\s\S]*?<\/div>/)?.[0] || "";
-const acmNewsCard = homepage.match(/<article[^>]*class="news-jump-card"[\s\S]*?May 2023 - Jul 2025[\s\S]*?<\/article>/)?.[0] || "";
+const acmStartNewsCard = homepage.match(/<article[^>]*>\s*<time>May 2024<\/time>[\s\S]*?<\/article>/)?.[0] || "";
+const acmRetirementNewsCard = homepage.match(/<article[^>]*class="news-jump-card"[^>]*>\s*[\s\S]*?<time>Jul 2025<\/time>[\s\S]*?<\/article>/)?.[0] || "";
+const researchSection = homepage.match(/<section id="research-experience"[\s\S]*?<\/section>/)?.[0] || "";
+const zhResearchSection = zhHomepage.match(/<section id="research-experience"[\s\S]*?<\/section>/)?.[0] || "";
 const workSection = homepage.match(/<section id="work-experience"[\s\S]*?<\/section>/)?.[0] || "";
 const zhWorkSection = zhHomepage.match(/<section id="work-experience"[\s\S]*?<\/section>/)?.[0] || "";
 const homeShortcutNav = homepage.match(/<nav[^>]*class="quick-jump-nav"[\s\S]*?<\/nav>/)?.[0] || "";
@@ -75,10 +78,12 @@ const checks = [
   ["ACMer wordmark is one continuous text element", /<text[^>]*data-acmer-wordmark[^>]*>ACMer<\/text>/.test(acmerLogo)],
   ["ACMer logo has no outer frame", !/<rect[^>]*stroke=/.test(acmerLogo)],
   ["old Academic Homepage label is removed", !profileCard.includes("Academic Homepage")],
-  ["ACM training-team period is rendered in English News", homepage.includes("May 2023 - Jul 2025")],
-  ["ACM training-team link is rendered in News", homepage.includes("https://cec.usst.edu.cn/2019/0523/c6556a148258/page.htm")],
-  ["RAICOM national first prize is rendered", acmNewsCard.includes("National First Prize in the 2025 RAICOM Robot Developer Competition")],
-  ["ACM News card links to Awards", acmNewsCard.includes('class="news-card-jump"') && acmNewsCard.includes('href="#awards-skills"')],
+  ["ACM experience period is corrected in both languages", researchSection.includes("May 2024 - Jul 2025") && zhResearchSection.includes("2024年5月 - 2025年7月") && cv.includes("May 2024 - Jul 2025") && zhCv.includes("2024年5月 - 2025年7月")],
+  ["old ACM start date is removed", !homepage.includes("May 2023 - Jul 2025") && !zhHomepage.includes("2023年5月 - 2025年7月")],
+  ["ACM journey-start News is bilingual and linked", acmStartNewsCard.includes("began my ACM journey") && acmStartNewsCard.includes("Looking forward to the challenges ahead! 🚀") && acmStartNewsCard.includes("https://cec.usst.edu.cn/2019/0523/c6556a148258/page.htm") && zhHomepage.includes("开启了我的 ACM 生涯。期待接下来的挑战！🚀")],
+  ["ACMer retirement News is bilingual", acmRetirementNewsCard.includes("My chapter as an ACMer officially came to an end.") && zhHomepage.includes("我的 ACMer 身份正式退役。")],
+  ["RAICOM national first prize remains in the ACM experience", researchSection.includes("National First Prize in the 2025 RAICOM Robot Developer Competition") && zhResearchSection.includes("睿抗机器人开发者大赛国家级一等奖")],
+  ["ACM retirement News card links to Awards", acmRetirementNewsCard.includes('class="news-jump-card"') && acmRetirementNewsCard.includes('href="#awards-skills"')],
   ["international organization period remains correct", homepage.includes("Jan - Apr 2026") && cv.includes("Jan 2026 - Apr 2026")],
   ["NeurIPS reviewer service is bilingual", homepage.includes("Reviewer, NeurIPS 2026") && zhHomepage.includes("NeurIPS 2026 审稿人") && zhCv.includes("NeurIPS 2026 审稿人")],
   ["three-time scholarship is bilingual", homepage.includes("National Encouragement Scholarship, Three-time Recipient") && zhHomepage.includes("国家励志奖学金（3 次）")],

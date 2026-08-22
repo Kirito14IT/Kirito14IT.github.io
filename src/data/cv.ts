@@ -108,7 +108,7 @@ const cvEn: CvData = {
     {
       date: "June 2026",
       html:
-        `Joined <a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">Advisor Xingjun Ma</a>'s team at <a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">TEAI, Fudan University</a> on an enterprise-oriented multi-agent secure collaboration project, contributing to requirements analysis, system design, implementation, and testing.`
+        `At <a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">TEAI, Fudan University</a>, under the guidance of <a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">Advisor Xingjun Ma</a>, I participated in an enterprise-oriented multi-agent secure collaboration project, contributing to requirements analysis, system design, implementation, and testing.`
     },
     {
       date: "Jan - Apr 2026",
@@ -118,7 +118,7 @@ const cvEn: CvData = {
     {
       date: "Mar - Jun 2026",
       html:
-        `Worked on the <a href="${xsafeclawUrl}" target="_blank" rel="noopener noreferrer">XSafeClaw</a> agent safety project at <a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">TEAI, Fudan University</a>, focusing on runtime integration, controlled tool calls, and safety audit workflows.`
+        `Joined <a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">TEAI, Fudan University</a> and, under the guidance of <a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">Advisor Xingjun Ma</a>, worked on the <a href="${xsafeclawUrl}" target="_blank" rel="noopener noreferrer">XSafeClaw</a> agent safety project, focusing on runtime integration, controlled tool calls, and safety audit workflows.`
     },
     {
       date: "Feb 2026",
@@ -471,7 +471,7 @@ const cvZh: CvData = {
     {
       date: "2026年6月",
       html:
-        `加入<a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">导师马兴军</a>在<a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">复旦大学可信具身智能研究院（TEAI）</a>的团队，参与面向企业的多智能体安全协作项目，负责需求分析、系统设计、实现与测试。`
+        `在<a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">复旦大学可信具身智能研究院（TEAI）</a>的团队中，在<a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">导师马兴军</a>指导下，参与面向企业的多智能体安全协作项目，负责需求分析、系统设计、实现与测试。`
     },
     {
       date: "2026年1月 - 4月",
@@ -480,7 +480,7 @@ const cvZh: CvData = {
     {
       date: "2026年3月 - 6月",
       html:
-        `在<a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">复旦大学可信具身智能研究院（TEAI）</a>参与 <a href="${xsafeclawUrl}" target="_blank" rel="noopener noreferrer">XSafeClaw</a> 智能体安全项目，聚焦运行时接入、受控工具调用与安全审计流程。`
+        `加入<a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">复旦大学可信具身智能研究院（TEAI）</a>，在<a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">马兴军老师</a>的指导下，参与 <a href="${xsafeclawUrl}" target="_blank" rel="noopener noreferrer">XSafeClaw</a> 智能体安全项目，聚焦运行时接入、受控工具调用与安全审计流程。`
     },
     {
       date: "2026年2月",

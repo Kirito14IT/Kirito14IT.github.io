@@ -104,6 +104,8 @@ const checks = [
   ["Chinese blog body is translated", zhBlog.includes("公开学术主页") && zhBlog.includes("GitHub 贡献图")],
   ["Chinese UI labels replace English section labels", zhHomepage.includes(">关于我</h2>") && zhHomepage.includes(">科研与实践经历</h2>") && !zhHomepage.includes(">About Me</h2>")],
   ["advisor titles remain consistent", homepage.includes("Advisor Jingfeng Zhang") && homepage.includes("Advisor Xingjun Ma") && zhHomepage.includes("导师张景锋") && zhHomepage.includes("导师马兴军")],
+  ["enterprise collaboration News places the linked advisor under TEAI", homepage.includes('At <a href="https://teai.fudan.edu.cn/"') && homepage.includes('under the guidance of <a href="http://xingjunma.com/"') && zhHomepage.includes('复旦大学可信具身智能研究院（TEAI）</a>的团队中，在<a href="http://xingjunma.com/"') && zhHomepage.includes("导师马兴军</a>指导下")],
+  ["XSafeClaw News includes linked TEAI and advisor guidance", homepage.includes('Joined <a href="https://teai.fudan.edu.cn/"') && homepage.includes('Advisor Xingjun Ma</a>, worked on the <a href="https://github.com/XSafeAI/XSafeClaw"') && zhHomepage.includes('加入<a href="https://teai.fudan.edu.cn/"') && zhHomepage.includes('马兴军老师</a>的指导下，参与 <a href="https://github.com/XSafeAI/XSafeClaw"')],
   ["academic honorifics remain removed for the two advisors", !homepage.includes("Prof. Jingfeng Zhang") && !homepage.includes("Dr. Xingjun Ma")]
 ];
 

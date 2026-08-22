@@ -21,4 +21,4 @@ SFMambaNet 探索如何为对应关系剪枝高效建模全局上下文。
 
 该项目将谱频感知机制引入选择性状态空间架构，目标是在保留强大全局建模能力的同时，避免 Transformer 风格全局注意力的二次复杂度增长。
 
-本研究在福州大学[福建省网络计算与智能信息处理重点实验室](https://ncip.fzu.edu.cn/xsdt.htm)科研实习期间完成，由刘一璋博士指导。论文正在 [IEEE Transactions on Image Processing（TIP）](https://signalprocessingsociety.org/publications-resources/ieee-transactions-image-processing)审稿，并已发布 [arXiv 预印本](https://arxiv.org/abs/2606.04493)。
+本研究在福州大学[福建省网络计算与智能信息处理重点实验室](https://ncip.fzu.edu.cn/index.htm)科研实习期间完成，由[导师刘翼章](https://ccds.fzu.edu.cn/info/1207/11276.htm)指导。论文正在 [IEEE Transactions on Image Processing（TIP）](https://signalprocessingsociety.org/publications-resources/ieee-transactions-image-processing)审稿，并已发布 [arXiv 预印本](https://arxiv.org/abs/2606.04493)。

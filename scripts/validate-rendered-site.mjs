@@ -40,6 +40,8 @@ const homepage = readRendered();
 const cv = readRendered("cv");
 const zhHomepage = readRendered("zh");
 const zhCv = readRendered("zh", "cv");
+const sfmambaProject = readRendered("projects", "sfmambanet");
+const zhSfmambaProject = readRendered("zh", "projects", "sfmambanet");
 const zhProject = readRendered("zh", "projects", "xsafeclaw");
 const zhBlog = readRendered("zh", "blog", "website-launch");
 const profileCard = homepage.match(/<a[^>]*data-profile-card[\s\S]*?<\/a>/)?.[0] || "";
@@ -106,6 +108,9 @@ const checks = [
   ["advisor titles remain consistent", homepage.includes("Advisor Jingfeng Zhang") && homepage.includes("Advisor Xingjun Ma") && zhHomepage.includes("导师张景锋") && zhHomepage.includes("导师马兴军")],
   ["enterprise collaboration News places the linked advisor under TEAI", homepage.includes('At <a href="https://teai.fudan.edu.cn/"') && homepage.includes('under the guidance of <a href="http://xingjunma.com/"') && zhHomepage.includes('复旦大学可信具身智能研究院（TEAI）</a>的团队中，在<a href="http://xingjunma.com/"') && zhHomepage.includes("导师马兴军</a>指导下")],
   ["XSafeClaw News includes linked TEAI and advisor guidance", homepage.includes('Joined <a href="https://teai.fudan.edu.cn/"') && homepage.includes('Advisor Xingjun Ma</a>, worked on the <a href="https://github.com/XSafeAI/XSafeClaw"') && zhHomepage.includes('加入<a href="https://teai.fudan.edu.cn/"') && zhHomepage.includes('马兴军老师</a>的指导下，参与 <a href="https://github.com/XSafeAI/XSafeClaw"')],
+  ["SFMambaNet News links the FZU laboratory and advisor in both languages", homepage.includes('Fujian Key Laboratory of Network Computing and Intelligent Information Processing</a> at Fuzhou University') && homepage.includes('Advisor Yizhang Liu</a>, began SFMambaNet research') && zhHomepage.includes('加入福州大学<a href="https://ncip.fzu.edu.cn/index.htm"') && zhHomepage.includes('导师刘翼章</a>指导下启动 SFMambaNet 研究')],
+  ["SFMambaNet CV and project pages use the verified advisor name and links", cv.includes("Advisor Yizhang Liu") && zhCv.includes("导师刘翼章") && sfmambaProject.includes("https://ccds.fzu.edu.cn/info/1207/11276.htm") && zhSfmambaProject.includes("导师刘翼章")],
+  ["old misspelling of the SFMambaNet advisor is removed", !zhHomepage.includes("刘一璋") && !zhCv.includes("刘一璋") && !zhSfmambaProject.includes("刘一璋")],
   ["academic honorifics remain removed for the two advisors", !homepage.includes("Prof. Jingfeng Zhang") && !homepage.includes("Dr. Xingjun Ma")]
 ];
 

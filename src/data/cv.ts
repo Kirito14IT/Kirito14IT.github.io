@@ -1,6 +1,7 @@
 import type { Locale } from "@i18n/index";
 
 const yizhangLiuProfileUrl = "https://ccds.fzu.edu.cn/info/1207" + "/11276.htm";
+const fzuKeyLabUrl = "https://ncip.fzu.edu.cn/index.htm";
 const xsafeclawUrl = "https://github.com/XSafeAI/XSafeClaw";
 const teaiUrl = "https://teai.fudan.edu.cn/";
 const xingjunMaUrl = "http://xingjunma.com/";
@@ -132,8 +133,8 @@ const cvEn: CvData = {
     },
     {
       date: "Sep 2025",
-      text:
-        "Started SFMambaNet research on spectral-frequency enhanced state space models for correspondence pruning."
+      html:
+        `Joined the <a href="${fzuKeyLabUrl}" target="_blank" rel="noopener noreferrer">Fujian Key Laboratory of Network Computing and Intelligent Information Processing</a> at Fuzhou University and, under the guidance of <a href="${yizhangLiuProfileUrl}" target="_blank" rel="noopener noreferrer">Advisor Yizhang Liu</a>, began SFMambaNet research on spectral-frequency enhanced state space models for correspondence pruning.`
     },
     {
       date: "Jul 2025",
@@ -273,17 +274,17 @@ const cvEn: CvData = {
       title: "Research Intern, SFMambaNet",
       titleUrl: "https://arxiv.org/abs/2606.04493",
       organization: "Fujian Key Laboratory of Network Computing and Intelligent Information Processing, Fuzhou University",
-      organizationUrl: "https://ncip.fzu.edu.cn/xsdt.htm",
+      organizationUrl: fzuKeyLabUrl,
       period: "Sep 2025 - Mar 2026",
       tags: ["Computer Vision", "Correspondence Pruning", "Mamba", "State Space Models", "Frequency Domain", "Two-View Geometry", "Outlier Rejection"],
       bullets: [
         {
           html:
-            'Worked as a research intern at <a href="https://ncip.fzu.edu.cn/xsdt.htm" target="_blank" rel="noopener noreferrer">Fujian Key Laboratory of Network Computing and Intelligent Information Processing</a>, Fuzhou University, from September 2025 to March 2026.'
+            `Worked as a research intern at <a href="${fzuKeyLabUrl}" target="_blank" rel="noopener noreferrer">Fujian Key Laboratory of Network Computing and Intelligent Information Processing</a>, Fuzhou University, from September 2025 to March 2026.`
         },
         {
           html:
-            `Worked closely with <a href="${yizhangLiuProfileUrl}" target="_blank" rel="noopener noreferrer">Dr. Yizhang Liu</a>, a university-appointed Associate Research Fellow and graduate supervisor, on robust two-view correspondence pruning.`
+            `Worked closely with <a href="${yizhangLiuProfileUrl}" target="_blank" rel="noopener noreferrer">Advisor Yizhang Liu</a>, a university-appointed Associate Research Fellow and graduate supervisor, on robust two-view correspondence pruning.`
         },
         {
           html:
@@ -291,8 +292,8 @@ const cvEn: CvData = {
         }
       ],
       links: [
-        { label: "FZU Key Lab", url: "https://ncip.fzu.edu.cn/xsdt.htm" },
-        { label: "Dr. Yizhang Liu", url: yizhangLiuProfileUrl },
+        { label: "FZU Key Lab", url: fzuKeyLabUrl },
+        { label: "Advisor Yizhang Liu", url: yizhangLiuProfileUrl },
         { label: "IEEE TIP", url: tipUrl },
         { label: "SFMambaNet arXiv", url: "https://arxiv.org/abs/2606.04493" }
       ]
@@ -493,7 +494,8 @@ const cvZh: CvData = {
     },
     {
       date: "2025年9月",
-      text: "启动 SFMambaNet 研究，探索用于对应关系剪枝的谱频增强状态空间模型。"
+      html:
+        `加入福州大学<a href="${fzuKeyLabUrl}" target="_blank" rel="noopener noreferrer">福建省网络计算与智能信息处理重点实验室</a>，在<a href="${yizhangLiuProfileUrl}" target="_blank" rel="noopener noreferrer">导师刘翼章</a>指导下启动 SFMambaNet 研究，探索用于对应关系剪枝的谱频增强状态空间模型。`
     },
     {
       date: "2025年7月",
@@ -633,17 +635,17 @@ const cvZh: CvData = {
       title: "科研实习生，SFMambaNet",
       titleUrl: "https://arxiv.org/abs/2606.04493",
       organization: "福州大学福建省网络计算与智能信息处理重点实验室",
-      organizationUrl: "https://ncip.fzu.edu.cn/xsdt.htm",
+      organizationUrl: fzuKeyLabUrl,
       period: "2025年9月 - 2026年3月",
       tags: ["计算机视觉", "对应关系剪枝", "Mamba", "状态空间模型", "频域", "双视图几何", "外点剔除"],
       bullets: [
         {
           html:
-            '于 2025 年 9 月至 2026 年 3 月在福州大学<a href="https://ncip.fzu.edu.cn/xsdt.htm" target="_blank" rel="noopener noreferrer">福建省网络计算与智能信息处理重点实验室</a>担任科研实习生。'
+            `于 2025 年 9 月至 2026 年 3 月在福州大学<a href="${fzuKeyLabUrl}" target="_blank" rel="noopener noreferrer">福建省网络计算与智能信息处理重点实验室</a>担任科研实习生。`
         },
         {
           html:
-            `与校聘副研究员、研究生导师<a href="${yizhangLiuProfileUrl}" target="_blank" rel="noopener noreferrer">刘一璋博士</a>紧密合作，研究鲁棒双视图对应关系剪枝。`
+            `在<a href="${yizhangLiuProfileUrl}" target="_blank" rel="noopener noreferrer">导师刘翼章</a>指导下，研究鲁棒双视图对应关系剪枝。`
         },
         {
           html:
@@ -651,8 +653,8 @@ const cvZh: CvData = {
         }
       ],
       links: [
-        { label: "福州大学重点实验室", url: "https://ncip.fzu.edu.cn/xsdt.htm" },
-        { label: "刘一璋博士", url: yizhangLiuProfileUrl },
+        { label: "福州大学重点实验室", url: fzuKeyLabUrl },
+        { label: "导师刘翼章", url: yizhangLiuProfileUrl },
         { label: "IEEE TIP", url: tipUrl },
         { label: "SFMambaNet arXiv", url: "https://arxiv.org/abs/2606.04493" }
       ]

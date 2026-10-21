@@ -13,6 +13,8 @@ const usstAcmUrl = "https://cec.usst.edu.cn/2019/" + "0523/c6556a148258/page.htm
 const embeddedCompetitionUrl = "https://www.socchina.net/home";
 const codeWisdomLabUrl = "http://www.se.fudan.edu.cn/";
 const yiLiUrl = "http://www.se.fudan.edu.cn/#";
+const logitechMouseFixRepoUrl = "https://github.com/Kirito14IT/logitech-mouse-not-working-after-sleep";
+const logitechMouseFixIssueUrl = "https://github.com/Logitech/cpg-docs/issues/25";
 
 type Link = { label: string; url: string };
 type RichText = string | { html: string };
@@ -86,6 +88,11 @@ const cvEn: CvData = {
     }
   ],
   news: [
+    {
+      date: "Oct 21, 2026",
+      html:
+        `Diagnosed and fixed a defect in Logitech's own driver stack that silently killed mouse input after Modern Standby resume, published the full <a href="${logitechMouseFixRepoUrl}" target="_blank" rel="noopener noreferrer">diagnosis and repair scripts</a> in a public repository, and filed the upstream report to <a href="${logitechMouseFixIssueUrl}" target="_blank" rel="noopener noreferrer">Logitech's official GitHub</a>.`
+    },
     {
       date: "Aug 13, 2026",
       html:
@@ -450,6 +457,11 @@ const cvZh: CvData = {
     }
   ],
   news: [
+    {
+      date: "2026年10月21日",
+      html:
+        `定位并修复了罗技官方驱动栈中一个会在现代待机恢复后静默吞掉鼠标输入的缺陷，公开了完整的<a href="${logitechMouseFixRepoUrl}" target="_blank" rel="noopener noreferrer">诊断过程与修复脚本</a>，并已向<a href="${logitechMouseFixIssueUrl}" target="_blank" rel="noopener noreferrer">罗技官方 GitHub</a>提交上游问题报告。`
+    },
     {
       date: "2026年8月13日",
       html:

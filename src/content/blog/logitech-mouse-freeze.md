@@ -134,18 +134,45 @@ Resetting the receiver is a software-level USB reset — one physical replug —
 
 `GetLastInputInfo`'s idle timer keeps running through standby and drops to zero the moment the user returns. **It is the only reliable, essentially free "the user is back" signal.**
 
-### 4.2 Three triggers
+### 4.2 Four triggers
 
 | Trigger | Condition | Notes |
 |---|---|---|
 | **T1** | The receiver's `LastArrivalDate` changes | Fires when the receiver moves to another port or a driver updates (it did not fire during standby, but it does on a port change) |
 | **T1b** | The device instance id changes | The receiver was moved to another USB port |
-| **T2** | **System idle drops from >4 minutes to <1 second** | **The main one.** The user is back → reset the receiver now |
-| **T5** | Every 20 minutes while idle > 10 minutes | Safety net so it always comes back eventually |
+| **T2** | **System idle drops from >4 minutes to <1 second** | The user is back (they touched the keyboard or touchpad) → reset the receiver now |
+| **T5** | **Every 2 minutes once idle > 5 minutes** | **Proactive**: reset the receiver while the user is away, so it is already fresh when they come back |
+| **T6** | A manual request file | The desktop "one-click recovery" writes a request file and the guard does the work — **no UAC prompt** |
 
 **T2 does not care whether the pointer moved** — that was the biggest lesson of the previous version. It required "the pointer stayed still for 4 seconds after the user returned", so a user who **reached for the touchpad** silently defeated the detector, and it never fired once.
 
-### 4.3 The cost, and what it feels like
+### 4.3 Why T5 has to be proactive
+
+A dead mouse **produces no input at all** — neither movement nor clicks reach Windows, so the idle timer never resets and the guard cannot tell the user came back. T5 inverts that: **reset the receiver periodically while the user is away.**
+
+Modern Standby keeps user-mode apps running, and a USB reset **re-powers the port and restarts the receiver firmware** — so by the time the user comes back the receiver is fresh, and **sliding the mouse is enough; no need to touch the keyboard at all.** T2 stays as the fallback for the case where resets do not work during standby.
+
+Measured over a 9.5-minute absence:
+
+```
+[00:50:58] T5 idle-period receiver reset    <- idle 307s
+[00:53:01] T5 idle-period receiver reset    <- idle 427s
+[00:55:03] T5 idle-period receiver reset    <- idle 547s
+```
+
+The interval held at two minutes, and the guard **was still running and resetting during standby** — which is the precondition the proactive design depends on.
+
+### 4.4 T6: a manual repair that needs no administrator rights
+
+Resetting the receiver **does** need administrator rights — measured, an unelevated `Disable-PnpDevice` / `Enable-PnpDevice` fails with a generic error. But the guard already runs as SYSTEM, so the desktop entry now only **writes a request file**:
+
+```bat
+>"E:\LogitechMouseFix\state\repair.request" echo request
+```
+
+The guard sees it and performs the reset. **Measured end to end: 11 seconds, no UAC prompt at all.** If the guard is not running, the batch file falls back to an elevated run.
+
+### 4.5 The cost, and what it feels like
 
 Coming back from a long idle, the mouse has a **4–5 second window** where it does not respond. But that is exactly the moment the mouse would have been dead anyway, so what you perceive is:
 

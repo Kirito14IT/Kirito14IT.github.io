@@ -1,256 +1,286 @@
 ---
 locale: "zh"
 translationKey: "logitech-mouse-freeze"
-title: "鼠标待机后失灵：一个被伪装成硬件故障的罗技驱动缺陷"
+title: "鼠标待机后失灵：真凶是 USB 端口掉电，不是驱动"
 date: 2026-10-21
-description: "设备管理器一切正常、触控板正常、鼠标却完全没反应——最终定位到罗技 logi_lamparray USB 下层过滤驱动在 Modern Standby 后吞掉了鼠标的全部 HID 报告。本文给出完整的定位思路、修复方案与踩坑记录。"
-tags: ["Windows", "故障排查", "驱动", "HID", "罗技", "PowerShell"]
+description: "设备管理器一切正常、触控板正常、鼠标却完全没反应——真因是 Modern Standby 期间 USB 端口被选择性挂起，罗技接收器固件掉电后不再监听已配对的鼠标。本文给出完整定位过程、真正的修复方案，以及一个我自己走错的弯路。"
+tags: ["Windows", "故障排查", "USB", "HID", "罗技", "PowerShell", "Modern Standby"]
 draft: false
 ---
 
-自己的 G304 无线鼠标又"待机后失灵"了。鼠标有电、接收器插着、触控板正常，唯独鼠标移动和点击毫无反应。
+我的 G304 无线鼠标又"待机后失灵"了。鼠标有电、接收器插着、触控板完全正常，但鼠标**移动无反应、点击无反应**。
 
-这次我决定不靠"拔插 USB / 重启电脑"糊弄过去，而是把它查清楚。
+第一次修的时候，我认定是罗技的驱动问题，卸载了驱动包、摘掉了过滤器——**结果这次同样的症状又原样复发**。过滤器早就没了，它根本不是元凶。
 
-结果证明：**是罗技官方驱动的缺陷**，而且这个缺陷伪装得极好——设备管理器里所有节点都显示 `Status=OK`，事件日志里一条错误都没有，硬件也完全正常。
-
----
-
-## 一、最重要的线索，恰恰是"拔插就好"
-
-如果鼠标是硬件坏了，拔插 USB 不会有任何效果。而"拔插一下立刻恢复"这件事本身就说明：
-
-> 故障不在硬件，而在**已加载的驱动/过滤器状态**。拔插 = 重新枚举设备树 = 重新加载驱动。
-
-顺着这个思路，第一步是排除硬件：
-
-```powershell
-Get-PnpDevice -Class Mouse |
-  Select-Object Status, Problem, FriendlyName, InstanceId
-```
-
-```
-Status  Problem         FriendlyName          InstanceId
-OK      CM_PROB_NONE    HID-compliant mouse    HID\VID_046D&PID_C53F&MI_01&COL01\8&1293EAEC&0&0000
-OK      CM_PROB_NONE    HID-compliant mouse    HID\HTIX5288&COL01\4&148E01A2&0&0000
-```
-
-`CM_PROB_NONE` 意味着**设备从未在 USB 层断开**。再查事件日志，`Kernel-PnP`、`UserPnp`、`DriverFrameworks`、`USBHUB3` 全部没有告警。
-
-于是故障范围被压缩到一句话：**设备在位、驱动在位，但报告流断了。**
+这篇文章是修正版：包括我走错的那条弯路。
 
 ---
 
-## 二、真正的元凶：一个"看不见"的 USB 过滤驱动
+## 一、现象的迷惑性
 
-罗技 LIGHTSPEED 接收器是 USB 复合设备。查它的**下层过滤器**：
+| 你看到的 | 实际情况 |
+|---|---|
+| 设备管理器里鼠标是 `OK`，没有黄色感叹号 | 设备**从未**在 USB 层断开，只是**一个 HID 报告都发不出来** |
+| 触控板能用，系统其他部分正常 | USB 控制器和系统都是好的 |
+| 拔插接收器就好 | 重新枚举 = 给接收器做了一次 USB 复位 = 接收器固件重启 |
+| 重启电脑就好 | 同上，而且顺带清掉了休眠状态 |
+| 事件日志里没有任何错误 | 驱动没报错，它只是**不再上报** |
 
-```powershell
-$recv = Get-PnpDevice -PresentOnly |
-  Where-Object { $_.InstanceId -like 'USB\VID_046D&PID_C53F\*' -and
-                 $_.InstanceId -notmatch '&MI_|LAMPARRAY' } | Select-Object -First 1
-
-Get-PnpDeviceProperty -InstanceId $recv.InstanceId -KeyName 'DEVPKEY_Device_LowerFilters'
-```
-
-```
-DEVPKEY_Device_LowerFilters : vhf, logi_lamparray
-```
-
-注册表里同一个值：
+关键证据（`Get-PnpDevice`）：
 
 ```
-HKLM\SYSTEM\CurrentControlSet\Enum\USB\VID_046D&PID_C53F\6&18811D57&0&1
-    LowerFilters = { vhf, logi_lamparray }
+Status  Class   FriendlyName          InstanceId
+OK      Mouse   HID-compliant mouse  HID\VID_046D&PID_C53F&MI_01&COL01\8&2C2C0656&0&0000
 ```
 
-`vhf` 是 Windows 自带的 Virtual HID Framework，正常。问题出在 `logi_lamparray`——这是罗技 `logi_lamparray_usb.inf` 驱动包安装的 **USB 下层过滤驱动**（内核态 `.sys`），配套还有用户态服务 `logi_lamparray_service`。
-
-它的唯一职责是**把罗技设备的 RGB 灯光接入 Windows 11 的 Dynamic Lighting**。
-
-而 **G304 是单色 DPI 指示灯机型，根本没有 RGB**。也就是说这套灯光驱动栈对我的鼠标毫无用处，却实实在在插在了它的 USB I/O 路径上。
-
-### 它为什么会吃掉报告
-
-USB 下层过滤驱动位于 USB 控制器和 HID 栈之间：
-
-```
-鼠标固件 →(LIGHTSPEED 无线)→ 接收器固件 →(USB 中断)→ USBHUB3 → logi_lamparray → hidusb → mouhid → 系统
-```
-
-`logi_lamparray` 夹在中间。**它一旦在电源状态转换中卡死，后面整条链路就断了**——而它不会报错，因为它不是"出错"，只是"不再传"。设备树不变、事件日志无错、服务状态正常。
-
-这就是它骗过所有人的地方。
+`Problem = CM_PROB_NONE`。**系统认为它完全正常**——这正是为什么网上所有「重启 / 换 USB 口」的建议都"有效"却没人找到真正原因。
 
 ---
 
-## 三、触发条件：Windows 的默认电源策略
+## 二、真凶：USB 端口在待机时被下电，接收器固件掉电
+
+LIGHTSPEED 接收器是**靠 USB 供电**的无线网关。链条是这样的：
+
+```
+鼠标（电池供电）──(LIGHTSPEED 无线)──> 接收器（USB 供电）──(USB 中断)──> 集线器 ──> 系统
+```
+
+待机时，Windows 会让 **USB 集线器进入选择性挂起（Selective Suspend）**，从而**切断端口供电**。接收器固件因此掉电。
+
+而唤醒后，**接收器固件不会自动重新监听已配对的鼠标**——它需要一次 USB 复位（物理拔插）才会重启无线栈、重新配对。
+
+于是：
+
+- 鼠标有电，一直在发信号（它是电池供电的）
+- 接收器"聋了"，收不到也转发不了
+- Windows 侧一切正常，鼠标 HID 节点 `OK`
+- **鼠标就是不发任何报告**
+
+我在日志里抓到了这个证据：待机前后接收器的枚举号从 `&3&` 变成了 `&4&`——**Windows 确实在待机时对接收器做了端口复位/重新枚举**，而那次复位之后鼠标依然是死的。
+
+### 怎么确认"是掉电"而不是"驱动坏了"
+
+最硬的证据是这条：**把接收器所在的 USB 集线器设为不允许被关闭，症状就不再出现**。
 
 ```powershell
-powercfg /a
+# 接收器所在的根集线器
+$hub = (Get-PnpDeviceProperty -InstanceId $recv.InstanceId -KeyName 'DEVPKEY_Device_Parent').Data
+$obj = Get-CimInstance -Namespace root\wmi -ClassName MSPower_DeviceEnable |
+       Where-Object { $_.InstanceName -eq "$hub`_0" }
+$obj.Enable = $false
+Set-CimInstance -InputObject $obj      # 注意：没有 -Filter / -ClassName
 ```
 
+> 这里有个 PowerShell 7 的坑：`Set-CimInstance` **只有 `-InputObject` 和 `-Query`**，没有 `-Filter`，也没有 `-ClassName`（`New-CimInstance` 才有 `-ClassName`）。我为此卡了两轮。
+
+---
+
+## 三、完整修复
+
+### 3.1 防止端口被下电（根治）
+
+四层一起上，缺一层都可能复发：
+
+```powershell
+# (1) 全局：关闭所有电源方案的 USB 选择性暂停（AC + DC）
+$SUB = '2a737441-1930-4402-8d77-b2bebba308a3'   # USB 设置
+$SET = '48e6b7a6-50f5-4782-a5d4-53bb8f07e226'   # USB 选择性暂停
+foreach ($s in (powercfg /list | Select-String -Pattern '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}').Matches.Value) {
+    powercfg /setacvalueindex $s $SUB $SET 0
+    powercfg /setdcvalueindex $s $SUB $SET 0
+}
+powercfg /setactive SCHEME_CURRENT
+
+# (2) 接收器所在的 USB 集线器：不允许被关闭
+#     ← 这一步是第一版修复里漏掉的，也是当时"修好了又复发"的真正原因
+$hub  = (Get-PnpDeviceProperty -InstanceId $recv.InstanceId -KeyName 'DEVPKEY_Device_Parent').Data
+$obj  = Get-CimInstance -Namespace root\wmi -ClassName MSPower_DeviceEnable |
+        Where-Object { $_.InstanceName -eq "$hub`_0" }
+$obj.Enable = $false
+Set-CimInstance -InputObject $obj
+
+# (3) 接收器自身及所有接口：禁止被关闭
+#     （每个节点的 root\wmi 实例名 = 设备实例 ID + "_0"）
+Get-CimInstance -Namespace root\wmi -ClassName MSPower_DeviceEnable |
+    Where-Object { $_.InstanceName -match 'VID_046D' } | ForEach-Object {
+        $_.Enable = $false; Set-CimInstance -InputObject $_
+    }
+
+# (4) 每个设备节点：关掉设备自身的选择性挂起与增强电源管理
+$dp = "HKLM:\SYSTEM\CurrentControlSet\Enum\$($recv.InstanceId)\Device Parameters"
+Set-ItemProperty $dp -Name SelectiveSuspendEnabled      -Value 0 -Type DWord
+Set-ItemProperty $dp -Name EnhancedPowerManagementEnabled -Value 0 -Type DWord
 ```
-此系统上有以下睡眠状态:
-    待机 (S0 低电量待机) 连接的网络
-    休眠
-    快速启动
+
+### 3.2 常驻守护：万一还是被复位了，自动修回来
+
+端口没电这类问题靠设置去"根除"并不总是可靠（笔记本厂商的 BIOS/EC、驱动栈更新都可能改回去）。所以再加一个常驻守护，**在用户还没回到电脑时就把接收器复位好**。
+
+关键洞察：**Windows 每次重新枚举设备，都会刷新接收器的 `DEVPKEY_Device_LastArrivalDate`，而设备实例 ID 不变**。这就是最可靠的"接收器刚刚被复位过"的信号：
+
+```powershell
+$before = (Get-PnpDeviceProperty -InstanceId $recv.InstanceId `
+           -KeyName 'DEVPKEY_Device_LastArrivalDate').Data
+# ... 重新枚举 ...
+$after  = (Get-PnpDeviceProperty -InstanceId $recv.InstanceId `
+           -KeyName 'DEVPKEY_Device_LastArrivalDate').Data
+"$before -> $after   变了 = $($before -ne $after)"
 ```
 
-不是传统 S3，而是 **Modern Standby (S0)**。在 S0 下系统空闲时会把设备逐个下电，用户一动再逐个上电。**过滤器驱动如果没处理好 S0 的挂起/恢复序列，就会卡在中间态。**
+守护的三个触发器：
 
-再叠加两个 Windows 默认值，构成了完整的复现条件：
-
-| 设置 | 默认值 | 影响 |
+| 触发器 | 含义 | 何时发生 |
 |---|---|---|
-| USB 选择性暂停 | 启用（AC 与 DC 均为启用） | 接收器端口被下电，恢复时过滤器状态机最容易出错 |
-| `DeviceSelectiveSuspended` | `1` | 证实设备当时确实处于被选择性挂起的状态 |
-| 快速启动 | 启用 | 于是"关机再开机"其实是休眠恢复，USB 设备常以半死状态起来 |
+| **T1** | `LastArrivalDate` 变了 | Windows 重新枚举了接收器（**通常发生在用户回来之前**） |
+| **T1b** | 设备实例 ID 变了 | 接收器被换到别的 USB 口 |
+| **T2** | 用户从长空闲回来，但**指针没跟着动** | 鼠标死了（鼠标活着的话，用户一动鼠标指针就动） |
 
----
+**T2 的设计是重点**：鼠标正常时，用户一动鼠标指针就动，这个触发器根本不会响，所以**不会给正常使用添乱**。
 
-## 四、这不是我一个人的机器
-
-拿到这个结论后，我去查了有没有别人遇到过同一件事。找到了三个独立佐证：
-
-**其一，另一台机器、另一款鼠标、同一个过滤器栈。** Valve 的 Dota 2 问题单里，有人报告拔插接收器时游戏主线程冻结数秒：
+T2 依赖"指针动没动"，需要区分"鼠标死了"和"用户改用触控板"——这本来要用 Raw Input 按设备区分。**但我实测发现这台机器上 Raw Input 不可用**：
 
 ```
-Logitech USB driver: logi_lamparray_usb.inf / oem218.inf
-Driver version: 1.1.91.2790
-Receiver lower filters: vhf, logi_lamparray
+GetRawInputDeviceList 返回码: 0   (无设备)
+光标: 起=(1640,766)  止=(1416,1040)  移动过=True
+WatchBoth 结果: G304=0  其它=0
+判定: 光标动了但 raw input 无事件 -> RAW INPUT 不可用
 ```
 
-**其二，同一个组件在别的软件里作乱。** OpenLogi 项目的问题单 #1129 指出，`logi_lamparray_service` 会持续往鼠标灯光区推 Windows 强调色，把其他工具的 HID++ 写入直接覆盖掉。
+（探针跑在交互式计划任务里，`SessionId=2`、`UserInteractive=True`，不是权限问题。）
 
-**其三，微软官方支持文档**在教用户**禁用 `Logitech_Lamparray_Service`**，并明确提到 G 系列键鼠用户大量反馈该服务导致"异常行为"。
+所以我**删掉了基于 raw input 的按设备判定**，改用上面三个不依赖它的触发器。
 
-**判定：罗技官方驱动缺陷，Windows 默认电源策略是放大器。** 我已经把这个复现过程和完整修复脚本提交到了罗技官方 GitHub 仓库。
+### 3.3 修复动作
 
----
-
-## 五、修复：把过滤器摘掉，驱动包卸掉
-
-核心只有一步——从接收器的设备实例上移除 `logi_lamparray`：
+复位接收器 = 软件层面的 USB 复位 = 物理拔插一次：
 
 ```powershell
-$key = "HKLM:\SYSTEM\CurrentControlSet\Enum\$($recv.InstanceId)"
-Set-ItemProperty -Path $key -Name LowerFilters -Value @('vhf') -Type MultiString
+Disable-PnpDevice -InstanceId $recv.InstanceId -Confirm:$false
+Start-Sleep -Milliseconds 700
+Enable-PnpDevice  -InstanceId $recv.InstanceId -Confirm:$false
 ```
 
-改完必须**重新枚举设备**才生效（禁用再启用接收器）。这一步做完，鼠标**立刻恢复**——没有拔插，没有重启。
-
-### 但只做这一步会埋雷
-
-如果留着罗技驱动包，日后把接收器换到另一个 USB 口，Windows 会新建设备实例、由 INF **把过滤器重新写回**，而内核驱动此时已被停用——设备会直接"无法启动"（Code 10 或 39），比原问题更糟。
-
-所以必须连驱动包一起卸掉：
-
-```powershell
-pnputil /delete-driver oem103.inf /uninstall /force   # logi_lamparray_usb.inf
-pnputil /delete-driver oem78.inf  /uninstall /force
-pnputil /delete-driver oem18.inf  /uninstall /force
-pnputil /delete-driver oem6.inf   /uninstall /force   # logi_lamparray_hid.inf
-```
-
-最终状态很干净：接收器回落到微软通用驱动 `usbccgp`，`LowerFilters` **完全为空**，一个第三方过滤器都不剩。
+实测耗时 **4~5 秒**。这一下是用户能感觉到的中断，所以触发时机很重要——**T1 发生在用户回来之前，这一次中断他完全无感**。
 
 ---
 
-## 六、踩到的几个坑（这部分最值钱）
+## 四、我走错的那条弯路（也是最有价值的部分）
 
-### 坑 1：`pnputil` 的输出是本地化的
+第一次故障时，我看到接收器上挂着罗技的 `logi_lamparray` USB 下层过滤驱动：
 
-提权进程里 `pnputil /enum-drivers` 输出的是中文标签 `发布名称:`，而交互式会话里是英文 `Published Name:`。用英文正则去解析提权进程的输出，**会全部匹配失败，而且静默地"什么都没找到"**——我第一次就是这么把"已清除"写成日志、然后复查才发现根本没删掉。
+```
+HKLM\...\Enum\USB\VID_046D&PID_C53F\<inst>\LowerFilters = { vhf, logi_lamparray }
+```
 
-解法是用与语言无关的模式直接抓 `oem` 编号：
+这是个罗技官方驱动（`logi_lamparray_usb.inf`，WHCP 签名），它的作用是把罗技设备的 RGB 灯光接入 Windows 11 的 Dynamic Lighting。我当时的推理链是：
+
+> G304 是单色 DPI 指示灯机型，根本用不到 RGB，这套驱动是误装的；它挂在接收器的 USB I/O 路径上，卡死就会吞掉 HID 报告。
+
+推理本身是自洽的，而且有旁证：
+
+- **微软官方支持文档**在教用户**禁用 `Logitech_Lamparray_Service`**，并说明 G 系列键鼠用户大量反馈该服务导致「异常行为」
+- **AprilNEA/OpenLogi#1129** 报告同一个服务持续覆盖 HID++ 写入
+- **ValveSoftware/Dota2-Gameplay#35162** 里，另一台机器、另一款鼠标（G Pro Wireless）、**同一套过滤器栈**，拔插接收器时游戏主线程冻结数秒
+
+于是我卸掉了驱动包、摘掉了过滤器、停用了服务。**鼠标当时确实恢复了。**
+
+但这次复发时，我第一件事就是查过滤器：
+
+```
+LowerFilters = []          ← 过滤器根本不在了
+logi_lamparray 驱动包      ← 不存在
+logi_lamparray 内核驱动    ← 已停用
+```
+
+**症状照样发生。**
+
+也就是说：**上次"修好"并不是因为摘掉了过滤器，而是因为那次操作顺带重新枚举了接收器**——和拔插 USB 是同一件事。过滤器从来不是这个症状的原因。
+
+这是一个很典型的教训：
+
+> **当一个修复"生效"时，先确认它到底修掉了什么。**
+> 我当时验证了"摘过滤器之后鼠标好了"，却没有验证"不摘过滤器、只重新枚举，鼠标是不是也一样好"。
+> 后者才是区分**真因**和**巧合**的对照实验。
+
+（过滤器本身仍是一个值得上报的真实缺陷——把 RGB 驱动绑到没有 RGB 的机型上，而且它确实和 Dynamic Lighting 冲突。只是它不是"鼠标待机后失灵"的原因。给罗技的 issue 我会同步更正。）
+
+---
+
+## 五、还有几个坑值得记下来
+
+### `pnputil` 的输出是本地化的
+
+提权进程里 `pnputil /enum-drivers` 输出的是中文标签 `发布名称:`，交互式会话里是英文 `Published Name:`。用英文正则去解析提权进程的输出会**全部匹配失败，而且静默地"什么都没找到"**——我第一次就是这么把"已清除"写进了日志，复查才发现根本没删掉。
+
+用与语言无关的模式：
 
 ```powershell
 $pub = ([regex]::Match($b, '(?i)oem\d+\.inf')).Value
 ```
 
-### 坑 2：卸完罗技驱动，WinUSB 会抢走整个复合设备，鼠标 HID 直接消失
+### `Set-CimInstance` 没有 `-Filter` / `-ClassName`
 
-`logi_lamparray_usb.inf` 被删后，Windows 重新匹配驱动，选中了第三方 `LIGHTSPEED_Receiver.inf`（libwdi / WinUSB）——它匹配的是**整个** `VID_046D&PID_C53F`（没有 `&MI_` 限定）。
-
-**WinUSB 不暴露 HID 接口**，于是鼠标 HID 节点整个消失。
-
-解法是把这几个 WinUSB 包也卸掉，让接收器回落到微软通用驱动。判断哪些该卸、哪些该留，直接读 DriverStore 里 INF 声明的硬件 ID：
-
-```
-LIGHTSPEED_Receiver.inf        -> VID_046D&PID_C53F          ← 抢整个复合设备，要卸
-usb_receiver_(interface_0).inf -> VID_046D&PID_C53F&MI_00    ← 只管 HID++ 接口，保留
-```
-
-### 坑 3：`Set-CimInstance` 没有 `-Filter` 和 `-ClassName`
-
-PowerShell 7 里只有 `-InputObject` / `-Query`：
+PowerShell 7 里只有 `-InputObject` 和 `-Query`。正确写法是取出对象、改属性、再传回去：
 
 ```powershell
-# 报错
-Set-CimInstance -Namespace root\wmi -ClassName MSPower_DeviceEnable -Property @{Enable=$false} -Filter "..."
-# 正确
 $obj.Enable = $false
 Set-CimInstance -InputObject $obj
 ```
 
-### 坑 4：PowerShell 变量名大小写不敏感
+### 删驱动包可能让设备直接起不来
 
-```powershell
-$Base = 'E:\LogitechMouseFix'
-$base = Measure-G304 -Milliseconds 8000   # ← 把 $Base 覆盖成了一个对象
-$bat  = "$Base\一键恢复鼠标.bat"           # → 路径变成 "@{Count=-1; ...}\一键恢复鼠标.bat"
+如果只是把过滤器从 `LowerFilters` 摘掉、却留着驱动包，那么换一个 USB 口时 Windows 会新建实例、由 INF **把过滤器写回来**，而内核驱动已被停用 → 设备直接「无法启动」（Code 10/39），比原问题更糟。**两者必须一起做。**
+
+### 卸载第三方驱动后 WinUSB 可能抢走整个复合设备
+
+摘掉罗技驱动包后，Windows 重新匹配驱动时选中了第三方 `LIGHTSPEED_Receiver.inf`（libwdi / WinUSB），它匹配的是**整个** `VID_046D&PID_C53F`（没有 `&MI_` 限定）。**WinUSB 不暴露 HID 接口**，于是鼠标 HID 节点整个消失。
+
+判断哪些该卸、哪些该留，直接读 DriverStore 里 INF 声明的硬件 ID：
+
 ```
-
-症状是日志里出现莫名其妙的对象字符串、文件写到错误路径。给路径变量起个不会撞的名字。
-
-### 坑 5：忘了 `-PresentOnly`
-
-`Get-PnpDevice` 默认会列出所有**历史**设备实例（包括插过的其它接收器、换过的 USB 口）。我这里就有两个 `PID_C53F` 实例，只有一个 `Present=True`。不对它做过滤，就会对着陈旧实例改注册表。
+LIGHTSPEED_Receiver.inf        -> VID_046D&PID_C53F          <- 抢整个复合设备，要卸
+usb_receiver_(interface_0).inf -> VID_046D&PID_C53F&MI_00    <- 只管 HID++ 接口，保留
+```
 
 ---
 
-## 七、让问题不再复发
-
-光修一次不够，得把触发条件也拆掉：
+## 六、给遇到同样问题的人：最快的排查路径
 
 ```powershell
-# 关闭所有电源方案的 USB 选择性暂停（AC 与 DC）
+# 1. 确认是软件层问题（设备在位、状态正常）
+Get-PnpDevice -PresentOnly | Where-Object { $_.InstanceId -match 'VID_046D' } |
+    Select-Object Status, Problem, Class, InstanceId
+
+# 2. 找到接收器，以及它挂在哪个集线器上
+$recv = Get-PnpDevice -PresentOnly |
+    Where-Object { $_.InstanceId -like 'USB\VID_046D&PID_C53F\*' -and
+                   $_.InstanceId -notmatch '&MI_|LAMPARRAY' } | Select-Object -First 1
+$hub  = (Get-PnpDeviceProperty -InstanceId $recv.InstanceId `
+         -KeyName 'DEVPKEY_Device_Parent').Data
+
+# 3. 让集线器不许被关闭（关键一步）
+$obj = Get-CimInstance -Namespace root\wmi -ClassName MSPower_DeviceEnable |
+       Where-Object { $_.InstanceName -eq "$hub`_0" }
+$obj.Enable = $false; Set-CimInstance -InputObject $obj
+
+# 4. 顺手关掉全局 USB 选择性暂停
 powercfg /setacvalueindex SCHEME_CURRENT 2a737441-1930-4402-8d77-b2bebba308a3 48e6b7a6-50f5-4782-a5d4-53bb8f07e226 0
 powercfg /setdcvalueindex SCHEME_CURRENT 2a737441-1930-4402-8d77-b2bebba308a3 48e6b7a6-50f5-4782-a5d4-53bb8f07e226 0
 powercfg /setactive SCHEME_CURRENT
 
-# 禁止 Windows 关闭罗技接收器接口的电源
-# （root\wmi 的 MSPower_DeviceEnable，Enable 设为 False）
-
-# 关闭快速启动
-Set-ItemProperty 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Power' -Name HiberbootEnabled -Value 0
-
-# 关闭空闲自动睡眠
+# 5. 应急：复位接收器（= 拔插一次，约 4~5 秒）
+Disable-PnpDevice -InstanceId $recv.InstanceId -Confirm:$false; Start-Sleep -Milliseconds 700
+Enable-PnpDevice  -InstanceId $recv.InstanceId -Confirm:$false
 ```
 
-另外还注册了三个计划任务：
-
-- **从低功耗状态恢复后**自动重新枚举接收器（故障几乎都发生在唤醒后，这是最关键的一条）
-- **用户登录时**自愈
-- **每 2 分钟**跑一次看门狗
-
-看门狗不是"定时重启接收器"（那会打断正常使用），而是**三重约束**才动手：G304 平时确实在用且最近活跃过、当前零事件而触控板有活动、连续两轮都这样。否则不动——如果你平时只用触控板，G304 静默是**正常的**，不能当成故障。
-
-判断"别的鼠标在动"靠 Raw Input 按设备路径过滤，把 `VID_046D&PID_C53F` 和其它鼠标区分开。
+**第 5 步永远能立刻救回来**——所以下次再遇到，先做这步，别急着重启。
 
 ---
 
-## 八、一点反思
+## 七、脚本与源码
 
-这次排查里最值钱的不是任何一条命令，而是**"拔插一下就好"这个现象本身**。
-
-它同时否定了硬件问题（USB 接触不良不会靠拔插解决鼠标不响应）并指向了驱动状态（重新枚举即可恢复）。几乎所有"鼠标失灵"的通用建议都是"换 USB 口 / 重启 / 换电池"，因为这些操作**碰巧**会触发设备树的重建——于是永远找不到真正的根因。
-
-一个能给出"故障级联"解释的排查，和一串试错的建议，差别就在这里。
-
-**完整脚本、逐条诊断实录和可回滚的备份**都放在这个仓库里：
+完整的修复包（PowerShell 脚本 + 守护进程 + 计划任务安装 + 日志）：
 
 > https://github.com/Kirito14IT/logitech-mouse-not-working-after-sleep
 
-如果你的鼠标也出现过"待机后失灵、设备管理器却一切正常"，可以直接用仓库里的 `一键恢复鼠标.bat` 试一下——它等价于一次软件层面的 USB 重新枚举，不需要真的拔插。
+里面也包含了给罗技的 issue 链接、OpenLogi 的 PR，以及本文提到的所有坑。

@@ -1,240 +1,285 @@
 ---
 locale: "en"
 translationKey: "logitech-mouse-freeze"
-title: "A Logitech Driver Bug That Disguises Itself as Hardware Failure"
+title: "Mouse Dead After Sleep: The Real Cause Is USB Port Power-Gating"
 date: 2026-10-21
-description: "Device Manager showed everything healthy, the touchpad worked, and the mouse was completely dead. The culprit turned out to be Logitech's own logi_lamparray USB filter driver wedging after Modern Standby and swallowing every HID report."
-tags: ["Windows", "Troubleshooting", "Drivers", "HID", "Logitech", "PowerShell"]
+description: "Device Manager said everything was healthy, the touchpad worked, and the mouse was completely dead. The actual cause was USB selective suspend cutting power to the LIGHTSPEED receiver during Modern Standby — not a driver bug. Full diagnosis, the real fix, and the false lead I chased first."
+tags: ["Windows", "Troubleshooting", "USB", "HID", "Logitech", "PowerShell", "Modern Standby"]
 draft: false
 ---
 
-My G304 wireless mouse went dead again after the laptop had been idle for a while. The mouse had power, the receiver was plugged in, the touchpad worked fine — but the mouse itself produced no motion and no clicks.
+My G304 wireless mouse went dead again after the laptop had been idle. The mouse had power, the receiver was plugged in, the touchpad worked fine — but the mouse produced no motion and no clicks.
 
-This time I decided not to paper over it with "unplug the receiver / reboot the machine", but to actually find the cause.
+The first time round, I blamed a Logitech driver, uninstalled the package and stripped the filter. **The same symptom came straight back.** The filter was long gone by then; it was never the culprit.
 
-It turned out to be a **defect in Logitech's own driver** — and a remarkably well-camouflaged one: every node in Device Manager reported `Status=OK`, the event log contained no errors whatsoever, and the hardware was perfectly fine.
-
----
-
-## 1. The most valuable clue was "unplugging fixes it"
-
-If the mouse were broken, replugging the USB receiver would change nothing. The fact that a replug instantly restored it says something specific:
-
-> The fault is not in the hardware but in **already-loaded driver/filter state**. A replug re-enumerates the device tree, which reloads the driver.
-
-Following that, step one was to rule out hardware:
-
-```powershell
-Get-PnpDevice -Class Mouse |
-  Select-Object Status, Problem, FriendlyName, InstanceId
-```
-
-```
-Status  Problem         FriendlyName          InstanceId
-OK      CM_PROB_NONE    HID-compliant mouse    HID\VID_046D&PID_C53F&MI_01&COL01\8&1293EAEC&0&0000
-OK      CM_PROB_NONE    HID-compliant mouse    HID\HTIX5288&COL01\4&148E01A2&0&0000
-```
-
-`CM_PROB_NONE` means the device was **never disconnected at the USB level**. The event log had no `Kernel-PnP`, `UserPnp`, `DriverFrameworks` or `USBHUB3` warnings either.
-
-The problem statement collapsed to one line: **the device was present, the driver was present, but the report stream had stopped.**
+This is the corrected version, including the dead end I walked down first.
 
 ---
 
-## 2. The real culprit: an invisible USB filter driver
+## 1. Why the symptom is so confusing
 
-A Logitech LIGHTSPEED receiver is a USB composite device. Looking at its **lower filters**:
+| What you see | What is actually happening |
+|---|---|
+| Device Manager shows the mouse as `OK`, no warning icon | The device was **never disconnected** at the USB level — it just **stops sending any HID report** |
+| The touchpad works, the rest of the system is fine | The USB controller and the OS are healthy |
+| Replugging the receiver fixes it | A re-enumeration is a USB reset of the receiver — the firmware restarts |
+| Rebooting fixes it | Same, plus it clears the suspend state |
+| Nothing in the event log | No driver errored; it simply stopped reporting |
 
-```powershell
-$recv = Get-PnpDevice -PresentOnly |
-  Where-Object { $_.InstanceId -like 'USB\VID_046D&PID_C53F\*' -and
-                 $_.InstanceId -notmatch '&MI_|LAMPARRAY' } | Select-Object -First 1
-
-Get-PnpDeviceProperty -InstanceId $recv.InstanceId -KeyName 'DEVPKEY_Device_LowerFilters'
-```
-
-```
-DEVPKEY_Device_LowerFilters : vhf, logi_lamparray
-```
-
-`vhf` is Microsoft's own Virtual HID Framework and is fine. The problem is `logi_lamparray` — a **USB lower filter driver** (kernel-mode `.sys`) installed by Logitech's `logi_lamparray_usb.inf` driver package, together with the user-mode `logi_lamparray_service`.
-
-Its only job is to **bridge Logitech RGB lighting into Windows 11 Dynamic Lighting**.
-
-And the G304 is a single-colour DPI-indicator mouse with **no RGB at all**. The lighting stack was therefore useless to this mouse, yet it sat squarely in the device's USB I/O path.
-
-### How it swallows the reports
-
-A USB lower filter driver sits between the host controller and the HID stack:
+The decisive evidence:
 
 ```
-mouse firmware →(LIGHTSPEED radio)→ receiver firmware →(USB interrupt)→ USBHUB3 → logi_lamparray → hidusb → mouhid → system
+Status  Class   FriendlyName          InstanceId
+OK      Mouse   HID-compliant mouse  HID\VID_046D&PID_C53F&MI_01&COL01\8&2C2C0656&0&0000
 ```
 
-`logi_lamparray` is in the middle. **Once it wedges during a power-state transition, everything downstream goes dark** — and it never reports an error, because it did not "fail"; it simply stopped forwarding. The device tree is unchanged, the event log is clean, the service is healthy.
-
-That is exactly how it fooled everyone, including me.
+`Problem = CM_PROB_NONE`. **The system believes the mouse is perfectly fine** — which is exactly why "reboot / try another port" always works and nobody ever finds the real cause.
 
 ---
 
-## 3. Trigger: Windows' default power policy
+## 2. The actual cause: the USB port loses power during standby
+
+The LIGHTSPEED receiver is a wireless gateway **powered by USB**:
+
+```
+mouse (battery) ──(LIGHTSPEED radio)──> receiver (USB powered) ──(USB interrupt)──> hub ──> OS
+```
+
+While the machine is idle, Windows lets the **USB hub enter selective suspend**, which **cuts power to its ports**. The receiver's firmware loses power with it.
+
+After the resume, **the receiver's firmware does not go back to listening for its paired mouse** — it needs a USB reset (a physical replug) to restart its radio stack and re-pair.
+
+So:
+
+- The mouse has its own battery and keeps transmitting
+- The receiver has gone deaf and cannot forward anything
+- Windows sees a perfectly healthy device
+- **The mouse reports nothing at all**
+
+I caught the evidence in the logs: the receiver's enumeration number changed from `&3&` to `&4&` across the standby — **Windows did perform a port reset / re-enumeration on the receiver**, and the mouse was still dead afterwards.
+
+### How to confirm "it lost power" rather than "the driver broke"
+
+The hardest evidence is this: **stop the USB hub the receiver is plugged into from being powered down, and the symptom goes away.**
 
 ```powershell
-powercfg /a
+# The root hub the receiver is plugged into
+$hub = (Get-PnpDeviceProperty -InstanceId $recv.InstanceId -KeyName 'DEVPKEY_Device_Parent').Data
+$obj = Get-CimInstance -Namespace root\wmi -ClassName MSPower_DeviceEnable |
+       Where-Object { $_.InstanceName -eq "$hub`_0" }
+$obj.Enable = $false
+Set-CimInstance -InputObject $obj      # note: no -Filter, no -ClassName
 ```
 
+> A PowerShell 7 trap that cost me two rounds: `Set-CimInstance` only has `-InputObject` and `-Query`. There is no `-Filter`, and `-ClassName` belongs to `New-CimInstance`.
+
+---
+
+## 3. The complete fix
+
+### 3.1 Stop the port from losing power (root fix)
+
+All four layers together — miss one and it can come back:
+
+```powershell
+# (1) Globally: USB selective suspend off for every power scheme (AC + DC)
+$SUB = '2a737441-1930-4402-8d77-b2bebba308a3'   # USB settings
+$SET = '48e6b7a6-50f5-4782-a5d4-53bb8f07e226'   # USB selective suspend
+foreach ($s in (powercfg /list | Select-String -Pattern '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}').Matches.Value) {
+    powercfg /setacvalueindex $s $SUB $SET 0
+    powercfg /setdcvalueindex $s $SUB $SET 0
+}
+powercfg /setactive SCHEME_CURRENT
+
+# (2) The hub the receiver is on: never let it be powered down
+#     ← this is the layer the first fix missed, and the reason it came back
+$hub = (Get-PnpDeviceProperty -InstanceId $recv.InstanceId -KeyName 'DEVPKEY_Device_Parent').Data
+$obj = Get-CimInstance -Namespace root\wmi -ClassName MSPower_DeviceEnable |
+       Where-Object { $_.InstanceName -eq "$hub`_0" }
+$obj.Enable = $false
+Set-CimInstance -InputObject $obj
+
+# (3) The receiver and each of its interfaces: never power them down
+#     (each node's root\wmi instance name is the device instance id + "_0")
+Get-CimInstance -Namespace root\wmi -ClassName MSPower_DeviceEnable |
+    Where-Object { $_.InstanceName -match 'VID_046D' } | ForEach-Object {
+        $_.Enable = $false; Set-CimInstance -InputObject $_
+    }
+
+# (4) Per device node: clear the device's own suspend flags
+$dp = "HKLM:\SYSTEM\CurrentControlSet\Enum\$($recv.InstanceId)\Device Parameters"
+Set-ItemProperty $dp -Name SelectiveSuspendEnabled        -Value 0 -Type DWord
+Set-ItemProperty $dp -Name EnhancedPowerManagementEnabled -Value 0 -Type DWord
 ```
-Standby (S0 low power idle) - Connected
-Hibernate
-Fast Startup
+
+### 3.2 A resident guard, in case it still gets reset
+
+Settings alone are not always enough to eliminate a power-gating problem — the laptop's EC/BIOS or a driver-stack update can put it back. So a resident watcher resets the receiver **before the user is even back at the machine**.
+
+The key insight: **Windows refreshes the receiver's `DEVPKEY_Device_LastArrivalDate` on every re-enumeration, while the device instance id stays the same.** That is the most reliable "the receiver was just reset" signal available:
+
+```powershell
+$before = (Get-PnpDeviceProperty -InstanceId $recv.InstanceId `
+           -KeyName 'DEVPKEY_Device_LastArrivalDate').Data
+# ... re-enumerate ...
+$after  = (Get-PnpDeviceProperty -InstanceId $recv.InstanceId `
+           -KeyName 'DEVPKEY_Device_LastArrivalDate').Data
+"$before -> $after   changed = $($before -ne $after)"
 ```
 
-This is **Modern Standby (S0)**, not legacy S3. In S0 the system powers devices down one by one when idle and brings them back when the user moves. A filter driver that does not handle the S0 suspend/resume sequence gets stuck in between.
+Three triggers:
 
-Two more Windows defaults complete the recipe:
-
-| Setting | Default | Effect |
+| Trigger | Meaning | When it fires |
 |---|---|---|
-| USB selective suspend | Enabled (both AC and DC) | The receiver's port is powered down; filter state machines are most fragile on resume |
-| `DeviceSelectiveSuspended` | `1` | Confirms the device really was in a selectively-suspended state |
-| Fast startup | Enabled | So "shutdown then power on" is a hibernation resume, and USB devices often come back half-alive |
+| **T1** | `LastArrivalDate` changed | Windows re-enumerated the receiver — **normally before the user comes back** |
+| **T1b** | The device instance id changed | The receiver moved to a different USB port |
+| **T2** | The user came back from a long idle, but **the pointer did not move** | The mouse is dead (a live mouse moves the pointer the moment you move it) |
 
----
+**T2 is the important one**: while the mouse is healthy, moving it moves the pointer, so this trigger never fires — it adds nothing to normal use.
 
-## 4. This is not specific to my machine
-
-Three independent corroborations turned up:
-
-**A different machine, a different mouse, the identical filter stack.** In a Dota 2 issue report, a user saw the game freeze for seconds whenever the receiver was replugged:
+T2 needs to tell "the mouse is dead" from "the user switched to the touchpad", which normally calls for Raw Input with per-device filtering. **On this machine Raw Input does not work at all:**
 
 ```
-Logitech USB driver: logi_lamparray_usb.inf / oem218.inf
-Driver version: 1.1.91.2790
-Receiver lower filters: vhf, logi_lamparray
+GetRawInputDeviceList return code: 0   (no devices)
+cursor: from=(1640,766)  to=(1416,1040)  moved=True
+WatchBoth result: G304=0  other=0
+verdict: the cursor moved but raw input delivered no events -> RAW INPUT UNAVAILABLE
 ```
 
-**The same component interfering with other software.** OpenLogi issue #1129 documents `logi_lamparray_service` continuously pushing a Windows accent colour over HID++ and overwriting other tools' writes.
+(The probe ran inside an interactive scheduled task — `SessionId=2`, `UserInteractive=True` — so this is not a permissions artefact.)
 
-**Microsoft's own support documentation** instructs users to **disable `Logitech_Lamparray_Service`**, noting that G-series keyboard and mouse users widely report abnormal behaviour caused by it.
+So I **dropped the raw-input based per-device detection** and used the three triggers above, none of which need it.
 
-**Verdict: a defect in Logitech's shipped driver, amplified by Windows' default power policy.** I filed the reproduction and a complete repair script with Logitech's official GitHub.
+### 3.3 The repair action
 
----
-
-## 5. The fix: strip the filter, remove the driver package
-
-The core step is removing `logi_lamparray` from the receiver's device instance:
+Resetting the receiver is a software-level USB reset, i.e. one physical replug:
 
 ```powershell
-$key = "HKLM:\SYSTEM\CurrentControlSet\Enum\$($recv.InstanceId)"
-Set-ItemProperty -Path $key -Name LowerFilters -Value @('vhf') -Type MultiString
+Disable-PnpDevice -InstanceId $recv.InstanceId -Confirm:$false
+Start-Sleep -Milliseconds 700
+Enable-PnpDevice  -InstanceId $recv.InstanceId -Confirm:$false
 ```
 
-You must then **re-enumerate the device** (disable and re-enable the receiver) for it to take effect. After that the mouse **came back immediately** — no replug, no reboot.
-
-### But stopping there leaves a trap
-
-If the Logitech driver package stays installed, moving the receiver to another USB port makes Windows create a new device instance and the INF **writes the filter back**, while the kernel driver is now disabled — the device then fails to start entirely (Code 10 or 39), which is worse than the original problem.
-
-So the packages have to go too:
-
-```powershell
-pnputil /delete-driver oem103.inf /uninstall /force   # logi_lamparray_usb.inf
-pnputil /delete-driver oem78.inf  /uninstall /force
-pnputil /delete-driver oem18.inf  /uninstall /force
-pnputil /delete-driver oem6.inf   /uninstall /force   # logi_lamparray_hid.inf
-```
-
-The end state is clean: the receiver falls back to Microsoft's generic `usbccgp` driver and `LowerFilters` ends up **completely empty** — not a single third-party filter left.
+Measured at **4–5 seconds**. That is an interruption the user can feel, so timing matters — **T1 fires before the user returns, so the interruption is entirely invisible**.
 
 ---
 
-## 6. The pitfalls (the genuinely valuable part)
+## 4. The false lead — and the most valuable part of this write-up
+
+On the first failure I found Logitech's `logi_lamparray` USB lower filter on the receiver:
+
+```
+HKLM\...\Enum\USB\VID_046D&PID_C53F\<inst>\LowerFilters = { vhf, logi_lamparray }
+```
+
+An official Logitech driver (`logi_lamparray_usb.inf`, WHCP-signed) whose job is to bridge Logitech RGB lighting into Windows 11 Dynamic Lighting. My reasoning was:
+
+> The G304 is a single-colour DPI-indicator mouse with no RGB at all, so this driver is installed by mistake; it sits in the receiver's USB I/O path, so if it wedges it swallows the HID reports.
+
+The reasoning was sound, and there was corroboration:
+
+- **Microsoft's own support documentation** instructs users to **disable `Logitech_Lamparray_Service`**, noting that G-series keyboard and mouse users widely report abnormal behaviour from it
+- **AprilNEA/OpenLogi#1129** documents the same service overwriting HID++ writes
+- **ValveSoftware/Dota2-Gameplay#35162** shows a different machine, a different mouse (G Pro Wireless) and the **identical filter stack**, with multi-second main-thread freezes on replug
+
+So I removed the driver package, stripped the filter and disabled the service. **The mouse did come back.**
+
+But when the symptom recurred, the first thing I checked was the filter:
+
+```
+LowerFilters = []            <- the filter is not there any more
+logi_lamparray driver package <- does not exist
+logi_lamparray kernel driver <- disabled
+```
+
+**The symptom happened anyway.**
+
+Which means: **the "fix" last time did not work because the filter was removed. It worked because the procedure happened to re-enumerate the receiver** — the same thing a replug does. The filter was never the cause.
+
+A textbook lesson:
+
+> **When a fix "works", first establish what it actually fixed.**
+> I verified "the mouse came back after stripping the filter", but never the control case: "does re-enumerating alone — without touching the filter — fix it just as well?" That control is what separates a **cause** from a **coincidence**.
+
+(The filter is still a genuine defect worth reporting upstream — binding an RGB driver to hardware with no RGB, and conflicting with Dynamic Lighting. It is simply not the cause of "the mouse dies after sleep". I have corrected the issue I filed with Logitech accordingly.)
+
+---
+
+## 5. Other traps worth recording
 
 ### `pnputil` output is localised
 
 In an elevated process, `pnputil /enum-drivers` prints `发布名称:`; in an interactive session it prints `Published Name:`. Parsing the elevated output with an English regex **matches nothing and fails silently** — my first run cheerfully logged "all cleared" while nothing had been deleted.
 
-Parse language-agnostically by grabbing the `oem` number directly:
+Parse it language-agnostically:
 
 ```powershell
 $pub = ([regex]::Match($b, '(?i)oem\d+\.inf')).Value
 ```
 
-### WinUSB claims the whole composite device afterwards
+### `Set-CimInstance` has no `-Filter` / `-ClassName`
 
-Once `logi_lamparray_usb.inf` is gone, Windows re-matches the driver and picks a third-party `LIGHTSPEED_Receiver.inf` (libwdi / WinUSB) that matches the **entire** `VID_046D&PID_C53F` (no `&MI_` qualifier).
+PowerShell 7 offers only `-InputObject` and `-Query`. Fetch the object, change the property, pass it back:
 
-**WinUSB exposes no HID interfaces**, so the mouse HID node vanishes entirely. Those packages have to be removed as well so the receiver falls back to `usbccgp`. To decide which ones to remove, read the hardware IDs declared in the DriverStore INF files:
+```powershell
+$obj.Enable = $false
+Set-CimInstance -InputObject $obj
+```
+
+### Removing a driver package can stop the device from starting at all
+
+If you only strip the filter but leave the package, moving the receiver to another port makes Windows create a new instance and the INF **writes the filter back** — and with the kernel driver now disabled the device fails to start entirely (Code 10/39), which is worse than the original problem. **Both have to go together.**
+
+### A WinUSB package can claim the whole composite device
+
+After the Logitech package was removed, Windows re-matched the driver and picked a third-party `LIGHTSPEED_Receiver.inf` (libwdi / WinUSB), which matches the **entire** `VID_046D&PID_C53F` with no `&MI_` qualifier. **WinUSB exposes no HID interfaces**, so the mouse's HID node vanished entirely.
+
+Deciding what to remove and what to keep comes straight from the hardware ids the INF declares:
 
 ```
 LIGHTSPEED_Receiver.inf        -> VID_046D&PID_C53F          <- claims everything, remove
 usb_receiver_(interface_0).inf -> VID_046D&PID_C53F&MI_00    <- HID++ interface only, keep
 ```
 
-### `Set-CimInstance` has no `-Filter` or `-ClassName`
-
-On PowerShell 7 it only offers `-InputObject` / `-Query`:
-
-```powershell
-# fails
-Set-CimInstance -Namespace root\wmi -ClassName MSPower_DeviceEnable -Property @{Enable=$false} -Filter "..."
-# works
-$obj.Enable = $false
-Set-CimInstance -InputObject $obj
-```
-
-### PowerShell variable names are case-insensitive
-
-```powershell
-$Base = 'E:\LogitechMouseFix'
-$base = Measure-G304 -Milliseconds 8000   # <- overwrote $Base with an object
-$bat  = "$Base\一键恢复鼠标.bat"           # -> path now reads "@{Count=-1; ...}\..."
-```
-
-The symptom is a baffling object string in the log and files written to a nonsense path. Never reuse a path variable name for a value.
-
-### Always filter with `-PresentOnly`
-
-`Get-PnpDevice` lists **historical** instances by default — other receivers, other ports. This machine had two `PID_C53F` instances and only one was `Present=True`. Without that filter you end up editing the registry for a stale instance.
-
 ---
 
-## 7. Making it stick
-
-A one-off repair is not enough; the trigger conditions have to go as well:
+## 6. The shortest path for anyone hitting this
 
 ```powershell
-# USB selective suspend off for every power scheme (AC and DC)
+# 1. Confirm it is software, not hardware
+Get-PnpDevice -PresentOnly | Where-Object { $_.InstanceId -match 'VID_046D' } |
+    Select-Object Status, Problem, Class, InstanceId
+
+# 2. Find the receiver and the hub it sits on
+$recv = Get-PnpDevice -PresentOnly |
+    Where-Object { $_.InstanceId -like 'USB\VID_046D&PID_C53F\*' -and
+                   $_.InstanceId -notmatch '&MI_|LAMPARRAY' } | Select-Object -First 1
+$hub  = (Get-PnpDeviceProperty -InstanceId $recv.InstanceId `
+         -KeyName 'DEVPKEY_Device_Parent').Data
+
+# 3. Stop the hub from being powered down (the key step)
+$obj = Get-CimInstance -Namespace root\wmi -ClassName MSPower_DeviceEnable |
+       Where-Object { $_.InstanceName -eq "$hub`_0" }
+$obj.Enable = $false; Set-CimInstance -InputObject $obj
+
+# 4. And turn global USB selective suspend off
 powercfg /setacvalueindex SCHEME_CURRENT 2a737441-1930-4402-8d77-b2bebba308a3 48e6b7a6-50f5-4782-a5d4-53bb8f07e226 0
 powercfg /setdcvalueindex SCHEME_CURRENT 2a737441-1930-4402-8d77-b2bebba308a3 48e6b7a6-50f5-4782-a5d4-53bb8f07e226 0
 powercfg /setactive SCHEME_CURRENT
 
-# stop Windows from powering down the Logitech receiver interfaces
-# (root\wmi MSPower_DeviceEnable, Enable set to False)
-
-# fast startup off
-Set-ItemProperty 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Power' -Name HiberbootEnabled -Value 0
-
-# idle sleep off
+# 5. Emergency: reset the receiver (= one replug, ~4-5 s)
+Disable-PnpDevice -InstanceId $recv.InstanceId -Confirm:$false; Start-Sleep -Milliseconds 700
+Enable-PnpDevice  -InstanceId $recv.InstanceId -Confirm:$false
 ```
 
-Three scheduled tasks then keep it self-healing: one fires **after a resume from low power state** (the failure almost always happens right after wake, so this is the important one), one runs **at logon**, and a watchdog runs **every two minutes**.
-
-The watchdog is deliberately not a "restart the receiver every so often" timer — that would interrupt normal use. It acts only when three conditions hold at once: the G304 was genuinely in use and recently active, it is currently silent while the touchpad is moving, and this has persisted for two consecutive rounds. Otherwise it stays out of the way. Telling the touchpad's activity apart from the G304's uses Raw Input with a device-path filter on `VID_046D&PID_C53F`.
+**Step 5 always brings it back immediately** — so when this happens, do that first instead of reaching for a reboot.
 
 ---
 
-## 8. A note on method
+## 7. Scripts and source
 
-The most valuable thing here was not any individual command, but the observation that **"unplugging fixes it"** was itself the diagnosis.
-
-It rules out hardware (a flaky USB port does not cure a dead mouse) and points straight at driver state, because a re-enumeration is all it takes. Almost every generic "mouse is dead" guide says "try another port / reboot / change the battery", because those actions *incidentally* rebuild the device tree — which is precisely why the actual root cause stays hidden forever.
-
-A diagnosis that explains the whole failure cascade is a different thing from a list of things to try.
-
-**The complete scripts, the step-by-step transcript and a rollback-ready backup** live here:
+The complete repair package (PowerShell scripts, the resident guard, task installation, logs):
 
 > https://github.com/Kirito14IT/logitech-mouse-not-working-after-sleep
 
-If your mouse has ever gone dead after sleep while Device Manager insisted everything was fine, try the repository's `一键恢复鼠标.bat` — it is equivalent to a software-level USB re-enumeration, with no replugging required.
+It also links the issue filed with Logitech, the OpenLogi pull request, and every trap mentioned above.

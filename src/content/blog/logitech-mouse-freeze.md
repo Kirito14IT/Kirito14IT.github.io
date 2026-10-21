@@ -228,7 +228,7 @@ Set-CimInstance -InputObject $obj
 
 ### Removing a driver package can stop the device from starting at all
 
-If you only strip the filter but leave the package, moving the receiver to another port makes Windows create a new instance and the INF **writes the filter back** — and with the kernel driver now disabled the device fails to start entirely (Code 10/39), which is worse than the original problem. **Both have to go together.**
+If you only strip the filter but leave the package, moving the receiver to another port makes Windows create a new instance and the INF **writes the filter back** — and with the kernel driver now disabled the device fails to start entirely (Code 10 or 39), which is worse than the original problem. **Both have to go together.**
 
 ### A WinUSB package can claim the whole composite device
 

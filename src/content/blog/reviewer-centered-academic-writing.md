@@ -139,5 +139,3 @@ The question I want to keep asking the next time I write a paper is a specific o
 
 - [CheatBench: Measuring Reward Gaming in AI Agents, arXiv v1](https://arxiv.org/abs/2609.36308v1), September 28, 2026.
 - These notes focus on the abstract and introduction (pages 1–2), the environment example in Figure 2 (page 3), the conceptual comparison in Figure 3 and the design principles (page 4), and evaluation and metrics (page 6).
-
-These are writing practices I have drawn from reading the paper and intend to use when checking my own work. A clear narrative still needs real, verifiable research evidence behind it.

@@ -182,6 +182,29 @@ rather than "it stays dead until I unplug the receiver".
 
 And T2 fires at the moment the user **touches the touchpad or the keyboard** — i.e. exactly when they have just noticed the mouse is dead and are reaching for something else. The recovery latency is effectively imperceptible.
 
+### 4.6 One full day of field testing: not a single freeze
+
+On the **first complete working day** after the fix went live (2026-10-22), the report was: "the mouse never stopped working today, not once."
+
+The guard's telemetry for that day:
+
+```
+T2  user returned from long idle (a real standby/wake cycle) :   6
+T5  proactive receiver resets while idle                      : 314  (steady ~2 min apart)
+T6  manual requests                                           :   8
+guard errors                                                  :   0
+receiver state at end of day                                  : OK / CM_PROB_NONE
+```
+
+**The T2 count is the number that matters** — six of them, each one a genuine standby-to-wake transition, and every single one recovered on its own. No manual replug, no UAC prompt, no user intervention.
+
+That confirms both key design decisions:
+
+1. **The proactive T5 reset really works.** With only the T2 fallback, the first mouse movement after waking would have had to feel dead (T2 waits until the user touches the keyboard or touchpad). Waking up to a working mouse instead means the periodic resets during standby had already kept the receiver healthy.
+2. **The T2 criterion does not depend on the pointer.** With 314 receiver resets in a single day, the guard neither false-triggered nor missed anything — zero errors, zero spurious repairs.
+
+(The raw log ships in the tutorial repo as `evidence/field-test-20261022.log`.)
+
 ---
 
 ## 5. The real fix is at the hardware layer

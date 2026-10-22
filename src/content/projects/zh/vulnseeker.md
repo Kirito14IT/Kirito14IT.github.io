@@ -6,6 +6,8 @@ date: 2026-01-01
 summary: "在复旦大学软件工程（CodeWisdom）实验室开发的自动化安全分析流程，结合 CodeQL 静态分析与 LLM 漏洞判断。"
 tags: ["CodeWisdom", "CodeQL", "程序分析", "LLM 安全"]
 links:
+  - label: "GitHub 代码"
+    url: "https://github.com/Kirito14IT/VulnSeeker"
   - label: "CodeWisdom 实验室"
     url: "http://www.se.fudan.edu.cn/"
   - label: "李昳讲师"
@@ -25,4 +27,4 @@ VulnSeeker 探索如何结合静态程序分析与 LLM 推理，实现自动化�
 - 结构化安全判断状态；
 - 静态规则与模型分类的联合评估。
 
-该项目将研究思路与实际代码分析流程结合，是人工智能安全应用方向的重要实践。
+[项目代码](https://github.com/Kirito14IT/VulnSeeker)已公开，可用于了解与复现这一分析流程。

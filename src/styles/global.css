@@ -534,6 +534,26 @@ a {
   font-size: 0.96rem;
 }
 
+.sidebar-copy a,
+.sidebar-affiliations a {
+  color: var(--blue);
+  text-underline-offset: 3px;
+}
+
+.sidebar-affiliations {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.sidebar-affiliations a {
+  display: inline-flex;
+  align-items: center;
+}
+
 .sidebar-links {
   display: grid;
   gap: 10px;
@@ -1322,6 +1342,7 @@ html[data-theme="dark"] .theme-icon-sun {
 .timeline-card h3,
 .project-card h3,
 .post-card h2,
+.post-card h3,
 .publication-card h3,
 .glass-card h3,
 .skill-groups h3,
@@ -1921,6 +1942,7 @@ html[data-theme="dark"] .sidebar-heading {
 html[data-theme="dark"] .timeline-card h3,
 html[data-theme="dark"] .project-card h3,
 html[data-theme="dark"] .post-card h2,
+html[data-theme="dark"] .post-card h3,
 html[data-theme="dark"] .publication-card h3,
 html[data-theme="dark"] .glass-card h3,
 html[data-theme="dark"] .skill-groups h3,
@@ -1934,6 +1956,8 @@ html[data-theme="dark"] .clean-list {
 }
 
 html[data-theme="dark"] .timeline-card a:not(.timeline-title-link),
+html[data-theme="dark"] .sidebar-copy a,
+html[data-theme="dark"] .sidebar-affiliations a,
 html[data-theme="dark"] .news-list a,
 html[data-theme="dark"] .markdown-body a {
   color: #71adff;

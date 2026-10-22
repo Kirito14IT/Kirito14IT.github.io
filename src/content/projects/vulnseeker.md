@@ -6,6 +6,8 @@ date: 2026-01-01
 summary: "An automated security analysis pipeline developed at the Fudan Software Engineering (CodeWisdom) Lab, combining CodeQL static analysis and LLM-based vulnerability judgement."
 tags: ["CodeWisdom", "CodeQL", "Program Analysis", "LLM Security"]
 links:
+  - label: "GitHub Code"
+    url: "https://github.com/Kirito14IT/VulnSeeker"
   - label: "CodeWisdom Lab"
     url: "http://www.se.fudan.edu.cn/"
   - label: "Lecturer Yi Li"
@@ -25,4 +27,4 @@ Key components:
 - structured security judgement states;
 - combined assessment from static rules and model classification.
 
-This project should be highlighted for AI security applications because it connects research ideas with a practical code-analysis workflow.
+The [source code](https://github.com/Kirito14IT/VulnSeeker) is publicly available for exploring the analysis workflow.

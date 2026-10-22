@@ -6,6 +6,8 @@ date: 2025-09-01
 summary: "用于高效视觉对应关系剪枝的谱频增强选择性状态空间模型。"
 tags: ["计算机视觉", "状态空间模型", "Mamba", "对应关系剪枝", "频域", "图神经网络", "双视图几何", "相机位姿估计", "外点剔除"]
 links:
+  - label: "GitHub 代码"
+    url: "https://github.com/Kirito14IT/SFMambaNet"
   - label: "arXiv / DOI"
     url: "https://doi.org/10.48550/arXiv.2606.04493"
   - label: "IEEE TIP"

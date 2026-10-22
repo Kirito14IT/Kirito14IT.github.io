@@ -41,7 +41,7 @@ export const ui = {
     switchTitle: "Switch to Chinese",
     theme: { switchToDark: "Switch to dark theme", switchToLight: "Switch to light theme" },
     nav: { home: "Home", cv: "CV", projects: "Projects", blog: "Blog" },
-    sidebar: { profile: "Profile", navigation: "Navigation", focus: "Focus", links: "Links" },
+    sidebar: { profile: "Profile", navigation: "Navigation", focus: "Focus", links: "Links", advisor: "Advisor", affiliations: "Lab / Institute" },
     homeJump: {
       homepage: "Homepage",
       about: "About Me",
@@ -129,7 +129,14 @@ export const ui = {
     blogPage: {
       eyebrow: "Notes",
       title: "Blog",
-      intro: "Technical notes, reading logs, and project retrospectives. The first post is a launch note for this site."
+      intro: "Technical notes, reproducible debugging write-ups, reading logs, and research retrospectives."
+    },
+    fieldNotes: {
+      title: "Field Notes",
+      eyebrow: "Debugging in practice",
+      intro: "Public notes from real debugging sessions, with evidence, reusable scripts, and unresolved issues kept visible.",
+      open: "Read on GitHub ↗",
+      allNotes: "More notes and retrospectives →"
     },
     serviceWatermark: "REVIEW",
     footer: {
@@ -148,7 +155,7 @@ export const ui = {
     switchTitle: "切换到英文",
     theme: { switchToDark: "切换到深色主题", switchToLight: "切换到浅色主题" },
     nav: { home: "首页", cv: "简历", projects: "项目", blog: "博客" },
-    sidebar: { profile: "个人信息", navigation: "导航", focus: "研究方向", links: "链接" },
+    sidebar: { profile: "个人信息", navigation: "导航", focus: "研究方向", links: "链接", advisor: "导师", affiliations: "实验室 / 研究院" },
     homeJump: {
       homepage: "首页",
       about: "关于我",
@@ -236,7 +243,14 @@ export const ui = {
     blogPage: {
       eyebrow: "笔记",
       title: "博客",
-      intro: "记录技术笔记、论文阅读与项目复盘；首篇文章介绍本网站的建设思路。"
+      intro: "记录技术笔记、可复现的故障排查、论文阅读与科研复盘。"
+    },
+    fieldNotes: {
+      title: "技术笔记",
+      eyebrow: "实践与排障",
+      intro: "公开真实排障过程，保留验证证据、可复用脚本与尚未解决的问题，便于他人查阅和复现。",
+      open: "前往 GitHub 阅读 ↗",
+      allNotes: "更多笔记与复盘 →"
     },
     serviceWatermark: "审稿",
     footer: {

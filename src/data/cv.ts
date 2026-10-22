@@ -3,6 +3,8 @@ import type { Locale } from "@i18n/index";
 const yizhangLiuProfileUrl = "https://ccds.fzu.edu.cn/info/1207" + "/11276.htm";
 const fzuKeyLabUrl = "https://ncip.fzu.edu.cn/index.htm";
 const xsafeclawUrl = "https://github.com/XSafeAI/XSafeClaw";
+const vulnseekerUrl = "https://github.com/Kirito14IT/VulnSeeker";
+const sfmambanetCodeUrl = "https://github.com/Kirito14IT/SFMambaNet";
 const teaiUrl = "https://teai.fudan.edu.cn/";
 const xingjunMaUrl = "http://xingjunma.com/";
 const tipUrl = "https://signalprocessingsociety.org/publications-resources/ieee-transactions-image-processing";
@@ -104,7 +106,7 @@ const cvEn: CvData = {
     {
       date: "Oct 21, 2026",
       html:
-        `Diagnosed and fixed a defect in Logitech's own driver stack that silently killed mouse input after Modern Standby resume, published the full <a href="${logitechMouseFixRepoUrl}" target="_blank" rel="noopener noreferrer">diagnosis and repair scripts</a> in a public repository, and filed the upstream report to <a href="${logitechMouseFixIssueUrl}" target="_blank" rel="noopener noreferrer">Logitech's official GitHub</a>.`
+        `Published a <a href="${logitechMouseFixRepoUrl}" target="_blank" rel="noopener noreferrer">Logitech mouse sleep/wake investigation and recovery scripts</a>, documenting receiver power-loss behavior and the initial filter-driver hypothesis that later testing ruled out. Updated the attribution in the <a href="${logitechMouseFixIssueUrl}" target="_blank" rel="noopener noreferrer">upstream issue</a>.`
     },
     {
       date: "Aug 13, 2026",
@@ -238,6 +240,7 @@ const cvEn: CvData = {
     },
     {
       title: "Research Intern, VulnSeeker",
+      titleUrl: vulnseekerUrl,
       organization: "Fudan Software Engineering (CodeWisdom) Lab",
       organizationUrl: codeWisdomLabUrl,
       period: "Jan 2026 - Mar 2026",
@@ -255,6 +258,7 @@ const cvEn: CvData = {
         "Designed prompt workflows for CodeQL and LLM interaction, including structured status codes for vulnerability triage and post-generation security inspection."
       ],
       links: [
+        { label: "VulnSeeker Code", url: vulnseekerUrl },
         { label: "CodeWisdom Lab", url: codeWisdomLabUrl },
         { label: "Lecturer Yi Li", url: yiLiUrl }
       ]
@@ -312,6 +316,7 @@ const cvEn: CvData = {
         }
       ],
       links: [
+        { label: "SFMambaNet Code", url: sfmambanetCodeUrl },
         { label: "FZU Key Lab", url: fzuKeyLabUrl },
         { label: "Advisor Yizhang Liu", url: yizhangLiuProfileUrl },
         { label: "IEEE TIP", url: tipUrl },
@@ -387,7 +392,8 @@ const cvEn: CvData = {
     {
       title: "VulnSeeker",
       summary: "Automated security analysis pipeline that combines CodeQL static analysis and LLM-based vulnerability classification.",
-      tags: ["CodeQL", "Security", "LLM"]
+      tags: ["CodeQL", "Security", "LLM"],
+      link: vulnseekerUrl
     },
     {
       title: "Robust Deep-Learning Watermark Mobile Application",
@@ -486,7 +492,7 @@ const cvZh: CvData = {
     {
       date: "2026年10月21日",
       html:
-        `定位并修复了罗技官方驱动栈中一个会在现代待机恢复后静默吞掉鼠标输入的缺陷，公开了完整的<a href="${logitechMouseFixRepoUrl}" target="_blank" rel="noopener noreferrer">诊断过程与修复脚本</a>，并已向<a href="${logitechMouseFixIssueUrl}" target="_blank" rel="noopener noreferrer">罗技官方 GitHub</a>提交上游问题报告。`
+        `公开了<a href="${logitechMouseFixRepoUrl}" target="_blank" rel="noopener noreferrer">罗技鼠标待机后失灵的排查记录与恢复脚本</a>，记录接收器掉电后的异常表现，以及后续测试推翻最初过滤驱动归因的过程，并在<a href="${logitechMouseFixIssueUrl}" target="_blank" rel="noopener noreferrer">上游问题报告</a>中更正说明。`
     },
     {
       date: "2026年8月13日",
@@ -617,6 +623,7 @@ const cvZh: CvData = {
     },
     {
       title: "科研实习生，VulnSeeker",
+      titleUrl: vulnseekerUrl,
       organization: "复旦大学软件工程（CodeWisdom）实验室",
       organizationUrl: codeWisdomLabUrl,
       period: "2026年1月 - 3月",
@@ -634,6 +641,7 @@ const cvZh: CvData = {
         "设计 CodeQL 与 LLM 协同提示流程，包括用于漏洞分诊和生成后安全检查的结构化状态码。"
       ],
       links: [
+        { label: "VulnSeeker 代码", url: vulnseekerUrl },
         { label: "CodeWisdom 实验室", url: codeWisdomLabUrl },
         { label: "李昳讲师", url: yiLiUrl }
       ]
@@ -691,6 +699,7 @@ const cvZh: CvData = {
         }
       ],
       links: [
+        { label: "SFMambaNet 代码", url: sfmambanetCodeUrl },
         { label: "福州大学重点实验室", url: fzuKeyLabUrl },
         { label: "导师刘翼章", url: yizhangLiuProfileUrl },
         { label: "IEEE TIP", url: tipUrl },
@@ -766,7 +775,8 @@ const cvZh: CvData = {
     {
       title: "VulnSeeker",
       summary: "结合 CodeQL 静态分析与 LLM 漏洞分类的自动化安全分析流程。",
-      tags: ["CodeQL", "安全", "LLM"]
+      tags: ["CodeQL", "安全", "LLM"],
+      link: vulnseekerUrl
     },
     {
       title: "Robust Deep-Learning Watermark Mobile Application",

@@ -1,0 +1,24 @@
+---
+import Section from "@components/Section.astro";
+import { getFieldNotes } from "@data/field-notes";
+import { getUi, localizedPath, type Locale } from "@i18n/index";
+
+const { locale, showBlogLink = false } = Astro.props as { locale: Locale; showBlogLink?: boolean };
+const copy = getUi(locale);
+const notes = getFieldNotes(locale);
+---
+
+<Section id="field-notes" title={copy.fieldNotes.title} eyebrow={copy.fieldNotes.eyebrow}>
+  <p class="muted">{copy.fieldNotes.intro}</p>
+  <div class="post-list">
+    {notes.map((note) => (
+      <a class="post-card" href={note.url} target="_blank" rel="noopener noreferrer">
+        <div class="card-topline"><span>GitHub</span><span>{copy.fieldNotes.open}</span></div>
+        <h3>{note.title}</h3>
+        <p>{note.summary}</p>
+        <div class="tag-list">{note.tags.map((tag) => <span>{tag}</span>)}</div>
+      </a>
+    ))}
+  </div>
+  {showBlogLink && <a class="text-link" href={localizedPath(locale, "/blog/")}>{copy.fieldNotes.allNotes}</a>}
+</Section>

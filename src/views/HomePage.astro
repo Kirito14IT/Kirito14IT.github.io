@@ -9,6 +9,7 @@ import ServiceList from "@components/ServiceList.astro";
 import Section from "@components/Section.astro";
 import Timeline from "@components/Timeline.astro";
 import Education from "@components/Education.astro";
+import FieldNotes from "@components/FieldNotes.astro";
 import ProjectCard from "@components/ProjectCard.astro";
 import { getProfile } from "@data/profile";
 import { getCvData } from "@data/cv";
@@ -31,6 +32,7 @@ const homeJumpLinks = [
   { label: copy.homeJump.research, href: "#research-experience" },
   { label: copy.homeJump.publications, href: "#publications" },
   { label: copy.homeJump.projects, href: "#projects" },
+  { label: copy.fieldNotes.title, href: "#field-notes" },
   { label: copy.homeJump.awards, href: "#awards-skills" },
   { label: copy.homeJump.work, href: "#work-experience" },
   { label: copy.homeJump.services, href: "#services" }
@@ -48,6 +50,10 @@ const homeJumpLinks = [
   <Section id="about" title={copy.sections.about} eyebrow={copy.sections.profile}>
     <div class="glass-card prose-card">
       <p>{profile.bio}</p>
+      <h3>{copy.hero.kicker}</h3>
+      <ul class="clean-list">
+        {profile.researchFocus.map((focus) => <li>{focus}</li>)}
+      </ul>
       <div class="tag-list">
         {profile.interests.map((interest) => <span>{interest}</span>)}
       </div>
@@ -116,6 +122,8 @@ const homeJumpLinks = [
       ))}
     </div>
   </Section>
+
+  <FieldNotes locale={locale} showBlogLink />
 
   <Section id="learning-map" title={copy.sections.learning} eyebrow={copy.sections.knowledge}>
     <LearningMap locale={locale} />

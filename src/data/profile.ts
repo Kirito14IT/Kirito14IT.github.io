@@ -16,11 +16,12 @@ export const profiles = {
     location: "Shanghai, China",
     institution: "University of Shanghai for Science and Technology",
     school: "School of Optical-Electrical and Computer Engineering",
-    title: "Undergraduate in Computer Science and Technology (Class of 2023)",
+    title: "Senior Undergraduate in Computer Science and Technology",
+    incomingTitle: "Incoming M.Sc. Student, Fudan University (2027)",
     tagline:
       "I build research prototypes around AI safety, LLM agents, embodied intelligence, software security analysis, and reliable multimodal systems.",
     bio:
-      "I am an undergraduate student in Computer Science and Technology (Class of 2023) at the University of Shanghai for Science and Technology (USST). I am currently a research intern at the Institute of Trustworthy Embodied Artificial Intelligence (TEAI), Fudan University, where I work on AI agents, AI safety, and embodied intelligence. Feel free to contact me~",
+      "I am a senior undergraduate student in Computer Science and Technology (Class of 2023) at the University of Shanghai for Science and Technology (USST). I will begin my M.Sc. studies at Fudan University in 2027, advised by Xingjun Ma. I am currently a research intern at the Institute of Trustworthy Embodied Artificial Intelligence (TEAI), Fudan University, where I work on AI agents, AI safety, and embodied intelligence. Feel free to contact me~",
     contactNote:
       "Please feel free to reach out by email for academic discussion, research collaboration, open-source projects, or learning exchange.",
     focusWords: [
@@ -83,10 +84,11 @@ export const profiles = {
     location: "中国上海",
     institution: "上海理工大学",
     school: "光电信息与计算机工程学院",
-    title: "计算机科学与技术专业 2023 级本科生",
+    title: "计算机科学与技术专业大四本科生",
+    incomingTitle: "复旦大学 2027 级准硕士生",
     tagline: "围绕人工智能安全、大语言模型智能体、具身智能、软件安全分析与可靠多模态系统开展研究原型开发。",
     bio:
-      "我是上海理工大学计算机科学与技术专业 2023 级本科生。目前，我正在复旦大学可信具身智能研究院（TEAI）进行科研实习，研究方向为智能体、人工智能安全与具身智能。欢迎与我联系交流~",
+      "我是上海理工大学计算机科学与技术专业 2023 级本科生，目前大四在读。我将于 2027 年进入复旦大学攻读硕士学位，导师为马兴军老师。目前，我正在复旦大学可信具身智能研究院（TEAI）进行科研实习，研究方向为智能体、人工智能安全与具身智能。欢迎与我联系交流~",
     contactNote: "欢迎通过邮件与我开展学术讨论、科研合作、开源项目协作或学习交流。",
     focusWords: [
       { text: "人工智能安全", color: "#2563eb" },

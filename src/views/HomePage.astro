@@ -8,6 +8,7 @@ import LearningMap from "@components/LearningMap.astro";
 import ServiceList from "@components/ServiceList.astro";
 import Section from "@components/Section.astro";
 import Timeline from "@components/Timeline.astro";
+import Education from "@components/Education.astro";
 import ProjectCard from "@components/ProjectCard.astro";
 import { getProfile } from "@data/profile";
 import { getCvData } from "@data/cv";
@@ -25,6 +26,7 @@ const allProjects = (await getCollection("projects"))
 const homeJumpLinks = [
   { label: copy.homeJump.homepage, href: "#home" },
   { label: copy.homeJump.about, href: "#about" },
+  { label: copy.homeJump.education, href: "#education" },
   { label: copy.homeJump.news, href: "#news" },
   { label: copy.homeJump.research, href: "#research-experience" },
   { label: copy.homeJump.publications, href: "#publications" },
@@ -51,6 +53,8 @@ const homeJumpLinks = [
       </div>
     </div>
   </Section>
+
+  <Education locale={locale} />
 
   <ContactLinks id="contact" locale={locale} />
 

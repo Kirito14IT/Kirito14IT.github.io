@@ -45,6 +45,7 @@ export const ui = {
     homeJump: {
       homepage: "Homepage",
       about: "About Me",
+      education: "Education",
       news: "News",
       work: "Work Experience",
       research: "Research Experience",
@@ -151,6 +152,7 @@ export const ui = {
     homeJump: {
       homepage: "首页",
       about: "关于我",
+      education: "教育",
       news: "动态",
       work: "工作经历",
       research: "科研经历",

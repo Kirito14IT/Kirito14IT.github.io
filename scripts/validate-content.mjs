@@ -80,7 +80,7 @@ const requiredPublicSnippets = [
   "/figures/scamweb-dataset-overview.png",
   "Dataset and annotation overview",
   ".hero-panel h2,\n.typing-line",
-  "I am an undergraduate student in Computer Science and Technology (Class of 2023)",
+  "I am a senior undergraduate student in Computer Science and Technology (Class of 2023)",
   "Institute of Trustworthy Embodied Artificial Intelligence (TEAI), Fudan University",
   "我是上海理工大学计算机科学与技术专业 2023 级本科生",
   "where I work on AI agents, AI safety, and embodied intelligence",

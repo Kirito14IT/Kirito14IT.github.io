@@ -2,13 +2,14 @@
 import BaseLayout from "@layouts/BaseLayout.astro";
 import Section from "@components/Section.astro";
 import Timeline from "@components/Timeline.astro";
+import Education from "@components/Education.astro";
 import LearningMap from "@components/LearningMap.astro";
 import ServiceList from "@components/ServiceList.astro";
 import { getCvData } from "@data/cv";
 import { getUi, type Locale } from "@i18n/index";
 
 const { locale } = Astro.props as { locale: Locale };
-const { education, workExperiences, experiences, publications, awards, skills, services } = getCvData(locale);
+const { workExperiences, experiences, publications, awards, skills, services } = getCvData(locale);
 const copy = getUi(locale);
 ---
 
@@ -19,9 +20,7 @@ const copy = getUi(locale);
     <p>{copy.cv.intro}</p>
   </header>
 
-  <Section title={copy.cv.education}>
-    <Timeline items={education.map((item) => ({ ...item, title: item.degree, organization: `${item.institution} · ${item.school}`, bullets: item.details }))} />
-  </Section>
+  <Education locale={locale} />
 
   <Section id="work-experience" title={copy.cv.workExperience}><Timeline items={workExperiences} /></Section>
 

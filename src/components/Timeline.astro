@@ -44,7 +44,10 @@ const { items } = Astro.props;
         {item.links && (
           <div class="inline-links">
             {item.links.map((link: any) => (
-              <a href={link.url} target="_blank" rel="noopener noreferrer">{link.label}</a>
+              <a href={link.url} target="_blank" rel="noopener noreferrer">
+                {link.logo && <img class="inline-link-logo" src={link.logo} alt="" width="22" height="22" loading="lazy" />}
+                {link.label}
+              </a>
             ))}
           </div>
         )}

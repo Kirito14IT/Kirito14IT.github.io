@@ -16,7 +16,7 @@ const yiLiUrl = "http://www.se.fudan.edu.cn/#";
 const logitechMouseFixRepoUrl = "https://github.com/Kirito14IT/logitech-mouse-not-working-after-sleep";
 const logitechMouseFixIssueUrl = "https://github.com/Logitech/cpg-docs/issues/25";
 
-type Link = { label: string; url: string };
+type Link = { label: string; url: string; logo?: string };
 type RichText = string | { html: string };
 
 export type NewsItem = {
@@ -35,7 +35,7 @@ export type TimelineItem = {
   organization?: string;
   organizationUrl?: string;
   period: string;
-  details?: string[];
+  details?: RichText[];
   tags?: string[];
   bullets?: RichText[];
   links?: Link[];
@@ -77,13 +77,26 @@ export type CvData = {
 const cvEn: CvData = {
   education: [
     {
-      degree: "B.Eng. in Computer Science and Technology",
+      degree: "Incoming M.Sc. Student",
+      institution: "Fudan University",
+      period: "2027 entry",
+      details: [
+        { html: `Advisor: <a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">Xingjun Ma</a>.` },
+        "Lab and institute: Fudan Vision and Learning Lab (FVL) and Institute of Trustworthy Embodied AI (TEAI)."
+      ],
+      links: [
+        { label: "Fudan FVL", url: "https://fvl.fudan.edu.cn/", logo: "/github-profile/fudan-university-logo.png" },
+        { label: "TEAI", url: "https://teai.fudan.edu.cn/#/", logo: "/github-profile/fudan-teai-logo.png" }
+      ]
+    },
+    {
+      degree: "B.Eng. in Computer Science and Technology (in progress)",
       institution: "University of Shanghai for Science and Technology",
       school: "School of Optical-Electrical and Computer Engineering",
       period: "Sep 2023 - Present",
       details: [
-        "Core academic interests: software engineering, web application development, artificial intelligence, algorithms, and high-performance programming.",
-        "Public profile focuses on research direction, project output, and technical growth rather than numeric course performance."
+        "Class of 2023; currently a senior undergraduate.",
+        "Core academic interests: software engineering, web application development, artificial intelligence, algorithms, and high-performance programming."
       ]
     }
   ],
@@ -446,13 +459,26 @@ const cvEn: CvData = {
 const cvZh: CvData = {
   education: [
     {
-      degree: "工学学士，计算机科学与技术",
+      degree: "硕士研究生（即将入学）",
+      institution: "复旦大学",
+      period: "2027年入学",
+      details: [
+        { html: `导师：<a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">马兴军</a>。` },
+        "实验室与研究机构：复旦大学视觉与学习实验室（FVL）、可信具身智能研究院（TEAI）。"
+      ],
+      links: [
+        { label: "Fudan FVL", url: "https://fvl.fudan.edu.cn/", logo: "/github-profile/fudan-university-logo.png" },
+        { label: "TEAI", url: "https://teai.fudan.edu.cn/#/", logo: "/github-profile/fudan-teai-logo.png" }
+      ]
+    },
+    {
+      degree: "工学学士，计算机科学与技术（在读）",
       institution: "上海理工大学",
       school: "光电信息与计算机工程学院",
       period: "2023年9月 - 至今",
       details: [
-        "主要学术兴趣包括软件工程、Web 应用开发、人工智能、算法与高性能程序设计。",
-        "公开主页重点展示研究方向、项目成果与技术成长，不展示具体课程分数或绩点。"
+        "2023 级本科生，目前大四在读。",
+        "主要学术兴趣包括软件工程、Web 应用开发、人工智能、算法与高性能程序设计。"
       ]
     }
   ],

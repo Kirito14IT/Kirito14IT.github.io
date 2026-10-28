@@ -11,6 +11,8 @@ import Timeline from "@components/Timeline.astro";
 import Education from "@components/Education.astro";
 import FieldNotes from "@components/FieldNotes.astro";
 import ProjectCard from "@components/ProjectCard.astro";
+import RepoStars from "@components/RepoStars.astro";
+import AISafetyHotDemo from "@components/AISafetyHotDemo.astro";
 import { getProfile } from "@data/profile";
 import { getCvData } from "@data/cv";
 import { getUi, localizedPath, type Locale } from "@i18n/index";
@@ -77,6 +79,8 @@ const homeJumpLinks = [
           )}
           <time>{item.date}</time>
           {item.html ? <p set:html={item.html} /> : <p>{item.text}</p>}
+          {item.starRepos && <RepoStars repos={item.starRepos} />}
+          {item.demo === "aisafetyhot" && <AISafetyHotDemo locale={locale} />}
         </article>
       ))}
     </div>

@@ -24,12 +24,15 @@ const cstTitle = "CST: Lightweight Risk Triage with Source-Grounded Evidence for
 
 type Link = { label: string; url: string; logo?: string };
 type RichText = string | { html: string };
+export type StarRepo = "wuyoscar/AISafetyHot" | "Kirito14IT/prompt-spider-ui" | "XSafeAI/XSafeClaw";
 
 export type NewsItem = {
   date: string;
   text?: string;
   html?: string;
   jumpTo?: string;
+  starRepos?: StarRepo[];
+  demo?: "aisafetyhot";
 };
 
 export type TimelineItem = {
@@ -45,6 +48,7 @@ export type TimelineItem = {
   tags?: string[];
   bullets?: RichText[];
   links?: Link[];
+  starRepos?: StarRepo[];
 };
 
 export type PublicationItem = {
@@ -122,6 +126,8 @@ const cvEn: CvData = {
     },
     {
       date: "Oct 2026",
+      demo: "aisafetyhot",
+      starRepos: ["wuyoscar/AISafetyHot", "Kirito14IT/prompt-spider-ui"],
       html: `Participated in the open-source projects <a href="${aiSafetyHotUrl}" target="_blank" rel="noopener noreferrer">AISafetyHot</a> and <a href="${promptSpiderUrl}" target="_blank" rel="noopener noreferrer">prompt-spider-ui</a> during China's National Day holiday.`
     },
     {
@@ -156,6 +162,7 @@ const cvEn: CvData = {
     },
     {
       date: "Mar - Jun 2026",
+      starRepos: ["XSafeAI/XSafeClaw"],
       html:
         `Joined <a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">TEAI, Fudan University</a> and, under the guidance of <a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">Advisor Xingjun Ma</a>, worked on the <a href="${xsafeclawUrl}" target="_blank" rel="noopener noreferrer">XSafeClaw</a> agent safety project, focusing on runtime integration, controlled tool calls, and safety audit workflows.`
     },
@@ -231,6 +238,7 @@ const cvEn: CvData = {
     },
     {
       title: "Research Intern, XSafeClaw Agent Runtime Safety",
+      starRepos: ["XSafeAI/XSafeClaw"],
       titleUrl: xsafeclawUrl,
       organization: "Institute of Trustworthy Embodied Artificial Intelligence (TEAI), Fudan University",
       organizationUrl: teaiUrl,
@@ -520,6 +528,8 @@ const cvZh: CvData = {
     },
     {
       date: "2026年10月",
+      demo: "aisafetyhot",
+      starRepos: ["wuyoscar/AISafetyHot", "Kirito14IT/prompt-spider-ui"],
       html: `国庆期间参与开源项目 <a href="${aiSafetyHotUrl}" target="_blank" rel="noopener noreferrer">AISafetyHot</a> 和 <a href="${promptSpiderUrl}" target="_blank" rel="noopener noreferrer">prompt-spider-ui</a>。`
     },
     {
@@ -552,6 +562,7 @@ const cvZh: CvData = {
     },
     {
       date: "2026年3月 - 6月",
+      starRepos: ["XSafeAI/XSafeClaw"],
       html:
         `加入<a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">复旦大学可信具身智能研究院（TEAI）</a>，在<a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">马兴军老师</a>的指导下，参与 <a href="${xsafeclawUrl}" target="_blank" rel="noopener noreferrer">XSafeClaw</a> 智能体安全项目，聚焦运行时接入、受控工具调用与安全审计流程。`
     },
@@ -626,6 +637,7 @@ const cvZh: CvData = {
     },
     {
       title: "科研实习生，XSafeClaw 智能体运行时安全",
+      starRepos: ["XSafeAI/XSafeClaw"],
       titleUrl: xsafeclawUrl,
       organization: "复旦大学可信具身智能研究院（TEAI）",
       organizationUrl: teaiUrl,

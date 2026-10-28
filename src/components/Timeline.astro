@@ -1,4 +1,5 @@
 ---
+import RepoStars from "@components/RepoStars.astro";
 const { items } = Astro.props;
 ---
 
@@ -16,6 +17,7 @@ const { items } = Astro.props;
             item.title || item.text
           )}
         </h3>
+        {item.starRepos && <RepoStars repos={item.starRepos} />}
         {item.organization && (
           <p class="muted">
             {item.organizationUrl ? (

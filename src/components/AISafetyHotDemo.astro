@@ -1,0 +1,66 @@
+---
+import type { Locale } from "@i18n/index";
+
+const { locale } = Astro.props as { locale: Locale };
+const zh = locale === "zh";
+const animation = "/media/aisafetyhot/observatory.gif";
+const poster = "/media/aisafetyhot/observatory-poster.webp";
+---
+
+<figure class="aisafetyhot-demo" data-project-demo>
+  <div class="demo-toolbar">
+    <span>AISafetyHot <span class="demo-divider">/</span> {zh ? "科研观测台演示" : "Observatory demo"}</span>
+    <button type="button" data-demo-toggle data-play-label={zh ? "播放动画" : "Play animation"} data-pause-label={zh ? "暂停动画" : "Pause animation"} hidden>
+      {zh ? "暂停动画" : "Pause animation"}
+    </button>
+  </div>
+  <picture>
+    <source media="(prefers-reduced-motion: reduce)" srcset={poster} />
+    <img
+      src={animation}
+      data-animation={animation}
+      data-poster={poster}
+      alt={zh ? "AISafetyHot 原项目演示：材料扫描、三维研究星图与新闻流" : "Original AISafetyHot demo: source scanning, a 3D research graph, and the news stream"}
+      width="1000"
+      height="694"
+      loading="lazy"
+      decoding="async"
+    />
+  </picture>
+  <figcaption>
+    <span>{zh ? "演示来源：" : "Demo credit: "}<a href="https://github.com/wuyoscar/AISafetyHot/blob/main/assets/observatory.gif" target="_blank" rel="noopener noreferrer">AI Safety HOT · README</a></span>
+    <a href={`https://aisafetyhot.com/${zh ? "zh" : "en"}`} target="_blank" rel="noopener noreferrer">{zh ? "打开项目网站 ↗" : "Explore the website ↗"}</a>
+  </figcaption>
+</figure>
+
+<style>
+  .aisafetyhot-demo { margin: 18px 0 0; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; background: var(--card); }
+  .demo-toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; padding: 11px 14px; font-size: 0.77rem; font-weight: 700; }
+  .demo-divider { margin: 0 6px; color: var(--muted); }
+  .demo-toolbar button { cursor: pointer; padding: 5px 9px; border: 1px solid var(--line); border-radius: 7px; background: transparent; color: inherit; font: inherit; }
+  .demo-toolbar button:hover { border-color: var(--blue); }
+  .demo-toolbar button:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+  .aisafetyhot-demo img { display: block; width: 100%; height: auto; background: #f6f5f1; }
+  .aisafetyhot-demo figcaption { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px 16px; padding: 10px 14px; font-size: 0.73rem; color: var(--muted); }
+</style>
+
+<script>
+  const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  document.querySelectorAll<HTMLElement>("[data-project-demo]").forEach((demo) => {
+    const button = demo.querySelector<HTMLButtonElement>("[data-demo-toggle]")!;
+    const image = demo.querySelector<HTMLImageElement>("img")!;
+    const source = demo.querySelector<HTMLSourceElement>("source")!;
+    let playing = !motion.matches;
+    function setPlaying(value: boolean) {
+      playing = value;
+      const url = value ? image.dataset.animation! : image.dataset.poster!;
+      if (image.getAttribute("src") !== url) image.src = url;
+      source.srcset = url;
+      button.textContent = value ? button.dataset.pauseLabel! : button.dataset.playLabel!;
+    }
+    setPlaying(playing);
+    button.hidden = false;
+    button.addEventListener("click", () => setPlaying(!playing));
+    motion.addEventListener("change", (event) => setPlaying(!event.matches));
+  });
+</script>

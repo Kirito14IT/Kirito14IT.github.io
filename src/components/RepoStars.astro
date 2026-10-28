@@ -1,0 +1,122 @@
+---
+import type { StarRepo } from "@data/cv";
+
+const { repos } = Astro.props as { repos: StarRepo[] };
+const zh = Astro.url.pathname.startsWith("/zh/");
+const badges: Record<StarRepo, { name: string; color: string }> = {
+  "wuyoscar/AISafetyHot": { name: "AISafetyHot", color: "d97706" },
+  "Kirito14IT/prompt-spider-ui": { name: "prompt-spider-ui", color: "8b5cf6" },
+  "XSafeAI/XSafeClaw": { name: "XSafeClaw", color: "0891b2" }
+};
+---
+
+<div class="repo-stars" aria-label={zh ? "项目 GitHub Stars" : "Project GitHub stars"}>
+  {repos.map((repo) => (
+    <a
+      class="repo-star-badge"
+      style={`--star-accent: #${badges[repo].color}`}
+      href={`https://github.com/${repo}/stargazers`}
+      target="_blank"
+      rel="noopener noreferrer"
+      data-star-repo={repo}
+      title={zh ? "查看 GitHub Stars；备用徽章由 Shields.io 自动更新（有缓存）" : "View GitHub stars; fallback badge auto-updated by Shields.io (cached)"}
+    >
+      <svg class="repo-star-icon" viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true">
+        <path d="m12 2.5 2.94 5.96 6.58.95-4.76 4.64 1.12 6.55L12 17.51l-5.88 3.09 1.12-6.55L2.48 9.41l6.58-.95L12 2.5Z" />
+      </svg>
+      <span class="repo-star-name">{badges[repo].name}</span>
+      <span class="repo-star-count" data-star-count hidden></span>
+      <img
+        class="repo-star-fallback"
+        src={`https://img.shields.io/github/stars/${repo}?style=flat&label=&color=${badges[repo].color}`}
+        alt="GitHub Stars"
+        height="20"
+        loading="lazy"
+        decoding="async"
+      />
+    </a>
+  ))}
+</div>
+
+<style>
+  .repo-stars { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 14px; }
+  .repo-star-badge.repo-star-badge {
+    display: inline-flex; align-items: center; gap: 7px; min-height: 34px;
+    padding: 5px 9px 5px 11px; border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--star-accent) 30%, transparent);
+    background: linear-gradient(135deg, #fff, color-mix(in srgb, var(--star-accent) 9%, #fff));
+    color: #26364c; font-size: 0.76rem; font-weight: 700; line-height: 1.3;
+    text-decoration: none; white-space: nowrap;
+    box-shadow: 0 3px 10px color-mix(in srgb, var(--star-accent) 8%, transparent);
+    transition: border-color 160ms ease, box-shadow 160ms ease;
+  }
+  .repo-star-badge.repo-star-badge:hover {
+    border-color: var(--star-accent); text-decoration: none;
+    box-shadow: 0 3px 16px color-mix(in srgb, var(--star-accent) 20%, transparent);
+  }
+  .repo-star-badge:focus-visible { outline: 2px solid var(--star-accent); outline-offset: 3px; }
+  .repo-star-icon { color: var(--star-accent); flex: none; }
+  .repo-star-count {
+    padding: 3px 7px; border-radius: 5px; color: #fff; background: var(--star-accent);
+    font: 700 0.72rem var(--mono); font-variant-numeric: tabular-nums;
+  }
+  .repo-star-fallback { height: 20px; max-width: 90px; border-radius: 4px; }
+  [hidden] { display: none; }
+  :global(html[data-theme="dark"]) .repo-star-badge.repo-star-badge {
+    color: #e5edf9;
+    background: linear-gradient(135deg, #162237, color-mix(in srgb, var(--star-accent) 14%, #162237));
+  }
+  @media (prefers-reduced-motion: reduce) { .repo-star-badge { transition: none; } }
+</style>
+
+<script>
+  type StarCache = { count: number; fetchedAt: number };
+  const ttl = 5 * 60 * 1000;
+  const zh = document.documentElement.lang.startsWith("zh");
+  const groups = new Map<string, HTMLAnchorElement[]>();
+  document.querySelectorAll<HTMLAnchorElement>("[data-star-repo]").forEach((badge) => {
+    const repo = badge.dataset.starRepo!;
+    groups.set(repo, [...(groups.get(repo) || []), badge]);
+  });
+
+  function display(badges: HTMLAnchorElement[], data: StarCache, cached: boolean) {
+    const count = new Intl.NumberFormat("en-US").format(data.count);
+    const time = new Date(data.fetchedAt).toLocaleString(zh ? "zh-CN" : "en-US");
+    for (const badge of badges) {
+      const counter = badge.querySelector<HTMLElement>("[data-star-count]")!;
+      counter.textContent = count;
+      counter.hidden = false;
+      badge.querySelector<HTMLImageElement>(".repo-star-fallback")!.hidden = true;
+      badge.title = `${badge.dataset.starRepo}: ${count} GitHub stars · ${cached ? (zh ? "缓存于" : "Cached at") : (zh ? "更新于" : "Updated at")} ${time}`;
+      badge.setAttribute("aria-label", `${badge.dataset.starRepo}: ${count} GitHub stars; ${zh ? "查看 Star 列表" : "view stargazers"}`);
+    }
+  }
+
+  async function update(repo: string, badges: HTMLAnchorElement[]) {
+    const key = `krico-github-stars:${repo}`;
+    try {
+      const cached: StarCache = JSON.parse(localStorage.getItem(key) || "null");
+      const age = cached ? Date.now() - cached.fetchedAt : NaN;
+      if (cached && Number.isSafeInteger(cached.count) && cached.count >= 0 && age >= 0 && age < 7 * 24 * 60 * 60 * 1000) {
+        display(badges, cached, true);
+        if (age < ttl) return;
+      }
+    } catch { /* Storage may be unavailable; fetch the public API instead. */ }
+
+    try {
+      const response = await fetch(`https://api.github.com/repos/${repo}`, {
+        headers: { Accept: "application/vnd.github+json" },
+        cache: "no-store",
+        signal: AbortSignal.timeout(6000)
+      });
+      if (!response.ok) return;
+      const body = await response.json();
+      if (!Number.isSafeInteger(body.stargazers_count) || body.stargazers_count < 0) return;
+      const data: StarCache = { count: body.stargazers_count, fetchedAt: Date.now() };
+      display(badges, data, false);
+      try { localStorage.setItem(key, JSON.stringify(data)); } catch { /* Optional cache. */ }
+    } catch { /* Keep the cached count or the Shields.io fallback on network failure. */ }
+  }
+
+  groups.forEach((badges, repo) => { void update(repo, badges); });
+</script>

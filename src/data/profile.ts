@@ -25,34 +25,34 @@ export const profiles = {
     incomingTitle: "Incoming M.Sc. Student, Fudan University (2027)",
     advisorName: "Xingjun Ma",
     tagline:
-      "I build research prototypes around AI safety, LLM agents, embodied intelligence, software security analysis, and reliable multimodal systems.",
+      "I study LLM agents, reinforcement learning for agents (Agent RL), and agent safety, with an interest in reliable reasoning, memory, and tool use.",
     bio:
-      "I am a senior undergraduate student in Computer Science and Technology (Class of 2023) at the University of Shanghai for Science and Technology (USST). I will begin my M.Sc. studies at Fudan University in 2027, advised by Xingjun Ma. I am currently a research intern at the Institute of Trustworthy Embodied Artificial Intelligence (TEAI), Fudan University, where I work on AI agents, AI safety, and embodied intelligence. Feel free to contact me~",
+      "I am a senior undergraduate student in Computer Science and Technology (Class of 2023) at the University of Shanghai for Science and Technology (USST). I will begin my M.Sc. studies at Fudan University in 2027, advised by Xingjun Ma. I am currently a research intern at the Institute of Trustworthy Embodied Artificial Intelligence (TEAI), Fudan University. My research interests center on LLM agents, reinforcement learning for agents (Agent RL), and agent safety. Feel free to get in touch.",
     contactNote:
       "Please feel free to reach out by email for academic discussion, research collaboration, open-source projects, or learning exchange.",
     researchFocus: [
-      "AI safety and runtime governance for LLM agents.",
-      "Multi-agent reinforcement learning for safety-constrained code generation.",
-      "CodeQL-assisted software security analysis.",
-      "Efficient neural models for visual correspondence pruning."
+      "Reinforcement learning for LLM agents (Agent RL), reasoning, and tool use.",
+      "Agent safety, memory security, and cross-session prompt injection.",
+      "Multi-agent collaboration and safety-constrained code generation.",
+      "Reliable agent evaluation, software security analysis, and practical agent systems."
     ],
     focusWords: [
-      { text: "AI Safety", color: "#2563eb" },
-      { text: "Large Language Models", color: "#7c3aed" },
-      { text: "LLM Agents", color: "#db2777" },
-      { text: "Embodied Intelligence", color: "#f59e0b" },
-      { text: "Software Security", color: "#0891b2" },
-      { text: "Multimodal Intelligence", color: "#16a34a" }
+      { text: "LLM Agents", color: "#2563eb" },
+      { text: "Agent RL", color: "#7c3aed" },
+      { text: "Agent Safety", color: "#db2777" },
+      { text: "Agent Memory", color: "#f59e0b" },
+      { text: "Multi-Agent Systems", color: "#0891b2" },
+      { text: "Embodied Intelligence", color: "#16a34a" }
     ],
     interests: [
-      "AI Safety",
       "LLM Agents",
-      "Embodied Intelligence",
-      "Software Security Analysis",
+      "Agent RL",
+      "Agent Safety",
+      "Multi-Agent Systems",
+      "Agent Memory",
       "Trustworthy AI",
-      "Multimodal Learning",
-      "Program Analysis",
-      "Computer Vision"
+      "Software Security Analysis",
+      "Embodied Intelligence"
     ],
     links: [
       { label: "Email", url: "mailto:2657751462@qq.com", displayUrl: "2657751462@qq.com" },
@@ -105,25 +105,25 @@ export const profiles = {
     title: "计算机科学与技术专业大四本科生",
     incomingTitle: "复旦大学 2027 级准硕士生",
     advisorName: "马兴军",
-    tagline: "围绕人工智能安全、大语言模型智能体、具身智能、软件安全分析与可靠多模态系统开展研究原型开发。",
+    tagline: "聚焦大语言模型智能体、智能体强化学习（Agent RL）与智能体安全，关注可靠推理、记忆与工具使用。",
     bio:
-      "我是上海理工大学计算机科学与技术专业 2023 级本科生，目前大四在读。我将于 2027 年进入复旦大学攻读硕士学位，导师为马兴军老师。目前，我正在复旦大学可信具身智能研究院（TEAI）进行科研实习，研究方向为智能体、人工智能安全与具身智能。欢迎与我联系交流~",
+      "我是上海理工大学计算机科学与技术专业 2023 级本科生，目前大四在读。我将于 2027 年进入复旦大学攻读硕士学位，导师为马兴军老师。目前，我正在复旦大学可信具身智能研究院（TEAI）进行科研实习，研究兴趣聚焦大语言模型智能体、智能体强化学习（Agent RL）与智能体安全。欢迎与我联系交流。",
     contactNote: "欢迎通过邮件与我开展学术讨论、科研合作、开源项目协作或学习交流。",
     researchFocus: [
-      "面向 LLM 智能体的人工智能安全与运行时治理。",
-      "面向安全约束代码生成的多智能体强化学习。",
-      "基于 CodeQL 的软件安全分析。",
-      "面向视觉对应关系剪枝的高效神经网络模型。"
+      "面向大语言模型智能体的强化学习（Agent RL）、推理与工具使用。",
+      "智能体安全、记忆安全与跨会话提示注入。",
+      "多智能体协作与安全约束代码生成。",
+      "可靠智能体评测、软件安全分析与智能体系统实践。"
     ],
     focusWords: [
-      { text: "人工智能安全", color: "#2563eb" },
-      { text: "大语言模型", color: "#7c3aed" },
-      { text: "LLM 智能体", color: "#db2777" },
-      { text: "具身智能", color: "#f59e0b" },
-      { text: "软件安全", color: "#0891b2" },
-      { text: "多模态智能", color: "#16a34a" }
+      { text: "LLM 智能体", color: "#2563eb" },
+      { text: "Agent RL", color: "#7c3aed" },
+      { text: "智能体安全", color: "#db2777" },
+      { text: "智能体记忆", color: "#f59e0b" },
+      { text: "多智能体系统", color: "#0891b2" },
+      { text: "具身智能", color: "#16a34a" }
     ],
-    interests: ["人工智能安全", "LLM 智能体", "具身智能", "软件安全分析", "可信人工智能", "多模态学习", "程序分析", "计算机视觉"],
+    interests: ["LLM 智能体", "Agent RL", "智能体安全", "多智能体系统", "智能体记忆", "可信人工智能", "软件安全分析", "具身智能"],
     links: [
       { label: "邮箱", url: "mailto:2657751462@qq.com", displayUrl: "2657751462@qq.com" },
       { label: "GitHub", url: "https://github.com/Kirito14IT", displayUrl: "https://github.com/Kirito14IT" },

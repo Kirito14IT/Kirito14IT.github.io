@@ -17,6 +17,10 @@ const codeWisdomLabUrl = "http://www.se.fudan.edu.cn/";
 const yiLiUrl = "http://www.se.fudan.edu.cn/#";
 const logitechMouseFixRepoUrl = "https://github.com/Kirito14IT/logitech-mouse-not-working-after-sleep";
 const logitechMouseFixIssueUrl = "https://github.com/Logitech/cpg-docs/issues/25";
+const aiSafetyHotUrl = "https://github.com/wuyoscar/AISafetyHot";
+const promptSpiderUrl = "https://github.com/Kirito14IT/prompt-spider-ui";
+const memHarmBenchTitle = "MemHarmBench: Evaluating Cross-Session Prompt Injection in Memory-Persistent AI Agents";
+const cstTitle = "CST: Lightweight Risk Triage with Source-Grounded Evidence for Web Discussions";
 
 type Link = { label: string; url: string; logo?: string };
 type RichText = string | { html: string };
@@ -104,9 +108,21 @@ const cvEn: CvData = {
   ],
   news: [
     {
+      date: "Oct 26, 2026",
+      html: `Submitted <strong>${memHarmBenchTitle}</strong> to The Web Conference (WWW 2027).`
+    },
+    {
+      date: "Oct 26, 2026",
+      html: `Submitted <strong>${cstTitle}</strong> to The Web Conference (WWW 2027).`
+    },
+    {
       date: "Oct 21, 2026",
       html:
         `Published a <a href="${logitechMouseFixRepoUrl}" target="_blank" rel="noopener noreferrer">Logitech mouse sleep/wake investigation and recovery scripts</a>, documenting receiver power-loss behavior and the initial filter-driver hypothesis that later testing ruled out. Updated the attribution in the <a href="${logitechMouseFixIssueUrl}" target="_blank" rel="noopener noreferrer">upstream issue</a>.`
+    },
+    {
+      date: "Oct 2026",
+      html: `Participated in the open-source projects <a href="${aiSafetyHotUrl}" target="_blank" rel="noopener noreferrer">AISafetyHot</a> and <a href="${promptSpiderUrl}" target="_blank" rel="noopener noreferrer">prompt-spider-ui</a> during China's National Day holiday.`
     },
     {
       date: "Aug 13, 2026",
@@ -490,9 +506,21 @@ const cvZh: CvData = {
   ],
   news: [
     {
+      date: "2026年10月26日",
+      html: `论文 <strong>${memHarmBenchTitle}</strong> 已投稿至 The Web Conference（WWW 2027）。`
+    },
+    {
+      date: "2026年10月26日",
+      html: `论文 <strong>${cstTitle}</strong> 已投稿至 The Web Conference（WWW 2027）。`
+    },
+    {
       date: "2026年10月21日",
       html:
         `公开了<a href="${logitechMouseFixRepoUrl}" target="_blank" rel="noopener noreferrer">罗技鼠标待机后失灵的排查记录与恢复脚本</a>，记录接收器掉电后的异常表现，以及后续测试推翻最初过滤驱动归因的过程，并在<a href="${logitechMouseFixIssueUrl}" target="_blank" rel="noopener noreferrer">上游问题报告</a>中更正说明。`
+    },
+    {
+      date: "2026年10月",
+      html: `国庆期间参与开源项目 <a href="${aiSafetyHotUrl}" target="_blank" rel="noopener noreferrer">AISafetyHot</a> 和 <a href="${promptSpiderUrl}" target="_blank" rel="noopener noreferrer">prompt-spider-ui</a>。`
     },
     {
       date: "2026年8月13日",

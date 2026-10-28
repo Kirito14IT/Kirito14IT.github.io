@@ -70,6 +70,7 @@ const socialProfileUrls = [
 const starRepos = ["wuyoscar/AISafetyHot", "Kirito14IT/prompt-spider-ui", "XSafeAI/XSafeClaw"];
 const hasStarBadge = (html, repo) => html.includes(`data-star-repo="${repo}"`) && html.includes(`href="https://github.com/${repo}/stargazers"`) && html.includes(`src="https://img.shields.io/github/stars/${repo}?`);
 const demoAssets = ["observatory.gif", "observatory-poster.webp"];
+const projectShowcases = [homepage, zhHomepage].map((html) => html.match(/<section id="projects"[\s\S]*?<\/section>/)?.[0] || "").concat(readRendered("projects"), readRendered("zh", "projects"));
 
 const checks = [
   ["all 22 bilingual routes are generated", expectedRoutes.length === 22],
@@ -91,7 +92,8 @@ const checks = [
   ["XSafeClaw star badge also appears in research, CV, and project detail pages", [researchSection, zhResearchSection, cv, zhCv, readRendered("projects", "xsafeclaw"), zhProject].every((html) => hasStarBadge(html, "XSafeAI/XSafeClaw"))],
   ["star badges retain icons and do not hard-code counts", [homepage, zhHomepage].every((html) => html.includes('class="repo-star-icon"') && /data-star-count[^>]*hidden[^>]*><\/span>/.test(html) && !/data-star-count[^>]*>\s*\d/.test(html))],
   ["AISafetyHot original demo assets are published", demoAssets.every((file) => fs.existsSync(path.join(root, "dist", "media", "aisafetyhot", file)))],
-  ["bilingual National Day News includes the attributed lazy-loaded demo and motion controls", [enNews, zhNews].every((cards) => cards.some((card) => card.includes('data-project-demo') && card.includes('src="/media/aisafetyhot/observatory.gif"') && card.includes('loading="lazy"') && card.includes('prefers-reduced-motion: reduce') && card.includes('data-demo-toggle') && card.includes('href="https://github.com/wuyoscar/AISafetyHot/blob/main/assets/observatory.gif"')))],
+  ["bilingual project showcases include the attributed lazy-loaded demo and motion controls", projectShowcases.every((html) => html.includes('data-project-demo') && html.includes('src="/media/aisafetyhot/observatory.gif"') && html.includes('loading="lazy"') && html.includes('prefers-reduced-motion: reduce') && html.includes('data-demo-toggle') && html.includes('href="https://github.com/wuyoscar/AISafetyHot/blob/main/assets/observatory.gif"') && hasStarBadge(html, "wuyoscar/AISafetyHot"))],
+  ["News remains concise and contains no project demos", [...enNews, ...zhNews].every((card) => !card.includes('data-project-demo') && !card.includes('observatory.gif'))],
   ["Agent RL appears in home and CV sidebars", [homepage, zhHomepage, cv, zhCv].every((html) => html.includes('<span>Agent RL</span>'))],
   ["Field Notes are linked from bilingual home and blog pages", [homepage, zhHomepage, readRendered("blog"), readRendered("zh", "blog")].every((html) => html.includes('id="field-notes"') && html.includes('href="https://github.com/Kirito14IT/chatgpt-codex-windows-remote-control-proxy-fix"'))],
   ["Field Notes retain the unresolved connection limitation", homepage.includes("a separate desktop WebSocket connection issue is documented as unresolved") && zhHomepage.includes("桌面端另一条 WebSocket 连接仍有未解决问题")],

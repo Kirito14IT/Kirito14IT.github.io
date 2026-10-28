@@ -32,7 +32,6 @@ export type NewsItem = {
   html?: string;
   jumpTo?: string;
   starRepos?: StarRepo[];
-  demo?: "aisafetyhot";
 };
 
 export type TimelineItem = {
@@ -126,7 +125,6 @@ const cvEn: CvData = {
     },
     {
       date: "Oct 2026",
-      demo: "aisafetyhot",
       starRepos: ["wuyoscar/AISafetyHot", "Kirito14IT/prompt-spider-ui"],
       html: `Participated in the open-source projects <a href="${aiSafetyHotUrl}" target="_blank" rel="noopener noreferrer">AISafetyHot</a> and <a href="${promptSpiderUrl}" target="_blank" rel="noopener noreferrer">prompt-spider-ui</a> during China's National Day holiday.`
     },
@@ -528,7 +526,6 @@ const cvZh: CvData = {
     },
     {
       date: "2026年10月",
-      demo: "aisafetyhot",
       starRepos: ["wuyoscar/AISafetyHot", "Kirito14IT/prompt-spider-ui"],
       html: `国庆期间参与开源项目 <a href="${aiSafetyHotUrl}" target="_blank" rel="noopener noreferrer">AISafetyHot</a> 和 <a href="${promptSpiderUrl}" target="_blank" rel="noopener noreferrer">prompt-spider-ui</a>。`
     },

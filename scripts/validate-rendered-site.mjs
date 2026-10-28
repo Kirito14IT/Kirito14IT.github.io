@@ -63,11 +63,18 @@ const submissionTitles = [
   "MemHarmBench: Evaluating Cross-Session Prompt Injection in Memory-Persistent AI Agents",
   "CST: Lightweight Risk Triage with Source-Grounded Evidence for Web Discussions"
 ];
+const socialProfileUrls = [
+  "https://www.douyin.com/user/MS4wLjABAAAAUGvPhZRE2l6SIkWl-UGmjqijJv1pQ_63oDcA7cMT-kg",
+  "https://www.xiaohongshu.com/user/profile/639c0cc20000000026005bed"
+];
 
 const checks = [
   ["all 22 bilingual routes are generated", expectedRoutes.length === 22],
   ["English root uses the correct lang", homepage.includes('<html lang="en"')],
   ["Chinese root uses the correct lang", zhHomepage.includes('<html lang="zh-CN"')],
+  ["public social profiles appear in bilingual home and CV sidebars", [homepage, zhHomepage, cv, zhCv].every((html) => socialProfileUrls.every((url) => html.includes(`href="${url}"`)) && !html.includes("https://www.douyin.com/user/self"))],
+  ["social profiles also appear in the homepage contact panels", [homepage, zhHomepage].every((html) => socialProfileUrls.every((url) => html.split(`href="${url}"`).length - 1 === 2))],
+  ["social labels are localized", homepage.includes(">Douyin</strong>") && homepage.includes(">Xiaohongshu</strong>") && zhHomepage.includes(">抖音</strong>") && zhHomepage.includes(">小红书</strong>")],
   ["English About copy is current", homepage.includes("I am a senior undergraduate student in Computer Science and Technology (Class of 2023)") && homepage.includes("I will begin my M.Sc. studies at Fudan University in 2027, advised by Xingjun Ma.") && homepage.includes("My research interests center on LLM agents, reinforcement learning for agents (Agent RL), and agent safety.")],
   ["Chinese About copy is current", zhHomepage.includes("我是上海理工大学计算机科学与技术专业 2023 级本科生，目前大四在读。") && zhHomepage.includes("我将于 2027 年进入复旦大学攻读硕士学位，导师为马兴军老师。") && zhHomepage.includes("研究兴趣聚焦大语言模型智能体、智能体强化学习（Agent RL）与智能体安全。")],
   ["incoming education is synchronized across home and CV", [homepage, cv].every((html) => html.includes("2027 entry") && html.includes("Class of 2023; currently a senior undergraduate.")) && [zhHomepage, zhCv].every((html) => html.includes("2027年入学") && html.includes("硕士研究生（即将入学）"))],

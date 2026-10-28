@@ -1,5 +1,10 @@
 import type { Locale } from "@i18n/index";
 
+const socialProfiles = {
+  douyin: "https://www.douyin.com/user/MS4wLjABAAAAUGvPhZRE2l6SIkWl-UGmjqijJv1pQ_63oDcA7cMT-kg",
+  xiaohongshu: "https://www.xiaohongshu.com/user/profile/639c0cc20000000026005bed"
+};
+
 const shared = {
   name: "Krico",
   githubUsername: "Kirito14IT",
@@ -62,6 +67,8 @@ export const profiles = {
         url: "https://scholar.google.com/citations?user=MyweXYYAAAAJ",
         displayUrl: "Academic publications and citations"
       },
+      { label: "Douyin", url: socialProfiles.douyin, displayUrl: "@Kirito14IT" },
+      { label: "Xiaohongshu", url: socialProfiles.xiaohongshu, displayUrl: "@998244353_plus" },
       {
         label: "XSafeClaw",
         url: "https://github.com/XSafeAI/XSafeClaw",
@@ -132,6 +139,8 @@ export const profiles = {
         url: "https://scholar.google.com/citations?user=MyweXYYAAAAJ",
         displayUrl: "学术论文与引用记录"
       },
+      { label: "抖音", url: socialProfiles.douyin, displayUrl: "@Kirito14IT" },
+      { label: "小红书", url: socialProfiles.xiaohongshu, displayUrl: "@998244353_plus" },
       {
         label: "XSafeClaw",
         url: "https://github.com/XSafeAI/XSafeClaw",

@@ -13,6 +13,7 @@ import FieldNotes from "@components/FieldNotes.astro";
 import ProjectCard from "@components/ProjectCard.astro";
 import RepoStars from "@components/RepoStars.astro";
 import AISafetyHotProject from "@components/AISafetyHotProject.astro";
+import VisitorMap from "@components/VisitorMap.astro";
 import { getProfile } from "@data/profile";
 import { getCvData } from "@data/cv";
 import { getUi, localizedPath, type Locale } from "@i18n/index";
@@ -162,4 +163,5 @@ const homeJumpLinks = [
   <Section id="services" title={copy.sections.services} eyebrow={copy.sections.academicCommunity}>
     <ServiceList items={services} locale={locale} />
   </Section>
+  <VisitorMap locale={locale} />
 </BaseLayout>

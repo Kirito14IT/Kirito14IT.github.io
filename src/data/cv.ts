@@ -431,7 +431,9 @@ const cvEn: CvData = {
     "National First Prize, RAICOM Robot Developer Competition, 2025",
     "National Second Prize, LanQiao Cup C/C++ Programming Contest, 2025",
     "Silver Award, CCPC Shanghai Collegiate Programming Contest, 2025",
+    "National Second Prize, National Computer Competency Challenge (2 awards)",
     "National Encouragement Scholarship, Three-time Recipient",
+    "Scholarships: First Class (2 awards), Second Class (3 awards), Third Class (2 awards)",
     "National Third Prize, National English Competition for College Students, 2025",
     "Shanghai First Prize, National College Student Mathematics Competition, 2024",
     "First-author software copyright for a robust deep-learning watermark mobile application"
@@ -829,7 +831,9 @@ const cvZh: CvData = {
     "2025 年睿抗机器人开发者大赛国家级一等奖",
     "2025 年蓝桥杯 C/C++ 程序设计竞赛全国二等奖",
     "2025 年中国大学生程序设计竞赛（CCPC）上海站银奖",
+    "全国计算机能力挑战赛国家级二等奖（2 次）",
     "国家励志奖学金（3 次）",
+    "奖学金一等奖（2 次）、二等奖（3 次）、三等奖（2 次）",
     "2025 年全国大学生英语竞赛全国三等奖",
     "2024 年全国大学生数学竞赛上海市一等奖",
     "深度学习鲁棒水印移动应用软件著作权（第一作者）"

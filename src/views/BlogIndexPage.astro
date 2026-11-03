@@ -12,7 +12,7 @@ const posts = (await getCollection("blog"))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 
-<BaseLayout locale={locale} title={locale === "zh" ? "博客 | Krico" : "Blog | Krico"}>
+<BaseLayout locale={locale} title={locale === "zh" ? "博客 | Carey" : "Blog | Carey"}>
   <header class="page-header">
     <p class="eyebrow">{copy.blogPage.eyebrow}</p>
     <h1>{copy.blogPage.title}</h1>

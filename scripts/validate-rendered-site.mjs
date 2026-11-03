@@ -80,6 +80,7 @@ const newPaperResources = [
 const publicationCard = (html, title) => (html.match(/<article class="publication-card"[\s\S]*?<\/article>/g) || []).find((card) => card.includes(title)) || "";
 
 const checks = [
+  ["Carey branding appears in bilingual home and CV titles and navigation", [homepage, zhHomepage, cv, zhCv].every((html) => html.includes('<h1>Carey</h1>') && /<a[^>]*class="mobile-site-brand"[^>]*>Carey<\/a>/.test(html) && /<title>[^<]*Carey[^<]*<\/title>/.test(html) && !html.includes('>Krico<'))],
   ["both CV pages expose the versioned PDFs and download actions", [cv, zhCv].every((html) => Object.values(resumeManifest.resumes).every((resume) => html.includes(`${resume.path}?v=${resume.sha256.slice(0, 12)}`)) && (html.match(/class="resume-preview\b/g) || []).length === 2 && (html.match(/download="/g) || []).length === 3)],
   ["primary downloads retain the requested filenames", [cv, zhCv].every((html) => html.includes('download="ZhihuaWang_cv_en.pdf"') && html.includes('download="ZhihuaWang_cv_cn.pdf"'))],
   ["detailed PDF preview stays in a closed disclosure and inert template", [cv, zhCv].every((html) => /<details[^>]*data-detailed-resume/.test(html) && !/<details[^>]*\bopen\b[^>]*data-detailed-resume/.test(html) && /<template[^>]*data-detailed-template[^>]*>[\s\S]*?<iframe/.test(html))],

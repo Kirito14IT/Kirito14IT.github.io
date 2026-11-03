@@ -6,7 +6,7 @@ const socialProfiles = {
 };
 
 const shared = {
-  name: "Krico",
+  name: "Carey",
   githubUsername: "Kirito14IT",
   siteUrl: "https://kirito14it.github.io",
   email: "2657751462@qq.com",

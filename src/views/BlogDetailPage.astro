@@ -8,7 +8,7 @@ const { Content } = await render(post);
 const dateLocale = locale === "zh" ? "zh-CN" : "en-US";
 ---
 
-<BaseLayout locale={locale} title={`${post.data.title} | Krico`} description={post.data.description}>
+<BaseLayout locale={locale} title={`${post.data.title} | Carey`} description={post.data.description}>
   <article class="article-page">
     <header class="page-header">
       <p class="eyebrow">{post.data.date.toLocaleDateString(dateLocale, { year: "numeric", month: "short", day: "2-digit" })}</p>

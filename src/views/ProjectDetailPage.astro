@@ -8,7 +8,7 @@ const { project, locale } = Astro.props as { project: any; locale: Locale };
 const { Content } = await render(project);
 ---
 
-<BaseLayout locale={locale} title={`${project.data.title} | Krico`} description={project.data.summary}>
+<BaseLayout locale={locale} title={`${project.data.title} | Carey`} description={project.data.summary}>
   <article class="article-page">
     <header class="page-header">
       <p class="eyebrow">{locale === "zh" ? `${project.data.date.getFullYear()} 年项目` : `${project.data.date.getFullYear()} Project`}</p>

@@ -90,7 +90,7 @@ const hasToolbarNavigation = Astro.slots.has("toolbar");
       <main class="main-content">
         <div class:list={["page-toolbar", { "has-navigation": hasToolbarNavigation }]}>
           <nav class="mobile-site-navigation" aria-label={copy.sidebar.navigation}>
-            <a class="mobile-site-brand" href={localizedPath(locale, "/")}>Krico</a>
+            <a class="mobile-site-brand" href={localizedPath(locale, "/")}>{profile.name}</a>
             <a href={localizedPath(locale, "/")}>{copy.nav.home}</a>
             <a href={localizedPath(locale, "/cv/")}>{copy.nav.cv}</a>
             <a href={localizedPath(locale, "/projects/")}>{copy.nav.projects}</a>

@@ -1,5 +1,4 @@
 ---
-import { getCollection } from "astro:content";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import TypingHero from "@components/TypingHero.astro";
 import ContributionGraph from "@components/ContributionGraph.astro";
@@ -9,7 +8,6 @@ import Section from "@components/Section.astro";
 import Timeline from "@components/Timeline.astro";
 import Education from "@components/Education.astro";
 import FieldNotes from "@components/FieldNotes.astro";
-import ProjectCard from "@components/ProjectCard.astro";
 import RepoStars from "@components/RepoStars.astro";
 import ResourceLinks from "@components/ResourceLinks.astro";
 import AISafetyHotProject from "@components/AISafetyHotProject.astro";
@@ -22,13 +20,10 @@ const { locale } = Astro.props as { locale: Locale };
 const profile = getProfile(locale);
 const { news, workExperiences, experiences, publications, awards, skills, services } = getCvData(locale);
 const copy = getUi(locale);
-const allProjects = (await getCollection("projects"))
-  .filter((item) => item.data.locale === locale && item.data.featured)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 4);
 
 const homeJumpLinks = [
   { label: copy.homeJump.homepage, href: "#home" },
+  { label: copy.nav.cv, href: localizedPath(locale, "/cv/") },
   { label: copy.homeJump.about, href: "#about" },
   { label: copy.homeJump.education, href: "#education" },
   { label: copy.homeJump.news, href: "#news" },
@@ -128,11 +123,6 @@ const homeJumpLinks = [
 
   <Section id="projects" title={copy.sections.projects} eyebrow={copy.sections.builds}>
     <AISafetyHotProject locale={locale} />
-    <div class="card-grid">
-      {allProjects.map((item) => (
-        <ProjectCard item={item} locale={locale} href={localizedPath(locale, `/projects/${item.data.translationKey}/`)} />
-      ))}
-    </div>
   </Section>
 
   <FieldNotes locale={locale} showBlogLink />

@@ -107,9 +107,9 @@ export const ui = {
       calendarLabel: "GitHub contribution calendar"
     },
     cv: {
-      eyebrow: "Web CV",
+      eyebrow: "CV",
       title: "Curriculum Vitae",
-      intro: "A public, web-native CV focused on research, projects, internships, awards, and reproducible artifacts.",
+      intro: "Preview or download my English and Chinese CVs.",
       education: "Education",
       workExperience: "Work Experience",
       experience: "Research and Internship Experience",
@@ -221,9 +221,9 @@ export const ui = {
       calendarLabel: "GitHub 贡献日历"
     },
     cv: {
-      eyebrow: "网页版简历",
+      eyebrow: "CV",
       title: "个人简历",
-      intro: "一份聚焦科研、项目、实习、奖项与可复现成果的公开网页版简历。",
+      intro: "在线预览或下载我的中文与英文简历。",
       education: "教育经历",
       workExperience: "工作经历",
       experience: "科研与实习经历",

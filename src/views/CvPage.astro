@@ -6,6 +6,8 @@ import Education from "@components/Education.astro";
 import LearningMap from "@components/LearningMap.astro";
 import ServiceList from "@components/ServiceList.astro";
 import ResourceLinks from "@components/ResourceLinks.astro";
+import ResumeDownloads from "@components/ResumeDownloads.astro";
+import DetailedResume from "@components/DetailedResume.astro";
 import { getCvData } from "@data/cv";
 import { getUi, type Locale } from "@i18n/index";
 
@@ -21,6 +23,12 @@ const copy = getUi(locale);
     <p>{copy.cv.intro}</p>
   </header>
 
+  <ResumeDownloads locale={locale} />
+  <DetailedResume locale={locale} />
+
+  <details class="web-cv">
+    <summary>{locale === "zh" ? "展开网页版履历" : "View web CV"}</summary>
+    <div class="web-cv-content">
   <Education locale={locale} />
 
   <Section id="work-experience" title={copy.cv.workExperience}><Timeline items={workExperiences} /></Section>
@@ -70,4 +78,12 @@ const copy = getUi(locale);
   </Section>
 
   <Section title={copy.cv.learning}><LearningMap locale={locale} /></Section>
+    </div>
+  </details>
 </BaseLayout>
+
+<style>
+  .web-cv { border-top: 1px solid var(--line); padding-top: 20px; }
+  .web-cv summary { cursor: pointer; color: var(--muted); font-weight: 600; }
+  .web-cv-content { padding-top: 20px; }
+</style>

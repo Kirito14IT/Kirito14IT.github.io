@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import { createHash } from "node:crypto";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -40,6 +41,7 @@ const homepage = readRendered();
 const cv = readRendered("cv");
 const zhHomepage = readRendered("zh");
 const zhCv = readRendered("zh", "cv");
+const resumeManifest = JSON.parse(fs.readFileSync(path.join(root, "public/cv/resume-manifest.json"), "utf8"));
 const sfmambaProject = readRendered("projects", "sfmambanet");
 const zhSfmambaProject = readRendered("zh", "projects", "sfmambanet");
 const zhProject = readRendered("zh", "projects", "xsafeclaw");
@@ -78,6 +80,12 @@ const newPaperResources = [
 const publicationCard = (html, title) => (html.match(/<article class="publication-card"[\s\S]*?<\/article>/g) || []).find((card) => card.includes(title)) || "";
 
 const checks = [
+  ["both CV pages expose the versioned PDFs and download actions", [cv, zhCv].every((html) => Object.values(resumeManifest.resumes).every((resume) => html.includes(`${resume.path}?v=${resume.sha256.slice(0, 12)}`)) && (html.match(/class="resume-preview\b/g) || []).length === 2 && (html.match(/download="/g) || []).length === 3)],
+  ["detailed PDF preview stays in a closed disclosure and inert template", [cv, zhCv].every((html) => /<details[^>]*data-detailed-resume/.test(html) && !/<details[^>]*\bopen\b[^>]*data-detailed-resume/.test(html) && /<template[^>]*data-detailed-template[^>]*>[\s\S]*?<iframe/.test(html))],
+  ["published PDF copies match the resume manifest", Object.values(resumeManifest.resumes).every((resume) => createHash("sha256").update(fs.readFileSync(path.join(root, "dist", resume.path))).digest("hex") === resume.sha256)],
+  ["home toolbar links to localized CV pages", homeShortcutNav.includes('href="/cv/">CV</a>') && zhHomeShortcutNav.includes('href="/zh/cv/">简历</a>')],
+  ["duplicate homepage project cards are removed", [homepage, zhHomepage].every((html) => !(html.match(/<section id="projects"[\s\S]*?<\/section>/)?.[0] || "").includes('class="card-grid"'))],
+  ["web CV remains optional behind a collapsed disclosure", [cv, zhCv].every((html) => /<details class="web-cv\b/.test(html) && !/<details[^>]*class="web-cv[^>]*\bopen\b/.test(html))],
   ["About includes bilingual internship search copy and an email contact", [[homepage, "Seeking internships:", "I am currently seeking internship opportunities in foundation models, agent post-training, and LLM evaluation."], [zhHomepage, "实习求职：", "我近期正在寻找基座大模型、智能体后训练（Agent Post-Training）及大模型评测相关的实习机会。"]].every(([html, title, description]) => { const about = html.match(/<section id="about"[\s\S]*?<\/section>/)?.[0] || ""; return about.includes(title) && about.includes(description) && about.includes('href="mailto:2657751462@qq.com"'); })],
   ["homepage Blog shortcut and section heading are localized", homeShortcutNav.includes('href="#field-notes">Blog</a>') && zhHomeShortcutNav.includes('href="#field-notes">博客</a>') && homepage.includes("<h2>Blog</h2>") && zhHomepage.includes("<h2>博客</h2>") && !zhHomeShortcutNav.includes("技术笔记")],
   ["both new papers have linked publication cards on bilingual home and CV pages", [homepage, zhHomepage, cv, zhCv].every((html) => newPaperResources.every(({title, paper, code}) => { const card = publicationCard(html, title); return card.includes(`href="${paper}"`) && card.includes(`href="${code}"`) && card.includes("WWW 2027") && /arXiv preprint|arXiv 预印本/.test(card); }))],

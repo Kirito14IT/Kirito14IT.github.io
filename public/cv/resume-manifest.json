@@ -1,0 +1,23 @@
+{
+    "schemaVersion":  1,
+    "resumes":  {
+                    "en":  {
+                               "path":  "/cv/ZhihuaWang_cv_en.pdf",
+                               "updatedDate":  "2026-11-04",
+                               "sha256":  "d7a9e6a582ff66d099e9efc205adc329f261421301e2ac2b388930c54e40ddcd",
+                               "pageCount":  2
+                           },
+                    "zh":  {
+                               "path":  "/cv/ZhihuaWang_cv_cn.pdf",
+                               "updatedDate":  "2026-11-04",
+                               "sha256":  "5dbd03bb51900b923001d18da979530f896f8bdcc08f0aeb2c870715ce28afc3",
+                               "pageCount":  1
+                           },
+                    "zhDetailed":  {
+                                       "path":  "/cv/resume-zh_CN-detailed-20261101.pdf",
+                                       "updatedDate":  "2026-11-04",
+                                       "sha256":  "c88ba410f552dbd25f394db23e20ac18f54eb87339f65614c65fe322ca9d03bc",
+                                       "pageCount":  1
+                                   }
+                }
+}

@@ -29,7 +29,7 @@ http://localhost:4321/
 
 ## 部署流程
 
-我不会自动执行 `git commit`、`git push` 或创建远程仓库，除非你明确确认。
+`main` 分支推送后，GitHub Actions 会构建并发布网站。中英文 PDF 简历由本地同步脚本自动更新。
 
 如果你要自己部署：
 
@@ -55,7 +55,7 @@ gh repo create Kirito14IT/Kirito14IT.github.io --public --source . --remote orig
 - 首页能看到打字/删除动画。
 - 首页能看到 GitHub Commit Activity 贡献图。
 - `/cv/`、`/projects/`、`/blog/` 都能打开。
-- 页面不展示手机号、精确住址、绩点、具体排名、具体课程分数。
+- CV 页面主要展示英文版与简洁中文版 PDF；指定的详细中文版默认折叠，点击后才加载预览。
 - 如果 GitHub 贡献图加载失败，页面会显示降级提示，不影响部署。
 
 ## 后续需要你补充
@@ -64,3 +64,12 @@ gh repo create Kirito14IT/Kirito14IT.github.io --public --source . --remote orig
 - SafeCodeRL 和 SFMambaNet 的 arXiv 链接。
 - 是否公开更多项目仓库链接。
 - 是否继续使用当前公开邮箱 `2657751462@qq.com`，还是换成 Gmail 或学校邮箱。
+
+## 中英文 PDF 简历
+
+- 中文页面：https://kirito14it.github.io/zh/cv/
+- English page: https://kirito14it.github.io/cv/
+- 主要展示 `public/cv/ZhihuaWang_cv_en.pdf` 和 `public/cv/ZhihuaWang_cv_cn.pdf`，英文内容由简洁中文版翻译而来；详细版 `resume-zh_CN-detailed-20261101.pdf` 放在默认折叠区域。
+- `public/cv/resume-manifest.json` 记录每份 PDF 的更新时间、页数和 SHA-256；预览地址使用内容哈希更新缓存。
+- 本地源文件是 `D:\Resume\resume\ZhihuaWang_cv_en.tex`、`ZhihuaWang_cv_cn.tex` 与详细版源文件；自动编译和同步脚本及使用说明位于该目录的 `scripts` 文件夹。
+- 本地保存修改后，由后台监测程序编译并提交对应 PDF；GitHub Pages 随后发布。电脑离线时保留待同步状态，联网后重试。

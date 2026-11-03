@@ -5,6 +5,7 @@ import Timeline from "@components/Timeline.astro";
 import Education from "@components/Education.astro";
 import LearningMap from "@components/LearningMap.astro";
 import ServiceList from "@components/ServiceList.astro";
+import ResourceLinks from "@components/ResourceLinks.astro";
 import { getCvData } from "@data/cv";
 import { getUi, type Locale } from "@i18n/index";
 
@@ -38,6 +39,7 @@ const copy = getUi(locale);
             {item.ratings && <div class="rating-pills">{item.ratings.map((rating) => <span>{rating}</span>)}</div>}
           </div>
           <div class="tag-list">{item.tags.map((tag) => <span>{tag}</span>)}</div>
+          {item.links && <ResourceLinks links={item.links} />}
           {item.frameworkImage && (
             <figure class="framework-preview">
               <img src={item.frameworkImage} alt={item.frameworkAlt} loading="lazy" />

@@ -21,6 +21,10 @@ const aiSafetyHotUrl = "https://github.com/wuyoscar/AISafetyHot";
 const promptSpiderUrl = "https://github.com/Kirito14IT/prompt-spider-ui";
 const memHarmBenchTitle = "MemHarmBench: Evaluating Cross-Session Prompt Injection in Memory-Persistent AI Agents";
 const cstTitle = "CST: Lightweight Risk Triage with Source-Grounded Evidence for Web Discussions";
+const memHarmBenchPaperUrl = "https://arxiv.org/abs/2611.01700";
+const memHarmBenchCodeUrl = "https://github.com/Kirito14IT/MemHarmBench";
+const cstPaperUrl = "https://arxiv.org/abs/2611.01710";
+const cstCodeUrl = "https://github.com/Kirito14IT/CST-MIL";
 
 type Link = { label: string; url: string; logo?: string };
 type RichText = string | { html: string };
@@ -32,6 +36,7 @@ export type NewsItem = {
   html?: string;
   jumpTo?: string;
   starRepos?: StarRepo[];
+  links?: Link[];
 };
 
 export type TimelineItem = {
@@ -56,6 +61,7 @@ export type PublicationItem = {
   role: string;
   year: string;
   url?: string;
+  links?: Link[];
   tags: string[];
   ratings?: string[];
   frameworkImage?: string;
@@ -112,11 +118,13 @@ const cvEn: CvData = {
   news: [
     {
       date: "Oct 26, 2026",
-      html: `Submitted <strong>${memHarmBenchTitle}</strong> to The Web Conference (WWW 2027).`
+      html: `Submitted <a href="${memHarmBenchPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>${memHarmBenchTitle}</strong></a> to The Web Conference (WWW 2027).`,
+      links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "Code", url: memHarmBenchCodeUrl }]
     },
     {
       date: "Oct 26, 2026",
-      html: `Submitted <strong>${cstTitle}</strong> to The Web Conference (WWW 2027).`
+      html: `Submitted <a href="${cstPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>${cstTitle}</strong></a> to The Web Conference (WWW 2027).`,
+      links: [{ label: "arXiv", url: cstPaperUrl }, { label: "Code", url: cstCodeUrl }]
     },
     {
       date: "Oct 21, 2026",
@@ -362,6 +370,27 @@ const cvEn: CvData = {
   ],
   publications: [
     {
+      title: memHarmBenchTitle,
+      status: "arXiv preprint; submitted to WWW 2027",
+      role: "First author",
+      year: "2026",
+      url: memHarmBenchPaperUrl,
+      links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "Code", url: memHarmBenchCodeUrl }],
+      tags: ["LLM Agents", "Persistent Memory", "Cross-Session Prompt Injection", "Victim-Centric Evaluation", "Agent Safety", "Benchmark"],
+      frameworkImage: "/figures/memharmbench-cross-session-en.webp",
+      frameworkAlt: "MemHarmBench Figure 1: an instruction from an external note is retained in memory; after the note is removed, a new session completes the expense summary but changes its recipient to the attacker's choice.",
+      frameworkCaption: "Figure 1 · Cross-session prompt injection can remain hidden behind successful task completion."
+    },
+    {
+      title: cstTitle,
+      status: "arXiv preprint; submitted to WWW 2027",
+      role: "First author",
+      year: "2026",
+      url: cstPaperUrl,
+      links: [{ label: "arXiv", url: cstPaperUrl }, { label: "Code", url: cstCodeUrl }],
+      tags: ["Risk Triage", "Source-Grounded Evidence", "Web Discussions", "Multilingual NLP", "CPU Inference"]
+    },
+    {
       title: "ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages",
       status: "Under review at AAAI 2027",
       role: "Co-first author",
@@ -515,11 +544,13 @@ const cvZh: CvData = {
   news: [
     {
       date: "2026年10月26日",
-      html: `论文 <strong>${memHarmBenchTitle}</strong> 已投稿至 The Web Conference（WWW 2027）。`
+      html: `论文 <a href="${memHarmBenchPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>${memHarmBenchTitle}</strong></a> 已投稿至 The Web Conference（WWW 2027）。`,
+      links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "代码", url: memHarmBenchCodeUrl }]
     },
     {
       date: "2026年10月26日",
-      html: `论文 <strong>${cstTitle}</strong> 已投稿至 The Web Conference（WWW 2027）。`
+      html: `论文 <a href="${cstPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>${cstTitle}</strong></a> 已投稿至 The Web Conference（WWW 2027）。`,
+      links: [{ label: "arXiv", url: cstPaperUrl }, { label: "代码", url: cstCodeUrl }]
     },
     {
       date: "2026年10月21日",
@@ -761,6 +792,27 @@ const cvZh: CvData = {
     }
   ],
   publications: [
+    {
+      title: memHarmBenchTitle,
+      status: "arXiv 预印本；已投稿至 WWW 2027",
+      role: "第一作者",
+      year: "2026",
+      url: memHarmBenchPaperUrl,
+      links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "代码", url: memHarmBenchCodeUrl }],
+      tags: ["LLM 智能体", "持久记忆", "跨会话提示注入", "受害者中心评测", "智能体安全", "评测基准"],
+      frameworkImage: "/figures/memharmbench-cross-session-zh.webp",
+      frameworkAlt: "MemHarmBench 图 1：外部笔记中的恶意指令被保留为记忆；原始笔记移除后，智能体在新会话中完成费用汇总，却将收款方改为攻击者指定对象。",
+      frameworkCaption: "图 1 · 跨会话提示注入可能隐藏在成功完成的任务背后。"
+    },
+    {
+      title: cstTitle,
+      status: "arXiv 预印本；已投稿至 WWW 2027",
+      role: "第一作者",
+      year: "2026",
+      url: cstPaperUrl,
+      links: [{ label: "arXiv", url: cstPaperUrl }, { label: "代码", url: cstCodeUrl }],
+      tags: ["风险分诊", "来源可追溯证据", "网络讨论", "多语言自然语言处理", "CPU 推理"]
+    },
     {
       title: "ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages",
       status: "AAAI 2027 在投",

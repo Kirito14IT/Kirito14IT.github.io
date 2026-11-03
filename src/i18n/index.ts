@@ -132,11 +132,11 @@ export const ui = {
       intro: "Technical notes, reproducible debugging write-ups, reading logs, and research retrospectives."
     },
     fieldNotes: {
-      title: "Field Notes",
+      title: "Blog",
       eyebrow: "Debugging in practice",
       intro: "Public notes from real debugging sessions, with evidence, reusable scripts, and unresolved issues kept visible.",
       open: "Read on GitHub ↗",
-      allNotes: "More notes and retrospectives →"
+      allNotes: "View all blog posts →"
     },
     serviceWatermark: "REVIEW",
     footer: {
@@ -246,11 +246,11 @@ export const ui = {
       intro: "记录技术笔记、可复现的故障排查、论文阅读与科研复盘。"
     },
     fieldNotes: {
-      title: "技术笔记",
+      title: "博客",
       eyebrow: "实践与排障",
       intro: "公开真实排障过程，保留验证证据、可复用脚本与尚未解决的问题，便于他人查阅和复现。",
       open: "前往 GitHub 阅读 ↗",
-      allNotes: "更多笔记与复盘 →"
+      allNotes: "查看全部博客 →"
     },
     serviceWatermark: "审稿",
     footer: {

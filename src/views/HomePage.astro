@@ -11,6 +11,7 @@ import Education from "@components/Education.astro";
 import FieldNotes from "@components/FieldNotes.astro";
 import ProjectCard from "@components/ProjectCard.astro";
 import RepoStars from "@components/RepoStars.astro";
+import ResourceLinks from "@components/ResourceLinks.astro";
 import AISafetyHotProject from "@components/AISafetyHotProject.astro";
 import VisitorMap from "@components/VisitorMap.astro";
 import { getProfile } from "@data/profile";
@@ -79,6 +80,7 @@ const homeJumpLinks = [
           )}
           <time>{item.date}</time>
           {item.html ? <p set:html={item.html} /> : <p>{item.text}</p>}
+          {item.links && <ResourceLinks links={item.links} />}
           {item.starRepos && <RepoStars repos={item.starRepos} />}
         </article>
       ))}
@@ -105,6 +107,7 @@ const homeJumpLinks = [
             {item.ratings && <div class="rating-pills">{item.ratings.map((rating) => <span>{rating}</span>)}</div>}
           </div>
           <div class="tag-list">{item.tags.map((tag) => <span>{tag}</span>)}</div>
+          {item.links && <ResourceLinks links={item.links} />}
           {item.frameworkImage && (
             <figure class="framework-preview">
               <img src={item.frameworkImage} alt={item.frameworkAlt} loading="lazy" />

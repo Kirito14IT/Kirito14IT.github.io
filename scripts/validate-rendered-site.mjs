@@ -81,6 +81,7 @@ const publicationCard = (html, title) => (html.match(/<article class="publicatio
 
 const checks = [
   ["both CV pages expose the versioned PDFs and download actions", [cv, zhCv].every((html) => Object.values(resumeManifest.resumes).every((resume) => html.includes(`${resume.path}?v=${resume.sha256.slice(0, 12)}`)) && (html.match(/class="resume-preview\b/g) || []).length === 2 && (html.match(/download="/g) || []).length === 3)],
+  ["primary downloads retain the requested filenames", [cv, zhCv].every((html) => html.includes('download="ZhihuaWang_cv_en.pdf"') && html.includes('download="ZhihuaWang_cv_cn.pdf"'))],
   ["detailed PDF preview stays in a closed disclosure and inert template", [cv, zhCv].every((html) => /<details[^>]*data-detailed-resume/.test(html) && !/<details[^>]*\bopen\b[^>]*data-detailed-resume/.test(html) && /<template[^>]*data-detailed-template[^>]*>[\s\S]*?<iframe/.test(html))],
   ["published PDF copies match the resume manifest", Object.values(resumeManifest.resumes).every((resume) => createHash("sha256").update(fs.readFileSync(path.join(root, "dist", resume.path))).digest("hex") === resume.sha256)],
   ["home toolbar links to localized CV pages", homeShortcutNav.includes('href="/cv/">CV</a>') && zhHomeShortcutNav.includes('href="/zh/cv/">简历</a>')],

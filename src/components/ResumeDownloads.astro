@@ -6,8 +6,8 @@ const { locale } = Astro.props as { locale: Locale };
 const isChinese = locale === "zh";
 const languages = isChinese ? ["zh", "en"] as const : ["en", "zh"] as const;
 const labels = {
-  zh: { title: "中文简历", language: "zh-CN", filename: "Wang-Zhihua-CV-CN.pdf" },
-  en: { title: "English CV", language: "en", filename: "Zhihua-Wang-CV-EN.pdf" }
+  zh: { title: "中文简历", language: "zh-CN", filename: "ZhihuaWang_cv_cn.pdf" },
+  en: { title: "English CV", language: "en", filename: "ZhihuaWang_cv_en.pdf" }
 };
 ---
 

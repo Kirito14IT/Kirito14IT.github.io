@@ -4,7 +4,6 @@ import BaseLayout from "@layouts/BaseLayout.astro";
 import TypingHero from "@components/TypingHero.astro";
 import ContributionGraph from "@components/ContributionGraph.astro";
 import ContactLinks from "@components/ContactLinks.astro";
-import LearningMap from "@components/LearningMap.astro";
 import ServiceList from "@components/ServiceList.astro";
 import Section from "@components/Section.astro";
 import Timeline from "@components/Timeline.astro";
@@ -129,10 +128,6 @@ const homeJumpLinks = [
   </Section>
 
   <FieldNotes locale={locale} showBlogLink />
-
-  <Section id="learning-map" title={copy.sections.learning} eyebrow={copy.sections.knowledge}>
-    <LearningMap locale={locale} />
-  </Section>
 
   <Section id="awards-skills" title={copy.sections.awardsSkills} eyebrow={copy.sections.signals}>
     <div class="two-column">

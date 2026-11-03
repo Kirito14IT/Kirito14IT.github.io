@@ -73,6 +73,8 @@ const demoAssets = ["observatory.gif", "observatory-poster.webp"];
 const projectShowcases = [homepage, zhHomepage].map((html) => html.match(/<section id="projects"[\s\S]*?<\/section>/)?.[0] || "").concat(readRendered("projects"), readRendered("zh", "projects"));
 
 const checks = [
+  ["bilingual homepages omit the learning map and percentage cards", [homepage, zhHomepage].every((html) => !html.includes('id="learning-map"') && !html.includes('class="learning-grid"') && !html.includes('class="progress-track"')) && !homepage.includes("Knowledge progress") && !zhHomepage.includes("知识进展")],
+  ["standalone blog pages and navigation use Blog and 博客", readRendered("blog").includes("<h1>Blog</h1>") && readRendered("zh", "blog").includes("<h1>博客</h1>") && homepage.includes('href="/blog/">Blog</a>') && zhHomepage.includes('href="/zh/blog/">博客</a>') && !zhHomepage.includes("技术博客")],
   ["all 22 bilingual routes are generated", expectedRoutes.length === 22],
   ["English root uses the correct lang", homepage.includes('<html lang="en"')],
   ["Chinese root uses the correct lang", zhHomepage.includes('<html lang="zh-CN"')],

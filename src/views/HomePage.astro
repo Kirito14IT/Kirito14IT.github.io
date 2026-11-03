@@ -53,6 +53,11 @@ const homeJumpLinks = [
   <Section id="about" title={copy.sections.about} eyebrow={copy.sections.profile}>
     <div class="glass-card prose-card">
       <p>{profile.bio}</p>
+      <p>
+        <strong>{profile.internshipSearch.title}</strong>{" "}
+        {profile.internshipSearch.description}{" "}
+        <a href={`mailto:${profile.email}`}>{profile.internshipSearch.contactLabel}</a>
+      </p>
       <h3>{copy.hero.kicker}</h3>
       <ul class="clean-list">
         {profile.researchFocus.map((focus) => <li>{focus}</li>)}

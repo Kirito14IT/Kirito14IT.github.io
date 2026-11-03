@@ -30,19 +30,25 @@ export const profiles = {
     incomingTitle: "Incoming M.Sc. Student, Fudan University (2027)",
     advisorName: "Xingjun Ma",
     tagline:
-      "I study LLM agents, reinforcement learning for agents (Agent RL), and agent safety, with an interest in reliable reasoning, memory, and tool use.",
+      "I study LLM agents, agent post-training, reinforcement learning for agents (Agent RL), and agent safety, with an interest in reliable reasoning, memory, and tool use.",
     bio:
-      "I am a senior undergraduate student in Computer Science and Technology (Class of 2023) at the University of Shanghai for Science and Technology (USST). I will begin my M.Sc. studies at Fudan University in 2027, advised by Xingjun Ma. I am currently a research intern at the Institute of Trustworthy Embodied Artificial Intelligence (TEAI), Fudan University. My research interests center on LLM agents, reinforcement learning for agents (Agent RL), and agent safety. Feel free to get in touch.",
+      "I am a senior undergraduate student in Computer Science and Technology (Class of 2023) at the University of Shanghai for Science and Technology (USST). I will begin my M.Sc. studies at Fudan University in 2027, advised by Xingjun Ma. I am currently a research intern at Fudan Vision and Learning Lab (FVL) and the Institute of Trustworthy Embodied Artificial Intelligence (TEAI), Fudan University. My research interests center on LLM agents, agent post-training, reinforcement learning for agents (Agent RL), and agent safety. Feel free to get in touch.",
     contactNote:
       "Please feel free to reach out by email for academic discussion, research collaboration, open-source projects, or learning exchange.",
+    internshipSearch: {
+      title: "Seeking internships:",
+      description: "I am currently seeking internship opportunities in foundation models, agent post-training, and LLM evaluation.",
+      contactLabel: "Recruiters and research teams are welcome to contact me by email."
+    },
     researchFocus: [
-      "Reinforcement learning for LLM agents (Agent RL), reasoning, and tool use.",
+      "Agent post-training and reinforcement learning (Agent RL) for LLM agents, with a focus on reasoning and tool use.",
       "Agent safety, memory security, and cross-session prompt injection.",
       "Multi-agent collaboration and safety-constrained code generation.",
-      "Reliable agent evaluation, software security analysis, and practical agent systems."
+      "Reliable agent evaluation and practical agent systems."
     ],
     focusWords: [
       { text: "LLM Agents", color: "#2563eb" },
+      { text: "Agent Post-Training", color: "#0891b2" },
       { text: "Agent RL", color: "#7c3aed" },
       { text: "Agent Safety", color: "#db2777" },
       { text: "Agent Memory", color: "#f59e0b" },
@@ -51,12 +57,12 @@ export const profiles = {
     ],
     interests: [
       "LLM Agents",
+      "Agent Post-Training",
       "Agent RL",
       "Agent Safety",
       "Multi-Agent Systems",
       "Agent Memory",
       "Trustworthy AI",
-      "Software Security Analysis",
       "Embodied Intelligence"
     ],
     links: [
@@ -68,12 +74,7 @@ export const profiles = {
         displayUrl: "Academic publications and citations"
       },
       { label: "Douyin", url: socialProfiles.douyin, displayUrl: "@Kirito14IT" },
-      { label: "Xiaohongshu", url: socialProfiles.xiaohongshu, displayUrl: "@998244353_plus" },
-      {
-        label: "XSafeClaw",
-        url: "https://github.com/XSafeAI/XSafeClaw",
-        displayUrl: "https://github.com/XSafeAI/XSafeClaw"
-      }
+      { label: "Xiaohongshu", url: socialProfiles.xiaohongshu, displayUrl: "@998244353_plus" }
     ],
     representativeLinks: [
       {
@@ -112,25 +113,31 @@ export const profiles = {
     title: "计算机科学与技术专业大四本科生",
     incomingTitle: "复旦大学 2027 级准硕士生",
     advisorName: "马兴军",
-    tagline: "聚焦大语言模型智能体、智能体强化学习（Agent RL）与智能体安全，关注可靠推理、记忆与工具使用。",
+    tagline: "聚焦大语言模型智能体、智能体后训练、智能体强化学习（Agent RL）与智能体安全，关注可靠推理、记忆与工具使用。",
     bio:
-      "我是上海理工大学计算机科学与技术专业 2023 级本科生，目前大四在读。我将于 2027 年进入复旦大学攻读硕士学位，导师为马兴军老师。目前，我正在复旦大学可信具身智能研究院（TEAI）进行科研实习，研究兴趣聚焦大语言模型智能体、智能体强化学习（Agent RL）与智能体安全。欢迎与我联系交流。",
+      "我是上海理工大学计算机科学与技术专业 2023 级本科生，目前大四在读。我将于 2027 年进入复旦大学攻读硕士学位，导师为马兴军老师。目前，我正在复旦大学视觉与学习实验室（FVL）&可信具身智能研究院（TEAI）进行科研实习，研究兴趣聚焦大语言模型智能体、智能体后训练、智能体强化学习（Agent RL）与智能体安全。欢迎与我联系交流。",
     contactNote: "欢迎通过邮件与我开展学术讨论、科研合作、开源项目协作或学习交流。",
+    internshipSearch: {
+      title: "实习求职：",
+      description: "我近期正在寻找基座大模型、智能体后训练（Agent Post-Training）及大模型评测相关的实习机会。",
+      contactLabel: "欢迎 HR 及研究团队通过邮件联系我。"
+    },
     researchFocus: [
-      "面向大语言模型智能体的强化学习（Agent RL）、推理与工具使用。",
+      "面向大语言模型智能体的后训练（Agent Post-Training）与强化学习（Agent RL），关注推理与工具使用。",
       "智能体安全、记忆安全与跨会话提示注入。",
       "多智能体协作与安全约束代码生成。",
-      "可靠智能体评测、软件安全分析与智能体系统实践。"
+      "可靠智能体评测与智能体系统实践。"
     ],
     focusWords: [
       { text: "LLM 智能体", color: "#2563eb" },
+      { text: "智能体后训练", color: "#0891b2" },
       { text: "Agent RL", color: "#7c3aed" },
       { text: "智能体安全", color: "#db2777" },
       { text: "智能体记忆", color: "#f59e0b" },
       { text: "多智能体系统", color: "#0891b2" },
       { text: "具身智能", color: "#16a34a" }
     ],
-    interests: ["LLM 智能体", "Agent RL", "智能体安全", "多智能体系统", "智能体记忆", "可信人工智能", "软件安全分析", "具身智能"],
+    interests: ["LLM 智能体", "智能体后训练", "Agent RL", "智能体安全", "多智能体系统", "智能体记忆", "可信人工智能", "具身智能"],
     links: [
       { label: "邮箱", url: "mailto:2657751462@qq.com", displayUrl: "2657751462@qq.com" },
       { label: "GitHub", url: "https://github.com/Kirito14IT", displayUrl: "https://github.com/Kirito14IT" },
@@ -140,12 +147,7 @@ export const profiles = {
         displayUrl: "学术论文与引用记录"
       },
       { label: "抖音", url: socialProfiles.douyin, displayUrl: "@Kirito14IT" },
-      { label: "小红书", url: socialProfiles.xiaohongshu, displayUrl: "@998244353_plus" },
-      {
-        label: "XSafeClaw",
-        url: "https://github.com/XSafeAI/XSafeClaw",
-        displayUrl: "https://github.com/XSafeAI/XSafeClaw"
-      }
+      { label: "小红书", url: socialProfiles.xiaohongshu, displayUrl: "@998244353_plus" }
     ],
     representativeLinks: [
       {

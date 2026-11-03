@@ -200,8 +200,13 @@ const cvEn: CvData = {
   ],
   workExperiences: [
     {
-      title: "The Third Research Institute of the Ministry of Public Security - Cybersecurity Center (Shanghai), Research Engineer (Online)",
-      period: "Apr 2026 - Present"
+      title: "AI Research Intern, Key Laboratory of Information Network Security, Ministry of Public Security (Third Research Institute, Shanghai)",
+      period: "Apr 2026 - Present",
+      bullets: [
+        { html: "<strong>Advisor:</strong> Songyang Wu" },
+        { html: "<strong>Project 1:</strong> Independently built a pipeline for joint analysis of webpage text, images, and URLs and localization of fraud evidence, producing <strong>one sole-first-author paper</strong>." },
+        { html: "<strong>Project 2:</strong> Designed a <strong>lightweight algorithm for short-text risk-topic discovery</strong>, combining character and frozen semantic features to aggregate risk evidence from group chats and enable rapid CPU-based screening." }
+      ]
     },
     {
       title: "International Organization (United Nations Volunteers) - UNDP, Research Intern (Online)",
@@ -361,7 +366,7 @@ const cvEn: CvData = {
       tags: ["ACM", "Competitive Programming", "Algorithms", "Data Structures"],
       bullets: [
         "Completed systematic training in algorithms, data structures, and contest problem solving.",
-        "Earned a National First Prize in the 2025 RAICOM Robot Developer Competition, a Silver Award at the 2025 CCPC Shanghai Collegiate Programming Contest, and a National Second Prize in the 2025 LanQiao Cup C/C++ competition."
+        "Earned a National First Prize in the 2025 RAICOM Robot Developer Competition, a Silver Award at the 2025 ACM Shanghai Collegiate Programming Contest, and a National Second Prize in the 2025 LanQiao Cup C/C++ competition."
       ],
       links: [
         { label: "ACM Programming Training Team", url: usstAcmUrl }
@@ -459,9 +464,9 @@ const cvEn: CvData = {
     },
     "National First Prize, RAICOM Robot Developer Competition, 2025",
     "National Second Prize, LanQiao Cup C/C++ Programming Contest, 2025",
-    "Silver Award, CCPC Shanghai Collegiate Programming Contest, 2025",
+    { html: "<strong>Silver Award</strong>, 2025 ACM Shanghai Collegiate Programming Contest" },
     "National Second Prize, National Computer Competency Challenge (2 awards)",
-    "National Encouragement Scholarship, Three-time Recipient",
+    "National Encouragement Scholarship, Five-time Recipient",
     "Scholarships: First Class (2 awards), Second Class (3 awards), Third Class (2 awards)",
     "National Third Prize, National English Competition for College Students, 2025",
     "Shanghai First Prize, National College Student Mathematics Competition, 2024",
@@ -623,8 +628,13 @@ const cvZh: CvData = {
   ],
   workExperiences: [
     {
-      title: "公安部第三研究所-网安中心部门（上海），科研工程师（线上）",
-      period: "2026年4月 - 至今"
+      title: "信息网络安全公安部重点实验室（公安部第三研究所，上海），AI 研究实习生",
+      period: "2026年4月 - 至今",
+      bullets: [
+        { html: "<strong>导师：</strong>吴松洋" },
+        { html: "<strong>项目 1：</strong>独立构建网页图文与 URL 联合分析及诈骗证据定位流程，完成<strong>独立一作论文 1 篇</strong>。" },
+        { html: "<strong>项目 2：</strong>设计<strong>轻量级短文本风险主题发现算法</strong>，融合字符与冻结语义特征，聚合群聊风险证据，支持 CPU 快速筛查。" }
+      ]
     },
     {
       title: "国际组织（联合国志愿人员组织）- UNDP，研究实习生（线上）",
@@ -784,7 +794,7 @@ const cvZh: CvData = {
       tags: ["ACM", "程序设计竞赛", "算法", "数据结构"],
       bullets: [
         "系统训练算法、数据结构与竞赛问题求解能力。",
-        "期间获得 2025 年睿抗机器人开发者大赛国家级一等奖、2025 年 CCPC 上海站银奖以及 2025 年蓝桥杯 C/C++ 组全国二等奖。"
+        "期间获得 2025 年睿抗机器人开发者大赛国家级一等奖、2025 ACM 上海站大学生程序设计竞赛银奖以及 2025 年蓝桥杯 C/C++ 组全国二等奖。"
       ],
       links: [
         { label: "ACM 程序设计集训队", url: usstAcmUrl }
@@ -800,7 +810,7 @@ const cvZh: CvData = {
       url: memHarmBenchPaperUrl,
       links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "代码", url: memHarmBenchCodeUrl }],
       tags: ["LLM 智能体", "持久记忆", "跨会话提示注入", "受害者中心评测", "智能体安全", "评测基准"],
-      frameworkImage: "/figures/memharmbench-cross-session-zh.webp",
+      frameworkImage: "/figures/memharmbench-cross-session-en.webp",
       frameworkAlt: "MemHarmBench 图 1：外部笔记中的恶意指令被保留为记忆；原始笔记移除后，智能体在新会话中完成费用汇总，却将收款方改为攻击者指定对象。",
       frameworkCaption: "图 1 · 跨会话提示注入可能隐藏在成功完成的任务背后。"
     },
@@ -882,9 +892,9 @@ const cvZh: CvData = {
     },
     "2025 年睿抗机器人开发者大赛国家级一等奖",
     "2025 年蓝桥杯 C/C++ 程序设计竞赛全国二等奖",
-    "2025 年中国大学生程序设计竞赛（CCPC）上海站银奖",
+    { html: "2025 ACM 上海站大学生程序设计竞赛 <strong>银奖</strong>" },
     "全国计算机能力挑战赛国家级二等奖（2 次）",
-    "国家励志奖学金（3 次）",
+    "国家励志奖学金（5 次）",
     "奖学金一等奖（2 次）、二等奖（3 次）、三等奖（2 次）",
     "2025 年全国大学生英语竞赛全国三等奖",
     "2024 年全国大学生数学竞赛上海市一等奖",

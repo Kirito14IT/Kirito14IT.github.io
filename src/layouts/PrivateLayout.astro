@@ -1,0 +1,43 @@
+---
+import { createHash } from "node:crypto";
+import "@styles/intern.css";
+
+// A bare layout for pages that are not part of the public site: no navigation, no
+// third-party widgets, nothing for search engines, and a strict content security policy.
+const { title = "Private" } = Astro.props as { title?: string };
+
+const themeScript = `(()=>{try{document.documentElement.dataset.theme=localStorage.getItem("krico-theme")==="dark"?"dark":"light"}catch{}})();`;
+const themeHash = createHash("sha256").update(themeScript).digest("base64");
+const contentSecurityPolicy = [
+  "default-src 'self'",
+  `script-src 'self' 'sha256-${themeHash}'`,
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data:",
+  "font-src 'self'",
+  "connect-src 'self' https://api.github.com",
+  "object-src 'none'",
+  "frame-src 'none'",
+  "base-uri 'none'",
+  "form-action 'none'"
+].join("; ");
+// The dev server injects its own inline scripts, so the policy only ships in builds.
+const enforcePolicy = !import.meta.env.DEV;
+---
+
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
+    <meta name="referrer" content="no-referrer" />
+    {enforcePolicy && <meta http-equiv="Content-Security-Policy" content={contentSecurityPolicy} />}
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <title>{title}</title>
+    <script is:inline set:html={themeScript}></script>
+  </head>
+  <body class="it-body">
+    <slot />
+  </body>
+</html>

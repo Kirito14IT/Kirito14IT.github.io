@@ -82,6 +82,18 @@ const octoberReleaseCard = (cards, title, date) => cards.find((card) => card.inc
 const recommendationImage = "/news/memharmbench-alpha-sight-recommendation-20261104.png";
 const labHeadUrl = "https://baike.baidu.com/item/%E5%A7%9C%E8%82%B2%E5%88%9A/22131913";
 const timelineCards = (html) => html.match(/<article class="timeline-item"[\s\S]*?<\/article>/g) || [];
+const privatePage = readRendered("zh", "intern");
+const privateAssets = [...privatePage.matchAll(/(?:src|href)="(\/_astro\/[^"]+\.(?:js|css))"/g)].map((match) => fs.readFileSync(path.join(root, "dist", match[1]), "utf8"));
+const renderedPages = (dir) =>
+  fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) return renderedPages(full);
+    return entry.name.endsWith(".html") ? [full] : [];
+  });
+const publicPages = renderedPages(path.join(root, "dist"))
+  .filter((file) => !file.includes(path.join("dist", "zh", "intern")))
+  .map((file) => fs.readFileSync(file, "utf8"));
+const emailLike = /[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.[A-Za-z]{2,}/;
 
 const checks = [
   ["Carey branding appears in bilingual home and CV titles and navigation", [homepage, zhHomepage, cv, zhCv].every((html) => html.includes('<h1>Carey</h1>') && /<a[^>]*class="mobile-site-brand"[^>]*>Carey<\/a>/.test(html) && /<title>[^<]*Carey[^<]*<\/title>/.test(html) && !html.includes('>Krico<'))],
@@ -196,7 +208,12 @@ const checks = [
   ["SFMambaNet News links the FZU laboratory and advisor in both languages", homepage.includes('Fujian Key Laboratory of Network Computing and Intelligent Information Processing</a> at Fuzhou University') && homepage.includes('Advisor Yizhang Liu</a>, began SFMambaNet research') && zhHomepage.includes('加入福州大学<a href="https://ncip.fzu.edu.cn/index.htm"') && zhHomepage.includes('导师刘翼章</a>指导下启动 SFMambaNet 研究')],
   ["SFMambaNet CV and project pages use the verified advisor name and links", cv.includes("Advisor Yizhang Liu") && zhCv.includes("导师刘翼章") && sfmambaProject.includes("https://ccds.fzu.edu.cn/info/1207/11276.htm") && zhSfmambaProject.includes("导师刘翼章")],
   ["old misspelling of the SFMambaNet advisor is removed", !zhHomepage.includes("刘一璋") && !zhCv.includes("刘一璋") && !zhSfmambaProject.includes("刘一璋")],
-  ["academic honorifics remain removed for the two advisors", !homepage.includes("Prof. Jingfeng Zhang") && !homepage.includes("Dr. Xingjun Ma")]
+  ["academic honorifics remain removed for the two advisors", !homepage.includes("Prof. Jingfeng Zhang") && !homepage.includes("Dr. Xingjun Ma")],
+  ["standalone page stays out of search results and sends no referrer", privatePage.includes('<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">') && privatePage.includes('<meta name="referrer" content="no-referrer">')],
+  ["standalone page ships a content security policy limited to the GitHub API", /<meta http-equiv="Content-Security-Policy" content="[^"]*script-src 'self'[^"]*connect-src 'self' https:\/\/api\.github\.com;[^"]*"/.test(privatePage)],
+  ["standalone page loads no third-party widgets, fonts, or canonical links", !/chatdoc|mapmyvisitors|fonts\.googleapis|rel="canonical"|hreflang=/.test(privatePage) && privateAssets.length > 0 && privateAssets.every((asset) => !/chatdoc|mapmyvisitors|fonts\.googleapis/.test(asset))],
+  ["no public page links to the standalone page", publicPages.length > 0 && publicPages.every((html) => !html.includes("/zh/intern"))],
+  ["standalone page bundle contains no email addresses", ![privatePage, ...privateAssets].some((text) => emailLike.test(text))]
 ];
 
 const failures = checks.filter(([, passed]) => !passed).map(([label]) => label);

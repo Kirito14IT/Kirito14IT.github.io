@@ -1,0 +1,15 @@
+---
+import PrivateLayout from "@layouts/PrivateLayout.astro";
+---
+
+<PrivateLayout>
+  <div class="it-app" data-intern-app>
+    <noscript><p class="it-loading">需要启用 JavaScript。</p></noscript>
+  </div>
+  <script>
+    import { start } from "../../../intern/ui/app.ts";
+
+    const root = document.querySelector<HTMLElement>("[data-intern-app]");
+    if (root) start(root);
+  </script>
+</PrivateLayout>

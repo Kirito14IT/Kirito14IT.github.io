@@ -1,0 +1,24 @@
+---
+import { chatbot } from "@data/chatbot";
+
+const appId = chatbot.appId.trim();
+const enabled = /^[A-Za-z0-9_-]{4,128}$/.test(appId);
+---
+
+{enabled && (
+  <script is:inline src="https://chatdoc.studio/chatbot/embed.js" data-id={appId} async defer></script>
+)}
+
+<style is:global>
+  @media (max-width: 600px) {
+    .chatdoc-studio-chatbot-iframe {
+      right: 12px !important;
+      left: auto !important;
+      bottom: max(12px, env(safe-area-inset-bottom)) !important;
+      width: calc(100% - 24px) !important;
+      height: min(800px, calc(100vh - 24px)) !important;
+      height: min(800px, calc(100dvh - 24px)) !important;
+      transform: none !important;
+    }
+  }
+</style>

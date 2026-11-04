@@ -4,6 +4,7 @@ import SiteFooter from "@components/SiteFooter.astro";
 import LanguageSwitcher from "@components/LanguageSwitcher.astro";
 import ThemeToggle from "@components/ThemeToggle.astro";
 import ClickBurst from "@components/ClickBurst.astro";
+import ChatBot from "@components/ChatBot.astro";
 import { getProfile } from "@data/profile";
 import { getUi, localizedPath, stripLocalePrefix, type Locale } from "@i18n/index";
 import "@styles/global.css";
@@ -106,5 +107,6 @@ const hasToolbarNavigation = Astro.slots.has("toolbar");
         <SiteFooter locale={locale} showVisitCounter={showVisitCounter} />
       </main>
     </div>
+    <ChatBot />
   </body>
 </html>

@@ -83,6 +83,13 @@ const copy = getUi(locale);
 </BaseLayout>
 
 <style>
+  .page-header { padding: 20px 28px; border-radius: 28px; }
+  .page-header .eyebrow { margin: 0 0 6px; line-height: 1.4; }
+  .page-header h1 { font-size: clamp(1.65rem, 2.8vw, 2.15rem); line-height: 1.15; }
+  .page-header > p:last-child { margin: 8px 0 0; line-height: 1.5; }
+  @media (max-width: 560px) {
+    .page-header { padding: 18px 20px; border-radius: 24px; }
+  }
   .web-cv { border-top: 1px solid var(--line); padding-top: 20px; }
   .web-cv summary { cursor: pointer; color: var(--muted); font-weight: 600; }
   .web-cv-content { padding-top: 20px; }

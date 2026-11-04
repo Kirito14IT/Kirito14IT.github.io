@@ -6,10 +6,102 @@ const enabled = /^[A-Za-z0-9_-]{4,128}$/.test(appId);
 ---
 
 {enabled && (
-  <script is:inline src="https://chatdoc.studio/chatbot/embed.js" data-id={appId} async defer></script>
+  <>
+    <script is:inline src="https://chatdoc.studio/chatbot/embed.js" data-id={appId} async defer></script>
+    <script is:inline>
+      (() => {
+        let mountObserver = null;
+        let visibilityObserver = null;
+        let mountDeadline = null;
+
+        const stopWaiting = () => {
+          mountObserver?.disconnect();
+          if (mountDeadline !== null) window.clearTimeout(mountDeadline);
+        };
+
+        const mountInvitation = () => {
+          const wrapper = document.querySelector(".chatdoc-studio-chatbot-iframe");
+          const launcher = wrapper?.querySelector(".chatdoc-studio-chatbot");
+          const frame = wrapper?.querySelector("iframe");
+          if (!(wrapper instanceof HTMLElement) || !(launcher instanceof HTMLElement) || !(frame instanceof HTMLIFrameElement)) return false;
+          if (wrapper.querySelector(".zhihua-chatbot-invitation")) {
+            stopWaiting();
+            return true;
+          }
+
+          const invitation = document.createElement("button");
+          invitation.type = "button";
+          invitation.className = "zhihua-chatbot-invitation";
+          invitation.textContent = "Ask anything about Zhihua Wang!";
+          invitation.hidden = true;
+          invitation.addEventListener("click", () => {
+            launcher.click();
+            frame.focus();
+          });
+          wrapper.append(invitation);
+
+          const syncVisibility = () => {
+            const closed = frame.style.transform.replace(/\s+/g, "") === "scale(0)";
+            invitation.hidden = !(closed && frame.isConnected && launcher.isConnected);
+          };
+          visibilityObserver = new MutationObserver(syncVisibility);
+          visibilityObserver.observe(frame, { attributes: true, attributeFilter: ["style"] });
+          visibilityObserver.observe(wrapper, { childList: true, subtree: true });
+          syncVisibility();
+          stopWaiting();
+          return true;
+        };
+
+        if (!mountInvitation()) {
+          mountObserver = new MutationObserver(mountInvitation);
+          mountObserver.observe(document.body, { childList: true, subtree: true });
+          mountDeadline = window.setTimeout(stopWaiting, 30000);
+        }
+        window.addEventListener("pagehide", (event) => {
+          if (!event.persisted) {
+            stopWaiting();
+            visibilityObserver?.disconnect();
+          }
+        });
+      })();
+    </script>
+  </>
 )}
 
 <style is:global>
+  .zhihua-chatbot-invitation {
+    position: absolute;
+    right: 0;
+    bottom: 72px;
+    width: max-content;
+    max-width: min(300px, calc(100vw - 48px));
+    padding: 12px 16px;
+    border: 1px solid var(--line, #dce4f1);
+    border-radius: 16px;
+    color: var(--ink, #142033);
+    background: var(--card-strong, #fff);
+    box-shadow: 0 8px 28px rgba(37, 72, 160, 0.16);
+    font: 500 14px/1.45 var(--body, system-ui, sans-serif);
+    text-align: left;
+    cursor: pointer;
+    pointer-events: auto;
+  }
+  .zhihua-chatbot-invitation::after {
+    position: absolute;
+    right: 20px;
+    bottom: -9px;
+    border-right: 8px solid transparent;
+    border-left: 8px solid transparent;
+    border-top: 9px solid var(--card-strong, #fff);
+    content: "";
+    pointer-events: none;
+  }
+  .zhihua-chatbot-invitation:focus-visible {
+    outline: 3px solid var(--blue, #2563eb);
+    outline-offset: 4px;
+  }
+  .zhihua-chatbot-invitation[hidden] { display: none !important; }
+
   @media (max-width: 600px) {
     .chatdoc-studio-chatbot-iframe {
       right: 12px !important;

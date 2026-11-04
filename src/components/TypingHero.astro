@@ -30,6 +30,27 @@ const copy = getUi(locale);
   </div>
 </section>
 
+<style>
+  .hero-panel { min-height: 320px; padding: 28px 36px; border-radius: 36px; }
+  .hero-panel::before { inset: 12px; border-radius: 26px; }
+  .hero-panel h2,
+  .typing-line { font-size: clamp(1.85rem, 3.2vw, 3rem); line-height: 1.1; }
+  .typing-line { min-height: 1.15em; }
+  .hero-panel > .anime-stickers { position: absolute; inset: 0; }
+  .sticker { width: 52px; height: 52px; border-radius: 18px; }
+  .sticker-1 { top: 76px; right: 62px; }
+  .sticker-2 { top: 16px; right: 28px; bottom: auto; }
+  .sticker-3 { top: 48px; left: auto; right: 154px; }
+  .hero-panel :global(.neural-field-canvas) { inset: 16px 24px auto auto; width: 48%; height: 160px; }
+  .hero-panel > p { margin-top: 12px; font-size: 1.05rem; line-height: 1.6; }
+  .hero-actions { margin-top: 18px; }
+  @media (max-width: 560px) {
+    .hero-panel { min-height: 0; padding: 24px 20px; border-radius: 28px; }
+    .typing-line { min-height: 2.2em; }
+    .anime-stickers { display: none; }
+  }
+</style>
+
 <script>
   const typingTargets = document.querySelectorAll("[data-typing-words]");
 

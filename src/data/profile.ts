@@ -43,29 +43,30 @@ export const profiles = {
       contactLabel: "Recruiters and research teams are welcome to contact me by email."
     },
     researchFocus: [
+      "Foundation models.",
       "Agent post-training and reinforcement learning (Agent RL) for LLM agents, with a focus on reasoning and tool use.",
       "Agent safety, memory security, and cross-session prompt injection.",
       "Multi-agent collaboration and safety-constrained code generation.",
       "Reliable agent evaluation and practical agent systems."
     ],
     focusWords: [
+      { text: "Foundation Models", color: "#16a34a" },
       { text: "LLM Agents", color: "#2563eb" },
       { text: "Agent Post-Training", color: "#0891b2" },
       { text: "Agent RL", color: "#7c3aed" },
       { text: "Agent Safety", color: "#db2777" },
       { text: "Agent Memory", color: "#f59e0b" },
-      { text: "Multi-Agent Systems", color: "#0891b2" },
-      { text: "Embodied Intelligence", color: "#16a34a" }
+      { text: "Multi-Agent Systems", color: "#0891b2" }
     ],
     interests: [
+      "Foundation Models",
       "LLM Agents",
       "Agent Post-Training",
       "Agent RL",
       "Agent Safety",
       "Multi-Agent Systems",
       "Agent Memory",
-      "Trustworthy AI",
-      "Embodied Intelligence"
+      "Trustworthy AI"
     ],
     links: [
       { label: "Email", url: "mailto:2657751462@qq.com", displayUrl: "2657751462@qq.com" },
@@ -141,21 +142,22 @@ export const profiles = {
       contactLabel: "欢迎 HR 及研究团队通过邮件联系我。"
     },
     researchFocus: [
+      "基座大模型。",
       "面向大语言模型智能体的后训练（Agent Post-Training）与强化学习（Agent RL），关注推理与工具使用。",
       "智能体安全、记忆安全与跨会话提示注入。",
       "多智能体协作与安全约束代码生成。",
       "可靠智能体评测与智能体系统实践。"
     ],
     focusWords: [
+      { text: "基座大模型", color: "#16a34a" },
       { text: "LLM 智能体", color: "#2563eb" },
       { text: "智能体后训练", color: "#0891b2" },
       { text: "Agent RL", color: "#7c3aed" },
       { text: "智能体安全", color: "#db2777" },
       { text: "智能体记忆", color: "#f59e0b" },
-      { text: "多智能体系统", color: "#0891b2" },
-      { text: "具身智能", color: "#16a34a" }
+      { text: "多智能体系统", color: "#0891b2" }
     ],
-    interests: ["LLM 智能体", "智能体后训练", "Agent RL", "智能体安全", "多智能体系统", "智能体记忆", "可信人工智能", "具身智能"],
+    interests: ["基座大模型", "LLM 智能体", "智能体后训练", "Agent RL", "智能体安全", "多智能体系统", "智能体记忆", "可信人工智能"],
     links: [
       { label: "邮箱", url: "mailto:2657751462@qq.com", displayUrl: "2657751462@qq.com" },
       { label: "GitHub", url: "https://github.com/Kirito14IT", displayUrl: "https://github.com/Kirito14IT" },

@@ -1,0 +1,86 @@
+---
+import type { NewsMediaItem } from "@data/cv";
+import type { Locale } from "@i18n/index";
+
+const { media, locale, id } = Astro.props as { media: NewsMediaItem; locale: Locale; id: string };
+const isChinese = locale === "zh";
+---
+
+<figure class="news-media" data-news-media>
+  <button class="news-media-trigger" type="button" aria-haspopup="dialog" aria-controls={id} data-news-media-open>
+    <img src={media.src} alt={media.alt} width={media.width} height={media.height} loading="lazy" decoding="async" />
+    <span>{media.caption}</span>
+  </button>
+  <dialog id={id} aria-labelledby={`${id}-title`} data-news-media-dialog>
+    <div class="news-media-dialog-content">
+      <header>
+        <h3 id={`${id}-title`}>{isChinese ? "Alpha Sight 推荐截图" : "Alpha Sight recommendation"}</h3>
+        <button class="news-media-close" type="button" data-news-media-close autofocus>{isChinese ? "关闭" : "Close"}</button>
+      </header>
+      <div class="news-media-image-area">
+        <img src={media.src} alt={media.alt} width={media.width} height={media.height} decoding="async" />
+      </div>
+      <a href={media.src} target="_blank" rel="noopener noreferrer">{isChinese ? "在新窗口打开原图" : "Open original image in a new window"}</a>
+    </div>
+  </dialog>
+</figure>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-news-media]").forEach((figure) => {
+    const trigger = figure.querySelector<HTMLButtonElement>("[data-news-media-open]");
+    const dialog = figure.querySelector<HTMLDialogElement>("[data-news-media-dialog]");
+    const close = figure.querySelector<HTMLButtonElement>("[data-news-media-close]");
+    if (!trigger || !dialog || !close) return;
+
+    const viewport = window.visualViewport;
+    const fitViewport = () => {
+      dialog.style.setProperty("--news-media-width", `${viewport?.width ?? document.documentElement.clientWidth}px`);
+      dialog.style.setProperty("--news-media-height", `${viewport?.height ?? window.innerHeight}px`);
+      dialog.style.setProperty("--news-media-left", `${viewport?.offsetLeft ?? 0}px`);
+      dialog.style.setProperty("--news-media-top", `${viewport?.offsetTop ?? 0}px`);
+    };
+    trigger.addEventListener("click", () => {
+      if (typeof dialog.showModal === "function") {
+        fitViewport();
+        dialog.showModal();
+        viewport?.addEventListener("resize", fitViewport);
+        viewport?.addEventListener("scroll", fitViewport);
+      } else window.open(figure.querySelector<HTMLImageElement>("img")!.src, "_blank", "noopener,noreferrer");
+    });
+    close.addEventListener("click", () => dialog.close());
+    dialog.addEventListener("click", (event) => {
+      if (event.target !== dialog) return;
+      const bounds = dialog.getBoundingClientRect();
+      if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) dialog.close();
+    });
+    dialog.addEventListener("close", () => {
+      viewport?.removeEventListener("resize", fitViewport);
+      viewport?.removeEventListener("scroll", fitViewport);
+      trigger.focus({ preventScroll: true });
+    });
+    // Native dialog handles Escape, focus trapping, and makes background links inert while open.
+  });
+</script>
+
+<style>
+  .news-media { margin: 14px 0 0; }
+  .news-media-trigger { display: grid; gap: 8px; width: min(230px, 100%); padding: 0; border: 0; background: transparent; color: var(--blue); font: inherit; font-size: .8rem; text-align: left; cursor: zoom-in; }
+  .news-media-trigger img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 12px; background: #fff; transition: box-shadow 180ms ease; }
+  .news-media-trigger:hover img { box-shadow: 0 8px 24px rgba(37, 99, 235, .16); }
+  .news-media-trigger:focus-visible { outline: 3px solid var(--blue); outline-offset: 5px; border-radius: 12px; }
+  dialog { position: fixed; inset: auto; left: calc(var(--news-media-left, 0px) + var(--news-media-width, 100vw) / 2); top: calc(var(--news-media-top, 0px) + var(--news-media-height, 100dvh) / 2); transform: translate(-50%, -50%); margin: 0; width: min(1040px, calc(var(--news-media-width, 100vw) - 32px)); max-width: none; max-height: calc(var(--news-media-height, 100dvh) - 32px); padding: 0; border: 1px solid var(--line); border-radius: 20px; color: var(--ink); background: var(--card-strong); box-shadow: 0 24px 80px rgba(5, 17, 36, .35); overflow: auto; }
+  dialog::backdrop { background: rgba(6, 17, 34, .74); backdrop-filter: blur(5px); }
+  .news-media-dialog-content { display: grid; gap: 12px; padding: 18px; background: #f8fbff; }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  h3 { margin: 0; font-size: 1rem; }
+  .news-media-close { flex: 0 0 auto; min-height: 44px; padding: 8px 16px; border: 1px solid var(--line); border-radius: 999px; color: inherit; background: transparent; font: inherit; cursor: pointer; }
+  .news-media-image-area { min-width: 0; overflow: auto; overscroll-behavior: contain; }
+  .news-media-image-area img { display: block; width: auto; max-width: 100%; height: auto; max-height: calc(var(--news-media-height, 100dvh) - 190px); margin: 0 auto; object-fit: contain; }
+  .news-media-dialog-content > a { justify-self: start; min-height: 32px; font-size: .85rem; }
+  :global(html[data-theme="dark"]) .news-media-dialog-content { background: #102039; color: #e5eefb; }
+  @media (max-width: 560px) {
+    dialog { width: calc(var(--news-media-width, 100vw) - 24px); max-height: calc(var(--news-media-height, 100dvh) - 24px); border-radius: 16px; }
+    .news-media-dialog-content { padding: 12px; }
+    header { gap: 10px; }
+  }
+</style>

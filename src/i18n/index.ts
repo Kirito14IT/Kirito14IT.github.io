@@ -41,7 +41,7 @@ export const ui = {
     switchTitle: "Switch to Chinese",
     theme: { switchToDark: "Switch to dark theme", switchToLight: "Switch to light theme" },
     nav: { home: "Home", cv: "CV", projects: "Projects", blog: "Blog" },
-    sidebar: { profile: "Profile", navigation: "Navigation", focus: "Focus", links: "Links", advisor: "Advisor", affiliations: "Lab / Institute" },
+    sidebar: { profile: "Profile", navigation: "Navigation", focus: "Focus", links: "Links", advisor: "Advisor", labHead: "Lab Director", affiliations: "Lab / Institute" },
     homeJump: {
       homepage: "Homepage",
       about: "About Me",
@@ -155,7 +155,7 @@ export const ui = {
     switchTitle: "切换到英文",
     theme: { switchToDark: "切换到深色主题", switchToLight: "切换到浅色主题" },
     nav: { home: "首页", cv: "简历", projects: "项目", blog: "博客" },
-    sidebar: { profile: "个人信息", navigation: "导航", focus: "研究方向", links: "链接", advisor: "导师", affiliations: "实验室 / 研究院" },
+    sidebar: { profile: "个人信息", navigation: "导航", focus: "研究方向", links: "链接", advisor: "导师", labHead: "实验室负责人", affiliations: "实验室 / 研究院" },
     homeJump: {
       homepage: "首页",
       about: "关于我",

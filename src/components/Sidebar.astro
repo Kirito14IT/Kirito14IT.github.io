@@ -32,6 +32,9 @@ const navItems = [
     <p class="sidebar-copy">
       {copy.sidebar.advisor}: <a href={profile.advisorUrl} target="_blank" rel="noopener noreferrer">{profile.advisorName}</a>
     </p>
+    <p class="sidebar-copy">
+      {copy.sidebar.labHead}: <a href={profile.labHeadUrl} target="_blank" rel="noopener noreferrer">{profile.labHeadName}</a>
+    </p>
     <div class="sidebar-affiliations">
       <span>{copy.sidebar.affiliations}:</span>
       {profile.affiliations.map((affiliation) => (

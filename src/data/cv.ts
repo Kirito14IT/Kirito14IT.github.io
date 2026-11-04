@@ -7,6 +7,7 @@ const vulnseekerUrl = "https://github.com/Kirito14IT/VulnSeeker";
 const sfmambanetCodeUrl = "https://github.com/Kirito14IT/SFMambaNet";
 const teaiUrl = "https://teai.fudan.edu.cn/";
 const xingjunMaUrl = "http://xingjunma.com/";
+const yuGangJiangUrl = "https://baike.baidu.com/item/%E5%A7%9C%E8%82%B2%E5%88%9A/22131913";
 const tipUrl = "https://signalprocessingsociety.org/publications-resources/ieee-transactions-image-processing";
 const jingfengZhangUrl = "https://zjfheart.github.io/";
 const gassUrl = "https://www.gass.ac.cn/gass/index.html";
@@ -30,6 +31,8 @@ type Link = { label: string; url: string; logo?: string };
 type RichText = string | { html: string };
 export type StarRepo = "wuyoscar/AISafetyHot" | "Kirito14IT/prompt-spider-ui" | "XSafeAI/XSafeClaw";
 
+export type NewsMediaItem = { src: string; alt: string; caption: string; width: number; height: number };
+
 export type NewsItem = {
   date: string;
   text?: string;
@@ -37,6 +40,7 @@ export type NewsItem = {
   jumpTo?: string;
   starRepos?: StarRepo[];
   links?: Link[];
+  media?: NewsMediaItem;
 };
 
 export type TimelineItem = {
@@ -97,6 +101,7 @@ const cvEn: CvData = {
       period: "2027 entry",
       details: [
         { html: `Advisor: <a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">Xingjun Ma</a>.` },
+        { html: `Lab Director: <a href="${yuGangJiangUrl}" target="_blank" rel="noopener noreferrer">Yu-Gang Jiang (Vice President, Fudan University)</a>.` },
         "Lab and institute: Fudan Vision and Learning Lab (FVL) and Institute of Trustworthy Embodied AI (TEAI)."
       ],
       links: [
@@ -117,13 +122,25 @@ const cvEn: CvData = {
   ],
   news: [
     {
+      date: "Nov 4, 2026",
+      html: `<a href="${memHarmBenchPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>MemHarmBench</strong></a> was recommended by Shanghai Innovation Institute and featured in MiraclePlus's <strong>Alpha Sight</strong>.`,
+      links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "Code", url: memHarmBenchCodeUrl }],
+      media: {
+        src: "/news/memharmbench-alpha-sight-recommendation-20261104.png",
+        alt: "Alpha Sight's November 4 digest recommending MemHarmBench, highlighted in the original screenshot.",
+        caption: "Alpha Sight recommendation · View screenshot",
+        width: 1328,
+        height: 992
+      }
+    },
+    {
       date: "Oct 26, 2026",
-      html: `Submitted <a href="${memHarmBenchPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>${memHarmBenchTitle}</strong></a> to The Web Conference (WWW 2027).`,
+      html: `The code for <a href="${memHarmBenchPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>${memHarmBenchTitle}</strong></a> is publicly available on GitHub, and the paper is available on arXiv.`,
       links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "Code", url: memHarmBenchCodeUrl }]
     },
     {
       date: "Oct 26, 2026",
-      html: `Submitted <a href="${cstPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>${cstTitle}</strong></a> to The Web Conference (WWW 2027).`,
+      html: `The code for <a href="${cstPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>${cstTitle}</strong></a> is publicly available on GitHub, and the paper is available on arXiv.`,
       links: [{ label: "arXiv", url: cstPaperUrl }, { label: "Code", url: cstCodeUrl }]
     },
     {
@@ -218,6 +235,23 @@ const cvEn: CvData = {
     }
   ],
   experiences: [
+    {
+      title: "Research Intern, MemHarmBench and CST",
+      organization: "Institute of Trustworthy Embodied AI (TEAI), Fudan University · FVL Laboratory · Shanghai Innovation Institute",
+      period: "Aug 2026 - Nov 2026",
+      tags: ["Agent Safety", "Memory Poisoning", "Risk Triage", "Source-Grounded Evidence", "First Author"],
+      bullets: [
+        { html: `Advised by <a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">Xingjun Ma</a> and <a href="${yuGangJiangUrl}" target="_blank" rel="noopener noreferrer">Yu-Gang Jiang (Vice President, Fudan University)</a>.` },
+        { html: "<strong>MemHarmBench:</strong> Built an exposure–trigger benchmark for cross-session memory poisoning with <strong>288 case environments</strong> (24 attack templates × 12 business scenarios) and 12 target categories. On samples retaining malicious rules, indirect attack success reached <strong>59.38%–76.39%</strong>." },
+        { html: "<strong>CST:</strong> Designed a lightweight algorithm for short-text risk-topic discovery, combining character-level and frozen semantic features to aggregate risk evidence from group chats for rapid CPU screening and source-grounded review." }
+      ],
+      links: [
+        { label: "MemHarmBench · arXiv", url: memHarmBenchPaperUrl },
+        { label: "MemHarmBench · Code", url: memHarmBenchCodeUrl },
+        { label: "CST · arXiv", url: cstPaperUrl },
+        { label: "CST · Code", url: cstCodeUrl }
+      ]
+    },
     {
       title: "Research Intern, ScamWeb Multimodal Fraud Benchmark",
       titleUrl: scamWebUrl,
@@ -393,7 +427,10 @@ const cvEn: CvData = {
       year: "2026",
       url: cstPaperUrl,
       links: [{ label: "arXiv", url: cstPaperUrl }, { label: "Code", url: cstCodeUrl }],
-      tags: ["Risk Triage", "Source-Grounded Evidence", "Web Discussions", "Multilingual NLP", "CPU Inference"]
+      tags: ["Risk Triage", "Source-Grounded Evidence", "Web Discussions", "Multilingual NLP", "CPU Inference"],
+      frameworkImage: "/figures/cst-framework-original.png",
+      frameworkAlt: "Original CST framework diagram: source-local context, lightweight feature fusion and topic discovery, risk triage, and source-grounded evidence for review.",
+      frameworkCaption: "CST framework · Original figure from the paper."
     },
     {
       title: "ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages",
@@ -528,6 +565,7 @@ const cvZh: CvData = {
       period: "2027年入学",
       details: [
         { html: `导师：<a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">马兴军</a>。` },
+        { html: `实验室负责人：<a href="${yuGangJiangUrl}" target="_blank" rel="noopener noreferrer">姜育刚（复旦大学副校长）</a>。` },
         "实验室与研究机构：复旦大学视觉与学习实验室（FVL）、可信具身智能研究院（TEAI）。"
       ],
       links: [
@@ -548,13 +586,25 @@ const cvZh: CvData = {
   ],
   news: [
     {
+      date: "2026年11月4日",
+      html: `<a href="${memHarmBenchPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>MemHarmBench</strong></a> 获得上海创智学院论文推荐，并获奇绩创坛「<strong>奇绩信号 Alpha Sight</strong>」推荐。`,
+      links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "代码", url: memHarmBenchCodeUrl }],
+      media: {
+        src: "/news/memharmbench-alpha-sight-recommendation-20261104.png",
+        alt: "奇绩信号 Alpha Sight 11月4日推荐 MemHarmBench 的原始截图，红框标注相关条目。",
+        caption: "Alpha Sight 推荐截图 · 点击查看大图",
+        width: 1328,
+        height: 992
+      }
+    },
+    {
       date: "2026年10月26日",
-      html: `论文 <a href="${memHarmBenchPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>${memHarmBenchTitle}</strong></a> 已投稿至 The Web Conference（WWW 2027）。`,
+      html: `<a href="${memHarmBenchPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>${memHarmBenchTitle}</strong></a> 的代码已在 GitHub 公开，论文已发布于 arXiv。`,
       links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "代码", url: memHarmBenchCodeUrl }]
     },
     {
       date: "2026年10月26日",
-      html: `论文 <a href="${cstPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>${cstTitle}</strong></a> 已投稿至 The Web Conference（WWW 2027）。`,
+      html: `<a href="${cstPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>${cstTitle}</strong></a> 的代码已在 GitHub 公开，论文已发布于 arXiv。`,
       links: [{ label: "arXiv", url: cstPaperUrl }, { label: "代码", url: cstCodeUrl }]
     },
     {
@@ -646,6 +696,23 @@ const cvZh: CvData = {
     }
   ],
   experiences: [
+    {
+      title: "科研实习生，MemHarmBench 与 CST",
+      organization: "复旦大学可信具身智能研究院（TEAI） · FVL 实验室 · 上海创智学院",
+      period: "2026年8月 - 11月",
+      tags: ["智能体安全", "记忆投毒", "风险分诊", "来源可追溯证据", "第一作者"],
+      bullets: [
+        { html: `导师：<a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">马兴军</a>、<a href="${yuGangJiangUrl}" target="_blank" rel="noopener noreferrer">姜育刚（复旦大学副校长）</a>。` },
+        { html: "<strong>MemHarmBench：</strong>构建面向跨会话记忆投毒的“暴露–触发”安全基准，覆盖 <strong>288 个案例环境</strong>（24 个攻击模板 × 12 个业务场景）和 12 类目标；在恶意规则留存样本中，间接攻击成功率达 <strong>59.38%–76.39%</strong>。" },
+        { html: "<strong>CST：</strong>设计轻量级短文本风险主题发现算法，融合字符与冻结语义特征，聚合群聊风险证据，支持 CPU 快速筛查和来源可追溯的人工复核。" }
+      ],
+      links: [
+        { label: "MemHarmBench · arXiv", url: memHarmBenchPaperUrl },
+        { label: "MemHarmBench · 代码", url: memHarmBenchCodeUrl },
+        { label: "CST · arXiv", url: cstPaperUrl },
+        { label: "CST · 代码", url: cstCodeUrl }
+      ]
+    },
     {
       title: "科研实习生，ScamWeb 多模态诈骗网页基准",
       titleUrl: scamWebUrl,
@@ -821,7 +888,10 @@ const cvZh: CvData = {
       year: "2026",
       url: cstPaperUrl,
       links: [{ label: "arXiv", url: cstPaperUrl }, { label: "代码", url: cstCodeUrl }],
-      tags: ["风险分诊", "来源可追溯证据", "网络讨论", "多语言自然语言处理", "CPU 推理"]
+      tags: ["风险分诊", "来源可追溯证据", "网络讨论", "多语言自然语言处理", "CPU 推理"],
+      frameworkImage: "/figures/cst-framework-original.png",
+      frameworkAlt: "CST 论文原始框架图：来源上下文、轻量特征融合与主题发现、风险分诊及来源可追溯的复核证据。",
+      frameworkCaption: "CST 方法框架 · 论文原图。"
     },
     {
       title: "ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages",

@@ -12,6 +12,7 @@ import RepoStars from "@components/RepoStars.astro";
 import ResourceLinks from "@components/ResourceLinks.astro";
 import AISafetyHotProject from "@components/AISafetyHotProject.astro";
 import VisitorMap from "@components/VisitorMap.astro";
+import NewsMedia from "@components/NewsMedia.astro";
 import { getProfile } from "@data/profile";
 import { getCvData } from "@data/cv";
 import { getUi, localizedPath, type Locale } from "@i18n/index";
@@ -69,7 +70,7 @@ const homeJumpLinks = [
 
   <Section id="news" title={copy.sections.news} eyebrow={copy.sections.recentUpdates}>
     <div class="news-list">
-      {news.map((item) => (
+      {news.map((item, index) => (
         <article class:list={{ "news-jump-card": Boolean(item.jumpTo) }}>
           {item.jumpTo && (
             <a
@@ -82,6 +83,7 @@ const homeJumpLinks = [
           {item.html ? <p set:html={item.html} /> : <p>{item.text}</p>}
           {item.links && <ResourceLinks links={item.links} />}
           {item.starRepos && <RepoStars repos={item.starRepos} />}
+          {item.media && <NewsMedia media={item.media} locale={locale} id={`news-media-${index}`} />}
         </article>
       ))}
     </div>

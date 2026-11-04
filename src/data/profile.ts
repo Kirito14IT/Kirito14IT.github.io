@@ -13,6 +13,7 @@ const shared = {
   github: "https://github.com/Kirito14IT",
   avatarUrl: "https://github.com/Kirito14IT.png",
   advisorUrl: "http://xingjunma.com/",
+  labHeadUrl: "https://baike.baidu.com/item/%E5%A7%9C%E8%82%B2%E5%88%9A/22131913",
   affiliations: [
     { label: "Fudan FVL", title: "Fudan Vision and Learning Lab", url: "https://fvl.fudan.edu.cn/", logo: "/github-profile/fudan-university-logo.png" },
     { label: "TEAI", title: "Institute of Trustworthy Embodied AI, Fudan University", url: "https://teai.fudan.edu.cn/#/", logo: "/github-profile/fudan-teai-logo.png" }
@@ -29,6 +30,7 @@ export const profiles = {
     title: "Senior Undergraduate in Computer Science and Technology",
     incomingTitle: "Incoming M.Sc. Student, Fudan University (2027)",
     advisorName: "Xingjun Ma",
+    labHeadName: "Yu-Gang Jiang (Vice President, Fudan University)",
     tagline:
       "I study LLM agents, agent post-training, reinforcement learning for agents (Agent RL), and agent safety, with an interest in reliable reasoning, memory, and tool use.",
     bio:
@@ -101,6 +103,21 @@ export const profiles = {
         label: "Representative Research: SFMambaNet",
         url: "https://kirito14it.github.io/projects/sfmambanet/",
         displayUrl: "https://kirito14it.github.io/projects/sfmambanet/"
+      },
+      {
+        label: "Representative Research: ScamWeb",
+        url: "https://anonymous.4open.science/r/ScamWeb-B710",
+        displayUrl: "ScamWeb: Multimodal Fraud Webpage Understanding"
+      },
+      {
+        label: "Representative Research: MemHarmBench",
+        url: "https://arxiv.org/abs/2611.01700",
+        displayUrl: "https://arxiv.org/abs/2611.01700"
+      },
+      {
+        label: "Representative Research: CST",
+        url: "https://arxiv.org/abs/2611.01710",
+        displayUrl: "https://arxiv.org/abs/2611.01710"
       }
     ]
   },
@@ -113,6 +130,7 @@ export const profiles = {
     title: "计算机科学与技术专业大四本科生",
     incomingTitle: "复旦大学 2027 级准硕士生",
     advisorName: "马兴军",
+    labHeadName: "姜育刚（复旦大学副校长）",
     tagline: "聚焦大语言模型智能体、智能体后训练、智能体强化学习（Agent RL）与智能体安全，关注可靠推理、记忆与工具使用。",
     bio:
       "我是上海理工大学计算机科学与技术专业 2023 级本科生，目前大四在读。我将于 2027 年进入复旦大学攻读硕士学位，导师为马兴军老师。目前，我正在复旦大学视觉与学习实验室（FVL）&可信具身智能研究院（TEAI）进行科研实习，研究兴趣聚焦大语言模型智能体、智能体后训练、智能体强化学习（Agent RL）与智能体安全。欢迎与我联系交流。",
@@ -174,6 +192,21 @@ export const profiles = {
         label: "代表研究：SFMambaNet",
         url: "https://kirito14it.github.io/zh/projects/sfmambanet/",
         displayUrl: "https://kirito14it.github.io/zh/projects/sfmambanet/"
+      },
+      {
+        label: "代表研究：ScamWeb",
+        url: "https://anonymous.4open.science/r/ScamWeb-B710",
+        displayUrl: "ScamWeb：多模态诈骗网页理解基准"
+      },
+      {
+        label: "代表研究：MemHarmBench",
+        url: "https://arxiv.org/abs/2611.01700",
+        displayUrl: "https://arxiv.org/abs/2611.01700"
+      },
+      {
+        label: "代表研究：CST",
+        url: "https://arxiv.org/abs/2611.01710",
+        displayUrl: "https://arxiv.org/abs/2611.01710"
       }
     ]
   }

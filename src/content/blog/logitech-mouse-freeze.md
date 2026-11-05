@@ -184,7 +184,7 @@ And T2 fires at the moment the user **touches the touchpad or the keyboard** —
 
 ### 4.6 One full day of field testing: not a single freeze
 
-On the **first complete working day** after the fix went live (2026-10-22), the report was: "the mouse never stopped working today, not once."
+On the **first complete working day** after the fix went live (2026.10.22), the report was: "the mouse never stopped working today, not once."
 
 The guard's telemetry for that day:
 

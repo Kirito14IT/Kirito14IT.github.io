@@ -77,7 +77,7 @@ const dynamicCopy = {
   const fillTemplate = (template, values) =>
     Object.entries(values).reduce((output, [key, value]) => output.replaceAll(`{${key}}`, String(value)), template);
 
-  const buildWeeks = (contributions, monthFormatter) => {
+  const buildWeeks = (contributions) => {
     if (!Array.isArray(contributions) || contributions.length === 0) return [];
     const sorted = [...contributions].sort((a, b) => a.date.localeCompare(b.date));
     const counts = new Map(sorted.map((item) => [item.date, item]));
@@ -99,7 +99,7 @@ const dynamicCopy = {
         const labelSource =
           buffer.find((day) => day.inRange && toUtcDate(day.date).getUTCDate() === 1) ||
           (weeks.length === 0 ? buffer.find((day) => day.inRange) : undefined);
-        weeks.push({ label: labelSource ? monthFormatter.format(toUtcDate(labelSource.date)) : "", days: buffer });
+        weeks.push({ month: labelSource?.date.slice(0, 7), days: buffer });
         buffer = [];
       }
       cursor = addUtcDays(cursor, 1);
@@ -111,10 +111,6 @@ const dynamicCopy = {
     const locale = root.dataset.locale === "zh" ? "zh" : "en";
     const dateLocale = locale === "zh" ? "zh-CN" : "en-US";
     const copy = JSON.parse(root.dataset.copy || "{}");
-    const monthFormatter = new Intl.DateTimeFormat(dateLocale, {
-      month: locale === "zh" ? "numeric" : "short",
-      timeZone: "UTC"
-    });
     const numberFormatter = new Intl.NumberFormat(dateLocale);
     const summary = root.querySelector("[data-contrib-summary]");
     const total = root.querySelector("[data-contrib-total]");
@@ -122,7 +118,7 @@ const dynamicCopy = {
     const columns = root.querySelector("[data-contrib-columns]");
     const note = root.querySelector("[data-contrib-note]");
     const contributions = payload?.contributions || [];
-    const weeks = buildWeeks(contributions, monthFormatter);
+    const weeks = buildWeeks(contributions);
     const totalLastYear = payload?.total?.lastYear || 0;
     const activeDays = contributions.filter((item) => (item.count || 0) > 0).length;
 
@@ -139,7 +135,10 @@ const dynamicCopy = {
 
     weeks.forEach((week) => {
       const label = document.createElement("span");
-      label.textContent = week.label;
+      if (week.month) {
+        label.textContent = week.month.slice(5);
+        label.title = week.month.replaceAll("-", ".");
+      }
       months.appendChild(label);
 
       const column = document.createElement("div");
@@ -148,7 +147,7 @@ const dynamicCopy = {
         const cell = document.createElement("span");
         cell.className = `contrib-cell level-${day.level}${day.inRange ? "" : " outside"}`;
         cell.title = fillTemplate(copy.dayTitle, {
-          date: day.date,
+          date: day.date.replaceAll("-", "."),
           count: numberFormatter.format(day.count),
           suffix: day.count === 1 ? "" : "s"
         });

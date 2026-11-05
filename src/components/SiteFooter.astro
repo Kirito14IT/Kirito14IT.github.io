@@ -1,12 +1,12 @@
 ---
 import { execFileSync } from "node:child_process";
 import { getProfile } from "@data/profile";
+import { formatNumericDate } from "@i18n/date";
 import { getUi, type Locale } from "@i18n/index";
 
 const { showVisitCounter = false, locale } = Astro.props as { showVisitCounter?: boolean; locale: Locale };
 const profile = getProfile(locale);
 const copy = getUi(locale);
-const dateLocale = locale === "zh" ? "zh-CN" : "en-US";
 
 let updateSource = "git";
 let updatedAtRaw = "";
@@ -28,22 +28,14 @@ if (Number.isNaN(updatedAt.valueOf())) {
 }
 
 const updatedIso = updatedAt.toISOString();
-const updatedLabel = new Intl.DateTimeFormat(dateLocale, {
-  year: "numeric",
-  month: locale === "zh" ? "numeric" : "long",
-  day: "numeric",
-  timeZone: "Asia/Shanghai"
-}).format(updatedAt);
-const updatedExactLabel = new Intl.DateTimeFormat(dateLocale, {
-  year: "numeric",
-  month: locale === "zh" ? "numeric" : "long",
-  day: "numeric",
+const timeZone = "Asia/Shanghai";
+const updatedLabel = formatNumericDate(updatedAt, { timeZone });
+const updatedExactLabel = formatNumericDate(updatedAt, {
   hour: "2-digit",
   minute: "2-digit",
-  hour12: false,
-  timeZone: "Asia/Shanghai",
+  timeZone,
   timeZoneName: "short"
-}).format(updatedAt);
+});
 
 const visitorBadgeUrl = new URL("https://api.visitorbadge.io/api/visitors");
 visitorBadgeUrl.searchParams.set("path", profile.siteUrl);

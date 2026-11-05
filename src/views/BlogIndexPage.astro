@@ -2,11 +2,11 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import FieldNotes from "@components/FieldNotes.astro";
+import { formatNumericDate } from "@i18n/date";
 import { getUi, localizedPath, type Locale } from "@i18n/index";
 
 const { locale } = Astro.props as { locale: Locale };
 const copy = getUi(locale);
-const dateLocale = locale === "zh" ? "zh-CN" : "en-US";
 const posts = (await getCollection("blog"))
   .filter((post) => post.data.locale === locale && !post.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
@@ -22,7 +22,7 @@ const posts = (await getCollection("blog"))
   <div class="post-list">
     {posts.map((post) => (
       <a class="post-card" href={localizedPath(locale, `/blog/${post.data.translationKey}/`)}>
-        <time>{post.data.date.toLocaleDateString(dateLocale, { year: "numeric", month: "short", day: "2-digit" })}</time>
+        <time datetime={post.data.date.toISOString().slice(0, 10)}>{formatNumericDate(post.data.date, { timeZone: "UTC" })}</time>
         <h2>{post.data.title}</h2>
         <p>{post.data.description}</p>
         <div class="tag-list">{post.data.tags.map((tag) => <span>{tag}</span>)}</div>

@@ -137,5 +137,5 @@ CheatBench 第 3.3 节区分了作弊尝试与尝试是否成功：在采用行�
 
 ## 回看原文
 
-- [CheatBench: Measuring Reward Gaming in AI Agents，arXiv v1](https://arxiv.org/abs/2609.36308v1)，2026 年 9 月 28 日。
+- [CheatBench: Measuring Reward Gaming in AI Agents，arXiv v1](https://arxiv.org/abs/2609.36308v1)，2026.09.28。
 - 本文主要讨论摘要与引言（第 1–2 页）、环境示例 Figure 2（第 3 页）、概念对照 Figure 3 与设计原则（第 4 页）、评价与指标（第 6 页）。

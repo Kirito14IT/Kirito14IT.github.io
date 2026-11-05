@@ -11,7 +11,7 @@ featured: true
 
 SafeCodeRL studies how to reduce vulnerable code generation while maintaining functional correctness.
 
-**Publication status:** Published on June 2, 2026.
+**Publication status:** Published on 2026.06.02.
 
 **Paper labels:** SCI Zone 3; CCF C.
 
@@ -21,6 +21,6 @@ The project proposes a collaborative workflow across multiple agents and introdu
 
 Publication notes:
 
-- Published on June 2, 2026.
+- Published on 2026.06.02.
 - Venue-specific details can be added when a stable public link is available.
 - The project page emphasizes method, responsibility, and reproducible safety evaluation.

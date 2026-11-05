@@ -98,7 +98,7 @@ const cvEn: CvData = {
     {
       degree: "Incoming M.Sc. Student",
       institution: "Fudan University",
-      period: "2027 entry",
+      period: "2027",
       details: [
         { html: `Advisor: <a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">Xingjun Ma</a>.` },
         { html: `Lab Director: <a href="${yuGangJiangUrl}" target="_blank" rel="noopener noreferrer">Yu-Gang Jiang (Vice President, Fudan University)</a>.` },
@@ -113,7 +113,7 @@ const cvEn: CvData = {
       degree: "B.Eng. in Computer Science and Technology (in progress)",
       institution: "University of Shanghai for Science and Technology",
       school: "School of Optical-Electrical and Computer Engineering",
-      period: "Sep 2023 - Present",
+      period: "2023.09 – present",
       details: [
         "Class of 2023; currently a senior undergraduate.",
         "Core academic interests: software engineering, web application development, artificial intelligence, algorithms, and high-performance programming."
@@ -122,95 +122,95 @@ const cvEn: CvData = {
   ],
   news: [
     {
-      date: "Nov 4, 2026",
+      date: "2026.11.04",
       html: `<a href="${memHarmBenchPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>MemHarmBench</strong></a> was recommended by Shanghai Innovation Institute and featured in MiraclePlus's <strong>Alpha Sight</strong>.`,
       links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "Code", url: memHarmBenchCodeUrl }],
       media: {
         src: "/news/memharmbench-alpha-sight-recommendation-20261104.png",
-        alt: "Alpha Sight's November 4 digest recommending MemHarmBench, highlighted in the original screenshot.",
+        alt: "Alpha Sight's 2026.11.04 digest recommending MemHarmBench, highlighted in the original screenshot.",
         caption: "Alpha Sight recommendation · View screenshot",
         width: 1328,
         height: 992
       }
     },
     {
-      date: "Oct 26, 2026",
+      date: "2026.10.26",
       html: `The code for <a href="${memHarmBenchPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>${memHarmBenchTitle}</strong></a> is publicly available on GitHub, and the paper is available on arXiv.`,
       links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "Code", url: memHarmBenchCodeUrl }]
     },
     {
-      date: "Oct 26, 2026",
+      date: "2026.10.26",
       html: `The code for <a href="${cstPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>${cstTitle}</strong></a> is publicly available on GitHub, and the paper is available on arXiv.`,
       links: [{ label: "arXiv", url: cstPaperUrl }, { label: "Code", url: cstCodeUrl }]
     },
     {
-      date: "Oct 21, 2026",
+      date: "2026.10.21",
       html:
         `Published a <a href="${logitechMouseFixRepoUrl}" target="_blank" rel="noopener noreferrer">Logitech mouse sleep/wake investigation and recovery scripts</a>, documenting receiver power-loss behavior and the initial filter-driver hypothesis that later testing ruled out. Updated the attribution in the <a href="${logitechMouseFixIssueUrl}" target="_blank" rel="noopener noreferrer">upstream issue</a>.`
     },
     {
-      date: "Oct 2026",
+      date: "2026.10",
       starRepos: ["wuyoscar/AISafetyHot", "Kirito14IT/prompt-spider-ui"],
       html: `Participated in the open-source projects <a href="${aiSafetyHotUrl}" target="_blank" rel="noopener noreferrer">AISafetyHot</a> and <a href="${promptSpiderUrl}" target="_blank" rel="noopener noreferrer">prompt-spider-ui</a> during China's National Day holiday.`
     },
     {
-      date: "Aug 13, 2026",
+      date: "2026.08.13",
       html:
         `Received the National First Prize at the National Finals of the <a href="${embeddedCompetitionUrl}" target="_blank" rel="noopener noreferrer">9th National College Student Embedded Chip and System Design Competition</a>.`
     },
     {
-      date: "Aug 2026",
+      date: "2026.08",
       html:
         `Submitted <a href="${scamWebUrl}" target="_blank" rel="noopener noreferrer">ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages</a> to AAAI 2027 after completing research on multimodal data curation, grounded annotation, benchmark design, and training-free fraud understanding.`
     },
     {
-      date: "July 2026",
+      date: "2026.07",
       html:
         `Joined <a href="${jingfengZhangUrl}" target="_blank" rel="noopener noreferrer">Advisor Jingfeng Zhang</a>'s RISE-AI Lab as a visiting student at <a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">TEAI, Fudan University</a> and began ICLR 2027-targeted research on a benchmark for persistent-memory poisoning in agents. The work adopts a victim-centered perspective to design evaluation cases and examines who ultimately bears the loss after an agent is compromised.`
     },
     {
-      date: "July 2026",
+      date: "2026.07",
       text:
         "Began serving as a reviewer for NeurIPS 2026, contributing to the peer-review process for research in machine learning and artificial intelligence."
     },
     {
-      date: "June 2026",
+      date: "2026.06",
       html:
         `At <a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">TEAI, Fudan University</a>, under the guidance of <a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">Advisor Xingjun Ma</a>, I participated in an enterprise-oriented multi-agent secure collaboration project, contributing to requirements analysis, system design, implementation, and testing.`
     },
     {
-      date: "Jan - Apr 2026",
+      date: "2026.01 – 2026.04",
       text:
         "Completed an International Organization Internship through the UNDP-administered UNV platform on mangrove responses to climate change and produced a review manuscript on blue carbon mitigation."
     },
     {
-      date: "Mar - Jun 2026",
+      date: "2026.03 – 2026.06",
       starRepos: ["XSafeAI/XSafeClaw"],
       html:
         `Joined <a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">TEAI, Fudan University</a> and, under the guidance of <a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">Advisor Xingjun Ma</a>, worked on the <a href="${xsafeclawUrl}" target="_blank" rel="noopener noreferrer">XSafeClaw</a> agent safety project, focusing on runtime integration, controlled tool calls, and safety audit workflows.`
     },
     {
-      date: "Feb 2026",
+      date: "2026.02",
       text:
         "Started SafeCodeRL, a multi-agent reinforcement learning framework for safety-constrained LLM code generation."
     },
     {
-      date: "Jan 2026",
+      date: "2026.01",
       html:
         `Worked on VulnSeeker at the <a href="${codeWisdomLabUrl}" target="_blank" rel="noopener noreferrer">Fudan Software Engineering (CodeWisdom) Lab</a>, combining CodeQL static analysis with LLM-based security judgement.`
     },
     {
-      date: "Sep 2025",
+      date: "2025.09",
       html:
         `Joined the <a href="${fzuKeyLabUrl}" target="_blank" rel="noopener noreferrer">Fujian Key Laboratory of Network Computing and Intelligent Information Processing</a> at Fuzhou University and, under the guidance of <a href="${yizhangLiuProfileUrl}" target="_blank" rel="noopener noreferrer">Advisor Yizhang Liu</a>, began SFMambaNet research on spectral-frequency enhanced state space models for correspondence pruning.`
     },
     {
-      date: "Jul 2025",
+      date: "2025.07",
       jumpTo: "#awards-skills",
       text: "My chapter as an ACMer officially came to an end."
     },
     {
-      date: "May 2024",
+      date: "2024.05",
       html:
         `Joined the <a href="${usstAcmUrl}" target="_blank" rel="noopener noreferrer">ACM Programming Training Team at the University of Shanghai for Science and Technology</a> and began my ACM journey. Looking forward to the challenges ahead! 🚀`
     }
@@ -218,7 +218,7 @@ const cvEn: CvData = {
   workExperiences: [
     {
       title: "AI Research Intern, Key Laboratory of Information Network Security, Ministry of Public Security (Third Research Institute, Shanghai)",
-      period: "Apr 2026 - Present",
+      period: "2026.04 – present",
       bullets: [
         { html: "<strong>Advisor:</strong> Songyang Wu" },
         { html: "<strong>Project 1:</strong> Independently built a pipeline for joint analysis of webpage text, images, and URLs and localization of fraud evidence, producing <strong>one sole-first-author paper</strong>." },
@@ -227,18 +227,18 @@ const cvEn: CvData = {
     },
     {
       title: "International Organization (United Nations Volunteers) - UNDP, Research Intern (Online)",
-      period: "Jan 2026 - Apr 2026"
+      period: "2026.01 – 2026.04"
     },
     {
       title: "Meituan, Odd Jobs",
-      period: "Jun 2023 - Sep 2023"
+      period: "2023.06 – 2023.09"
     }
   ],
   experiences: [
     {
       title: "Research Intern, MemHarmBench and CST",
       organization: "Institute of Trustworthy Embodied AI (TEAI), Fudan University · FVL Laboratory · Shanghai Innovation Institute",
-      period: "Aug 2026 - Nov 2026",
+      period: "2026.08 – 2026.11",
       tags: ["Agent Safety", "Memory Poisoning", "Risk Triage", "Source-Grounded Evidence", "First Author"],
       bullets: [
         { html: `Advised by <a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">Xingjun Ma</a> and <a href="${yuGangJiangUrl}" target="_blank" rel="noopener noreferrer">Yu-Gang Jiang (Vice President, Fudan University)</a>.` },
@@ -256,7 +256,7 @@ const cvEn: CvData = {
       title: "Research Intern, ScamWeb Multimodal Fraud Benchmark",
       titleUrl: scamWebUrl,
       organization: "Institute of Trustworthy Embodied Artificial Intelligence (TEAI), Fudan University & The Third Research Institute of the Ministry of Public Security",
-      period: "Apr 2026 - Aug 2026",
+      period: "2026.04 – 2026.08",
       tags: ["AAAI 2027", "Multimodal Benchmark", "Cybersecurity", "Grounded Understanding", "Trustworthy AI"],
       bullets: [
         {
@@ -287,7 +287,7 @@ const cvEn: CvData = {
       titleUrl: xsafeclawUrl,
       organization: "Institute of Trustworthy Embodied Artificial Intelligence (TEAI), Fudan University",
       organizationUrl: teaiUrl,
-      period: "Mar 2026 - Jun 2026",
+      period: "2026.03 – 2026.06",
       tags: ["TEAI", "Agent Safety", "Runtime Governance", "Open Source"],
       bullets: [
         {
@@ -312,7 +312,7 @@ const cvEn: CvData = {
       titleUrl: vulnseekerUrl,
       organization: "Fudan Software Engineering (CodeWisdom) Lab",
       organizationUrl: codeWisdomLabUrl,
-      period: "Jan 2026 - Mar 2026",
+      period: "2026.01 – 2026.03",
       tags: ["CodeWisdom", "CodeQL", "LLM Security", "Program Analysis"],
       bullets: [
         {
@@ -336,7 +336,7 @@ const cvEn: CvData = {
       title: "International Organization Internship, UNDP-administered UNV Online Research Intern",
       titleUrl: "https://www.undp.org/",
       organization: "Morobe Development Foundation Inc., Papua New Guinea",
-      period: "Jan 2026 - Apr 2026",
+      period: "2026.01 – 2026.04",
       tags: ["UNDP", "UNV", "Climate Change", "Blue Carbon"],
       bullets: [
         "Completed an International Organization Internship through the UNDP-administered United Nations Volunteers (UNV) platform, supporting research on mangrove responses to climate change scenarios and blue carbon mitigation.",
@@ -355,7 +355,7 @@ const cvEn: CvData = {
     {
       title: "First-author Research, SafeCodeRL",
       organization: "Independent research collaboration",
-      period: "Feb 2026 - Present",
+      period: "2026.02 – present",
       tags: ["AI Safety", "Multi-Agent Systems", "Constrained RL", "Secure Code Generation", "LLM Code Generation", "IoT/CPS Security", "Trustworthy AI"],
       bullets: [
         "Proposed SafeCodeRL, a multi-agent framework for dynamic safety constraints in LLM code generation.",
@@ -368,12 +368,12 @@ const cvEn: CvData = {
       titleUrl: "https://arxiv.org/abs/2606.04493",
       organization: "Fujian Key Laboratory of Network Computing and Intelligent Information Processing, Fuzhou University",
       organizationUrl: fzuKeyLabUrl,
-      period: "Sep 2025 - Mar 2026",
+      period: "2025.09 – 2026.03",
       tags: ["Computer Vision", "Correspondence Pruning", "Mamba", "State Space Models", "Frequency Domain", "Two-View Geometry", "Outlier Rejection"],
       bullets: [
         {
           html:
-            `Worked as a research intern at <a href="${fzuKeyLabUrl}" target="_blank" rel="noopener noreferrer">Fujian Key Laboratory of Network Computing and Intelligent Information Processing</a>, Fuzhou University, from September 2025 to March 2026.`
+            `Worked as a research intern at <a href="${fzuKeyLabUrl}" target="_blank" rel="noopener noreferrer">Fujian Key Laboratory of Network Computing and Intelligent Information Processing</a>, Fuzhou University (2025.09 – 2026.03).`
         },
         {
           html:
@@ -396,7 +396,7 @@ const cvEn: CvData = {
       title: "ACMer, ACM Programming Training Team",
       titleUrl: usstAcmUrl,
       organization: "University of Shanghai for Science and Technology",
-      period: "May 2024 - Jul 2025",
+      period: "2024.05 – 2025.07",
       tags: ["ACM", "Competitive Programming", "Algorithms", "Data Structures"],
       bullets: [
         "Completed systematic training in algorithms, data structures, and contest problem solving.",
@@ -445,7 +445,7 @@ const cvEn: CvData = {
     },
     {
       title: "SafeCodeRL: A Multi-Agent Reinforcement Learning Framework for Safety-Constrained LLM Code Generation",
-      status: "Published on June 2, 2026",
+      status: "Published on 2026.06.02",
       role: "First author",
       year: "2026",
       tags: ["AI Safety", "Multi-Agent Systems", "Constrained Reinforcement Learning", "Secure Code Generation", "LLM", "IoT/CPS Security", "Trustworthy AI", "Vulnerability Mitigation"],
@@ -497,7 +497,7 @@ const cvEn: CvData = {
   awards: [
     {
       html:
-        `National First Prize, National Finals of the <a href="${embeddedCompetitionUrl}" target="_blank" rel="noopener noreferrer">9th National College Student Embedded Chip and System Design Competition</a> — Aug 13, 2026`
+        `National First Prize, National Finals of the <a href="${embeddedCompetitionUrl}" target="_blank" rel="noopener noreferrer">9th National College Student Embedded Chip and System Design Competition</a> — 2026.08.13`
     },
     "National First Prize, RAICOM Robot Developer Competition, 2025",
     "National Second Prize, LanQiao Cup C/C++ Programming Contest, 2025",
@@ -562,7 +562,7 @@ const cvZh: CvData = {
     {
       degree: "硕士研究生（即将入学）",
       institution: "复旦大学",
-      period: "2027年入学",
+      period: "2027",
       details: [
         { html: `导师：<a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">马兴军</a>。` },
         { html: `实验室负责人：<a href="${yuGangJiangUrl}" target="_blank" rel="noopener noreferrer">姜育刚（复旦大学副校长）</a>。` },
@@ -577,7 +577,7 @@ const cvZh: CvData = {
       degree: "工学学士，计算机科学与技术（在读）",
       institution: "上海理工大学",
       school: "光电信息与计算机工程学院",
-      period: "2023年9月 - 至今",
+      period: "2023.09 – 至今",
       details: [
         "2023 级本科生，目前大四在读。",
         "主要学术兴趣包括软件工程、Web 应用开发、人工智能、算法与高性能程序设计。"
@@ -586,92 +586,92 @@ const cvZh: CvData = {
   ],
   news: [
     {
-      date: "2026年11月4日",
+      date: "2026.11.04",
       html: `<a href="${memHarmBenchPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>MemHarmBench</strong></a> 获得上海创智学院论文推荐，并获奇绩创坛「<strong>奇绩信号 Alpha Sight</strong>」推荐。`,
       links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "代码", url: memHarmBenchCodeUrl }],
       media: {
         src: "/news/memharmbench-alpha-sight-recommendation-20261104.png",
-        alt: "奇绩信号 Alpha Sight 11月4日推荐 MemHarmBench 的原始截图，红框标注相关条目。",
+        alt: "奇绩信号 Alpha Sight 于 2026.11.04 推荐 MemHarmBench 的原始截图，红框标注相关条目。",
         caption: "Alpha Sight 推荐截图 · 点击查看大图",
         width: 1328,
         height: 992
       }
     },
     {
-      date: "2026年10月26日",
+      date: "2026.10.26",
       html: `<a href="${memHarmBenchPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>${memHarmBenchTitle}</strong></a> 的代码已在 GitHub 公开，论文已发布于 arXiv。`,
       links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "代码", url: memHarmBenchCodeUrl }]
     },
     {
-      date: "2026年10月26日",
+      date: "2026.10.26",
       html: `<a href="${cstPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>${cstTitle}</strong></a> 的代码已在 GitHub 公开，论文已发布于 arXiv。`,
       links: [{ label: "arXiv", url: cstPaperUrl }, { label: "代码", url: cstCodeUrl }]
     },
     {
-      date: "2026年10月21日",
+      date: "2026.10.21",
       html:
         `公开了<a href="${logitechMouseFixRepoUrl}" target="_blank" rel="noopener noreferrer">罗技鼠标待机后失灵的排查记录与恢复脚本</a>，记录接收器掉电后的异常表现，以及后续测试推翻最初过滤驱动归因的过程，并在<a href="${logitechMouseFixIssueUrl}" target="_blank" rel="noopener noreferrer">上游问题报告</a>中更正说明。`
     },
     {
-      date: "2026年10月",
+      date: "2026.10",
       starRepos: ["wuyoscar/AISafetyHot", "Kirito14IT/prompt-spider-ui"],
       html: `国庆期间参与开源项目 <a href="${aiSafetyHotUrl}" target="_blank" rel="noopener noreferrer">AISafetyHot</a> 和 <a href="${promptSpiderUrl}" target="_blank" rel="noopener noreferrer">prompt-spider-ui</a>。`
     },
     {
-      date: "2026年8月13日",
+      date: "2026.08.13",
       html:
         `获得<a href="${embeddedCompetitionUrl}" target="_blank" rel="noopener noreferrer">第九届全国大学生嵌入式芯片与系统设计竞赛全国总决赛</a>全国一等奖。`
     },
     {
-      date: "2026年8月",
+      date: "2026.08",
       html:
         `完成 <a href="${scamWebUrl}" target="_blank" rel="noopener noreferrer">ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages</a> 的多模态数据整理、落地式标注、基准设计与免训练诈骗理解研究，并投稿至 AAAI 2027。`
     },
     {
-      date: "2026年7月",
+      date: "2026.07",
       html:
         `加入<a href="${jingfengZhangUrl}" target="_blank" rel="noopener noreferrer">导师张景锋</a>的 RISE-AI Lab，在<a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">复旦大学可信具身智能研究院（TEAI）</a>担任访问学生，开展以 ICLR 2027 为投稿目标的智能体持久性记忆投毒评测基准研究。该工作从受害者视角设计评测案例，并分析智能体遭受攻击后最终由谁承担损失。`
     },
     {
-      date: "2026年7月",
+      date: "2026.07",
       text: "开始担任 NeurIPS 2026 审稿人，参与机器学习与人工智能研究的同行评审工作。"
     },
     {
-      date: "2026年6月",
+      date: "2026.06",
       html:
         `在<a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">复旦大学可信具身智能研究院（TEAI）</a>的团队中，在<a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">导师马兴军</a>指导下，参与面向企业的多智能体安全协作项目，负责需求分析、系统设计、实现与测试。`
     },
     {
-      date: "2026年1月 - 4月",
+      date: "2026.01 – 2026.04",
       text: "通过由 UNDP 管理的 UNV 平台完成国际组织实习，研究红树林对气候变化的响应，并产出蓝碳减缓方向的综述手稿。"
     },
     {
-      date: "2026年3月 - 6月",
+      date: "2026.03 – 2026.06",
       starRepos: ["XSafeAI/XSafeClaw"],
       html:
         `加入<a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">复旦大学可信具身智能研究院（TEAI）</a>，在<a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">马兴军老师</a>的指导下，参与 <a href="${xsafeclawUrl}" target="_blank" rel="noopener noreferrer">XSafeClaw</a> 智能体安全项目，聚焦运行时接入、受控工具调用与安全审计流程。`
     },
     {
-      date: "2026年2月",
+      date: "2026.02",
       text: "启动 SafeCodeRL 研究，探索面向安全约束大语言模型代码生成的多智能体强化学习框架。"
     },
     {
-      date: "2026年1月",
+      date: "2026.01",
       html:
         `在<a href="${codeWisdomLabUrl}" target="_blank" rel="noopener noreferrer">复旦大学软件工程（CodeWisdom）实验室</a>开展 VulnSeeker 研究，将 CodeQL 静态分析与基于 LLM 的安全判断相结合。`
     },
     {
-      date: "2025年9月",
+      date: "2025.09",
       html:
         `加入福州大学<a href="${fzuKeyLabUrl}" target="_blank" rel="noopener noreferrer">福建省网络计算与智能信息处理重点实验室</a>，在<a href="${yizhangLiuProfileUrl}" target="_blank" rel="noopener noreferrer">导师刘翼章</a>指导下启动 SFMambaNet 研究，探索用于对应关系剪枝的谱频增强状态空间模型。`
     },
     {
-      date: "2025年7月",
+      date: "2025.07",
       jumpTo: "#awards-skills",
       text: "我的 ACMer 身份正式退役。"
     },
     {
-      date: "2024年5月",
+      date: "2024.05",
       html:
         `加入<a href="${usstAcmUrl}" target="_blank" rel="noopener noreferrer">上海理工大学 ACM 程序设计集训队</a>，开启了我的 ACM 生涯。期待接下来的挑战！🚀`
     }
@@ -679,7 +679,7 @@ const cvZh: CvData = {
   workExperiences: [
     {
       title: "信息网络安全公安部重点实验室（公安部第三研究所，上海），AI 研究实习生",
-      period: "2026年4月 - 至今",
+      period: "2026.04 – 至今",
       bullets: [
         { html: "<strong>导师：</strong>吴松洋" },
         { html: "<strong>项目 1：</strong>独立构建网页图文与 URL 联合分析及诈骗证据定位流程，完成<strong>独立一作论文 1 篇</strong>。" },
@@ -688,18 +688,18 @@ const cvZh: CvData = {
     },
     {
       title: "国际组织（联合国志愿人员组织）- UNDP，研究实习生（线上）",
-      period: "2026年1月 - 2026年4月"
+      period: "2026.01 – 2026.04"
     },
     {
       title: "美团，打零工",
-      period: "2023年6月 - 2023年9月"
+      period: "2023.06 – 2023.09"
     }
   ],
   experiences: [
     {
       title: "科研实习生，MemHarmBench 与 CST",
       organization: "复旦大学可信具身智能研究院（TEAI） · FVL 实验室 · 上海创智学院",
-      period: "2026年8月 - 11月",
+      period: "2026.08 – 2026.11",
       tags: ["智能体安全", "记忆投毒", "风险分诊", "来源可追溯证据", "第一作者"],
       bullets: [
         { html: `导师：<a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">马兴军</a>、<a href="${yuGangJiangUrl}" target="_blank" rel="noopener noreferrer">姜育刚（复旦大学副校长）</a>。` },
@@ -717,7 +717,7 @@ const cvZh: CvData = {
       title: "科研实习生，ScamWeb 多模态诈骗网页基准",
       titleUrl: scamWebUrl,
       organization: "复旦大学可信具身智能研究院（TEAI）与公安部第三研究所",
-      period: "2026年4月 - 8月",
+      period: "2026.04 – 2026.08",
       tags: ["AAAI 2027", "多模态基准", "网络安全", "落地式理解", "可信人工智能"],
       bullets: [
         {
@@ -748,7 +748,7 @@ const cvZh: CvData = {
       titleUrl: xsafeclawUrl,
       organization: "复旦大学可信具身智能研究院（TEAI）",
       organizationUrl: teaiUrl,
-      period: "2026年3月 - 6月",
+      period: "2026.03 – 2026.06",
       tags: ["TEAI", "智能体安全", "运行时治理", "开源"],
       bullets: [
         {
@@ -773,7 +773,7 @@ const cvZh: CvData = {
       titleUrl: vulnseekerUrl,
       organization: "复旦大学软件工程（CodeWisdom）实验室",
       organizationUrl: codeWisdomLabUrl,
-      period: "2026年1月 - 3月",
+      period: "2026.01 – 2026.03",
       tags: ["CodeWisdom", "CodeQL", "LLM 安全", "程序分析"],
       bullets: [
         {
@@ -797,7 +797,7 @@ const cvZh: CvData = {
       title: "国际组织实习：UNDP 管理的 UNV 在线科研实习生",
       titleUrl: "https://www.undp.org/",
       organization: "巴布亚新几内亚 Morobe Development Foundation Inc.",
-      period: "2026年1月 - 4月",
+      period: "2026.01 – 2026.04",
       tags: ["UNDP", "UNV", "气候变化", "蓝碳"],
       bullets: [
         "通过由 UNDP 管理的联合国志愿人员组织（UNV）平台完成国际组织实习，支持红树林对气候变化情景响应与蓝碳减缓研究。",
@@ -816,7 +816,7 @@ const cvZh: CvData = {
     {
       title: "第一作者研究，SafeCodeRL",
       organization: "独立科研合作",
-      period: "2026年2月 - 至今",
+      period: "2026.02 – 至今",
       tags: ["人工智能安全", "多智能体系统", "约束强化学习", "安全代码生成", "LLM 代码生成", "IoT/CPS 安全", "可信人工智能"],
       bullets: [
         "提出 SafeCodeRL，一种面向大语言模型代码生成动态安全约束的多智能体框架。",
@@ -829,12 +829,12 @@ const cvZh: CvData = {
       titleUrl: "https://arxiv.org/abs/2606.04493",
       organization: "福州大学福建省网络计算与智能信息处理重点实验室",
       organizationUrl: fzuKeyLabUrl,
-      period: "2025年9月 - 2026年3月",
+      period: "2025.09 – 2026.03",
       tags: ["计算机视觉", "对应关系剪枝", "Mamba", "状态空间模型", "频域", "双视图几何", "外点剔除"],
       bullets: [
         {
           html:
-            `于 2025 年 9 月至 2026 年 3 月在福州大学<a href="${fzuKeyLabUrl}" target="_blank" rel="noopener noreferrer">福建省网络计算与智能信息处理重点实验室</a>担任科研实习生。`
+            `2025.09 – 2026.03，在福州大学<a href="${fzuKeyLabUrl}" target="_blank" rel="noopener noreferrer">福建省网络计算与智能信息处理重点实验室</a>担任科研实习生。`
         },
         {
           html:
@@ -857,7 +857,7 @@ const cvZh: CvData = {
       title: "ACMer，ACM 程序设计集训队",
       titleUrl: usstAcmUrl,
       organization: "上海理工大学",
-      period: "2024年5月 - 2025年7月",
+      period: "2024.05 – 2025.07",
       tags: ["ACM", "程序设计竞赛", "算法", "数据结构"],
       bullets: [
         "系统训练算法、数据结构与竞赛问题求解能力。",
@@ -906,7 +906,7 @@ const cvZh: CvData = {
     },
     {
       title: "SafeCodeRL: A Multi-Agent Reinforcement Learning Framework for Safety-Constrained LLM Code Generation",
-      status: "发表于 2026 年 6 月 2 日",
+      status: "发表于 2026.06.02",
       role: "第一作者",
       year: "2026",
       tags: ["人工智能安全", "多智能体系统", "约束强化学习", "安全代码生成", "LLM", "IoT/CPS 安全", "可信人工智能", "漏洞缓解"],
@@ -958,7 +958,7 @@ const cvZh: CvData = {
   awards: [
     {
       html:
-        `<a href="${embeddedCompetitionUrl}" target="_blank" rel="noopener noreferrer">第九届全国大学生嵌入式芯片与系统设计竞赛全国总决赛</a>全国一等奖（2026年8月13日）`
+        `<a href="${embeddedCompetitionUrl}" target="_blank" rel="noopener noreferrer">第九届全国大学生嵌入式芯片与系统设计竞赛全国总决赛</a>全国一等奖（2026.08.13）`
     },
     "2025 年睿抗机器人开发者大赛国家级一等奖",
     "2025 年蓝桥杯 C/C++ 程序设计竞赛全国二等奖",

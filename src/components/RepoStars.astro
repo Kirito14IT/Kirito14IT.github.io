@@ -70,6 +70,8 @@ const badges: Record<StarRepo, { name: string; color: string }> = {
 </style>
 
 <script>
+  import { formatNumericDate } from "@i18n/date";
+
   type StarCache = { count: number; fetchedAt: number };
   const ttl = 5 * 60 * 1000;
   const zh = document.documentElement.lang.startsWith("zh");
@@ -81,7 +83,11 @@ const badges: Record<StarRepo, { name: string; color: string }> = {
 
   function display(badges: HTMLAnchorElement[], data: StarCache, cached: boolean) {
     const count = new Intl.NumberFormat("en-US").format(data.count);
-    const time = new Date(data.fetchedAt).toLocaleString(zh ? "zh-CN" : "en-US");
+    const time = formatNumericDate(new Date(data.fetchedAt), {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit"
+    });
     for (const badge of badges) {
       const counter = badge.querySelector<HTMLElement>("[data-star-count]")!;
       counter.textContent = count;

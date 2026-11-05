@@ -11,6 +11,8 @@ import { createTrackerSync } from "../data/sync.ts";
 import type { SyncStatus, TrackerSync } from "../data/sync.ts";
 import type { App } from "./app-api.ts";
 import * as commands from "./commands.ts";
+import { connectErrorMessage } from "./connect-errors.ts";
+import type { ConnectStage } from "./connect-errors.ts";
 import { VIEWS, buildContext, emptyContactFilters, initialState } from "./context.ts";
 import type { ContactFilters, View, ViewContext } from "./context.ts";
 import { html } from "./html.ts";
@@ -436,6 +438,7 @@ export const start = (root: HTMLElement) => {
   const connect = async (settings: RepoSettings, token: string, mode: TokenMode, persist: { passphrase?: string } | null) => {
     root.innerHTML = loadingView("正在连接数据仓库…").toString();
     const client = createGitHubClient({ fetch: (input, init) => window.fetch(input, init), token, ref: { ...settings, apiBase: apiBase() } });
+    let stage: ConnectStage = "access";
     try {
       const access = await client.checkAccess();
       if (!access.canPush) throw new Error("这个令牌只能读取，不能保存修改。请在令牌设置里把 Contents 设为 Read and write。");
@@ -447,6 +450,7 @@ export const start = (root: HTMLElement) => {
         onChange: () => render()
       });
       root.innerHTML = loadingView("正在读取数据…").toString();
+      stage = "load";
       const { warnings } = await instance.load();
       if (persist) await saveAuth(stores, { ...settings, mode, token, passphrase: persist.passphrase });
       sync = instance;
@@ -455,7 +459,7 @@ export const start = (root: HTMLElement) => {
       renderShell();
       if (warnings.length > 0) toast(`数据里有 ${warnings.length} 条格式提示，可以在设置里查看`);
     } catch (error) {
-      showConnect(describeError(error), { repo: `${settings.owner}/${settings.repo}`, branch: settings.branch, dir: settings.dir, mode });
+      showConnect(connectErrorMessage(error, stage, settings), { repo: `${settings.owner}/${settings.repo}`, branch: settings.branch, dir: settings.dir, mode });
     }
   };
 

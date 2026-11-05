@@ -39,10 +39,12 @@ export const connectView = (defaults: ConnectDefaults, error = "") => html`<main
     <details class="it-help">
       <summary>如何创建令牌</summary>
       <ol>
-        <li>在 GitHub 打开 Settings → Developer settings → Personal access tokens → Fine-grained tokens，点击 Generate new token。</li>
-        <li>Repository access 选择 Only select repositories，只勾选数据仓库。</li>
-        <li>Repository permissions 里把 Contents 设为 Read and write，其他保持默认。</li>
-        <li>生成后复制令牌，粘贴到上面的输入框。</li>
+        <li>先确认 GitHub 右上角登录的是数据仓库所属的账号，再打开 Settings → Developer settings → Personal access tokens → Fine-grained tokens，点击 Generate new token。</li>
+        <li>Resource owner 选这个账号。</li>
+        <li>Repository access 默认是 Public repositories，必须改成 Only select repositories，再勾选数据仓库。</li>
+        <li>Permissions 里找到 Contents，设为 Read and write，其他保持默认。</li>
+        <li>生成后复制令牌，只粘贴到上面的输入框，不要发到聊天或其他地方。</li>
+        <li>已经建好的令牌可以点进去修改 Repository access 和权限，不必重新创建。</li>
       </ol>
       <a class="it-external" href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">打开 GitHub 令牌设置${icons.external}</a>
     </details>

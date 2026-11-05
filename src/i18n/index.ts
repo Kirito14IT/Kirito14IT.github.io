@@ -82,7 +82,7 @@ export const ui = {
       academicCommunity: "Academic community"
     },
     contact: {
-      eyebrow: "Contact and Representative Links",
+      eyebrow: "Contact",
       title: "Open to academic discussion and collaboration"
     },
     publication: { framework: "Framework overview" },
@@ -196,7 +196,7 @@ export const ui = {
       academicCommunity: "学术共同体"
     },
     contact: {
-      eyebrow: "联系方式与代表链接",
+      eyebrow: "联系方式",
       title: "欢迎开展学术交流与科研合作"
     },
     publication: { framework: "框架概览" },

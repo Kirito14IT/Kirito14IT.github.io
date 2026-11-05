@@ -28,9 +28,9 @@ const homeJumpLinks = [
   { label: copy.homeJump.about, href: "#about" },
   { label: copy.homeJump.education, href: "#education" },
   { label: copy.homeJump.news, href: "#news" },
-  { label: copy.homeJump.research, href: "#research-experience" },
   { label: copy.homeJump.publications, href: "#publications" },
   { label: copy.homeJump.projects, href: "#projects" },
+  { label: copy.homeJump.research, href: "#research-experience" },
   { label: copy.fieldNotes.title, href: "#field-notes" },
   { label: copy.homeJump.awards, href: "#awards-skills" },
   { label: copy.homeJump.work, href: "#work-experience" },
@@ -89,10 +89,6 @@ const homeJumpLinks = [
     </div>
   </Section>
 
-  <Section id="research-experience" title={copy.sections.researchExperience} eyebrow={copy.sections.timeline}>
-    <Timeline items={experiences} />
-  </Section>
-
   <Section id="publications" title={copy.sections.publications} eyebrow={copy.sections.researchOutput}>
     <div class="publication-list">
       {publications.map((item) => (
@@ -121,11 +117,15 @@ const homeJumpLinks = [
     </div>
   </Section>
 
-  <ContributionGraph locale={locale} />
-
   <Section id="projects" title={copy.sections.projects} eyebrow={copy.sections.builds}>
     <AISafetyHotProject locale={locale} />
   </Section>
+
+  <Section id="research-experience" title={copy.sections.researchExperience} eyebrow={copy.sections.timeline}>
+    <Timeline items={experiences} />
+  </Section>
+
+  <ContributionGraph locale={locale} />
 
   <FieldNotes locale={locale} showBlogLink />
 

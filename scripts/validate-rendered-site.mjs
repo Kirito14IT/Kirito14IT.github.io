@@ -56,6 +56,11 @@ const workSection = homepage.match(/<section id="work-experience"[\s\S]*?<\/sect
 const zhWorkSection = zhHomepage.match(/<section id="work-experience"[\s\S]*?<\/section>/)?.[0] || "";
 const homeShortcutNav = homepage.match(/<nav[^>]*class="quick-jump-nav"[\s\S]*?<\/nav>/)?.[0] || "";
 const zhHomeShortcutNav = zhHomepage.match(/<nav[^>]*class="quick-jump-nav"[\s\S]*?<\/nav>/)?.[0] || "";
+const featuredSectionOrder = ["news", "publications", "projects", "research-experience"];
+const followsFeaturedSectionOrder = (ids) => {
+  const newsIndex = ids.indexOf("news");
+  return newsIndex >= 0 && featuredSectionOrder.every((id, index) => ids[newsIndex + index] === id);
+};
 const meteorMarkup = homepage.match(/<div class="meteor-shower">([\s\S]*?)<\/div>/)?.[1] || "";
 const meteorCount = (meteorMarkup.match(/<span style=/g) || []).length;
 const newsCards = (html) => (html.match(/<section id="news"[\s\S]*?<\/section>/)?.[0] || "").match(/<article\b[\s\S]*?<\/article>/g) || [];
@@ -102,6 +107,13 @@ const checks = [
   ["detailed PDF preview stays in a closed disclosure and inert template", [cv, zhCv].every((html) => /<details[^>]*data-detailed-resume/.test(html) && !/<details[^>]*\bopen\b[^>]*data-detailed-resume/.test(html) && /<template[^>]*data-detailed-template[^>]*>[\s\S]*?<iframe/.test(html))],
   ["published PDF copies match the resume manifest", Object.values(resumeManifest.resumes).every((resume) => createHash("sha256").update(fs.readFileSync(path.join(root, "dist", resume.path))).digest("hex") === resume.sha256)],
   ["home toolbar links to localized CV pages", homeShortcutNav.includes('href="/cv/">CV</a>') && zhHomeShortcutNav.includes('href="/zh/cv/">简历</a>')],
+  ["publications and projects immediately follow News on both homepages and in their navigation", [
+    [homepage, homeShortcutNav],
+    [zhHomepage, zhHomeShortcutNav]
+  ].every(([html, nav]) =>
+    followsFeaturedSectionOrder([...html.matchAll(/<section id="([^"]+)"/g)].map(([, id]) => id)) &&
+    followsFeaturedSectionOrder([...nav.matchAll(/href="#([^"]+)"/g)].map(([, id]) => id))
+  )],
   ["duplicate homepage project cards are removed", [homepage, zhHomepage].every((html) => !(html.match(/<section id="projects"[\s\S]*?<\/section>/)?.[0] || "").includes('class="card-grid"'))],
   ["web CV remains optional behind a collapsed disclosure", [cv, zhCv].every((html) => /<details class="web-cv\b/.test(html) && !/<details[^>]*class="web-cv[^>]*\bopen\b/.test(html))],
   ["About includes bilingual internship search copy and an email contact", [[homepage, "Seeking internships:", "I am seeking internships in foundation models, coding agents, agent post-training, agentic reinforcement learning, and LLM evaluation."], [zhHomepage, "实习求职：", "我在寻找基座大模型、Coding Agent、智能体后训练（Agent Post-Training）、Agentic rl及大模型评测相关的实习机会。"]].every(([html, title, description]) => { const about = html.match(/<section id="about"[\s\S]*?<\/section>/)?.[0] || ""; return about.includes(title) && about.includes(description) && about.includes('href="mailto:2657751462@qq.com"'); })],
@@ -112,7 +124,7 @@ const checks = [
   ["original English MemHarmBench figure is published", fs.existsSync(path.join(root, "dist", "figures", "memharmbench-cross-session-en.webp"))],
   ["CST publication cards share the original paper framework figure across both languages", fs.existsSync(path.join(root, "dist/figures/cst-framework-original.png")) && [homepage, cv, zhHomepage, zhCv].every((html) => { const card = publicationCard(html, submissionTitles[1]); return card.includes('src="/figures/cst-framework-original.png"') && /Original figure from the paper|论文原图/.test(card) && card.includes('loading="lazy"'); })],
   ["combined MemHarmBench and CST research card retains dates, affiliations, advisors, and both project resources", [[homepage, "Aug 2026 - Nov 2026", "Xingjun Ma", "Yu-Gang Jiang (Vice President, Fudan University)", "Shanghai Innovation Institute"], [zhHomepage, "2026年8月 - 11月", "马兴军", "姜育刚（复旦大学副校长）", "上海创智学院"]].every(([html, period, advisor, head, institute]) => { const cards = timelineCards(html.match(/<section id="research-experience"[\s\S]*?<\/section>/)?.[0] || ""); const combined = cards.filter((card) => /<h3>[^<]*MemHarmBench[^<]*CST/.test(card)); return combined.length === 1 && [period, advisor, head, institute, "FVL", "TEAI", ...newPaperResources.flatMap(({paper, code}) => [`href="${paper}"`, `href="${code}"`])].every((value) => combined[0].includes(value)); })],
-  ["lab director link appears in bilingual sidebars and education with representative research links preserved", [[homepage, "Lab Director", "Yu-Gang Jiang (Vice President, Fudan University)"], [zhHomepage, "实验室负责人", "姜育刚（复旦大学副校长）"]].every(([html, label, head]) => { const sidebar = html.match(/<aside\b[\s\S]*?<\/aside>/)?.[0] || ""; const education = html.match(/<section id="education"[\s\S]*?<\/section>/)?.[0] || ""; const representatives = html.match(/<div class="representative-links">[\s\S]*?<\/div>/)?.[0] || ""; return [sidebar, education].every((section) => section.includes(label) && section.includes(head) && section.includes(`href="${labHeadUrl}"`)) && ["https://anonymous.4open.science/r/ScamWeb-B710", ...newPaperResources.map(({paper}) => paper)].every((url) => representatives.includes(`href="${url}"`)); })],
+  ["lab director link appears in bilingual sidebars and education", [[homepage, "Lab Director", "Yu-Gang Jiang (Vice President, Fudan University)"], [zhHomepage, "实验室负责人", "姜育刚（复旦大学副校长）"]].every(([html, label, head]) => { const sidebar = html.match(/<aside\b[\s\S]*?<\/aside>/)?.[0] || ""; const education = html.match(/<section id="education"[\s\S]*?<\/section>/)?.[0] || ""; return [sidebar, education].every((section) => section.includes(label) && section.includes(head) && section.includes(`href="${labHeadUrl}"`)); })],
   ["bilingual homepages omit the learning map and percentage cards", [homepage, zhHomepage].every((html) => !html.includes('id="learning-map"') && !html.includes('class="learning-grid"') && !html.includes('class="progress-track"')) && !homepage.includes("Knowledge progress") && !zhHomepage.includes("知识进展")],
   ["standalone blog pages and navigation use Blog and 博客", readRendered("blog").includes("<h1>Blog</h1>") && readRendered("zh", "blog").includes("<h1>博客</h1>") && homepage.includes('href="/blog/">Blog</a>') && zhHomepage.includes('href="/zh/blog/">博客</a>') && !zhHomepage.includes("技术博客")],
   ["all 22 bilingual routes are generated", expectedRoutes.length === 22],
@@ -128,7 +140,13 @@ const checks = [
     return sidebar.includes(link) && direct.includes(link) && html.split(link).length === 3;
   })],
   ["duplicate XSafeClaw links are removed from sidebars and direct contact lists", [homepage, zhHomepage, cv, zhCv].every((html) => !(html.match(/<aside\b[\s\S]*?<\/aside>/)?.[0] || "").includes('href="https://github.com/XSafeAI/XSafeClaw"')) && [homepage, zhHomepage].every((html) => !(html.match(/<div class="direct-link-list">[\s\S]*?<\/div>/)?.[0] || "").includes('href="https://github.com/XSafeAI/XSafeClaw"'))],
-  ["representative open-source XSafeClaw link is preserved", [homepage, zhHomepage].every((html) => (html.match(/<div class="representative-links">[\s\S]*?<\/div>/)?.[0] || "").includes('href="https://github.com/XSafeAI/XSafeClaw"'))],
+  ["bilingual homepage contact panels show only direct contact links", [homepage, zhHomepage].every((html) => {
+    const contact = html.match(/<section id="contact"[\s\S]*?<\/section>/)?.[0] || "";
+    const urls = [...contact.matchAll(/<a\b[^>]*href="([^"]+)"/g)].map(([, url]) => url);
+    const expected = ["mailto:2657751462@qq.com", "https://github.com/Kirito14IT", "https://scholar.google.com/citations?user=MyweXYYAAAAJ", ...socialProfileUrls];
+    return urls.length === expected.length && expected.every((url) => urls.includes(url)) &&
+      !html.includes('class="representative-links"');
+  })],
   ["English About copy includes both labs and updated research interests", homepage.includes("I am a senior undergraduate student in Computer Science and Technology (Class of 2023)") && homepage.includes("I will begin my M.Sc. studies at Fudan University in 2027, advised by Xingjun Ma.") && homepage.includes("Fudan Vision and Learning Lab (FVL)") && homepage.includes("My research interests include large language models, coding agents, trustworthy AI, agent post-training, and reinforcement learning for agents (Agent RL).")],
   ["Chinese About copy includes both labs and updated research interests", zhHomepage.includes("我是上海理工大学计算机科学与技术专业 2023 级本科生，目前大四在读。") && zhHomepage.includes("我将于 2027 年进入复旦大学攻读硕士学位，导师为马兴军老师。") && zhHomepage.includes("我正在复旦大学视觉与学习实验室（FVL）&amp;可信具身智能研究院（TEAI）进行科研实习") && zhHomepage.includes("研究兴趣聚焦大语言模型、Coding Agent、可信AI、智能体后训练、智能体强化学习（Agent RL）。欢迎与我联系交流。")],
   ["incoming education is synchronized across home and CV", [homepage, cv].every((html) => html.includes("2027 entry") && html.includes("Class of 2023; currently a senior undergraduate.")) && [zhHomepage, zhCv].every((html) => html.includes("2027年入学") && html.includes("硕士研究生（即将入学）"))],

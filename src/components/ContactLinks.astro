@@ -22,13 +22,4 @@ const copy = getUi(locale);
       </a>
     ))}
   </div>
-
-  <div class="representative-links">
-    {profile.representativeLinks.map((link) => (
-      <a href={link.url} target="_blank" rel="noopener noreferrer">
-        <span>{link.label}</span>
-        <code>{link.displayUrl}</code>
-      </a>
-    ))}
-  </div>
 </section>

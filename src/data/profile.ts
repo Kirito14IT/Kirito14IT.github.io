@@ -79,43 +79,6 @@ export const profiles = {
       },
       { label: "Douyin", url: socialProfiles.douyin, displayUrl: "@Kirito14IT" },
       { label: "Xiaohongshu", url: socialProfiles.xiaohongshu, displayUrl: "@998244353_plus" }
-    ],
-    representativeLinks: [
-      {
-        label: "Representative Open-Source Work: XSafeClaw",
-        url: "https://github.com/XSafeAI/XSafeClaw",
-        displayUrl: "https://github.com/XSafeAI/XSafeClaw"
-      },
-      {
-        label: "Security Analysis: VulnSeeker",
-        url: "https://github.com/Kirito14IT/VulnSeeker",
-        displayUrl: "CodeQL and LLM-assisted vulnerability analysis"
-      },
-      {
-        label: "Representative Research: SafeCodeRL",
-        url: "https://kirito14it.github.io/projects/safecoderl/",
-        displayUrl: "https://kirito14it.github.io/projects/safecoderl/"
-      },
-      {
-        label: "Representative Research: SFMambaNet",
-        url: "https://kirito14it.github.io/projects/sfmambanet/",
-        displayUrl: "https://kirito14it.github.io/projects/sfmambanet/"
-      },
-      {
-        label: "Representative Research: ScamWeb",
-        url: "https://anonymous.4open.science/r/ScamWeb-B710",
-        displayUrl: "ScamWeb: Multimodal Fraud Webpage Understanding"
-      },
-      {
-        label: "Representative Research: MemHarmBench",
-        url: "https://arxiv.org/abs/2611.01700",
-        displayUrl: "https://arxiv.org/abs/2611.01700"
-      },
-      {
-        label: "Representative Research: CST",
-        url: "https://arxiv.org/abs/2611.01710",
-        displayUrl: "https://arxiv.org/abs/2611.01710"
-      }
     ]
   },
   zh: {
@@ -165,43 +128,6 @@ export const profiles = {
       },
       { label: "抖音", url: socialProfiles.douyin, displayUrl: "@Kirito14IT" },
       { label: "小红书", url: socialProfiles.xiaohongshu, displayUrl: "@998244353_plus" }
-    ],
-    representativeLinks: [
-      {
-        label: "代表开源工作：XSafeClaw",
-        url: "https://github.com/XSafeAI/XSafeClaw",
-        displayUrl: "https://github.com/XSafeAI/XSafeClaw"
-      },
-      {
-        label: "安全分析：VulnSeeker",
-        url: "https://github.com/Kirito14IT/VulnSeeker",
-        displayUrl: "CodeQL 与大语言模型辅助漏洞分析"
-      },
-      {
-        label: "代表研究：SafeCodeRL",
-        url: "https://kirito14it.github.io/zh/projects/safecoderl/",
-        displayUrl: "https://kirito14it.github.io/zh/projects/safecoderl/"
-      },
-      {
-        label: "代表研究：SFMambaNet",
-        url: "https://kirito14it.github.io/zh/projects/sfmambanet/",
-        displayUrl: "https://kirito14it.github.io/zh/projects/sfmambanet/"
-      },
-      {
-        label: "代表研究：ScamWeb",
-        url: "https://anonymous.4open.science/r/ScamWeb-B710",
-        displayUrl: "ScamWeb：多模态诈骗网页理解基准"
-      },
-      {
-        label: "代表研究：MemHarmBench",
-        url: "https://arxiv.org/abs/2611.01700",
-        displayUrl: "https://arxiv.org/abs/2611.01700"
-      },
-      {
-        label: "代表研究：CST",
-        url: "https://arxiv.org/abs/2611.01710",
-        displayUrl: "https://arxiv.org/abs/2611.01710"
-      }
     ]
   }
 } as const;

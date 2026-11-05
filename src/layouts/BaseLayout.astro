@@ -56,10 +56,14 @@ const hasToolbarNavigation = Astro.slots.has("toolbar");
           const preferredTheme = window.localStorage.getItem("krico-theme");
           root.dataset.theme = preferredTheme === "dark" ? "dark" : "light";
           const currentLocale = root.dataset.locale;
-          const preferredLocale = window.localStorage.getItem("krico-locale");
+          const storedLocale = window.localStorage.getItem("krico-locale");
           const counterpart = root.dataset.counterpartPath;
-          if ((preferredLocale === "en" || preferredLocale === "zh") && preferredLocale !== currentLocale && counterpart) {
-            window.location.replace(`${counterpart}${window.location.search}${window.location.hash}`);
+          const { pathname, search, hash } = window.location;
+          const isHomeEntry = pathname === "/" || pathname === "/index.html";
+          const defaultLocale = isHomeEntry ? "zh" : currentLocale;
+          const preferredLocale = storedLocale === "en" || storedLocale === "zh" ? storedLocale : defaultLocale;
+          if (preferredLocale !== currentLocale && counterpart) {
+            window.location.replace(`${counterpart}${search}${hash}`);
           }
         } catch {
           // Keep the requested static route when browser storage is unavailable.

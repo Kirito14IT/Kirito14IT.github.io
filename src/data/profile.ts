@@ -32,14 +32,14 @@ export const profiles = {
     advisorName: "Xingjun Ma",
     labHeadName: "Yu-Gang Jiang (Vice President, Fudan University)",
     tagline:
-      "I study LLM agents, agent post-training, reinforcement learning for agents (Agent RL), and agent safety, with an interest in reliable reasoning, memory, and tool use.",
+      "I study large language models, coding agents, trustworthy AI, agent post-training, and reinforcement learning for agents (Agent RL), with an interest in reliable reasoning, memory, and tool use.",
     bio:
-      "I am a senior undergraduate student in Computer Science and Technology (Class of 2023) at the University of Shanghai for Science and Technology (USST). I will begin my M.Sc. studies at Fudan University in 2027, advised by Xingjun Ma. I am currently a research intern at Fudan Vision and Learning Lab (FVL) and the Institute of Trustworthy Embodied Artificial Intelligence (TEAI), Fudan University. My research interests center on LLM agents, agent post-training, reinforcement learning for agents (Agent RL), and agent safety. Feel free to get in touch.",
+      "I am a senior undergraduate student in Computer Science and Technology (Class of 2023) at the University of Shanghai for Science and Technology (USST). I will begin my M.Sc. studies at Fudan University in 2027, advised by Xingjun Ma. I am currently a research intern at Fudan Vision and Learning Lab (FVL) and the Institute of Trustworthy Embodied Artificial Intelligence (TEAI), Fudan University. My research interests include large language models, coding agents, trustworthy AI, agent post-training, and reinforcement learning for agents (Agent RL). Feel free to get in touch.",
     contactNote:
       "Please feel free to reach out by email for academic discussion, research collaboration, open-source projects, or learning exchange.",
     internshipSearch: {
       title: "Seeking internships:",
-      description: "I am currently seeking internship opportunities in foundation models, agent post-training, and LLM evaluation.",
+      description: "I am seeking internships in foundation models, coding agents, agent post-training, agentic reinforcement learning, and LLM evaluation.",
       contactLabel: "Recruiters and research teams are welcome to contact me by email."
     },
     researchFocus: [
@@ -52,6 +52,7 @@ export const profiles = {
     focusWords: [
       { text: "Foundation Models", color: "#16a34a" },
       { text: "LLM Agents", color: "#2563eb" },
+      { text: "Coding Agent", color: "#0891b2" },
       { text: "Agent Post-Training", color: "#0891b2" },
       { text: "Agent RL", color: "#7c3aed" },
       { text: "Agent Safety", color: "#db2777" },
@@ -60,11 +61,11 @@ export const profiles = {
     ],
     interests: [
       "Foundation Models",
-      "LLM Agents",
+      "LLM",
+      "Coding Agent",
       "Agent Post-Training",
       "Agent RL",
       "Agent Safety",
-      "Multi-Agent Systems",
       "Agent Memory",
       "Trustworthy AI"
     ],
@@ -80,11 +81,6 @@ export const profiles = {
       { label: "Xiaohongshu", url: socialProfiles.xiaohongshu, displayUrl: "@998244353_plus" }
     ],
     representativeLinks: [
-      {
-        label: "Academic Profile: Google Scholar",
-        url: "https://scholar.google.com/citations?user=MyweXYYAAAAJ",
-        displayUrl: "Google Scholar Profile"
-      },
       {
         label: "Representative Open-Source Work: XSafeClaw",
         url: "https://github.com/XSafeAI/XSafeClaw",
@@ -132,13 +128,13 @@ export const profiles = {
     incomingTitle: "复旦大学 2027 级准硕士生",
     advisorName: "马兴军",
     labHeadName: "姜育刚（复旦大学副校长）",
-    tagline: "聚焦大语言模型智能体、智能体后训练、智能体强化学习（Agent RL）与智能体安全，关注可靠推理、记忆与工具使用。",
+    tagline: "聚焦大语言模型、Coding Agent、可信AI、智能体后训练、智能体强化学习（Agent RL），关注可靠推理、记忆与工具使用。",
     bio:
-      "我是上海理工大学计算机科学与技术专业 2023 级本科生，目前大四在读。我将于 2027 年进入复旦大学攻读硕士学位，导师为马兴军老师。目前，我正在复旦大学视觉与学习实验室（FVL）&可信具身智能研究院（TEAI）进行科研实习，研究兴趣聚焦大语言模型智能体、智能体后训练、智能体强化学习（Agent RL）与智能体安全。欢迎与我联系交流。",
+      "我是上海理工大学计算机科学与技术专业 2023 级本科生，目前大四在读。我将于 2027 年进入复旦大学攻读硕士学位，导师为马兴军老师。目前，我正在复旦大学视觉与学习实验室（FVL）&可信具身智能研究院（TEAI）进行科研实习，研究兴趣聚焦大语言模型、Coding Agent、可信AI、智能体后训练、智能体强化学习（Agent RL）。欢迎与我联系交流。",
     contactNote: "欢迎通过邮件与我开展学术讨论、科研合作、开源项目协作或学习交流。",
     internshipSearch: {
       title: "实习求职：",
-      description: "我近期正在寻找基座大模型、智能体后训练（Agent Post-Training）及大模型评测相关的实习机会。",
+      description: "我在寻找基座大模型、Coding Agent、智能体后训练（Agent Post-Training）、Agentic rl及大模型评测相关的实习机会。",
       contactLabel: "欢迎 HR 及研究团队通过邮件联系我。"
     },
     researchFocus: [
@@ -151,13 +147,14 @@ export const profiles = {
     focusWords: [
       { text: "基座大模型", color: "#16a34a" },
       { text: "LLM 智能体", color: "#2563eb" },
+      { text: "Coding Agent", color: "#0891b2" },
       { text: "智能体后训练", color: "#0891b2" },
       { text: "Agent RL", color: "#7c3aed" },
       { text: "智能体安全", color: "#db2777" },
       { text: "智能体记忆", color: "#f59e0b" },
       { text: "多智能体系统", color: "#0891b2" }
     ],
-    interests: ["基座大模型", "LLM 智能体", "智能体后训练", "Agent RL", "智能体安全", "多智能体系统", "智能体记忆", "可信人工智能"],
+    interests: ["基座大模型", "LLM", "Coding Agent", "智能体后训练", "Agent RL", "智能体安全", "智能体记忆", "可信人工智能"],
     links: [
       { label: "邮箱", url: "mailto:2657751462@qq.com", displayUrl: "2657751462@qq.com" },
       { label: "GitHub", url: "https://github.com/Kirito14IT", displayUrl: "https://github.com/Kirito14IT" },
@@ -170,11 +167,6 @@ export const profiles = {
       { label: "小红书", url: socialProfiles.xiaohongshu, displayUrl: "@998244353_plus" }
     ],
     representativeLinks: [
-      {
-        label: "学术主页：Google Scholar",
-        url: "https://scholar.google.com/citations?user=MyweXYYAAAAJ",
-        displayUrl: "Google Scholar 主页"
-      },
       {
         label: "代表开源工作：XSafeClaw",
         url: "https://github.com/XSafeAI/XSafeClaw",

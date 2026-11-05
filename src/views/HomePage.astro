@@ -8,11 +8,10 @@ import Section from "@components/Section.astro";
 import Timeline from "@components/Timeline.astro";
 import Education from "@components/Education.astro";
 import FieldNotes from "@components/FieldNotes.astro";
-import RepoStars from "@components/RepoStars.astro";
 import ResourceLinks from "@components/ResourceLinks.astro";
 import AISafetyHotProject from "@components/AISafetyHotProject.astro";
 import VisitorMap from "@components/VisitorMap.astro";
-import NewsMedia from "@components/NewsMedia.astro";
+import NewsCard from "@components/NewsCard.astro";
 import { getProfile } from "@data/profile";
 import { getCvData } from "@data/cv";
 import { getUi, localizedPath, type Locale } from "@i18n/index";
@@ -21,6 +20,9 @@ const { locale } = Astro.props as { locale: Locale };
 const profile = getProfile(locale);
 const { news, workExperiences, experiences, publications, awards, skills, services } = getCvData(locale);
 const copy = getUi(locale);
+const latestNewsCount = 5;
+const latestNews = news.slice(0, latestNewsCount);
+const olderNews = news.slice(latestNewsCount);
 
 const homeJumpLinks = [
   { label: copy.homeJump.homepage, href: "#home" },
@@ -70,22 +72,22 @@ const homeJumpLinks = [
 
   <Section id="news" title={copy.sections.news} eyebrow={copy.sections.recentUpdates}>
     <div class="news-list">
-      {news.map((item, index) => (
-        <article class:list={{ "news-jump-card": Boolean(item.jumpTo) }}>
-          {item.jumpTo && (
-            <a
-              class="news-card-jump"
-              href={item.jumpTo}
-              aria-label={copy.newsJump.replace("{date}", item.date)}
-            ></a>
-          )}
-          <time>{item.date}</time>
-          {item.html ? <p set:html={item.html} /> : <p>{item.text}</p>}
-          {item.links && <ResourceLinks links={item.links} />}
-          {item.starRepos && <RepoStars repos={item.starRepos} />}
-          {item.media && <NewsMedia media={item.media} locale={locale} id={`news-media-${index}`} />}
-        </article>
+      {latestNews.map((item, index) => (
+        <NewsCard item={item} locale={locale} id={`news-media-${index}`} />
       ))}
+      {olderNews.length > 0 && (
+        <details class="news-archive">
+          <summary class="news-archive-toggle button ghost">
+            <span class="news-archive-expand">{copy.newsArchive.expand}</span>
+            <span class="news-archive-collapse">{copy.newsArchive.collapse}</span>
+          </summary>
+          <div class="news-list">
+            {olderNews.map((item, index) => (
+              <NewsCard item={item} locale={locale} id={`news-media-${latestNewsCount + index}`} />
+            ))}
+          </div>
+        </details>
+      )}
     </div>
   </Section>
 

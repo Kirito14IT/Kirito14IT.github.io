@@ -147,7 +147,8 @@ export const ui = {
       visitsLabel: "visits",
       unavailable: "Unavailable"
     },
-    newsJump: "{date} update: jump to competition awards"
+    newsJump: "{date} update: jump to competition awards",
+    newsArchive: { expand: "Show all news", collapse: "Show fewer" }
   },
   zh: {
     htmlLang: "zh-CN",
@@ -261,7 +262,8 @@ export const ui = {
       visitsLabel: "访问量",
       unavailable: "暂不可用"
     },
-    newsJump: "{date} 动态：跳转到竞赛获奖部分"
+    newsJump: "{date} 动态：跳转到竞赛获奖部分",
+    newsArchive: { expand: "展开全部", collapse: "收起" }
   }
 } as const;
 

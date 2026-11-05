@@ -1,0 +1,25 @@
+---
+import NewsMedia from "@components/NewsMedia.astro";
+import RepoStars from "@components/RepoStars.astro";
+import ResourceLinks from "@components/ResourceLinks.astro";
+import type { NewsItem } from "@data/cv";
+import { getUi, type Locale } from "@i18n/index";
+
+const { item, locale, id } = Astro.props as { item: NewsItem; locale: Locale; id: string };
+const copy = getUi(locale);
+---
+
+<article class:list={{ "news-jump-card": Boolean(item.jumpTo) }}>
+  {item.jumpTo && (
+    <a
+      class="news-card-jump"
+      href={item.jumpTo}
+      aria-label={copy.newsJump.replace("{date}", item.date)}
+    ></a>
+  )}
+  <time>{item.date}</time>
+  {item.html ? <p set:html={item.html} /> : <p>{item.text}</p>}
+  {item.links && <ResourceLinks links={item.links} />}
+  {item.starRepos && <RepoStars repos={item.starRepos} />}
+  {item.media && <NewsMedia media={item.media} locale={locale} id={id} />}
+</article>

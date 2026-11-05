@@ -1137,6 +1137,22 @@ html[data-theme="dark"] .theme-icon-sun {
   gap: 14px;
 }
 
+.news-archive .news-archive-toggle {
+  display: list-item;
+  width: fit-content;
+  list-style-position: inside;
+  cursor: pointer;
+}
+
+.news-archive[open] .news-archive-expand,
+.news-archive:not([open]) .news-archive-collapse {
+  display: none;
+}
+
+.news-archive .news-list {
+  margin-top: 14px;
+}
+
 .news-list article,
 .publication-card {
   border-radius: 22px;

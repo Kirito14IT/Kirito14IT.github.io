@@ -85,7 +85,11 @@ export const ui = {
       eyebrow: "Contact",
       title: "Open to academic discussion and collaboration"
     },
-    publication: { framework: "Framework overview" },
+    publication: {
+      framework: "Framework overview",
+      coFirst: "Co-first author (equal contribution)",
+      corresponding: "Corresponding author"
+    },
     contribution: {
       eyebrow: "Live Open Source Signal",
       title: "GitHub Commit Activity",
@@ -200,7 +204,11 @@ export const ui = {
       eyebrow: "联系方式",
       title: "欢迎开展学术交流与科研合作"
     },
-    publication: { framework: "框架概览" },
+    publication: {
+      framework: "框架概览",
+      coFirst: "共同第一作者（贡献相同）",
+      corresponding: "通讯作者"
+    },
     contribution: {
       eyebrow: "开源活动",
       title: "GitHub 提交活动",

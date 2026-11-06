@@ -70,7 +70,7 @@ const requiredPublicSnippets = [
   "2026.07",
   "https://zjfheart.github.io/",
   "RISE-AI Lab",
-  "ICLR 2027",
+  "WWW 2027",
   "victim-centered",
   "2026.04 – 2026.08",
   "https://www.gass.ac.cn/gass/index.html",

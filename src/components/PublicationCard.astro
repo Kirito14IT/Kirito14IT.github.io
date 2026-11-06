@@ -26,7 +26,16 @@ const fullFigureLabel = locale === "zh" ? "查看原图" : "View full-size figur
     {item.authors.length > 0 && (
       <p class="publication-authors">
         {item.authors.map((author, index) => (
-          <>{index > 0 && ", "}{author === profileAuthor ? <strong>{author}</strong> : author}</>
+          <>
+            {index > 0 && ", "}
+            {author === profileAuthor ? <strong>{author}</strong> : author}
+            {item.coFirstAuthors?.includes(author) && (
+              <sup class="publication-author-mark" title={copy.publication.coFirst}>*</sup>
+            )}
+            {item.correspondingAuthor === author && (
+              <sup class="publication-author-mark" title={copy.publication.corresponding}>†</sup>
+            )}
+          </>
         ))}
       </p>
     )}

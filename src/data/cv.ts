@@ -32,22 +32,28 @@ const safeCodeRlPaperUrl = "https://doi.org/10.3390/s26113502";
 const publicationCredits = {
   memHarmBench: {
     authors: ["Zhihua Wang", "Yunhao Feng", "Yifeng Gao", "Rui Pan", "Baiheng Zhao", "Zixing Chen", "Xingjun Ma"],
+    correspondingAuthor: "Xingjun Ma",
     date: "2026.11.01"
   },
   cst: {
     authors: ["Zhihua Wang", "Yifeng Gao", "Yunhao Feng", "Rui Pan", "Baiheng Zhao", "Zixing Chen", "Nan Li"],
+    correspondingAuthor: "Yifeng Gao",
     date: "2026.11.01"
   },
   scamWeb: {
     authors: ["Nan Li", "Zhihua Wang", "Ziyang Chen", "Yunhao Feng", "Songyang Wu"],
+    coFirstAuthors: ["Nan Li", "Zhihua Wang"],
+    correspondingAuthor: "Songyang Wu",
     date: "2026.08"
   },
   safeCodeRl: {
     authors: ["Zhihua Wang", "Junfan Chen", "Zixiang Wei", "Lan Lin", "Guoxiang Tong"],
+    correspondingAuthor: "Guoxiang Tong",
     date: "2026.06.02"
   },
   sfmambaNet: {
     authors: ["Zhihua Wang", "Yanping Li", "Yizhang Liu"],
+    correspondingAuthor: "Yanping Li",
     date: "2026.06.03"
   },
   mangrove: { authors: ["Zhihua Wang"], date: "2026" }
@@ -88,6 +94,8 @@ export type TimelineItem = {
 export type PublicationItem = {
   title: string;
   authors: readonly string[];
+  correspondingAuthor?: string;
+  coFirstAuthors?: readonly string[];
   status: string;
   role: string;
   date: string;
@@ -193,7 +201,7 @@ const cvEn: CvData = {
     {
       date: "2026.07",
       html:
-        `Joined <a href="${jingfengZhangUrl}" target="_blank" rel="noopener noreferrer">Advisor Jingfeng Zhang</a>'s RISE-AI Lab as a visiting student at <a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">TEAI, Fudan University</a> and began ICLR 2027-targeted research on a benchmark for persistent-memory poisoning in agents. The work adopts a victim-centered perspective to design evaluation cases and examines who ultimately bears the loss after an agent is compromised.`
+        `Joined <a href="${jingfengZhangUrl}" target="_blank" rel="noopener noreferrer">Advisor Jingfeng Zhang</a>'s RISE-AI Lab as a visiting student at <a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">TEAI, Fudan University</a> and began research on MemHarmBench, a benchmark for persistent-memory poisoning in agents. The work adopts a victim-centered perspective to design evaluation cases and examines who ultimately bears the loss after an agent is compromised.`
     },
     {
       date: "2026.07",
@@ -658,7 +666,7 @@ const cvZh: CvData = {
     {
       date: "2026.07",
       html:
-        `加入<a href="${jingfengZhangUrl}" target="_blank" rel="noopener noreferrer">导师张景锋</a>的 RISE-AI Lab，在<a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">复旦大学可信具身智能研究院（TEAI）</a>担任访问学生，开展以 ICLR 2027 为投稿目标的智能体持久性记忆投毒评测基准研究。该工作从受害者视角设计评测案例，并分析智能体遭受攻击后最终由谁承担损失。`
+        `加入<a href="${jingfengZhangUrl}" target="_blank" rel="noopener noreferrer">导师张景锋</a>的 RISE-AI Lab，在<a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">复旦大学可信具身智能研究院（TEAI）</a>担任访问学生，启动 MemHarmBench 智能体持久性记忆投毒评测基准研究。该工作从受害者视角设计评测案例，并分析智能体遭受攻击后最终由谁承担损失。`
     },
     {
       date: "2026.07",

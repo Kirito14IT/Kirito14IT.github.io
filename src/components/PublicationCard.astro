@@ -1,0 +1,38 @@
+---
+import ResourceLinks from "@components/ResourceLinks.astro";
+import type { PublicationItem } from "@data/cv";
+import { getProfile } from "@data/profile";
+import { getUi, type Locale } from "@i18n/index";
+
+const { item, locale } = Astro.props as { item: PublicationItem; locale: Locale };
+const copy = getUi(locale);
+const profileAuthor = getProfile("en").legalName;
+const fullFigureLabel = locale === "zh" ? "查看原图" : "View full-size figure";
+---
+
+<article class="publication-card">
+  {item.frameworkImage && (
+    <figure class="framework-preview">
+      <a href={item.frameworkImage} target="_blank" rel="noopener noreferrer" aria-label={`${fullFigureLabel} · ${item.title}`}>
+        <img src={item.frameworkImage} alt={item.frameworkAlt} loading="lazy" decoding="async" />
+      </a>
+      <figcaption>{item.frameworkCaption || copy.publication.framework}</figcaption>
+    </figure>
+  )}
+  <div class="publication-details">
+    <h3>
+      {item.url ? <a class="publication-title-link" href={item.url} target="_blank" rel="noopener noreferrer">{item.title}</a> : item.title}
+    </h3>
+    {item.authors.length > 0 && (
+      <p class="publication-authors">
+        {item.authors.map((author, index) => (
+          <>{index > 0 && ", "}{author === profileAuthor ? <strong>{author}</strong> : author}</>
+        ))}
+      </p>
+    )}
+    <p class="muted">{item.role} · {item.status} · <time datetime={item.date.replaceAll(".", "-")}>{item.date}</time></p>
+    {item.links && <ResourceLinks links={item.links} />}
+    {item.ratings && <div class="rating-pills">{item.ratings.map((rating) => <span>{rating}</span>)}</div>}
+    <div class="tag-list">{item.tags.map((tag) => <span>{tag}</span>)}</div>
+  </div>
+</article>

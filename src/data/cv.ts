@@ -26,6 +26,32 @@ const memHarmBenchPaperUrl = "https://arxiv.org/abs/2611.01700";
 const memHarmBenchCodeUrl = "https://github.com/Kirito14IT/MemHarmBench";
 const cstPaperUrl = "https://arxiv.org/abs/2611.01710";
 const cstCodeUrl = "https://github.com/Kirito14IT/CST-MIL";
+const safeCodeRlTitle = "SafeCodeRL: Security-Constrained Multi-Agent Reinforcement Learning for Trustworthy LLM-Generated IoT/CPS Software";
+const safeCodeRlPaperUrl = "https://doi.org/10.3390/s26113502";
+
+const publicationCredits = {
+  memHarmBench: {
+    authors: ["Zhihua Wang", "Yunhao Feng", "Yifeng Gao", "Rui Pan", "Baiheng Zhao", "Zixing Chen", "Xingjun Ma"],
+    date: "2026.11.01"
+  },
+  cst: {
+    authors: ["Zhihua Wang", "Yifeng Gao", "Yunhao Feng", "Rui Pan", "Baiheng Zhao", "Zixing Chen", "Nan Li"],
+    date: "2026.11.01"
+  },
+  scamWeb: {
+    authors: ["Nan Li", "Zhihua Wang", "Ziyang Chen", "Yunhao Feng", "Songyang Wu"],
+    date: "2026.08"
+  },
+  safeCodeRl: {
+    authors: ["Zhihua Wang", "Junfan Chen", "Zixiang Wei", "Lan Lin", "Guoxiang Tong"],
+    date: "2026.06.02"
+  },
+  sfmambaNet: {
+    authors: ["Zhihua Wang", "Yanping Li", "Yizhang Liu"],
+    date: "2026.06.03"
+  },
+  mangrove: { authors: ["Zhihua Wang"], date: "2026" }
+} as const;
 
 type Link = { label: string; url: string; logo?: string };
 type RichText = string | { html: string };
@@ -61,9 +87,10 @@ export type TimelineItem = {
 
 export type PublicationItem = {
   title: string;
+  authors: readonly string[];
   status: string;
   role: string;
-  year: string;
+  date: string;
   url?: string;
   links?: Link[];
   tags: string[];
@@ -161,7 +188,7 @@ const cvEn: CvData = {
     {
       date: "2026.08",
       html:
-        `Submitted <a href="${scamWebUrl}" target="_blank" rel="noopener noreferrer">ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages</a> to AAAI 2027 after completing research on multimodal data curation, grounded annotation, benchmark design, and training-free fraud understanding.`
+        `Completed research on multimodal data curation, grounded annotation, benchmark design, and training-free fraud understanding for <a href="${scamWebUrl}" target="_blank" rel="noopener noreferrer">ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages</a>.`
     },
     {
       date: "2026.07",
@@ -257,7 +284,7 @@ const cvEn: CvData = {
       titleUrl: scamWebUrl,
       organization: "Institute of Trustworthy Embodied Artificial Intelligence (TEAI), Fudan University & The Third Research Institute of the Ministry of Public Security",
       period: "2026.04 – 2026.08",
-      tags: ["AAAI 2027", "Multimodal Benchmark", "Cybersecurity", "Grounded Understanding", "Trustworthy AI"],
+      tags: ["Multimodal Benchmark", "Cybersecurity", "Grounded Understanding", "Trustworthy AI"],
       bullets: [
         {
           html:
@@ -271,7 +298,7 @@ const cvEn: CvData = {
         "Contributed to data collection and cleaning, fraud taxonomy and expert annotation protocol design, the ScamDet multimodal pipeline and prompts, evaluation metrics, full-scale experiments, manuscript writing, result analysis, and project implementation.",
         {
           html:
-            `The completed work, <a href="${scamWebUrl}" target="_blank" rel="noopener noreferrer">ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages</a>, has been submitted to AAAI 2027.`
+            `The research manuscript is titled <a href="${scamWebUrl}" target="_blank" rel="noopener noreferrer">ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages</a>.`
         }
       ],
       links: [
@@ -409,10 +436,10 @@ const cvEn: CvData = {
   ],
   publications: [
     {
+      ...publicationCredits.memHarmBench,
       title: memHarmBenchTitle,
-      status: "arXiv preprint; submitted to WWW 2027",
+      status: "Submitted to WWW 2027 · arXiv preprint",
       role: "First author",
-      year: "2026",
       url: memHarmBenchPaperUrl,
       links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "Code", url: memHarmBenchCodeUrl }],
       tags: ["LLM Agents", "Persistent Memory", "Cross-Session Prompt Injection", "Victim-Centric Evaluation", "Agent Safety", "Benchmark"],
@@ -421,10 +448,10 @@ const cvEn: CvData = {
       frameworkCaption: "Figure 1 · Cross-session prompt injection can remain hidden behind successful task completion."
     },
     {
+      ...publicationCredits.cst,
       title: cstTitle,
-      status: "arXiv preprint; submitted to WWW 2027",
+      status: "Submitted to WWW 2027 · arXiv preprint",
       role: "First author",
-      year: "2026",
       url: cstPaperUrl,
       links: [{ label: "arXiv", url: cstPaperUrl }, { label: "Code", url: cstCodeUrl }],
       tags: ["Risk Triage", "Source-Grounded Evidence", "Web Discussions", "Multilingual NLP", "CPU Inference"],
@@ -433,10 +460,10 @@ const cvEn: CvData = {
       frameworkCaption: "CST framework · Original figure from the paper."
     },
     {
+      ...publicationCredits.scamWeb,
       title: "ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages",
-      status: "Under review at AAAI 2027",
+      status: "Research manuscript",
       role: "Co-first author",
-      year: "2026",
       url: scamWebUrl,
       tags: ["Multimodal Benchmark", "Cyber-enabled Fraud", "Grounded Understanding", "Evidence Localization", "LLM-VLM", "Trustworthy AI"],
       frameworkImage: "/figures/scamweb-dataset-overview.png",
@@ -444,20 +471,21 @@ const cvEn: CvData = {
       frameworkCaption: "Dataset and annotation overview"
     },
     {
-      title: "SafeCodeRL: A Multi-Agent Reinforcement Learning Framework for Safety-Constrained LLM Code Generation",
-      status: "Published on 2026.06.02",
+      ...publicationCredits.safeCodeRl,
+      title: safeCodeRlTitle,
+      status: "Sensors, 26(11), 3502",
       role: "First author",
-      year: "2026",
+      url: safeCodeRlPaperUrl,
       tags: ["AI Safety", "Multi-Agent Systems", "Constrained Reinforcement Learning", "Secure Code Generation", "LLM", "IoT/CPS Security", "Trustworthy AI", "Vulnerability Mitigation"],
       ratings: ["SCI Zone 3", "CCF C"],
       frameworkImage: "/figures/safecoderl-framework.png",
       frameworkAlt: "SafeCodeRL framework diagram showing IoT/CPS contexts, a five-agent closed loop, constraint-aware optimization, and training pipeline."
     },
     {
+      ...publicationCredits.sfmambaNet,
       title: "SFMambaNet: Spectral-Frequency Enhanced Selective State Space Model for Correspondence Pruning",
-      status: "arXiv preprint; under review at IEEE Transactions on Image Processing (TIP)",
+      status: "Under review at IEEE Transactions on Image Processing (TIP) · arXiv preprint",
       role: "First author",
-      year: "2026",
       url: "https://doi.org/10.48550/arXiv.2606.04493",
       tags: ["Computer Vision", "Correspondence Pruning", "Mamba", "State Space Model", "Frequency Domain", "Graph Neural Networks", "Two-View Geometry"],
       ratings: ["SCI Zone 1", "CCF A"],
@@ -465,10 +493,10 @@ const cvEn: CvData = {
       frameworkAlt: "SFMambaNet framework diagram showing pruning blocks, local spectral-geometric feature extraction, spectral-global aggregation, and verification."
     },
     {
+      ...publicationCredits.mangrove,
       title: "Research Support in Analysing Mangrove Responses to Climate Change: The Interplay of Anthropogenic Impacts and Blue Carbon Mitigation",
-      status: "review manuscript",
-      role: "Author",
-      year: "2026",
+      status: "UNDP / UNV review manuscript",
+      role: "Sole author",
       url: "https://www.undp.org/",
       tags: ["UNDP", "UNV", "Climate Change", "Blue Carbon"],
       frameworkImage: "/figures/mangrove-carbon-dynamics.png",
@@ -625,7 +653,7 @@ const cvZh: CvData = {
     {
       date: "2026.08",
       html:
-        `完成 <a href="${scamWebUrl}" target="_blank" rel="noopener noreferrer">ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages</a> 的多模态数据整理、落地式标注、基准设计与免训练诈骗理解研究，并投稿至 AAAI 2027。`
+        `完成 <a href="${scamWebUrl}" target="_blank" rel="noopener noreferrer">ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages</a> 的多模态数据整理、落地式标注、基准设计与免训练诈骗理解研究。`
     },
     {
       date: "2026.07",
@@ -718,7 +746,7 @@ const cvZh: CvData = {
       titleUrl: scamWebUrl,
       organization: "复旦大学可信具身智能研究院（TEAI）与公安部第三研究所",
       period: "2026.04 – 2026.08",
-      tags: ["AAAI 2027", "多模态基准", "网络安全", "落地式理解", "可信人工智能"],
+      tags: ["多模态基准", "网络安全", "落地式理解", "可信人工智能"],
       bullets: [
         {
           html:
@@ -732,7 +760,7 @@ const cvZh: CvData = {
         "参与数据采集与清洗、诈骗分类体系与专家标注协议设计、ScamDet 多模态流程与提示词设计、评测指标、全量实验、论文写作、结果分析及项目实现。",
         {
           html:
-            `相关工作 <a href="${scamWebUrl}" target="_blank" rel="noopener noreferrer">ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages</a> 已投稿至 AAAI 2027。`
+            `研究手稿为 <a href="${scamWebUrl}" target="_blank" rel="noopener noreferrer">ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages</a>。`
         }
       ],
       links: [
@@ -870,10 +898,10 @@ const cvZh: CvData = {
   ],
   publications: [
     {
+      ...publicationCredits.memHarmBench,
       title: memHarmBenchTitle,
-      status: "arXiv 预印本；已投稿至 WWW 2027",
+      status: "已投稿至 WWW 2027 · arXiv 预印本",
       role: "第一作者",
-      year: "2026",
       url: memHarmBenchPaperUrl,
       links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "代码", url: memHarmBenchCodeUrl }],
       tags: ["LLM 智能体", "持久记忆", "跨会话提示注入", "受害者中心评测", "智能体安全", "评测基准"],
@@ -882,10 +910,10 @@ const cvZh: CvData = {
       frameworkCaption: "图 1 · 跨会话提示注入可能隐藏在成功完成的任务背后。"
     },
     {
+      ...publicationCredits.cst,
       title: cstTitle,
-      status: "arXiv 预印本；已投稿至 WWW 2027",
+      status: "已投稿至 WWW 2027 · arXiv 预印本",
       role: "第一作者",
-      year: "2026",
       url: cstPaperUrl,
       links: [{ label: "arXiv", url: cstPaperUrl }, { label: "代码", url: cstCodeUrl }],
       tags: ["风险分诊", "来源可追溯证据", "网络讨论", "多语言自然语言处理", "CPU 推理"],
@@ -894,10 +922,10 @@ const cvZh: CvData = {
       frameworkCaption: "CST 方法框架 · 论文原图。"
     },
     {
+      ...publicationCredits.scamWeb,
       title: "ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages",
-      status: "AAAI 2027 在投",
+      status: "研究手稿",
       role: "共同第一作者",
-      year: "2026",
       url: scamWebUrl,
       tags: ["多模态基准", "网络诈骗", "落地式理解", "证据定位", "LLM-VLM", "可信人工智能"],
       frameworkImage: "/figures/scamweb-dataset-overview.png",
@@ -905,20 +933,21 @@ const cvZh: CvData = {
       frameworkCaption: "数据集与标注概览"
     },
     {
-      title: "SafeCodeRL: A Multi-Agent Reinforcement Learning Framework for Safety-Constrained LLM Code Generation",
-      status: "发表于 2026.06.02",
+      ...publicationCredits.safeCodeRl,
+      title: safeCodeRlTitle,
+      status: "Sensors, 26(11), 3502",
       role: "第一作者",
-      year: "2026",
+      url: safeCodeRlPaperUrl,
       tags: ["人工智能安全", "多智能体系统", "约束强化学习", "安全代码生成", "LLM", "IoT/CPS 安全", "可信人工智能", "漏洞缓解"],
       ratings: ["SCI 三区", "CCF C"],
       frameworkImage: "/figures/safecoderl-framework.png",
       frameworkAlt: "SafeCodeRL 框架图，展示 IoT/CPS 任务上下文、五智能体闭环、约束感知优化与训练流程。"
     },
     {
+      ...publicationCredits.sfmambaNet,
       title: "SFMambaNet: Spectral-Frequency Enhanced Selective State Space Model for Correspondence Pruning",
-      status: "arXiv 预印本；IEEE Transactions on Image Processing (TIP) 在投",
+      status: "IEEE Transactions on Image Processing (TIP) 在审 · arXiv 预印本",
       role: "第一作者",
-      year: "2026",
       url: "https://doi.org/10.48550/arXiv.2606.04493",
       tags: ["计算机视觉", "对应关系剪枝", "Mamba", "状态空间模型", "频域", "图神经网络", "双视图几何"],
       ratings: ["SCI 一区", "CCF A"],
@@ -926,10 +955,10 @@ const cvZh: CvData = {
       frameworkAlt: "SFMambaNet 框架图，展示剪枝模块、局部谱几何特征提取、谱全局聚合与验证模块。"
     },
     {
+      ...publicationCredits.mangrove,
       title: "Research Support in Analysing Mangrove Responses to Climate Change: The Interplay of Anthropogenic Impacts and Blue Carbon Mitigation",
-      status: "综述手稿",
-      role: "作者",
-      year: "2026",
+      status: "UNDP / UNV 综述手稿",
+      role: "独立作者",
       url: "https://www.undp.org/",
       tags: ["UNDP", "UNV", "气候变化", "蓝碳"],
       frameworkImage: "/figures/mangrove-carbon-dynamics.png",

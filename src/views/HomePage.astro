@@ -8,7 +8,7 @@ import Section from "@components/Section.astro";
 import Timeline from "@components/Timeline.astro";
 import Education from "@components/Education.astro";
 import FieldNotes from "@components/FieldNotes.astro";
-import ResourceLinks from "@components/ResourceLinks.astro";
+import PublicationCard from "@components/PublicationCard.astro";
 import AISafetyHotProject from "@components/AISafetyHotProject.astro";
 import VisitorMap from "@components/VisitorMap.astro";
 import NewsCard from "@components/NewsCard.astro";
@@ -93,29 +93,7 @@ const homeJumpLinks = [
 
   <Section id="publications" title={copy.sections.publications} eyebrow={copy.sections.researchOutput}>
     <div class="publication-list">
-      {publications.map((item) => (
-        <article class="publication-card">
-          <div>
-            <h3>
-              {item.url ? (
-                <a class="publication-title-link" href={item.url} target="_blank" rel="noopener noreferrer">
-                  {item.title}
-                </a>
-              ) : item.title}
-            </h3>
-            <p class="muted">{item.role} · {item.status} · {item.year}</p>
-            {item.ratings && <div class="rating-pills">{item.ratings.map((rating) => <span>{rating}</span>)}</div>}
-          </div>
-          <div class="tag-list">{item.tags.map((tag) => <span>{tag}</span>)}</div>
-          {item.links && <ResourceLinks links={item.links} />}
-          {item.frameworkImage && (
-            <figure class="framework-preview">
-              <img src={item.frameworkImage} alt={item.frameworkAlt} loading="lazy" />
-              <figcaption>{item.frameworkCaption || copy.publication.framework}</figcaption>
-            </figure>
-          )}
-        </article>
-      ))}
+      {publications.map((item) => <PublicationCard item={item} locale={locale} />)}
     </div>
   </Section>
 

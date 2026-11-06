@@ -8,17 +8,30 @@ const zh = locale === "zh";
 ---
 
 <article class="glass-card aisafetyhot-project">
-  <p class="eyebrow">{zh ? "开源项目参与" : "Open-source participation"} · 2026.10</p>
-  <h3><a href="https://github.com/wuyoscar/AISafetyHot" target="_blank" rel="noopener noreferrer">AISafetyHot</a></h3>
-  <p class="project-description">{zh
-    ? "国庆期间参与的开源项目，聚合 AI 安全新闻、研究论文与事件，并提供面向 Agent 的 MCP 接口。"
-    : "An open-source project I participated in during the National Day holiday. It brings together AI safety news, research, and events, with an MCP interface for agents."}</p>
-  <RepoStars repos={["wuyoscar/AISafetyHot"]} />
-  <AISafetyHotDemo locale={locale} />
+  <div class="project-summary">
+    <p class="eyebrow">{zh ? "开源项目参与" : "Open-source participation"} · 2026.10</p>
+    <h3><a href="https://github.com/wuyoscar/AISafetyHot" target="_blank" rel="noopener noreferrer">AISafetyHot</a></h3>
+    <p class="project-description">{zh
+      ? "国庆期间参与的开源项目，聚合 AI 安全新闻、研究论文与事件，并提供面向 Agent 的 MCP 接口。"
+      : "An open-source project I participated in during the National Day holiday. It brings together AI safety news, research, and events, with an MCP interface for agents."}</p>
+    <RepoStars repos={["wuyoscar/AISafetyHot"]} />
+  </div>
+  <div class="project-preview">
+    <AISafetyHotDemo locale={locale} />
+  </div>
 </article>
 
 <style>
-  .aisafetyhot-project { margin-bottom: 20px; }
+  .aisafetyhot-project {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px 24px;
+    margin-bottom: 20px;
+  }
+  .project-summary { flex: 1 1 18rem; min-width: 0; }
+  .project-preview { flex: 0 1 22rem; min-width: 0; max-width: 100%; }
+  .project-preview :global(.aisafetyhot-demo) { margin-top: 0; }
   .aisafetyhot-project h3 a { color: inherit; text-decoration: none; }
   .aisafetyhot-project h3 a:hover { color: var(--blue); text-decoration: underline; text-underline-offset: 4px; }
   .project-description { margin: 12px 0 0; color: var(--muted); }

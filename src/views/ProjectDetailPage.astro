@@ -26,6 +26,15 @@ const { Content } = await render(project);
         </div>
       )}
     </header>
-    <div class="markdown-body"><Content /></div>
+    <div class="markdown-body project-body"><Content /></div>
   </article>
 </BaseLayout>
+
+<style>
+  .project-body :global(img) {
+    width: auto;
+    max-width: min(100%, 36rem);
+    max-height: 20rem;
+    margin-inline: auto;
+  }
+</style>

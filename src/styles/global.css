@@ -1206,7 +1206,37 @@ html[data-theme="dark"] .theme-icon-sun {
 
 .publication-card {
   display: grid;
-  gap: 12px;
+  align-items: start;
+  gap: 16px;
+}
+
+.publication-card:has(> .framework-preview) {
+  grid-template-columns: clamp(144px, 34%, 280px) minmax(0, 1fr);
+}
+
+.publication-details {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.publication-details h3 {
+  font-size: 1.125rem;
+}
+
+.publication-authors {
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.publication-details .muted {
+  font-size: 0.86rem;
+}
+
+.publication-details .tag-list,
+.publication-details .rating-pills {
+  margin-top: 0;
 }
 
 .news-list time {
@@ -1216,9 +1246,12 @@ html[data-theme="dark"] .theme-icon-sun {
   font-weight: 800;
 }
 
-.news-list p,
-.publication-card p {
+.news-list p {
   margin: 6px 0 0;
+}
+
+.publication-details p {
+  margin: 0;
 }
 
 .rating-pills {
@@ -1243,15 +1276,27 @@ html[data-theme="dark"] .theme-icon-sun {
 }
 
 .framework-preview {
-  grid-column: 1 / -1;
-  margin: 16px 0 0;
-  padding: 12px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.78);
-  border: 1px solid rgba(104, 122, 150, 0.14);
+  min-width: 0;
+  max-width: 280px;
+  margin: 0;
 }
 
-.framework-preview img,
+.framework-preview a {
+  display: block;
+  border-radius: 10px;
+}
+
+.framework-preview img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 168px;
+  object-fit: contain;
+  background: #fffefa;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
 .markdown-body img {
   display: block;
   width: 100%;
@@ -1262,12 +1307,20 @@ html[data-theme="dark"] .theme-icon-sun {
 }
 
 .framework-preview figcaption {
-  margin-top: 8px;
-  color: #6b7c94;
-  font-family: var(--mono);
-  font-size: 0.74rem;
-  font-weight: 700;
-  text-transform: uppercase;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.76rem;
+  line-height: 1.4;
+}
+
+@media (max-width: 620px) {
+  .publication-card:has(> .framework-preview) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .framework-preview {
+    max-width: min(100%, 236px);
+  }
 }
 
 .timeline {
@@ -2029,15 +2082,6 @@ html[data-theme="dark"] .rating-pills span {
   color: #d8e8ff;
   background: linear-gradient(135deg, rgba(120, 88, 28, 0.58), rgba(35, 69, 112, 0.82));
   border-color: rgba(117, 173, 244, 0.24);
-}
-
-html[data-theme="dark"] .framework-preview {
-  background: rgba(11, 22, 38, 0.86);
-  border-color: rgba(153, 188, 229, 0.16);
-}
-
-html[data-theme="dark"] .framework-preview figcaption {
-  color: #9eafc8;
 }
 
 html[data-theme="dark"] .service-card {

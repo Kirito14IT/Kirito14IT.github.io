@@ -462,7 +462,7 @@ const cvEn: CvData = {
     {
       ...publicationCredits.scamWeb,
       title: "ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages",
-      status: "Research manuscript",
+      status: "Under review at AAAI 2027",
       role: "Co-first author",
       url: scamWebUrl,
       tags: ["Multimodal Benchmark", "Cyber-enabled Fraud", "Grounded Understanding", "Evidence Localization", "LLM-VLM", "Trustworthy AI"],
@@ -924,7 +924,7 @@ const cvZh: CvData = {
     {
       ...publicationCredits.scamWeb,
       title: "ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages",
-      status: "研究手稿",
+      status: "AAAI 2027 在审",
       role: "共同第一作者",
       url: scamWebUrl,
       tags: ["多模态基准", "网络诈骗", "落地式理解", "证据定位", "LLM-VLM", "可信人工智能"],

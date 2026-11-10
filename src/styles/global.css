@@ -1287,6 +1287,29 @@ html[data-theme="dark"] .theme-icon-sun {
   box-shadow: 0 10px 24px rgba(37, 99, 235, 0.08);
 }
 
+.publication-list--home .rating-pills {
+  gap: 6px;
+}
+
+.publication-list--home .rating-pills span {
+  border-radius: 5px;
+  padding: 4px 9px;
+  color: #fff;
+  background: #992d47;
+  border: 1px solid #992d47;
+  font-family: var(--body);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.025em;
+  line-height: 1.4;
+  box-shadow: none;
+}
+
+.publication-list--home .rating-pills span + span {
+  background: #25456d;
+  border-color: #25456d;
+}
+
 .framework-preview {
   min-width: 0;
   max-width: 280px;
@@ -2094,6 +2117,17 @@ html[data-theme="dark"] .rating-pills span {
   color: #d8e8ff;
   background: linear-gradient(135deg, rgba(120, 88, 28, 0.58), rgba(35, 69, 112, 0.82));
   border-color: rgba(117, 173, 244, 0.24);
+}
+
+html[data-theme="dark"] .publication-list--home .rating-pills span {
+  color: #fff;
+  background: #91354e;
+  border-color: #b9647b;
+}
+
+html[data-theme="dark"] .publication-list--home .rating-pills span + span {
+  background: #284b75;
+  border-color: #557ba8;
 }
 
 html[data-theme="dark"] .service-card {

@@ -44,6 +44,7 @@ const publicationCredits = {
     authors: ["Nan Li", "Zhihua Wang", "Ziyang Chen", "Yunhao Feng", "Songyang Wu"],
     coFirstAuthors: ["Nan Li", "Zhihua Wang"],
     correspondingAuthor: "Songyang Wu",
+    homepageRatings: ["AAAI 2027", "CCF A"],
     date: "2026.08"
   },
   safeCodeRl: {
@@ -105,7 +106,8 @@ export type PublicationItem = {
   url?: string;
   links?: Link[];
   tags: string[];
-  ratings?: string[];
+  ratings?: readonly string[];
+  homepageRatings?: readonly string[];
   frameworkImage?: string;
   frameworkAlt?: string;
   frameworkCaption?: string;

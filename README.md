@@ -63,7 +63,6 @@ gh repo create Kirito14IT/Kirito14IT.github.io --public --source . --remote orig
 - 头像是否继续使用 GitHub 头像，还是换成正式照片或二次元风格头像。
 - SafeCodeRL 和 SFMambaNet 的 arXiv 链接。
 - 是否公开更多项目仓库链接。
-- 是否继续使用当前公开邮箱 `2657751462@qq.com`，还是换成 Gmail 或学校邮箱。
 
 ## 中英文 PDF 简历
 

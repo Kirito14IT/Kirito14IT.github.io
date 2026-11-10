@@ -37,7 +37,7 @@ const forbiddenPatterns = [
 ];
 
 const requiredPublicSnippets = [
-  "2657751462@qq.com",
+  "wzh2657751462@gmail.com",
   "data-neural-field",
   "learningProgress",
   "International Organization Internship",

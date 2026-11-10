@@ -94,7 +94,16 @@ const homeJumpLinks = [
   <Section id="publications" title={copy.sections.publications} eyebrow={copy.sections.researchOutput}>
     <p class="publication-author-legend muted">* {copy.publication.coFirst} · † {copy.publication.corresponding}</p>
     <div class="publication-list">
-      {publications.map((item) => <PublicationCard item={item} locale={locale} />)}
+      {publications.map((item) => (
+        <PublicationCard
+          item={{
+            ...item,
+            authors: item.homepageAuthors ?? item.authors,
+            status: item.homepageStatus ?? item.status
+          }}
+          locale={locale}
+        />
+      ))}
     </div>
   </Section>
 

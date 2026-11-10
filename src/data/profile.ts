@@ -9,7 +9,7 @@ const shared = {
   name: "Carey",
   githubUsername: "Kirito14IT",
   siteUrl: "https://kirito14it.github.io",
-  email: "2657751462@qq.com",
+  email: "wzh2657751462@gmail.com",
   github: "https://github.com/Kirito14IT",
   avatarUrl: "https://github.com/Kirito14IT.png",
   advisorUrl: "http://xingjunma.com/",
@@ -70,7 +70,7 @@ export const profiles = {
       "Trustworthy AI"
     ],
     links: [
-      { label: "Email", url: "mailto:2657751462@qq.com", displayUrl: "2657751462@qq.com" },
+      { label: "Email", url: "mailto:wzh2657751462@gmail.com", displayUrl: "wzh2657751462@gmail.com" },
       { label: "GitHub", url: "https://github.com/Kirito14IT", displayUrl: "https://github.com/Kirito14IT" },
       {
         label: "Google Scholar",
@@ -119,7 +119,7 @@ export const profiles = {
     ],
     interests: ["基座大模型", "LLM", "Coding Agent", "智能体后训练", "Agent RL", "智能体安全", "智能体记忆", "可信人工智能"],
     links: [
-      { label: "邮箱", url: "mailto:2657751462@qq.com", displayUrl: "2657751462@qq.com" },
+      { label: "邮箱", url: "mailto:wzh2657751462@gmail.com", displayUrl: "wzh2657751462@gmail.com" },
       { label: "GitHub", url: "https://github.com/Kirito14IT", displayUrl: "https://github.com/Kirito14IT" },
       {
         label: "谷歌学术",

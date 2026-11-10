@@ -116,9 +116,18 @@ const checks = [
   )],
   ["duplicate homepage project cards are removed", [homepage, zhHomepage].every((html) => !(html.match(/<section id="projects"[\s\S]*?<\/section>/)?.[0] || "").includes('class="card-grid"'))],
   ["web CV remains optional behind a collapsed disclosure", [cv, zhCv].every((html) => /<details class="web-cv\b/.test(html) && !/<details[^>]*class="web-cv[^>]*\bopen\b/.test(html))],
-  ["About includes bilingual internship search copy and an email contact", [[homepage, "Seeking internships:", "I am seeking internships in foundation models, coding agents, agent post-training, agentic reinforcement learning, and LLM evaluation."], [zhHomepage, "实习求职：", "我在寻找基座大模型、Coding Agent、智能体后训练（Agent Post-Training）、Agentic rl及大模型评测相关的实习机会。"]].every(([html, title, description]) => { const about = html.match(/<section id="about"[\s\S]*?<\/section>/)?.[0] || ""; return about.includes(title) && about.includes(description) && about.includes('href="mailto:2657751462@qq.com"'); })],
+  ["About includes bilingual internship search copy and an email contact", [[homepage, "Seeking internships:", "I am seeking internships in foundation models, coding agents, agent post-training, agentic reinforcement learning, and LLM evaluation."], [zhHomepage, "实习求职：", "我在寻找基座大模型、Coding Agent、智能体后训练（Agent Post-Training）、Agentic rl及大模型评测相关的实习机会。"]].every(([html, title, description]) => { const about = html.match(/<section id="about"[\s\S]*?<\/section>/)?.[0] || ""; return about.includes(title) && about.includes(description) && about.includes('href="mailto:wzh2657751462@gmail.com"'); })],
   ["homepage Blog shortcut and section heading are localized", homeShortcutNav.includes('href="#field-notes">Blog</a>') && zhHomeShortcutNav.includes('href="#field-notes">博客</a>') && homepage.includes("<h2>Blog</h2>") && zhHomepage.includes("<h2>博客</h2>") && !zhHomeShortcutNav.includes("技术笔记")],
-  ["both new papers have linked publication cards on bilingual home and CV pages", [homepage, zhHomepage, cv, zhCv].every((html) => newPaperResources.every(({title, paper, code}) => { const card = publicationCard(html, title); return card.includes(`href="${paper}"`) && card.includes(`href="${code}"`) && card.includes("WWW 2027") && /arXiv preprint|arXiv 预印本/.test(card); }))],
+  ["both new papers retain their resources while only homepages omit submission venues", [
+    [homepage, false],
+    [zhHomepage, false],
+    [cv, true],
+    [zhCv, true]
+  ].every(([html, showSubmissionVenue]) => newPaperResources.every(({ title, paper, code }) => {
+    const card = publicationCard(html, title);
+    return card.includes(`href="${paper}"`) && card.includes(`href="${code}"`) &&
+      card.includes("WWW 2027") === showSubmissionVenue && /arXiv preprint|arXiv 预印本/.test(card);
+  }))],
   ["new publication links use safe external targets", [homepage, zhHomepage, cv, zhCv].every((html) => newPaperResources.every(({title}) => (publicationCard(html, title).match(/<a\b[^>]*>/g) || []).every((link) => link.includes('target="_blank"') && link.includes('rel="noopener noreferrer"'))))],
   ["all MemHarmBench cards use the original English Figure 1", [homepage, cv, zhHomepage, zhCv].every((html) => { const card = publicationCard(html, submissionTitles[0]); return card.includes('src="/figures/memharmbench-cross-session-en.webp"') && !card.includes('memharmbench-cross-session-zh.webp') && card.includes('loading="lazy"'); })],
   ["original English MemHarmBench figure is published", fs.existsSync(path.join(root, "dist", "figures", "memharmbench-cross-session-en.webp"))],
@@ -143,7 +152,7 @@ const checks = [
   ["bilingual homepage contact panels show only direct contact links", [homepage, zhHomepage].every((html) => {
     const contact = html.match(/<section id="contact"[\s\S]*?<\/section>/)?.[0] || "";
     const urls = [...contact.matchAll(/<a\b[^>]*href="([^"]+)"/g)].map(([, url]) => url);
-    const expected = ["mailto:2657751462@qq.com", "https://github.com/Kirito14IT", "https://scholar.google.com/citations?user=MyweXYYAAAAJ", ...socialProfileUrls];
+    const expected = ["mailto:wzh2657751462@gmail.com", "https://github.com/Kirito14IT", "https://scholar.google.com/citations?user=MyweXYYAAAAJ", ...socialProfileUrls];
     return urls.length === expected.length && expected.every((url) => urls.includes(url)) &&
       !html.includes('class="representative-links"');
   })],

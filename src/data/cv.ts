@@ -53,6 +53,7 @@ const publicationCredits = {
   },
   sfmambaNet: {
     authors: ["Zhihua Wang", "Yanping Li", "Yizhang Liu"],
+    homepageAuthors: ["Zhihua Wang", "Yifeng Gao", "Yanping Li", "Yizhang Liu"],
     correspondingAuthor: "Yanping Li",
     date: "2026.06.03"
   },
@@ -94,9 +95,11 @@ export type TimelineItem = {
 export type PublicationItem = {
   title: string;
   authors: readonly string[];
+  homepageAuthors?: readonly string[];
   correspondingAuthor?: string;
   coFirstAuthors?: readonly string[];
   status: string;
+  homepageStatus?: string;
   role: string;
   date: string;
   url?: string;
@@ -447,6 +450,7 @@ const cvEn: CvData = {
       ...publicationCredits.memHarmBench,
       title: memHarmBenchTitle,
       status: "Submitted to WWW 2027 · arXiv preprint",
+      homepageStatus: "arXiv preprint",
       role: "First author",
       url: memHarmBenchPaperUrl,
       links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "Code", url: memHarmBenchCodeUrl }],
@@ -459,6 +463,7 @@ const cvEn: CvData = {
       ...publicationCredits.cst,
       title: cstTitle,
       status: "Submitted to WWW 2027 · arXiv preprint",
+      homepageStatus: "arXiv preprint",
       role: "First author",
       url: cstPaperUrl,
       links: [{ label: "arXiv", url: cstPaperUrl }, { label: "Code", url: cstCodeUrl }],
@@ -470,7 +475,7 @@ const cvEn: CvData = {
     {
       ...publicationCredits.scamWeb,
       title: "ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages",
-      status: "Under review at AAAI 2027",
+      status: "AAAI 2027; Will be accepted(accept*4)",
       role: "Co-first author",
       url: scamWebUrl,
       tags: ["Multimodal Benchmark", "Cyber-enabled Fraud", "Grounded Understanding", "Evidence Localization", "LLM-VLM", "Trustworthy AI"],
@@ -909,6 +914,7 @@ const cvZh: CvData = {
       ...publicationCredits.memHarmBench,
       title: memHarmBenchTitle,
       status: "已投稿至 WWW 2027 · arXiv 预印本",
+      homepageStatus: "arXiv 预印本",
       role: "第一作者",
       url: memHarmBenchPaperUrl,
       links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "代码", url: memHarmBenchCodeUrl }],
@@ -921,6 +927,7 @@ const cvZh: CvData = {
       ...publicationCredits.cst,
       title: cstTitle,
       status: "已投稿至 WWW 2027 · arXiv 预印本",
+      homepageStatus: "arXiv 预印本",
       role: "第一作者",
       url: cstPaperUrl,
       links: [{ label: "arXiv", url: cstPaperUrl }, { label: "代码", url: cstCodeUrl }],
@@ -932,7 +939,7 @@ const cvZh: CvData = {
     {
       ...publicationCredits.scamWeb,
       title: "ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages",
-      status: "AAAI 2027 在审",
+      status: "AAAI 2027; Will be accepted(accept*4)",
       role: "共同第一作者",
       url: scamWebUrl,
       tags: ["多模态基准", "网络诈骗", "落地式理解", "证据定位", "LLM-VLM", "可信人工智能"],

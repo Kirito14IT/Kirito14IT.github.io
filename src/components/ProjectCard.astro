@@ -6,7 +6,6 @@ const copy = getUi(locale);
 ---
 
 <a class="project-card" href={href}>
-  <div class="project-glow" aria-hidden="true"></div>
   <div class="card-topline">
     <span>{item.data?.date ? item.data.date.getFullYear() : copy.projectsPage.project}</span>
     {item.data?.featured && <strong>{copy.projectsPage.featured}</strong>}

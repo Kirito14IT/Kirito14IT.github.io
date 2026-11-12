@@ -7,10 +7,10 @@ const { locale } = Astro.props as { locale: Locale };
 const zh = locale === "zh";
 ---
 
-<article class="glass-card aisafetyhot-project">
+<article class="aisafetyhot-project">
   <div class="project-summary">
-    <p class="eyebrow">{zh ? "开源项目参与" : "Open-source participation"} · 2026.10</p>
     <h3><a href="https://github.com/wuyoscar/AISafetyHot" target="_blank" rel="noopener noreferrer">AISafetyHot</a></h3>
+    <p class="project-meta">{zh ? "开源项目参与" : "Open-source participation"} · 2026.10</p>
     <p class="project-description">{zh
       ? "国庆期间参与的开源项目，聚合 AI 安全新闻、研究论文与事件，并提供面向 Agent 的 MCP 接口。"
       : "An open-source project I participated in during the National Day holiday. It brings together AI safety news, research, and events, with an MCP interface for agents."}</p>
@@ -23,16 +23,23 @@ const zh = locale === "zh";
 
 <style>
   .aisafetyhot-project {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 20px 24px;
-    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 240px;
+    align-items: start;
+    gap: 24px;
+    padding-block: 16px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 24px;
   }
-  .project-summary { flex: 1 1 18rem; min-width: 0; }
-  .project-preview { flex: 0 1 22rem; min-width: 0; max-width: 100%; }
+  .project-summary { min-width: 0; }
+  .project-preview { min-width: 0; max-width: 100%; }
   .project-preview :global(.aisafetyhot-demo) { margin-top: 0; }
   .aisafetyhot-project h3 a { color: inherit; text-decoration: none; }
   .aisafetyhot-project h3 a:hover { color: var(--blue); text-decoration: underline; text-underline-offset: 4px; }
-  .project-description { margin: 12px 0 0; color: var(--muted); }
+  .project-meta { margin: 4px 0 8px; font-size: 13px; color: var(--muted); }
+  .project-description { margin: 8px 0 0; }
+  @media (max-width: 600px) {
+    .aisafetyhot-project { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+    .project-preview { max-width: 280px; }
+  }
 </style>

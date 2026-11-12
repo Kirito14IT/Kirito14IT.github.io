@@ -6,70 +6,38 @@ import { getUi, localizedPath, type Locale } from "@i18n/index";
 const { locale } = Astro.props as { locale: Locale };
 const profile = getProfile(locale);
 const copy = getUi(locale);
-const navItems = [
-  { label: copy.nav.home, href: localizedPath(locale, "/") },
-  { label: copy.nav.cv, href: localizedPath(locale, "/cv/") },
-  { label: copy.nav.projects, href: localizedPath(locale, "/projects/") },
-  { label: copy.nav.blog, href: localizedPath(locale, "/blog/") }
+const contactIcons = [
+  "M3 5h18v14H3z M3 5l9 7 9-7",
+  "M9 19c-4 1-4-2-6-2m12 5v-4c0-1 .1-1.4-.5-2 4-.5 6.5-2 6.5-6a5 5 0 0 0-1.5-3.5 5 5 0 0 0-.1-3.5S18 2.5 15 4a13 13 0 0 0-6 0C6 2.5 4.6 3 4.6 3a5 5 0 0 0-.1 3.5A5 5 0 0 0 3 10c0 4 2.5 5.5 6.5 6-.6.6-.5 1.4-.5 2v4",
+  "M2 8l10-5 10 5-10 5-10-5z M6 10v6c4 3 8 3 12 0v-6 M22 8v7",
+  "M14 3v12a4 4 0 1 1-4-4 M14 3c1 4 3 6 7 6",
+  "M3 4h18v16H3z M7 8h4 M7 12h4 M15 8v8 M7 16h4"
 ];
 ---
 
-<aside class="sidebar">
+<aside class="sidebar" aria-label={locale === "zh" ? "个人信息" : "Profile"}>
   <a class="profile-card" data-profile-card href={localizedPath(locale, "/")} aria-label={`${profile.name} ${copy.nav.home}`}>
-    <img class="avatar" src={profile.avatarUrl} alt={`${profile.name} avatar`} width="92" height="92" />
-    <AcmerLogo />
+    <img class="avatar" src={profile.avatarUrl} alt={`${profile.name} avatar`} width="140" height="140" />
     <div class="profile-identity">
       <h1>{profile.name}</h1>
       <p>{profile.legalName}</p>
     </div>
+    <AcmerLogo />
   </a>
-
-  <section class="sidebar-section">
-    <p class="sidebar-heading">{copy.sidebar.profile}</p>
-    <p class="sidebar-copy">{profile.title}</p>
-    <p class="sidebar-copy">{profile.institution}</p>
-    <p class="sidebar-copy"><strong>{profile.incomingTitle}</strong></p>
-    <p class="sidebar-copy">
-      {copy.sidebar.advisor}: <a href={profile.advisorUrl} target="_blank" rel="noopener noreferrer">{profile.advisorName}</a>
-    </p>
-    <p class="sidebar-copy">
-      {copy.sidebar.labHead}: <a href={profile.labHeadUrl} target="_blank" rel="noopener noreferrer">{profile.labHeadName}</a>
-    </p>
-    <div class="sidebar-affiliations">
-      <span>{copy.sidebar.affiliations}:</span>
-      {profile.affiliations.map((affiliation) => (
-        <a href={affiliation.url} title={affiliation.title} target="_blank" rel="noopener noreferrer">
-          <img class="inline-link-logo" src={affiliation.logo} alt="" width="22" height="22" loading="lazy" />
-          {affiliation.label}
-        </a>
-      ))}
-    </div>
-    <p class="sidebar-copy">{profile.location}</p>
-  </section>
-
-  <nav class="sidebar-section" aria-label={copy.sidebar.navigation}>
-    <p class="sidebar-heading">{copy.sidebar.navigation}</p>
-    <div class="sidebar-links">
-      {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
-    </div>
-  </nav>
-
-  <section class="sidebar-section">
-    <p class="sidebar-heading">{copy.sidebar.focus}</p>
-    <div class="tag-list compact">
-      {profile.interests.map((interest) => <span>{interest}</span>)}
-    </div>
-  </section>
-
-  <section class="sidebar-section">
-    <p class="sidebar-heading">{copy.sidebar.links}</p>
-    <div class="sidebar-links">
-      {profile.links.map((link) => (
-        <a class="sidebar-link-detail" href={link.url} target={link.url.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer">
-          <strong>{link.label}</strong>
-          <span>{link.displayUrl || link.url}</span>
-        </a>
-      ))}
-    </div>
-  </section>
+  <div class="sidebar-details">
+    <p>{profile.institution}</p>
+    <p class="sidebar-location">{profile.location}</p>
+  </div>
+  <div class="sidebar-contacts">
+    <a class="sidebar-contact" href={localizedPath(locale, "/cv/")}>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h10l4 4v14H5z M14 3v5h5 M8 12h8 M8 16h6" /></svg>
+      <span>{copy.nav.cv}</span>
+    </a>
+    {profile.links.map((link, index) => (
+      <a class="sidebar-contact" href={link.url} target={link.url.startsWith("http") ? "_blank" : undefined} rel={link.url.startsWith("http") ? "noopener noreferrer" : undefined} title={link.displayUrl || link.label}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d={contactIcons[index]} /></svg>
+        <span>{link.label}</span>
+      </a>
+    ))}
+  </div>
 </aside>

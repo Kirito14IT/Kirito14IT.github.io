@@ -7,7 +7,8 @@ const requiredFiles = [
   "src/data/profile.ts",
   "src/data/cv.ts",
   "src/i18n/index.ts",
-  "src/components/ThemeToggle.astro",
+  "src/layouts/BaseLayout.astro",
+  "src/components/Sidebar.astro",
   "src/components/ClickBurst.astro",
   "src/views/HomePage.astro",
   "src/pages/index.astro",
@@ -22,10 +23,11 @@ const requiredFiles = [
   "src/content/projects/zh/xsafeclaw.md"
 ];
 
+const gradeLikeFraction = /(?<![/:])\b\d+\s*\/\s*\d+\b/;
 const forbiddenPatterns = [
   /\bGPA\b/i,
   /\brank\b/i,
-  /(?<![/:])\b\d+\s*\/\s*\d+\b/,
+  gradeLikeFraction,
   /\b\d{11}\b/,
   /Research Intern,\s*XSafeClaw[\s\S]{0,500}(?:Apr 2026 - Present|2026\.04 – present)/,
   /TCSVT/,
@@ -38,13 +40,10 @@ const forbiddenPatterns = [
 
 const requiredPublicSnippets = [
   "wzh2657751462@gmail.com",
-  "data-neural-field",
   "learningProgress",
   "International Organization Internship",
-  "Please feel free to reach out by email",
+  "Feel free to reach out by email",
   "meteor-shower",
-  ".typing-target::after",
-  "max-height: calc(100dvh - 32px)",
   "SCI Zone 1",
   "CCF A",
   "IEEE Transactions on Image Processing (TIP)",
@@ -57,13 +56,10 @@ const requiredPublicSnippets = [
   "CCF C",
   "/figures/sfmambanet-framework.png",
   "/figures/safecoderl-framework.png",
-  "data-draggable-sticker",
   "meteor-layer",
   "Array.from({ length: 8 }",
   "const duration = 12.4 + (index % 6) * 1.7",
   "const delay = index * -1.24",
-  "document.addEventListener(\"pointermove\", moveSticker",
-  "z-index: 4;",
   "https://scholar.google.com/citations?user=MyweXYYAAAAJ",
   "Academic publications and citations",
   "2026.03 – 2026.06",
@@ -78,21 +74,16 @@ const requiredPublicSnippets = [
   "ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages",
   "/figures/scamweb-dataset-overview.png",
   "Dataset and annotation overview",
-  ".hero-panel h2,\n.typing-line",
-  "I am a senior undergraduate student in Computer Science and Technology (Class of 2023)",
+  "I am a senior undergraduate in Computer Science and Technology at USST",
   "Institute of Trustworthy Embodied Artificial Intelligence (TEAI), Fudan University",
-  "我是上海理工大学计算机科学与技术专业 2023 级本科生",
-  "My research interests include large language models, coding agents, trustworthy AI",
-  "研究兴趣聚焦大语言模型、Coding Agent、可信AI、智能体后训练、智能体强化学习（Agent RL）",
+  "我是上海理工大学计算机科学与技术专业大四本科生",
+  "My research interests include foundation models, coding agents",
+  "研究兴趣包括基座大模型、Coding Agent、智能体后训练与强化学习，以及可信人工智能。",
   "Foundation Models",
   "基座大模型",
   "export const locales: Locale[] = [\"en\", \"zh\"]",
   "data-language-switch",
   "krico-locale",
-  "data-theme-toggle",
-  "krico-theme",
-  "Switch to dark theme",
-  "切换到深色主题",
   "data-click-effect-layer",
   "click-bubble-burst",
   "const maxBursts = 4",
@@ -149,7 +140,12 @@ for (const file of textFiles) {
   const content = fs.readFileSync(file, "utf8");
   sourceCorpus.push(content);
   for (const pattern of forbiddenPatterns) {
-    if (pattern.test(content)) {
+    // CSS grid tracks and aspect ratios use the same slash notation as grades.
+    // Exempt those declarations only; public copy and all privacy patterns stay checked.
+    const checked = pattern === gradeLikeFraction
+      ? content.replace(/\b(?:grid-row|grid-column|grid-area|aspect-ratio)\s*:[^;}]+[;}]/g, "")
+      : content;
+    if (pattern.test(checked)) {
       violations.push(`${path.relative(root, file)} matches ${pattern}`);
     }
   }
@@ -164,6 +160,37 @@ const joinedSource = sourceCorpus.join("\n");
 const missingSnippets = requiredPublicSnippets.filter((snippet) => !joinedSource.includes(snippet));
 if (missingSnippets.length > 0) {
   console.error(`Required public homepage features are missing:\n${missingSnippets.map((snippet) => `- ${snippet}`).join("\n")}`);
+  process.exit(1);
+}
+
+const source = (file) => fs.readFileSync(path.join(root, file), "utf8");
+const layout = source("src/layouts/BaseLayout.astro");
+const home = source("src/views/HomePage.astro");
+const sidebar = source("src/components/Sidebar.astro");
+const timeline = source("src/components/Timeline.astro");
+const education = source("src/components/Education.astro");
+const cvData = source("src/data/cv.ts");
+const demo = source("src/components/AISafetyHotDemo.astro");
+const visitor = source("src/components/VisitorMap.astro");
+const stylesheet = source("src/styles/global.css");
+const contracts = [
+  ["shared styles keep the approved white system-font 15px base", /body\s*\{[^}]*background:\s*#(?:fff|ffffff)\s*;[^}]*font:\s*400\s+15px\//.test(stylesheet) && /--body:\s*-apple-system,[^;]*sans-serif/.test(stylesheet) && !/data-theme\s*=\s*["']dark|fonts\.googleapis\.com/.test(stylesheet + layout)],
+  ["shared layout retains locale persistence without a theme toggle or theme preference", layout.includes("krico-locale") && !/ThemeToggle|krico-theme|data-theme-toggle/.test(layout)],
+  ["home removes the hero, contribution graph, contacts, field notes, and skill groups", !/TypingHero|NeuralField|ContributionGraph|ContactLinks|FieldNotes|homeBlog|skills\.map\(|skill-groups|researchFocus|focusWords/.test(home)],
+  ["sidebar no longer renders research focus tags", !/profile\.(?:interests|researchFocus|focusWords)|copy\.sidebar\.focus/.test(sidebar)],
+  ["research collapse is opt-in and leaves other timelines expanded", /collapsible\s*=\s*false/.test(timeline) && /collapsible\s*\?\s*"details"\s*:\s*"article"/.test(timeline) && /<summary\b/.test(timeline)],
+  ["research summary is optional in the shared timeline data type", /export type TimelineItem\s*=\s*\{[^}]*summary\?:\s*string/.test(cvData)],
+  ["compact education is opt-in", /compact\s*=\s*false/.test(education)],
+  ["home renders all News in one scroll region", home.includes("news-scroll") && /news\.map\(/.test(home) && !/latestNews|olderNews|news-archive|news\.slice\(/.test(home)],
+  ["News scroll height follows the approved desktop and mobile limits", /(?:max-)?height:\s*320px/.test(stylesheet + home) && /(?:max-)?height:\s*280px/.test(stylesheet + home)],
+  ["AISafetyHot displays its looping animation and a reduced-motion poster with no playback controls", /src=\{animation\}/.test(demo) && /<source\b[^>]*media="\(prefers-reduced-motion: reduce\)"[^>]*srcset=\{poster\}/.test(demo) && !/data-demo-toggle|<script\b/.test(demo)],
+  ["visitor map waits for viewport proximity and retains the production guard", visitor.includes("IntersectionObserver") && /rootMargin:\s*["']300px(?: 0px)?["']/.test(visitor) && visitor.includes('location.hostname !== "kirito14it.github.io"')],
+  ["visitor-map timeout starts inside the actual loading function", visitor.indexOf("window.setTimeout(unavailable") > visitor.indexOf("const loadMap =") && visitor.indexOf("const loadMap =") > visitor.indexOf('location.hostname !== "kirito14it.github.io"')],
+  ["removed effect components have no remaining references", ["NeuralField", "TypingHero", "ContributionGraph"].every((component) => !fs.existsSync(path.join(root, `src/components/${component}.astro`)) && !joinedSource.includes(`@components/${component}.astro`))]
+];
+const contractFailures = contracts.filter(([, passed]) => !passed).map(([label]) => label);
+if (contractFailures.length > 0) {
+  console.error(`Simplified-site source contracts failed:\n${contractFailures.map((label) => `- ${label}`).join("\n")}`);
   process.exit(1);
 }
 

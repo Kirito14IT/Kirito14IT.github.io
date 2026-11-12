@@ -8,7 +8,7 @@ const copy = getUi(locale);
 const notes = getFieldNotes(locale);
 ---
 
-<Section id="field-notes" title={copy.fieldNotes.title} eyebrow={copy.fieldNotes.eyebrow}>
+<Section id="field-notes" title={copy.fieldNotes.title}>
   <p class="muted">{copy.fieldNotes.intro}</p>
   <div class="post-list">
     {notes.map((note) => (

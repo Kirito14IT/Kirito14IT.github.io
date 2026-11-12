@@ -1,9 +1,8 @@
 ---
 import type { ServiceItem } from "@data/cv";
-import { getUi, type Locale } from "@i18n/index";
+import { type Locale } from "@i18n/index";
 
 const { items, locale } = Astro.props as { items: ServiceItem[]; locale: Locale };
-const copy = getUi(locale);
 ---
 
 <div class="service-list">
@@ -17,7 +16,6 @@ const copy = getUi(locale);
         <h3>{item.role}</h3>
         <p>{item.description}</p>
       </div>
-      <span class="service-watermark" aria-hidden="true">{copy.serviceWatermark}</span>
     </article>
   ))}
 </div>

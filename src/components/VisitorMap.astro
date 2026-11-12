@@ -7,11 +7,11 @@ const dashboard = "https://mapmyvisitors.com/web/1c95g";
 const widget = new URL("https://mapmyvisitors.com/map.js");
 widget.search = new URLSearchParams({
   d: "Miw8Y3UKp7XPCrYF9jOIM4QCtDp0Xsl3diZ8V2GxW78",
-  co: "0b1428",
-  cl: "72b7cd",
-  ct: "cbdcf3",
-  cmo: "a78bfa",
-  cmn: "2dd4bf",
+  co: "ffffff",
+  cl: "dbe4ec",
+  ct: "494e52",
+  cmo: "2458a6",
+  cmn: "218358",
   t: "tt",
   w: "a"
 }).toString();
@@ -19,20 +19,10 @@ widget.search = new URLSearchParams({
 
 <section id="visitors" class="section-stack visitor-section" aria-labelledby="visitor-title" data-visitor-map data-widget-src={widget.toString()}>
   <div class="section-heading">
-    <p>{zh ? "跨越山海的相遇" : "Connections across the world"}</p>
-    <h2 id="visitor-title">{zh ? "世界访客" : "Visitors around the world"}</h2>
+    <h2 id="visitor-title"><span aria-hidden="true">🌍 </span>{zh ? "世界访客" : "Visitors around the world"}</h2>
   </div>
   <div class="visitor-panel">
     <div class="visitor-header">
-      <div class="visitor-label">
-        <svg viewBox="0 0 32 32" width="30" height="30" fill="none" aria-hidden="true">
-          <circle cx="16" cy="16" r="10" stroke="currentColor" stroke-width="1.4" />
-          <ellipse cx="16" cy="16" rx="4" ry="10" stroke="currentColor" stroke-width="1.2" />
-          <path d="M6 16h20M8 10.5c5 3 11 3 16 0M8 21.5c5-3 11-3 16 0" stroke="currentColor" stroke-width="1.2" />
-          <path d="M4 22c-3 0-2-5 3-10M25 9c6-2 7 1 2 6" stroke="#b69aff" stroke-width="1.4" stroke-linecap="round" />
-        </svg>
-        <span>GLOBAL VISITOR MAP</span>
-      </div>
       <a class="visitor-details" href={dashboard} target="_blank" rel="noopener noreferrer">{zh ? "查看访问统计 ↗" : "Explore visitor stats ↗"}</a>
     </div>
     <div class="visitor-stage">
@@ -50,41 +40,23 @@ widget.search = new URLSearchParams({
 </section>
 
 <style>
-  .visitor-panel {
-    position: relative; isolation: isolate; overflow: hidden; border-radius: 28px;
-    padding: 1px; border: 1px solid rgba(106, 158, 233, 0.35);
-    background: #0b1428; color: #dbe9ff;
-    box-shadow: 0 22px 65px rgba(16, 38, 80, 0.18), 0 0 30px rgba(76, 111, 240, 0.09);
-  }
-  .visitor-panel::before {
-    content: ""; position: absolute; z-index: -1; inset: 0; pointer-events: none;
-    background: radial-gradient(ellipse at 0 0, #113b53 0, transparent 44%), radial-gradient(ellipse at 100% 0, #30204e 0, transparent 48%);
-  }
-  .visitor-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 26px 18px; }
-  .visitor-label { display: inline-flex; align-items: center; gap: 12px; color: #79d6ee; font: 700 0.7rem var(--mono); letter-spacing: 0.09em; }
-  .visitor-label svg { flex: none; filter: drop-shadow(0 0 7px #54d8ef55); }
-  .visitor-details { color: #e7dcff; text-decoration: none; font-size: 0.76rem; padding: 7px 12px; border: 1px solid #ad8bf24d; border-radius: 9px; background: #b38df010; }
-  .visitor-details:hover { color: #fff; border-color: #bca1f6; background: #b38df025; }
-  .visitor-panel a:focus-visible { outline: 2px solid #80e7f6; outline-offset: 4px; }
-  .visitor-stage { position: relative; margin: 0 18px; min-height: clamp(205px, 36vw, 430px); background: #0b1428; border-radius: 16px; }
+  .visitor-panel { color: var(--ink); background: #fff; }
+  .visitor-header { display: flex; justify-content: flex-end; padding-bottom: 12px; }
+  .visitor-details { color: var(--blue); font-size: 13px; text-underline-offset: 3px; }
+  .visitor-panel a:focus-visible { outline: 2px solid var(--blue); outline-offset: 4px; }
+  .visitor-stage { position: relative; min-height: clamp(180px, 30vw, 360px); background: #fff; }
   .visitor-host { width: 100%; }
-  .visitor-status { position: absolute; inset: 0; display: grid; align-content: center; justify-items: center; gap: 18px; padding: 24px; text-align: center; font-size: 0.8rem; color: #a9bbd5; }
-  .visitor-status svg { color: #72b7cd; opacity: 0.75; }
-  .visitor-caption { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px 20px; margin: 16px 26px 0; padding: 15px 0 18px; border-top: 1px solid #a5bdf51c; color: #94a8c4; font-size: 0.7rem; }
-  .visitor-caption a { color: #b4c8e5; text-decoration: none; }
+  .visitor-status { position: absolute; inset: 0; display: grid; align-content: center; justify-items: center; gap: 12px; padding: 20px; text-align: center; font-size: 13px; color: var(--muted); }
+  .visitor-status svg { color: var(--muted); }
+  .visitor-caption { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; padding-top: 12px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+  .visitor-caption a { color: var(--blue); }
   .visitor-caption a:hover { text-decoration: underline; }
-  .visitor-section :global(#mapmyvisitors-widget) { width: 100% !important; max-width: 100%; border-radius: 12px; overflow: hidden; }
+  .visitor-section :global(#mapmyvisitors-widget) { width: 100% !important; max-width: 100%; overflow: hidden; }
   .visitor-section :global(.mapmyvisitors-map) { width: 100% !important; height: auto !important; aspect-ratio: 2.04; background-size: 100% 100%; }
-  .visitor-section :global(.mapmyvisitors-visitors) { padding: 12px 0 5px; font-family: var(--mono); }
-  .visitor-section :global(.mapmyvisitors-date) { opacity: 0.65; }
-  .visitor-section :global(#mapmyvisitors-widget .jvectormap-zoomin), .visitor-section :global(#mapmyvisitors-widget .jvectormap-zoomout) { background: #203654; color: #c6f1ff; border-color: #72b7cd55; }
+  .visitor-section :global(.mapmyvisitors-visitors) { padding: 12px 0 5px; font-variant-numeric: tabular-nums; }
+  .visitor-section :global(.mapmyvisitors-date) { color: var(--muted); }
+  .visitor-section :global(#mapmyvisitors-widget .jvectormap-zoomin), .visitor-section :global(#mapmyvisitors-widget .jvectormap-zoomout) { background: #fff; color: var(--blue); border-color: var(--line); }
   [hidden] { display: none; }
-  @media (max-width: 520px) {
-    .visitor-header { padding: 18px 16px 14px; gap: 12px; }
-    .visitor-label { font-size: 0.65rem; gap: 8px; }
-    .visitor-stage { margin: 0 8px; }
-    .visitor-caption { margin-inline: 16px; }
-  }
 </style>
 
 <script>
@@ -99,45 +71,69 @@ widget.search = new URLSearchParams({
       section.dataset.state = "preview";
       message.textContent = zh ? "本地预览不计入访问统计。上线后将显示真实访问地图。" : "Local previews are not tracked. The live site displays the real visitor map.";
     } else {
-      section.dataset.state = "loading";
-      message.textContent = zh ? "正在连接 MapMyVisitors…" : "Connecting to MapMyVisitors…";
-      const unavailable = () => {
-        section.dataset.state = "unavailable";
-        host.hidden = true;
-        message.textContent = zh ? "地图暂时无法加载，请使用上方链接查看统计。" : "The map is temporarily unavailable. Use the link above to view visitor statistics.";
-      };
-      const timeout = window.setTimeout(unavailable, 16000);
-      const observer = new MutationObserver(() => {
-        const link = host.querySelector<HTMLAnchorElement>("#mapmyvisitors-widget");
-        const counter = host.querySelector(".mapmyvisitors-visitors");
-        if (link) {
-          link.href = "https://mapmyvisitors.com/web/1c95g";
-          link.target = "_blank";
-          link.rel = "noopener noreferrer";
-          link.setAttribute("aria-label", zh ? "打开访客地图详细统计" : "Open detailed visitor map statistics");
-        }
-        if (!counter?.textContent?.trim() || !host.querySelector("svg")) return;
-        section.dataset.state = "ready";
-        status.hidden = true;
-        host.hidden = false;
-        window.clearTimeout(timeout);
-        observer.disconnect();
-        // Resize the provider's map without reloading its tracking script.
-        const resize = new ResizeObserver(() => {
-          type MapJQuery = (node: Element) => { data: (key: string) => { updateSize?: () => void } | undefined };
-          const jq = (window as Window & { vmap_jq?: MapJQuery }).vmap_jq;
-          const container = host.querySelector(".jvectormap-container");
-          if (container) jq?.(container).data("mapObject")?.updateSize?.();
+      section.dataset.state = "waiting";
+      message.textContent = zh ? "滚动至此处后加载访问地图。" : "The visitor map loads when you reach this section.";
+      let started = false;
+      const loadMap = () => {
+        if (started) return;
+        started = true;
+        section.dataset.state = "loading";
+        message.textContent = zh ? "正在连接 MapMyVisitors…" : "Connecting to MapMyVisitors…";
+        let timeout: number;
+        let observer: MutationObserver;
+        const cleanup = () => {
+          window.clearTimeout(timeout);
+          observer.disconnect();
+        };
+        const unavailable = () => {
+          cleanup();
+          section.dataset.state = "unavailable";
+          host.hidden = true;
+          message.textContent = zh ? "地图暂时无法加载，请使用上方链接查看统计。" : "The map is temporarily unavailable. Use the link above to view visitor statistics.";
+        };
+        observer = new MutationObserver(() => {
+          const link = host.querySelector<HTMLAnchorElement>("#mapmyvisitors-widget");
+          const counter = host.querySelector(".mapmyvisitors-visitors");
+          if (link) {
+            link.href = "https://mapmyvisitors.com/web/1c95g";
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            link.setAttribute("aria-label", zh ? "打开访客地图详细统计" : "Open detailed visitor map statistics");
+          }
+          if (!counter?.textContent?.trim() || !host.querySelector("svg")) return;
+          section.dataset.state = "ready";
+          status.hidden = true;
+          host.hidden = false;
+          cleanup();
+          // Resize the provider's map without reloading its tracking script.
+          if (typeof ResizeObserver === "undefined") return;
+          const resize = new ResizeObserver(() => {
+            type MapJQuery = (node: Element) => { data: (key: string) => { updateSize?: () => void } | undefined };
+            const jq = (window as Window & { vmap_jq?: MapJQuery }).vmap_jq;
+            const container = host.querySelector(".jvectormap-container");
+            if (container) jq?.(container).data("mapObject")?.updateSize?.();
+          });
+          resize.observe(host);
         });
-        resize.observe(host);
-      });
-      observer.observe(host, { childList: true, subtree: true, characterData: true });
-      const script = document.createElement("script");
-      script.id = "mapmyvisitors";
-      script.src = section.dataset.widgetSrc!;
-      script.async = true;
-      script.onerror = unavailable;
-      host.append(script);
+        observer.observe(host, { childList: true, subtree: true, characterData: true });
+        timeout = window.setTimeout(unavailable, 16000);
+        const script = document.createElement("script");
+        script.id = "mapmyvisitors";
+        script.src = section.dataset.widgetSrc!;
+        script.async = true;
+        script.onerror = unavailable;
+        host.append(script);
+      };
+      if (typeof IntersectionObserver === "undefined") {
+        loadMap();
+      } else {
+        const visibility = new IntersectionObserver((entries) => {
+          if (!entries.some((entry) => entry.isIntersecting)) return;
+          visibility.disconnect();
+          loadMap();
+        }, { rootMargin: "300px 0px" });
+        visibility.observe(section);
+      }
     }
   }
 </script>

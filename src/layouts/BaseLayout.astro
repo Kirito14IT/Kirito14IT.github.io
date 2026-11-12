@@ -2,7 +2,6 @@
 import Sidebar from "@components/Sidebar.astro";
 import SiteFooter from "@components/SiteFooter.astro";
 import LanguageSwitcher from "@components/LanguageSwitcher.astro";
-import ThemeToggle from "@components/ThemeToggle.astro";
 import ClickBurst from "@components/ClickBurst.astro";
 import ChatBot from "@components/ChatBot.astro";
 import { getProfile } from "@data/profile";
@@ -39,7 +38,7 @@ const hasToolbarNavigation = Astro.slots.has("toolbar");
     <meta property="og:description" content={pageDescription} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalUrl} />
-    <meta name="theme-color" content="#f8fbff" />
+    <meta name="theme-color" content="#ffffff" />
     <link rel="canonical" href={canonicalUrl} />
     <link rel="alternate" hreflang="en" href={new URL(englishPath, profile.siteUrl).toString()} />
     <link rel="alternate" hreflang="zh-CN" href={new URL(chinesePath, profile.siteUrl).toString()} />
@@ -53,8 +52,6 @@ const hasToolbarNavigation = Astro.slots.has("toolbar");
       (() => {
         try {
           const root = document.documentElement;
-          const preferredTheme = window.localStorage.getItem("krico-theme");
-          root.dataset.theme = preferredTheme === "dark" ? "dark" : "light";
           const currentLocale = root.dataset.locale;
           const storedLocale = window.localStorage.getItem("krico-locale");
           const counterpart = root.dataset.counterpartPath;
@@ -72,12 +69,6 @@ const hasToolbarNavigation = Astro.slots.has("toolbar");
     </script>
   </head>
   <body>
-    <div class="site-background" aria-hidden="true">
-      <span class="mesh mesh-a"></span>
-      <span class="mesh mesh-b"></span>
-      <span class="mesh mesh-c"></span>
-      <span class="grid-paper"></span>
-    </div>
     <div class="meteor-layer" aria-hidden="true">
       <div class="meteor-shower">
         {Array.from({ length: 8 }, (_, index) => {
@@ -92,19 +83,18 @@ const hasToolbarNavigation = Astro.slots.has("toolbar");
     <ClickBurst />
     <div class="site-shell">
       <Sidebar locale={locale} />
-      <main class="main-content">
+      <main class="main-content" id="main-content">
         <div class:list={["page-toolbar", { "has-navigation": hasToolbarNavigation }]}>
-          <nav class="mobile-site-navigation" aria-label={copy.sidebar.navigation}>
-            <a class="mobile-site-brand" href={localizedPath(locale, "/")}>{profile.name}</a>
-            <a href={localizedPath(locale, "/")}>{copy.nav.home}</a>
-            <a href={localizedPath(locale, "/cv/")}>{copy.nav.cv}</a>
-            <a href={localizedPath(locale, "/projects/")}>{copy.nav.projects}</a>
-            <a href={localizedPath(locale, "/blog/")}>{copy.nav.blog}</a>
-          </nav>
-          {hasToolbarNavigation && <div class="toolbar-navigation"><slot name="toolbar" /></div>}
+          {hasToolbarNavigation ? <div class="toolbar-navigation"><slot name="toolbar" /></div> : (
+            <nav class="site-navigation" aria-label={copy.sidebar.navigation}>
+              <a href={localizedPath(locale, "/")}>{copy.nav.home}</a>
+              <a href={localizedPath(locale, "/cv/")}>{copy.nav.cv}</a>
+              <a href={localizedPath(locale, "/projects/")}>{copy.nav.projects}</a>
+              <a href={localizedPath(locale, "/blog/")}>{copy.nav.blog}</a>
+            </nav>
+          )}
           <div class="toolbar-controls">
             <LanguageSwitcher locale={locale} pathname={Astro.url.pathname} />
-            <ThemeToggle locale={locale} />
           </div>
         </div>
         <slot />

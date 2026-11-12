@@ -14,7 +14,6 @@ const posts = (await getCollection("blog"))
 
 <BaseLayout locale={locale} title={locale === "zh" ? "博客 | Carey" : "Blog | Carey"}>
   <header class="page-header">
-    <p class="eyebrow">{copy.blogPage.eyebrow}</p>
     <h1>{copy.blogPage.title}</h1>
     <p>{copy.blogPage.intro}</p>
   </header>

@@ -7,8 +7,3 @@ const { links } = Astro.props as { links: Array<{ label: string; url: string }> 
     <a href={link.url} target="_blank" rel="noopener noreferrer">{link.label} ↗</a>
   ))}
 </div>
-
-<style>
-  .resource-links { margin-top: 0; gap: 8px; }
-  .resource-links a { padding: 7px 12px; font-size: 0.82rem; }
-</style>

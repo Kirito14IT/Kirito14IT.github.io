@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-12T00:00:00+08:00",
+  "title": "Design System: Carey Academic Website",
+  "extensions": {
+    "shadows": [],
+    "motion": [
+      {
+        "name": "meteor-fall",
+        "value": "12.4s–25.3s linear infinite",
+        "purpose": "Retained optional CSS meteor decoration; hidden for reduced motion."
+      },
+      {
+        "name": "click-feedback",
+        "value": "1120ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Retained click feedback; hidden for reduced motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "compact-desktop",
+        "value": "1100px"
+      },
+      {
+        "name": "stacked-sidebar",
+        "value": "900px"
+      },
+      {
+        "name": "stacked-publications",
+        "value": "600px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Text link",
+      "kind": "custom",
+      "refersTo": "link",
+      "description": "Blue inline link for academic sources and contact actions.",
+      "html": "<a class=\"ds-link\" href=\"#publication\">Paper and code</a>",
+      "css": ".ds-link { color: var(--blue, #1769aa); font: 14px/1.55 system-ui, sans-serif; text-decoration: none; text-underline-offset: 3px; } .ds-link:hover { text-decoration: underline; } .ds-link:focus-visible { outline: 2px solid var(--blue, #1769aa); outline-offset: 4px; }"
+    },
+    {
+      "name": "Utility button",
+      "kind": "button",
+      "refersTo": "button",
+      "description": "Small rectangular control for a direct utility action.",
+      "html": "<button class=\"ds-button\" type=\"button\">Open preview</button>",
+      "css": ".ds-button { padding: 5px 10px; border: 1px solid var(--line, #ddd); border-radius: 2px; color: var(--blue, #1769aa); background: #fff; font: 14px/1.55 system-ui, sans-serif; cursor: pointer; } .ds-button:hover { border-color: var(--blue, #1769aa); } .ds-button:focus-visible { outline: 2px solid var(--blue, #1769aa); outline-offset: 4px; } .ds-button:active { color: #222; }"
+    },
+    {
+      "name": "Public navigation",
+      "kind": "nav",
+      "description": "One wrapping row for public-page navigation.",
+      "html": "<nav class=\"ds-nav\"><a href=\"#home\">Home</a><a href=\"#cv\">CV</a><a href=\"#projects\">Projects</a><a href=\"#blog\">Blog</a></nav>",
+      "css": ".ds-nav { display: flex; flex-wrap: wrap; gap: 7px 20px; font: 15px/1.55 system-ui, sans-serif; padding-bottom: 15px; border-bottom: 1px solid var(--line, #ddd); } .ds-nav a { color: var(--ink, #222); text-decoration: none; text-underline-offset: 3px; } .ds-nav a:hover { color: var(--blue, #1769aa); text-decoration: underline; } .ds-nav a:focus-visible { outline: 2px solid var(--blue, #1769aa); outline-offset: 4px; }"
+    },
+    {
+      "name": "Research disclosure",
+      "kind": "custom",
+      "description": "Native disclosure for compact research experience rows.",
+      "html": "<details class=\"ds-details\"><summary>2026 · Agent safety research</summary><p>Research details and source links appear on expansion.</p></details>",
+      "css": ".ds-details { color: var(--ink, #222); font: 15px/1.55 system-ui, sans-serif; padding-top: 12px; border-top: 1px solid var(--line, #ddd); } .ds-details summary { cursor: pointer; } .ds-details summary:hover { color: var(--blue, #1769aa); } .ds-details summary:focus-visible { outline: 2px solid var(--blue, #1769aa); outline-offset: 4px; } .ds-details p { margin: 12px 0 0; }"
+    },
+    {
+      "name": "Academic content row",
+      "kind": "custom",
+      "description": "A flat title, summary, and metadata row for projects and notes.",
+      "html": "<a class=\"ds-row\" href=\"#project\"><h3>Research project</h3><p>A concise description of the work and its contribution.</p><span>2026 · Open source</span></a>",
+      "css": ".ds-row { display: block; padding: 18px 0; border-bottom: 1px solid var(--line, #ddd); color: var(--ink, #222); font: 15px/1.55 system-ui, sans-serif; text-decoration: none; } .ds-row h3 { margin: 0 0 7px; font-size: 17px; line-height: 1.35; font-weight: 600; } .ds-row p { margin: 0 0 8px; } .ds-row span { color: var(--muted, #626262); font-size: 13px; } .ds-row:hover h3 { color: var(--blue, #1769aa); text-decoration: underline; text-underline-offset: 3px; } .ds-row:focus-visible { outline: 2px solid var(--blue, #1769aa); outline-offset: 4px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "A compact academic page",
+    "overview": "The approved reference is xuyanye.com. The website uses a plain white surface, familiar system typography, restrained blue links, and thin separators so academic content carries the page. The identity sidebar and dense, readable content rows form the recurring composition.",
+    "keyCharacteristics": [
+      "White, flat public pages.",
+      "Compact text and simple academic hierarchy.",
+      "Linked publications, dated news, and accessible disclosures.",
+      "Bilingual routes with a consistent shared shell."
+    ],
+    "rules": [
+      {
+        "name": "The White Surface Rule",
+        "body": "Keep the main public page surface white and fixed to light mode.",
+        "section": "colors"
+      }
+    ],
+    "dos": [
+      "Do keep public page backgrounds white and use system sans-serif text.",
+      "Do preserve clear keyboard focus, ordinary links, authorship marks, and language controls.",
+      "Do use thin separators and flat content rows.",
+      "Do keep contacts visible when the sidebar stacks on mobile."
+    ],
+    "donts": [
+      "Don't add glass panels, decorative meshes, background grids, or large shadows.",
+      "Don't turn tags, ratings, or resource links into pills.",
+      "Don't add section eyebrows or animated ACMer styling.",
+      "Don't hide the entire sidebar on mobile or add a second mobile navigation."
+    ]
+  }
+}

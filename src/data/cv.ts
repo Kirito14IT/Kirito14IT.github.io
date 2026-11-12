@@ -79,6 +79,7 @@ export type NewsItem = {
 
 export type TimelineItem = {
   title?: string;
+  summary?: string;
   titleUrl?: string;
   degree?: string;
   institution?: string;
@@ -277,6 +278,7 @@ const cvEn: CvData = {
   experiences: [
     {
       title: "Research Intern, MemHarmBench and CST",
+      summary: "Built MemHarmBench for cross-session memory poisoning and CST for CPU-based risk triage.",
       organization: "Institute of Trustworthy Embodied AI (TEAI), Fudan University · FVL Laboratory · Shanghai Innovation Institute",
       period: "2026.08 – 2026.11",
       tags: ["Agent Safety", "Memory Poisoning", "Risk Triage", "Source-Grounded Evidence", "First Author"],
@@ -294,6 +296,7 @@ const cvEn: CvData = {
     },
     {
       title: "Research Intern, ScamWeb Multimodal Fraud Benchmark",
+      summary: "Co-developed a multilingual fraud benchmark with expert-annotated evidence and explanations.",
       titleUrl: scamWebUrl,
       organization: "Institute of Trustworthy Embodied Artificial Intelligence (TEAI), Fudan University & The Third Research Institute of the Ministry of Public Security",
       period: "2026.04 – 2026.08",
@@ -323,6 +326,7 @@ const cvEn: CvData = {
     },
     {
       title: "Research Intern, XSafeClaw Agent Runtime Safety",
+      summary: "Integrated local agent sessions with controlled tool calls and runtime safety audits.",
       starRepos: ["XSafeAI/XSafeClaw"],
       titleUrl: xsafeclawUrl,
       organization: "Institute of Trustworthy Embodied Artificial Intelligence (TEAI), Fudan University",
@@ -349,6 +353,7 @@ const cvEn: CvData = {
     },
     {
       title: "Research Intern, VulnSeeker",
+      summary: "Combined CodeQL analysis, code context, and LLM judgement for vulnerability triage.",
       titleUrl: vulnseekerUrl,
       organization: "Fudan Software Engineering (CodeWisdom) Lab",
       organizationUrl: codeWisdomLabUrl,
@@ -374,6 +379,7 @@ const cvEn: CvData = {
     },
     {
       title: "International Organization Internship, UNDP-administered UNV Online Research Intern",
+      summary: "Reviewed mangrove responses to climate change and blue carbon mitigation through UNV.",
       titleUrl: "https://www.undp.org/",
       organization: "Morobe Development Foundation Inc., Papua New Guinea",
       period: "2026.01 – 2026.04",
@@ -394,6 +400,7 @@ const cvEn: CvData = {
     },
     {
       title: "First-author Research, SafeCodeRL",
+      summary: "Designed a five-agent, constraint-aware RL workflow for secure LLM code generation.",
       organization: "Independent research collaboration",
       period: "2026.02 – present",
       tags: ["AI Safety", "Multi-Agent Systems", "Constrained RL", "Secure Code Generation", "LLM Code Generation", "IoT/CPS Security", "Trustworthy AI"],
@@ -405,6 +412,7 @@ const cvEn: CvData = {
     },
     {
       title: "Research Intern, SFMambaNet",
+      summary: "Explored spectral-frequency state space models for robust two-view correspondence pruning.",
       titleUrl: "https://arxiv.org/abs/2606.04493",
       organization: "Fujian Key Laboratory of Network Computing and Intelligent Information Processing, Fuzhou University",
       organizationUrl: fzuKeyLabUrl,
@@ -434,6 +442,7 @@ const cvEn: CvData = {
     },
     {
       title: "ACMer, ACM Programming Training Team",
+      summary: "Trained in algorithms and data structures; earned national and regional programming awards.",
       titleUrl: usstAcmUrl,
       organization: "University of Shanghai for Science and Technology",
       period: "2024.05 – 2025.07",
@@ -741,6 +750,7 @@ const cvZh: CvData = {
   experiences: [
     {
       title: "科研实习生，MemHarmBench 与 CST",
+      summary: "构建跨会话记忆投毒基准 MemHarmBench，以及支持 CPU 快速风险分诊的 CST。",
       organization: "复旦大学可信具身智能研究院（TEAI） · FVL 实验室 · 上海创智学院",
       period: "2026.08 – 2026.11",
       tags: ["智能体安全", "记忆投毒", "风险分诊", "来源可追溯证据", "第一作者"],
@@ -758,6 +768,7 @@ const cvZh: CvData = {
     },
     {
       title: "科研实习生，ScamWeb 多模态诈骗网页基准",
+      summary: "共同构建多语言诈骗网页基准，提供专家标注的证据区域与解释。",
       titleUrl: scamWebUrl,
       organization: "复旦大学可信具身智能研究院（TEAI）与公安部第三研究所",
       period: "2026.04 – 2026.08",
@@ -787,6 +798,7 @@ const cvZh: CvData = {
     },
     {
       title: "科研实习生，XSafeClaw 智能体运行时安全",
+      summary: "接入本地智能体会话，实现受控工具调用与运行时安全审计。",
       starRepos: ["XSafeAI/XSafeClaw"],
       titleUrl: xsafeclawUrl,
       organization: "复旦大学可信具身智能研究院（TEAI）",
@@ -813,6 +825,7 @@ const cvZh: CvData = {
     },
     {
       title: "科研实习生，VulnSeeker",
+      summary: "结合 CodeQL 静态分析、代码上下文与 LLM 安全判断开展漏洞分诊。",
       titleUrl: vulnseekerUrl,
       organization: "复旦大学软件工程（CodeWisdom）实验室",
       organizationUrl: codeWisdomLabUrl,
@@ -838,6 +851,7 @@ const cvZh: CvData = {
     },
     {
       title: "国际组织实习：UNDP 管理的 UNV 在线科研实习生",
+      summary: "通过 UNV 开展红树林气候变化响应与蓝碳减缓研究综述。",
       titleUrl: "https://www.undp.org/",
       organization: "巴布亚新几内亚 Morobe Development Foundation Inc.",
       period: "2026.01 – 2026.04",
@@ -858,6 +872,7 @@ const cvZh: CvData = {
     },
     {
       title: "第一作者研究，SafeCodeRL",
+      summary: "设计五智能体闭环与约束感知强化学习流程，支持安全代码生成。",
       organization: "独立科研合作",
       period: "2026.02 – 至今",
       tags: ["人工智能安全", "多智能体系统", "约束强化学习", "安全代码生成", "LLM 代码生成", "IoT/CPS 安全", "可信人工智能"],
@@ -869,6 +884,7 @@ const cvZh: CvData = {
     },
     {
       title: "科研实习生，SFMambaNet",
+      summary: "研究谱频增强状态空间模型，用于鲁棒双视图对应关系剪枝。",
       titleUrl: "https://arxiv.org/abs/2606.04493",
       organization: "福州大学福建省网络计算与智能信息处理重点实验室",
       organizationUrl: fzuKeyLabUrl,
@@ -898,6 +914,7 @@ const cvZh: CvData = {
     },
     {
       title: "ACMer，ACM 程序设计集训队",
+      summary: "系统训练算法与数据结构，获得全国及区域程序设计竞赛奖项。",
       titleUrl: usstAcmUrl,
       organization: "上海理工大学",
       period: "2024.05 – 2025.07",

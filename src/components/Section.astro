@@ -1,11 +1,22 @@
 ---
-const { title, eyebrow, id, class: className = "" } = Astro.props;
+interface Props {
+  title: string;
+  eyebrow?: string;
+  id?: string;
+  class?: string;
+  icon?: string;
+  headingHref?: string;
+}
+
+const { title, id, class: className = "", icon, headingHref } = Astro.props;
 ---
 
 <section id={id} class={`section-stack ${className}`}>
   <div class="section-heading">
-    {eyebrow && <p>{eyebrow}</p>}
-    <h2>{title}</h2>
+    <h2>
+      {icon && <span class="section-icon" aria-hidden="true">{icon}</span>}
+      {headingHref ? <a href={headingHref}>{title} <span aria-hidden="true">→</span></a> : title}
+    </h2>
   </div>
   <slot />
 </section>

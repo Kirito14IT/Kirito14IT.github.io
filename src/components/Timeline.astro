@@ -1,20 +1,34 @@
 ---
 import RepoStars from "@components/RepoStars.astro";
-const { items } = Astro.props;
+import type { TimelineItem } from "@data/cv";
+
+interface Props {
+  items: TimelineItem[];
+  collapsible?: boolean;
+}
+
+const { items, collapsible = false } = Astro.props;
 ---
 
 <div class="timeline">
-  {items.map((item: any) => (
-    <article class="timeline-item">
-      <div class="timeline-date">{item.period || item.date}</div>
+  {items.map((item) => {
+    const Item = collapsible ? "details" : "article";
+    return (
+    <Item class:list={["timeline-item", { "timeline-disclosure": collapsible }]}>
+      {collapsible ? (
+        <summary class="timeline-summary">
+          <span class="timeline-date">{item.period}</span>
+          <span class="timeline-summary-text">{item.summary ?? item.title}</span>
+        </summary>
+      ) : <div class="timeline-date">{item.period}</div>}
       <div class="timeline-card">
         <h3>
           {item.titleUrl ? (
             <a class="timeline-title-link" href={item.titleUrl} target="_blank" rel="noopener noreferrer">
-              {item.title || item.text}
+              {item.title}
             </a>
           ) : (
-            item.title || item.text
+            item.title
           )}
         </h3>
         {item.starRepos && <RepoStars repos={item.starRepos} />}
@@ -31,21 +45,21 @@ const { items } = Astro.props;
         )}
         {item.tags && (
           <div class="tag-list">
-            {item.tags.map((tag: string) => <span>{tag}</span>)}
+            {item.tags.map((tag) => <span>{tag}</span>)}
           </div>
         )}
         {item.bullets && (
           <ul>
-            {item.bullets.map((bullet: any) => (
+            {item.bullets.map((bullet) => (
               <li>
-                {bullet.html ? <span set:html={bullet.html} /> : bullet}
+                {typeof bullet === "string" ? bullet : <span set:html={bullet.html} />}
               </li>
             ))}
           </ul>
         )}
         {item.links && (
           <div class="inline-links">
-            {item.links.map((link: any) => (
+            {item.links.map((link) => (
               <a href={link.url} target="_blank" rel="noopener noreferrer">
                 {link.logo && <img class="inline-link-logo" src={link.logo} alt="" width="22" height="22" loading="lazy" />}
                 {link.label}
@@ -54,6 +68,7 @@ const { items } = Astro.props;
           </div>
         )}
       </div>
-    </article>
-  ))}
+    </Item>
+    );
+  })}
 </div>

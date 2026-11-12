@@ -1,13 +1,9 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
-import TypingHero from "@components/TypingHero.astro";
-import ContributionGraph from "@components/ContributionGraph.astro";
-import ContactLinks from "@components/ContactLinks.astro";
 import ServiceList from "@components/ServiceList.astro";
 import Section from "@components/Section.astro";
 import Timeline from "@components/Timeline.astro";
 import Education from "@components/Education.astro";
-import FieldNotes from "@components/FieldNotes.astro";
 import PublicationCard from "@components/PublicationCard.astro";
 import AISafetyHotProject from "@components/AISafetyHotProject.astro";
 import VisitorMap from "@components/VisitorMap.astro";
@@ -18,22 +14,19 @@ import { getUi, localizedPath, type Locale } from "@i18n/index";
 
 const { locale } = Astro.props as { locale: Locale };
 const profile = getProfile(locale);
-const { news, workExperiences, experiences, publications, awards, skills, services } = getCvData(locale);
+const { news, workExperiences, experiences, publications, awards, services } = getCvData(locale);
 const copy = getUi(locale);
-const latestNewsCount = 5;
-const latestNews = news.slice(0, latestNewsCount);
-const olderNews = news.slice(latestNewsCount);
+const [fvl, teai] = profile.affiliations;
+const emailLabel = locale === "zh" ? "邮件" : "email";
+const [contactBeforeEmail, contactAfterEmail] = profile.contactNote.split(emailLabel);
 
 const homeJumpLinks = [
-  { label: copy.homeJump.homepage, href: "#home" },
-  { label: copy.nav.cv, href: localizedPath(locale, "/cv/") },
   { label: copy.homeJump.about, href: "#about" },
-  { label: copy.homeJump.education, href: "#education" },
   { label: copy.homeJump.news, href: "#news" },
   { label: copy.homeJump.publications, href: "#publications" },
+  { label: copy.homeJump.education, href: "#education" },
   { label: copy.homeJump.projects, href: "#projects" },
   { label: copy.homeJump.research, href: "#research-experience" },
-  { label: copy.fieldNotes.title, href: "#field-notes" },
   { label: copy.homeJump.awards, href: "#awards-skills" },
   { label: copy.homeJump.work, href: "#work-experience" },
   { label: copy.homeJump.services, href: "#services" }
@@ -46,52 +39,28 @@ const homeJumpLinks = [
   </nav>
 
   <div id="home" class="anchor-sentinel"></div>
-  <TypingHero locale={locale} />
 
-  <Section id="about" title={copy.sections.about} eyebrow={copy.sections.profile}>
-    <div class="glass-card prose-card">
-      <p>{profile.bio}</p>
-      <p>
-        <strong>{profile.internshipSearch.title}</strong>{" "}
-        {profile.internshipSearch.description}{" "}
-        <a href={`mailto:${profile.email}`}>{profile.internshipSearch.contactLabel}</a>
-      </p>
-      <h3>{copy.hero.kicker}</h3>
-      <ul class="clean-list">
-        {profile.researchFocus.map((focus) => <li>{focus}</li>)}
-      </ul>
-      <div class="tag-list">
-        {profile.interests.map((interest) => <span>{interest}</span>)}
+  <Section id="about" title={copy.sections.about} icon="👋">
+    <div class="about-copy">
+      {locale === "zh" ? (
+        <p>我是<a href={profile.institutionUrl}>上海理工大学</a>计算机科学与技术专业大四本科生，将于 2027 年进入<a href={profile.incomingInstitutionUrl}>复旦大学</a>攻读硕士，导师为<a href={profile.advisorUrl}>{profile.advisorName}</a>老师。目前在<a href={profile.labHeadUrl}>姜育刚</a>老师负责的<a href={fvl.url} title={fvl.title}><img class="about-affiliation-logo" src={fvl.logo} alt="" width="18" height="18" />复旦大学视觉与学习实验室（FVL）</a>及<a href={teai.url} title={teai.title}><img class="about-affiliation-logo" src={teai.logo} alt="" width="18" height="18" />可信具身智能研究院（TEAI）</a>进行科研实习。研究兴趣包括基座大模型、Coding Agent、智能体后训练与强化学习，以及可信人工智能。</p>
+      ) : (
+        <p>I am a senior undergraduate in Computer Science and Technology at <a href={profile.institutionUrl} title={profile.institution}>USST</a> and an incoming M.Sc. student at <a href={profile.incomingInstitutionUrl}>Fudan University</a> (2027), advised by <a href={profile.advisorUrl}>{profile.advisorName}</a>. I am currently a research intern at <a href={fvl.url} title={fvl.title}><img class="about-affiliation-logo" src={fvl.logo} alt="" width="18" height="18" />Fudan FVL</a>, led by <a href={profile.labHeadUrl}>Yu-Gang Jiang</a>, and <a href={teai.url} title={teai.title}><img class="about-affiliation-logo" src={teai.logo} alt="" width="18" height="18" />TEAI</a>. My research interests include foundation models, coding agents, agent post-training and reinforcement learning, and trustworthy AI.</p>
+      )}
+      <p>{profile.internshipSearch.description}</p>
+      <p>{contactBeforeEmail}<a href={`mailto:${profile.email}`}>{emailLabel}</a>{contactAfterEmail}</p>
+    </div>
+  </Section>
+
+  <Section id="news" title={copy.sections.news} icon="📰">
+    <div class="news-scroll" role="region" aria-label={copy.sections.news} tabindex="0">
+      <div class="news-list">
+        {news.map((item, index) => <NewsCard item={item} locale={locale} id={`news-media-${index}`} />)}
       </div>
     </div>
   </Section>
 
-  <Education locale={locale} />
-
-  <ContactLinks id="contact" locale={locale} />
-
-  <Section id="news" title={copy.sections.news} eyebrow={copy.sections.recentUpdates}>
-    <div class="news-list">
-      {latestNews.map((item, index) => (
-        <NewsCard item={item} locale={locale} id={`news-media-${index}`} />
-      ))}
-      {olderNews.length > 0 && (
-        <details class="news-archive">
-          <summary class="news-archive-toggle button ghost">
-            <span class="news-archive-expand">{copy.newsArchive.expand}</span>
-            <span class="news-archive-collapse">{copy.newsArchive.collapse}</span>
-          </summary>
-          <div class="news-list">
-            {olderNews.map((item, index) => (
-              <NewsCard item={item} locale={locale} id={`news-media-${latestNewsCount + index}`} />
-            ))}
-          </div>
-        </details>
-      )}
-    </div>
-  </Section>
-
-  <Section id="publications" title={copy.sections.publications} eyebrow={copy.sections.researchOutput}>
+  <Section id="publications" title={copy.sections.publications} icon="📝">
     <p class="publication-author-legend muted">* {copy.publication.coFirst} · † {copy.publication.corresponding}</p>
     <div class="publication-list publication-list--home">
       {publications.map((item) => (
@@ -108,45 +77,27 @@ const homeJumpLinks = [
     </div>
   </Section>
 
-  <Section id="projects" title={copy.sections.projects} eyebrow={copy.sections.builds}>
+  <Education locale={locale} compact />
+
+  <Section id="projects" title={copy.sections.projects} icon="🛠️" headingHref={localizedPath(locale, "/projects/")}>
     <AISafetyHotProject locale={locale} />
   </Section>
 
-  <Section id="research-experience" title={copy.sections.researchExperience} eyebrow={copy.sections.timeline}>
-    <Timeline items={experiences} />
+  <Section id="research-experience" title={copy.sections.researchExperience} icon="🔬">
+    <Timeline items={experiences} collapsible />
   </Section>
 
-  <ContributionGraph locale={locale} />
-
-  <FieldNotes locale={locale} showBlogLink />
-
-  <Section id="awards-skills" title={copy.sections.awardsSkills} eyebrow={copy.sections.signals}>
-    <div class="two-column">
-      <div class="glass-card">
-        <h3>{copy.sections.selectedHonors}</h3>
-        <ul class="clean-list">
-          {awards.map((award) => typeof award === "string" ? <li>{award}</li> : <li set:html={award.html} />)}
-        </ul>
-      </div>
-      <div class="glass-card">
-        <h3>{copy.sections.skills}</h3>
-        <div class="skill-groups">
-          {skills.map((group) => (
-            <section>
-              <h4>{group.group}</h4>
-              <div class="tag-list">{group.items.map((item) => <span>{item}</span>)}</div>
-            </section>
-          ))}
-        </div>
-      </div>
-    </div>
+  <Section id="awards-skills" title={copy.sections.awards} icon="🏆">
+    <ul class="clean-list awards-list">
+      {awards.map((award) => typeof award === "string" ? <li>{award}</li> : <li set:html={award.html} />)}
+    </ul>
   </Section>
 
-  <Section id="work-experience" title={copy.sections.workExperience} eyebrow={copy.sections.timeline}>
+  <Section id="work-experience" title={copy.sections.workExperience} icon="💼">
     <Timeline items={workExperiences} />
   </Section>
 
-  <Section id="services" title={copy.sections.services} eyebrow={copy.sections.academicCommunity}>
+  <Section id="services" title={copy.sections.services} icon="🤝">
     <ServiceList items={services} locale={locale} />
   </Section>
   <VisitorMap locale={locale} />

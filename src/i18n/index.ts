@@ -62,6 +62,7 @@ export const ui = {
     },
     sections: {
       about: "About Me",
+      education: "Educations",
       profile: "Profile",
       news: "News",
       recentUpdates: "Recent updates",
@@ -77,6 +78,7 @@ export const ui = {
       awardsSkills: "Awards and Skills",
       signals: "Signals",
       selectedHonors: "Selected Honors",
+      awards: "Awards",
       skills: "Skills",
       services: "Services",
       academicCommunity: "Academic community"
@@ -181,6 +183,7 @@ export const ui = {
     },
     sections: {
       about: "关于我",
+      education: "教育经历",
       profile: "个人简介",
       news: "最新动态",
       recentUpdates: "近期更新",
@@ -196,6 +199,7 @@ export const ui = {
       awardsSkills: "奖项与技能",
       signals: "能力概览",
       selectedHonors: "代表荣誉",
+      awards: "奖项",
       skills: "技能",
       services: "学术服务",
       academicCommunity: "学术共同体"

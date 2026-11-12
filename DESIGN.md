@@ -105,7 +105,7 @@ Content has square, unboxed edges. Utility controls use a minimal corner radius 
 
 ### Navigation
 
-Desktop and mobile share one horizontally scrollable navigation row. Homepage links jump to sections; inner pages link to Home, CV, Projects, and Blog. Language switching remains a plain text link with a small globe where space permits.
+Desktop and mobile share one horizontally scrollable navigation row. The navigation and language switcher stick to the top of the viewport while scrolling, on an opaque white surface with a thin bottom rule. Homepage links jump to sections with an 88px anchor offset so headings remain below the toolbar; inner pages link to Home, CV, Projects, and Blog. Language switching remains a plain text link with a small globe where space permits.
 
 ### Publication rows
 

@@ -3,7 +3,7 @@ import BrandIcon from "@components/BrandIcon.astro";
 
 const { links, variant = "default" } = Astro.props as {
   links: Array<{ label: string; url: string }>;
-  variant?: "default" | "publication";
+  variant?: "default" | "publication" | "platform";
 };
 
 const platforms: Record<string, { name: string; label: string }> = {
@@ -24,25 +24,27 @@ function getPlatform(url: string) {
 
 <div class:list={["inline-links", "resource-links", { "resource-links--publication": variant === "publication" }]}>
   {links.map((link) => {
-    const platform = variant === "publication" ? getPlatform(link.url) : undefined;
+    const platform = variant === "publication" || variant === "platform" ? getPlatform(link.url) : undefined;
     return (
-      <a class:list={{ "publication-resource-link": variant === "publication" }} href={link.url} target="_blank" rel="noopener noreferrer">
+      <a class:list={{ "publication-resource-link": variant === "publication", "platform-resource-link": variant === "platform" && Boolean(platform) }} href={link.url} target="_blank" rel="noopener noreferrer">
         {platform && <BrandIcon name={platform.name} size={16} class="resource-link-icon" />}
-        <span>{platform?.label ?? link.label}{variant === "default" && " ↗"}</span>
+        <span>{platform?.label ?? link.label}{(variant === "default" || (variant === "platform" && !platform)) && " ↗"}</span>
       </a>
     );
   })}
 </div>
 
 <style>
-  .publication-resource-link {
+  .publication-resource-link,
+  .platform-resource-link {
     align-items: center;
     gap: 5px;
     text-decoration: underline;
     text-underline-offset: 0.15em;
   }
 
-  .publication-resource-link span {
+  .publication-resource-link span,
+  .platform-resource-link span {
     text-decoration: underline;
     text-underline-offset: 0.15em;
   }

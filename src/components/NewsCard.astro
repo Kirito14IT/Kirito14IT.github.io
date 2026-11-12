@@ -19,7 +19,7 @@ const copy = getUi(locale);
   )}
   <time>{item.date}</time>
   <p>{item.emoji && <span class="news-item-emoji" aria-hidden="true">{item.emoji} </span>}{item.html ? <Fragment set:html={item.html} /> : item.text}</p>
-  {item.links && <ResourceLinks links={item.links} />}
+  {item.links && <ResourceLinks links={item.links} variant="platform" />}
   {item.starRepos && <RepoStars repos={item.starRepos} variant="compact" />}
   {item.media && <NewsMedia media={item.media} locale={locale} id={id} />}
 </article>

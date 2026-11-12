@@ -11,7 +11,7 @@ const copy = getUi(locale);
 
 <aside class="sidebar" aria-label={locale === "zh" ? "个人信息" : "Profile"}>
   <a class="profile-card" data-profile-card href={localizedPath(locale, "/")} aria-label={`${profile.name} ${copy.nav.home}`}>
-    <img class="avatar" src={profile.avatarUrl} alt={`${profile.name} avatar`} width="140" height="140" />
+    <img class="avatar" src={profile.avatarUrl} alt={`${profile.name} avatar`} width="170" height="170" />
     <div class="profile-identity">
       <h1>{profile.name}</h1>
       <p>{profile.legalName}</p>
@@ -20,7 +20,7 @@ const copy = getUi(locale);
   </a>
   <div class="sidebar-details">
     <p>{profile.institution}</p>
-    <p class="sidebar-location">{profile.location}</p>
+    <p class="sidebar-location"><BrandIcon name="location" size={16} /> {profile.location}</p>
   </div>
   <div class="sidebar-contacts">
     <a class="sidebar-contact" href={localizedPath(locale, "/cv/")}>

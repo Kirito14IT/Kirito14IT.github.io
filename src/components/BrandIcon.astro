@@ -2,11 +2,16 @@
 interface Props {
   name: string;
   size?: number;
+  width?: number;
   class?: string;
 }
 
-const { name, size = 20, class: className } = Astro.props;
+const { name, size = 20, width = size, class: className } = Astro.props;
 const assets: Record<string, string> = {
+  email: "/brand-icons/gmail.png",
+  cv: "/brand-icons/cv.svg",
+  location: "/brand-icons/location.svg",
+  icpc: "/brand-icons/icpc.png",
   github: "/brand-icons/github.svg",
   scholar: "/brand-icons/scholar.ico",
   douyin: "/brand-icons/douyin.ico",
@@ -19,13 +24,11 @@ const assets: Record<string, string> = {
   teai: "/github-profile/fudan-teai-logo.png",
   usst: "/brand-icons/usst.ico",
   deakin: "/brand-icons/deakin.png",
-  ant: "/brand-icons/ant.svg",
-  gass: "/brand-icons/gass.png"
+  ant: "/brand-icons/ant-group.png",
+  gass: "/brand-icons/gass-wordmark.png"
 };
 const source = assets[name];
 const lineIcons: Record<string, string> = {
-  email: "M3 5h18v14H3z M3 5l9 7 9-7",
-  cv: "M5 3h10l4 4v14H5z M14 3v5h5 M8 12h8 M8 16h6",
   medal: "m8 3 4 5 4-5 M6 3h4 M14 3h4 M12 8a6 6 0 1 0 0 12 6 6 0 0 0 0-12Z m0 3 1 2 2 .3-1.5 1.5.4 2.2-1.9-1-1.9 1 .4-2.2L9 13.3l2-.3 1-2Z"
 };
 ---
@@ -35,9 +38,9 @@ const lineIcons: Record<string, string> = {
     class:list={["brand-icon", className]}
     data-brand-icon={name}
     src={source}
-    width={size}
+    width={width}
     height={size}
-    style={`--brand-icon-size: ${size}px`}
+    style={`--brand-icon-size: ${size}px; --brand-icon-width: ${width}px`}
     alt=""
     aria-hidden="true"
     decoding="async"
@@ -47,9 +50,9 @@ const lineIcons: Record<string, string> = {
     class:list={["brand-icon", "brand-icon--line", className]}
     data-brand-icon={name}
     viewBox="0 0 24 24"
-    width={size}
+    width={width}
     height={size}
-    style={`--brand-icon-size: ${size}px`}
+    style={`--brand-icon-size: ${size}px; --brand-icon-width: ${width}px`}
     aria-hidden="true"
   ><path d={lineIcons[name]} /></svg>
 ) : null}
@@ -57,9 +60,9 @@ const lineIcons: Record<string, string> = {
 <style>
   .brand-icon {
     display: inline-block;
-    width: var(--brand-icon-size);
+    width: var(--brand-icon-width, var(--brand-icon-size));
     height: var(--brand-icon-size);
-    flex: 0 0 var(--brand-icon-size);
+    flex: 0 0 var(--brand-icon-width, var(--brand-icon-size));
     object-fit: contain;
     vertical-align: -0.15em;
   }

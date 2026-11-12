@@ -1,0 +1,43 @@
+---
+import type { Locale } from "@i18n/index";
+
+const { repo, fallback, locale } = Astro.props as { repo: string; fallback: number; locale: Locale };
+const label = locale === "zh" ? "近30天下载" : "Downloads (30d)";
+---
+
+<div class="dataset-downloads" data-hf-dataset={repo} data-download-fallback={fallback} aria-label={`${label}: ${fallback.toLocaleString("en-US")}`} title={label}>
+  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M5 16v5h14v-5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+  <span>{label}</span>
+  <strong data-download-count>{fallback.toLocaleString("en-US")}</strong>
+</div>
+
+<style>
+  .dataset-downloads { display: inline-flex; align-items: center; gap: 5px; max-width: 100%; margin: 2px 0 7px; padding: 3px 7px; border: 1px solid #e4d5ae; border-radius: 5px; background: #fff9e9; color: #65501f; font-size: 11.5px; line-height: 1.4; }
+  .dataset-downloads svg { flex: none; }
+  .dataset-downloads strong { margin-left: 2px; font-variant-numeric: tabular-nums; }
+</style>
+
+<script>
+  import { createDatasetDownloadsClient } from "../lib/dataset-downloads";
+
+  let storage: Storage | undefined;
+  try { storage = window.localStorage; } catch { /* Optional in private browsing. */ }
+  const update = createDatasetDownloadsClient({ storage });
+  const groups = new Map<string, HTMLElement[]>();
+  document.querySelectorAll<HTMLElement>("[data-hf-dataset]").forEach((badge) => {
+    const repo = badge.dataset.hfDataset!;
+    groups.set(repo, [...(groups.get(repo) || []), badge]);
+  });
+  const label = document.documentElement.lang.startsWith("zh") ? "近 30 天下载" : "Downloads in the last 30 days";
+  groups.forEach((badges, repo) => {
+    const fallback = Number(badges[0].dataset.downloadFallback);
+    void update(repo, fallback, (value) => {
+      const count = new Intl.NumberFormat("en-US").format(value.count);
+      for (const badge of badges) {
+        badge.querySelector<HTMLElement>("[data-download-count]")!.textContent = count;
+        badge.setAttribute("aria-label", `${label}: ${count}`);
+        badge.title = `${label}: ${count}`;
+      }
+    });
+  });
+</script>

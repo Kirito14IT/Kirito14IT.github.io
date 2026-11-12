@@ -38,7 +38,7 @@ export const profiles = {
     tagline:
       "I study large language models, coding agents, trustworthy AI, agent post-training, and reinforcement learning for agents (Agent RL), with an interest in reliable reasoning, memory, and tool use.",
     bio:
-      "Hello! I am Zhihua Wang, an incoming master's student at Fudan FVL and TEAI, advised by Prof. Xingjun Ma. FVL is led by Prof. Yu-Gang Jiang. I am pursuing a bachelor's degree in Computer Science and Technology at the School of Optical-Electrical and Computer Engineering, University of Shanghai for Science and Technology (2023–2027). My open-source projects have received approximately 2.5k GitHub Stars. I won a silver medal at the 2025 ACM Shanghai Collegiate Programming Contest.",
+      "Hello! I am Zhihua Wang, an incoming master's student at Fudan University's FVL, led by Prof. Yu-Gang Jiang (Vice President, Fudan University), and TEAI. I will be advised by Prof. Xingjun Ma. I am pursuing a bachelor's degree in Computer Science and Technology at the School of Optical-Electrical and Computer Engineering, University of Shanghai for Science and Technology (USST) (2023–2027). My open-source projects have received approximately 2.5k GitHub Stars, and I won an ACM silver medal.",
     researchInterests:
       "My research interests include foundation models, coding agents, agent post-training and reinforcement learning, and trustworthy AI.",
     contactNote:
@@ -102,7 +102,7 @@ export const profiles = {
     labHeadName: "姜育刚（复旦大学副校长）",
     tagline: "聚焦大语言模型、Coding Agent、可信AI、智能体后训练、智能体强化学习（Agent RL），关注可靠推理、记忆与工具使用。",
     bio:
-      "Hello! 我是王志华，是复旦大学 FVL 与 TEAI 的准硕士生，师从马兴军教授。FVL 由姜育刚教授领导。我目前在上海理工大学光电信息与计算机工程学院攻读计算机科学与技术学士学位（2023–2027）。我的开源项目累计获得约 2.5k GitHub Stars。我曾获 2025 ACM 上海站大学生程序设计竞赛银奖。",
+      "Hello! 我是王志华，是复旦大学 FVL（由姜育刚教授（复旦大学副校长）领导）与 TEAI 的准硕士生，师从马兴军教授。我目前在上海理工大学光电信息与计算机工程学院（USST）攻读计算机科学与技术学士学位（2023–2027）。我的开源项目累计获得约 2.5k GitHub Stars，并获 ACM 银奖。",
     researchInterests: "我的研究兴趣包括基座大模型、Coding Agent、智能体后训练与强化学习，以及可信人工智能。",
     contactNote: "也欢迎其他方面的合作、交流与共同学习。",
     internshipSearch: {

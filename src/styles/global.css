@@ -48,7 +48,7 @@ time, .timeline-date, .education-period, .article-date { font-style: italic; fon
 .sidebar { position: sticky; top: 32px; align-self: start; min-width: 0; }
 .profile-card { display: flex; flex-direction: column; align-items: flex-start; color: var(--ink); text-decoration: none; }
 .profile-card:hover { text-decoration: none; }
-.avatar { width: 140px; height: 140px; border-radius: 50%; object-fit: cover; }
+.avatar { width: 170px; height: 170px; border-radius: 50%; object-fit: cover; }
 .profile-identity { margin-top: 14px; }
 .profile-identity h1 { margin: 0; font-size: 21px; }
 .profile-identity p { margin: 3px 0 0; }
@@ -97,9 +97,12 @@ time, .timeline-date, .education-period, .article-date { font-style: italic; fon
 .section-heading-row { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; }
 .section-heading-row .section-heading { flex: 1; }
 .about-copy p:last-child { margin-bottom: 0; }
-.about-metrics { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 16px; }
-.about-stat-badge { display: inline-flex; vertical-align: baseline; align-items: center; gap: 6px; min-height: 26px; padding: 3px 8px; border: 1px solid #d6dee7; border-radius: 3px; background: #f6f8fa; font-size: 12px; line-height: 1.4; color: var(--ink); }
+.about-stat-badge { display: inline-flex; vertical-align: middle; align-items: center; gap: 5px; padding: 2px 6px; border: 1px solid #d6dee7; border-radius: 3px; background: #f6f8fa; font-size: 13px; font-weight: 600; line-height: 1.35; color: var(--ink); white-space: nowrap; }
 .about-stat-badge svg, .about-stat-badge img { flex: none; width: 15px; height: 15px; }
+.about-award { display: inline-flex; align-items: center; gap: 3px; vertical-align: middle; white-space: nowrap; }
+.company-badge { display: inline-flex; align-items: center; max-width: 100%; padding: 2px 6px; border: 1px solid #d9dde2; border-radius: 3px; background: #fff; vertical-align: middle; line-height: 1; }
+.company-badge:hover { border-color: var(--blue); }
+.company-badge-label { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .about-copy > p a { font-weight: 600; }
 .internship-callout { margin-top: 20px; padding: 17px 20px; border-left: 4px solid #2862a6; border-radius: 0 8px 8px 0; background: #f0f6ff; }
 .internship-callout h3 { margin: 0 0 8px; font-size: 16px; }
@@ -151,7 +154,7 @@ time, .timeline-date, .education-period, .article-date { font-style: italic; fon
 .framework-preview a { display: block; }
 .framework-preview img { display: block; width: 100%; max-height: 145px; object-fit: contain; }
 .framework-preview figcaption { margin-top: 5px; color: var(--muted); font-size: 12px; line-height: 1.4; }
-.publication-list--home .publication-card:has(> .framework-preview) { grid-template-columns: 320px minmax(0, 1fr); gap: 24px; }
+.publication-list--home .publication-card:has(> .framework-preview) { grid-template-columns: 400px minmax(0, 1fr); gap: 24px; }
 .publication-list--home .framework-preview { width: 100%; }
 .publication-list--home .framework-preview img { width: 100%; height: auto; max-height: none; }
 
@@ -244,13 +247,14 @@ time, .timeline-date, .education-period, .article-date { font-style: italic; fon
 @media (max-width: 1100px) {
   .site-shell { width: calc(100% - 48px); gap: 36px; }
   .publication-card:has(> .framework-preview) { grid-template-columns: 160px minmax(0, 1fr); }
-  .publication-list--home .publication-card:has(> .framework-preview) { grid-template-columns: 280px minmax(0, 1fr); }
+  .publication-list--home .publication-card:has(> .framework-preview) { grid-template-columns: 340px minmax(0, 1fr); }
 }
 @media (max-width: 900px) {
+  .publication-list--home .publication-card:has(> .framework-preview) { grid-template-columns: minmax(0, 1fr); }
   .site-shell { width: calc(100% - 40px); grid-template-columns: 1fr; gap: 28px; padding-top: 28px; }
   .sidebar { position: static; display: grid; grid-template-columns: 118px minmax(0, 1fr); column-gap: 20px; align-items: start; }
   .profile-card { grid-column: 1; grid-row: 1 / 3; }
-  .avatar { width: 96px; height: 96px; }
+  .avatar { width: 110px; height: 110px; }
   .profile-identity { margin-top: 8px; }
   .profile-identity h1 { font-size: 21px; }
   .profile-identity p { font-size: 14px; }

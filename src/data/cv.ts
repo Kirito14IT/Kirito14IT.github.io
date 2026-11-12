@@ -28,7 +28,7 @@ const memHarmBenchCodeUrl = "https://github.com/Kirito14IT/MemHarmBench";
 const cstPaperUrl = "https://arxiv.org/abs/2611.01710";
 const cstCodeUrl = "https://github.com/Kirito14IT/CST-MIL";
 const safeCodeRlTitle = "SafeCodeRL: Security-Constrained Multi-Agent Reinforcement Learning for Trustworthy LLM-Generated IoT/CPS Software";
-const safeCodeRlPaperUrl = "https://doi.org/10.3390/s26113502";
+const safeCodeRlPaperUrl = "/papers/safecoderl.pdf";
 
 const publicationCredits = {
   memHarmBench: {
@@ -108,6 +108,7 @@ export type PublicationItem = {
   date: string;
   url?: string;
   links?: Link[];
+  datasetDownloads?: { repo: string; fallback: number };
   tags: string[];
   ratings?: readonly string[];
   homepageRatings?: readonly string[];
@@ -199,7 +200,7 @@ const cvEn: CvData = {
       date: "2026.10",
       emoji: "💻",
       starRepos: ["wuyoscar/AISafetyHot", "Kirito14IT/prompt-spider-ui"],
-      html: `Participated in the open-source projects <a href="${aiSafetyHotUrl}" target="_blank" rel="noopener noreferrer"><strong>AISafetyHot</strong></a> and <a href="${promptSpiderUrl}" target="_blank" rel="noopener noreferrer"><strong>prompt-spider-ui</strong></a> during China's National Day holiday.`
+      html: `Participated in the open-source projects <a href="${aiSafetyHotUrl}" target="_blank" rel="noopener noreferrer"><strong>AISafetyHot</strong></a> and <a href="${promptSpiderUrl}" target="_blank" rel="noopener noreferrer"><strong>prompt-spider-ui</strong></a> during China's National Day holiday. Many thanks to my collaborators for their support and ideas.`
     },
     {
       date: "2026.08.13",
@@ -509,6 +510,7 @@ const cvEn: CvData = {
       role: "Co-first author",
       url: scamWebUrl,
       links: [{ label: "Hugging Face", url: scamWebDatasetUrl }],
+      datasetDownloads: { repo: "kirco567/ScamWeb-Dataset", fallback: 839 },
       tags: ["Multimodal Benchmark", "Cyber-enabled Fraud", "Grounded Understanding", "Evidence Localization", "LLM-VLM", "Trustworthy AI"],
       frameworkImage: "/figures/scamweb-dataset-overview.png",
       frameworkAlt: "ScamWeb dataset overview showing data sources, webpage collection and recovery, processed multimodal artifacts, expert annotations, dataset composition, and representative samples.",
@@ -542,7 +544,13 @@ const cvEn: CvData = {
       title: "Research Support in Analysing Mangrove Responses to Climate Change: The Interplay of Anthropogenic Impacts and Blue Carbon Mitigation",
       status: "UNDP / UNV review manuscript",
       role: "Sole author",
-      url: "https://www.undp.org/",
+      url: "/papers/mangrove-paper.pdf",
+      links: [
+        { label: "Paper", url: "/papers/mangrove-paper.pdf" },
+        { label: "Certificate", url: "/papers/unv-certificate.pdf" },
+        { label: "Thanks", url: "/papers/unv-thanks.pdf" },
+        { label: "Assignment", url: "/papers/unv-assignment.pdf" }
+      ],
       tags: ["UNDP", "UNV", "Climate Change", "Blue Carbon"],
       frameworkImage: "/figures/mangrove-carbon-dynamics.png",
       frameworkAlt: "Conceptual model of carbon dynamics in mature mangrove ecosystems, showing net primary productivity, carbon sequestration, carbon efflux, and tidal carbon export pathways."
@@ -568,14 +576,14 @@ const cvEn: CvData = {
     }
   ],
   awards: [
+    { html: `<strong>Silver Award</strong>, <time datetime="2025">2025</time> <strong>ACM</strong> Shanghai Collegiate Programming Contest` },
+    { html: `<strong>National First Prize</strong>, RAICOM Robot Developer Competition, <time datetime="2025">2025</time>` },
+    { html: `<strong>National Second Prize</strong>, LanQiao Cup C/C++ Programming Contest, <time datetime="2025">2025</time>` },
     {
       html:
-        `National First Prize, National Finals of the <a href="${embeddedCompetitionUrl}" target="_blank" rel="noopener noreferrer">9th National College Student Embedded Chip and System Design Competition</a> — <time datetime="2026-08-13">2026.08.13</time>`
+        `<strong>National First Prize</strong>, National Finals of the 9th National College Student Embedded Chip and System Design Competition, <time datetime="2026">2026</time>`
     },
-    { html: `National First Prize, RAICOM Robot Developer Competition, <time datetime="2025">2025</time>` },
-    { html: `National Second Prize, LanQiao Cup C/C++ Programming Contest, <time datetime="2025">2025</time>` },
-    { html: `<strong>Silver Award</strong>, <time datetime="2025">2025</time> ACM Shanghai Collegiate Programming Contest` },
-    "National Second Prize, National Computer Competency Challenge (2 awards)",
+    { html: `<strong>National Second Prize</strong>, National Computer Competency Challenge (2 awards)` },
     "National Encouragement Scholarship, Five-time Recipient",
     "Scholarships: First Class (2 awards), Second Class (3 awards), Third Class (2 awards)",
     { html: `National Third Prize, National English Competition for College Students, <time datetime="2025">2025</time>` },
@@ -693,7 +701,7 @@ const cvZh: CvData = {
       date: "2026.10",
       emoji: "💻",
       starRepos: ["wuyoscar/AISafetyHot", "Kirito14IT/prompt-spider-ui"],
-      html: `国庆期间参与开源项目 <a href="${aiSafetyHotUrl}" target="_blank" rel="noopener noreferrer"><strong>AISafetyHot</strong></a> 和 <a href="${promptSpiderUrl}" target="_blank" rel="noopener noreferrer"><strong>prompt-spider-ui</strong></a>。`
+      html: `国庆期间参与开源项目 <a href="${aiSafetyHotUrl}" target="_blank" rel="noopener noreferrer"><strong>AISafetyHot</strong></a> 和 <a href="${promptSpiderUrl}" target="_blank" rel="noopener noreferrer"><strong>prompt-spider-ui</strong></a>。 感谢合作者的支持与启发。`
     },
     {
       date: "2026.08.13",
@@ -1000,6 +1008,7 @@ const cvZh: CvData = {
       role: "共同第一作者",
       url: scamWebUrl,
       links: [{ label: "Hugging Face", url: scamWebDatasetUrl }],
+      datasetDownloads: { repo: "kirco567/ScamWeb-Dataset", fallback: 839 },
       tags: ["多模态基准", "网络诈骗", "落地式理解", "证据定位", "LLM-VLM", "可信人工智能"],
       frameworkImage: "/figures/scamweb-dataset-overview.png",
       frameworkAlt: "ScamWeb 数据集概览，包括数据来源、网页采集与恢复、多模态处理结果、专家标注、数据集构成和代表性样本。",
@@ -1033,7 +1042,13 @@ const cvZh: CvData = {
       title: "Research Support in Analysing Mangrove Responses to Climate Change: The Interplay of Anthropogenic Impacts and Blue Carbon Mitigation",
       status: "UNDP / UNV 综述手稿",
       role: "独立作者",
-      url: "https://www.undp.org/",
+      url: "/papers/mangrove-paper.pdf",
+      links: [
+        { label: "Paper", url: "/papers/mangrove-paper.pdf" },
+        { label: "证书", url: "/papers/unv-certificate.pdf" },
+        { label: "感谢信", url: "/papers/unv-thanks.pdf" },
+        { label: "任务书", url: "/papers/unv-assignment.pdf" }
+      ],
       tags: ["UNDP", "UNV", "气候变化", "蓝碳"],
       frameworkImage: "/figures/mangrove-carbon-dynamics.png",
       frameworkAlt: "成熟红树林生态系统碳动态概念模型，展示净初级生产力、碳封存、碳排放与潮汐碳输出路径。"
@@ -1059,14 +1074,14 @@ const cvZh: CvData = {
     }
   ],
   awards: [
+    { html: `<time datetime="2025">2025</time> <strong>ACM</strong> 上海站大学生程序设计竞赛 <strong>银奖</strong>` },
+    { html: `<time datetime="2025">2025</time> 年睿抗机器人开发者大赛<strong>国家级一等奖</strong>` },
+    { html: `<time datetime="2025">2025</time> 年蓝桥杯 C/C++ 程序设计竞赛<strong>全国二等奖</strong>` },
     {
       html:
-        `<a href="${embeddedCompetitionUrl}" target="_blank" rel="noopener noreferrer">第九届全国大学生嵌入式芯片与系统设计竞赛全国总决赛</a>全国一等奖（<time datetime="2026-08-13">2026.08.13</time>）`
+        `第九届全国大学生嵌入式芯片与系统设计竞赛全国总决赛<strong>全国一等奖</strong>，<time datetime="2026">2026</time>`
     },
-    { html: `<time datetime="2025">2025</time> 年睿抗机器人开发者大赛国家级一等奖` },
-    { html: `<time datetime="2025">2025</time> 年蓝桥杯 C/C++ 程序设计竞赛全国二等奖` },
-    { html: `<time datetime="2025">2025</time> ACM 上海站大学生程序设计竞赛 <strong>银奖</strong>` },
-    "全国计算机能力挑战赛国家级二等奖（2 次）",
+    { html: `全国计算机能力挑战赛<strong>国家级二等奖</strong>（2 次）` },
     "国家励志奖学金（5 次）",
     "奖学金一等奖（2 次）、二等奖（3 次）、三等奖（2 次）",
     { html: `<time datetime="2025">2025</time> 年全国大学生英语竞赛全国三等奖` },

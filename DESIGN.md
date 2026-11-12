@@ -87,9 +87,9 @@ Body prose uses normal weight and a compact, readable line height. Article text 
 
 ## Layout
 
-Desktop pages use a centered container with a maximum width of 1280px, a 220px sidebar, and a 48px column gap. The gap reduces to 36px below 1100px. At 900px and below the sidebar becomes a visible, stacked identity header with contacts alongside the avatar. Small screens retain both navigation and language switching without adding a duplicate navigation row.
+Desktop pages use a centered container with a maximum width of 1280px, a 220px sidebar, and a 48px column gap. The gap reduces to 36px below 1100px. At 900px and below the sidebar becomes a visible, stacked identity header with contacts alongside the avatar. The avatar is 170px on desktop and 110px on mobile; a small location mark precedes the city. Small screens retain both navigation and language switching without adding a duplicate navigation row.
 
-Section headings sit above a thin rule. Navigation stays on one horizontally scrollable row. News occupies a pale, bordered, 10px-rounded scroll window, 320px high on desktop and 280px on mobile; screenshot links open a full-size native dialog. Homepage publications pair a 320px uncropped figure at left with text at right, then stack at 600px and below. Lists of projects and notes use flat rows. Research experience uses native details/summary disclosures, while education uses two compact rows.
+Section headings sit above a thin rule. Navigation stays on one horizontally scrollable row. News occupies a pale, bordered, 10px-rounded scroll window, 320px high on desktop and 280px on mobile; screenshot links open a full-size native dialog. Homepage publications pair a 400px uncropped figure at left with text at right, reduce to 340px on compact desktops, then stack at 900px and below. Lists of projects and notes use flat rows. Research experience uses native details/summary disclosures, while education uses two compact rows. Acknowledgements precede the visitor map.
 
 ## Elevation & Depth
 
@@ -97,7 +97,7 @@ Content rows remain unboxed and flat. Homepage paper images have the explicitly 
 
 ## Shapes
 
-Content has square, unboxed edges. Utility controls use a minimal corner radius from the frontmatter. The avatar remains circular. Contacts use original official brand marks, with standard outline icons for email and CV, and the static ACMer asset retains its own identity geometry.
+Content has square, unboxed edges. Utility controls use a minimal corner radius from the frontmatter. The avatar remains circular. Contacts use original brand marks, including Gmail, and a filled blue CV document icon. The ACMer asset retains its animated identity geometry. User-approved sentence badges use a thin border and slight rounding: the static GitHub total, ICPC medal mark, and supplied full Ant Group and MPS logos stay inline with the prose.
 
 ## Components
 
@@ -107,7 +107,7 @@ Desktop and mobile share one horizontally scrollable navigation row. Homepage li
 
 ### Publication rows
 
-A figure links to the full image. Paper titles are plain bold text (700 weight). Each author line is followed only by notes for symbols that actually occur. Homepage figures carry a small upper-left rating badge, or Preprint; homepage dates and captions are hidden while full CV metadata remains. Platform resource links use official marks and underlined labels. News and Featured Projects use compact colorful live Star badges; the About total badge is the user-specified static ≈2.5k. Existing author/status overrides remain intact.
+A figure links to the full image. Paper titles are plain bold text (700 weight). Each author line is followed only by notes for symbols that actually occur. Homepage figures carry a small upper-left rating badge, or Preprint; homepage dates and captions are hidden while full CV metadata remains. Platform resource links use official marks and underlined labels. News and Featured Projects use compact colorful live Star badges; the About total is a nonlinked inline 2.5k GitHub Stars badge. ScamWeb shows a compact rolling-30-day download count above its Hugging Face resources, with an initial fallback of 839 and a cached public-API update. Local PDF resources open directly in the browser. Existing author/status overrides remain intact.
 
 ### Disclosures
 

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-12T00:00:00+08:00",
+  "generatedAt": "2026-11-13T00:00:00+08:00",
   "title": "Design System: Carey Academic Website",
   "extensions": {
     "shadows": [
@@ -37,8 +37,12 @@
         "value": "900px"
       },
       {
-        "name": "stacked-publications",
+        "name": "stacked-CV-publications",
         "value": "600px"
+      },
+      {
+        "name": "stacked-home-publications",
+        "value": "900px"
       }
     ]
   },
@@ -103,7 +107,8 @@
       "Do use thin separators and flat content rows.",
       "Do keep contacts visible when the sidebar stacks on mobile.",
       "Use underlined content links and plain bold publication titles with per-paper author notes.",
-      "Use the approved pale internship callout, rounded News window, and compact Star badges."
+      "Use the approved pale internship callout, rounded News window, compact Star badges, and nonlinked inline About metrics.",
+      "Keep supplied Ant and MPS full logos inside small sentence badges; show ScamWeb's rolling-30-day download metric next to Hugging Face."
     ],
     "donts": [
       "Don't add glass panels, decorative meshes, background grids, or large shadows.",

@@ -15,6 +15,7 @@ medal symbol remains an inline line icon in `BrandIcon.astro`.
 | `arxiv.svg` | [arXiv logos](https://info.arxiv.org/brand/logos.html), [small logomark SVG](https://cornell.box.com/v/arxiv-logomark-small-svg) |
 | `scholar.ico` | [Google Scholar favicon](https://scholar.google.com/favicon.ico) |
 | `gmail.png` | [Google Brand Resource Center](https://about.google/brand-resource-center/products-and-services/), [Google-hosted Gmail product icon](https://www.gstatic.com/images/branding/product/2x/gmail_48dp.png), retrieved 2026-11-13 |
+| `gmail-flat.png` | Gmail icon supplied by the user on 2026-11-13; original PNG copied without changes. Active Email icon; `gmail.png` retained for URL compatibility. |
 | `cv.svg` | Authored blue document/profile icon for this site; not a third-party brand mark |
 | `location.svg` | Authored orange/red location pin with a pale blue ground ellipse, following the user's supplied visual reference; not a third-party brand mark |
 | `icpc.png` | Three-color ICPC mark supplied by the user on 2026-11-13; original artwork retained without changes. [ICPC press resources](https://news.icpc.global/press/) |

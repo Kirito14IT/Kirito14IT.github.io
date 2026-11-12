@@ -142,7 +142,7 @@ const expectedCredits = [
   { authors: ["Zhihua Wang"], date: "2026", roles: ["Sole author", "独立作者"] }
 ];
 const expectedPublicationResources = [
-  { url: "https://arxiv.org/abs/2611.01700", links: ["https://arxiv.org/abs/2611.01700", "https://github.com/Kirito14IT/MemHarmBench"] },
+  { url: "https://arxiv.org/abs/2611.01700", links: ["https://arxiv.org/abs/2611.01700", "https://github.com/Kirito14IT/MemHarmBench", "https://huggingface.co/datasets/kirco567/MemHarmBench"] },
   { url: "https://arxiv.org/abs/2611.01710", links: ["https://arxiv.org/abs/2611.01710", "https://github.com/Kirito14IT/CST-MIL"] },
   { url: "https://anonymous.4open.science/r/ScamWeb-B710", links: ["https://huggingface.co/datasets/kirco567/ScamWeb-Dataset"] },
   { url: "/papers/safecoderl.pdf", links: [] },

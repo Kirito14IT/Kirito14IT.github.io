@@ -25,6 +25,7 @@ const memHarmBenchTitle = "MemHarmBench: Evaluating Cross-Session Prompt Injecti
 const cstTitle = "CST: Lightweight Risk Triage with Source-Grounded Evidence for Web Discussions";
 const memHarmBenchPaperUrl = "https://arxiv.org/abs/2611.01700";
 const memHarmBenchCodeUrl = "https://github.com/Kirito14IT/MemHarmBench";
+const memHarmBenchDatasetUrl = "https://huggingface.co/datasets/kirco567/MemHarmBench";
 const cstPaperUrl = "https://arxiv.org/abs/2611.01710";
 const cstCodeUrl = "https://github.com/Kirito14IT/CST-MIL";
 const safeCodeRlTitle = "SafeCodeRL: Security-Constrained Multi-Agent Reinforcement Learning for Trustworthy LLM-Generated IoT/CPS Software";
@@ -485,7 +486,7 @@ const cvEn: CvData = {
       homepageStatus: "arXiv preprint",
       role: "First author",
       url: memHarmBenchPaperUrl,
-      links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "Code", url: memHarmBenchCodeUrl }],
+      links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "Code", url: memHarmBenchCodeUrl }, { label: "Hugging Face", url: memHarmBenchDatasetUrl }],
       tags: ["LLM Agents", "Persistent Memory", "Cross-Session Prompt Injection", "Victim-Centric Evaluation", "Agent Safety", "Benchmark"],
       frameworkImage: "/figures/memharmbench-cross-session-en.webp",
       frameworkAlt: "MemHarmBench Figure 1: an instruction from an external note is retained in memory; after the note is removed, a new session completes the expense summary but changes its recipient to the attacker's choice.",
@@ -983,7 +984,7 @@ const cvZh: CvData = {
       homepageStatus: "arXiv 预印本",
       role: "第一作者",
       url: memHarmBenchPaperUrl,
-      links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "代码", url: memHarmBenchCodeUrl }],
+      links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "代码", url: memHarmBenchCodeUrl }, { label: "Hugging Face", url: memHarmBenchDatasetUrl }],
       tags: ["LLM 智能体", "持久记忆", "跨会话提示注入", "受害者中心评测", "智能体安全", "评测基准"],
       frameworkImage: "/figures/memharmbench-cross-session-en.webp",
       frameworkAlt: "MemHarmBench 图 1：外部笔记中的恶意指令被保留为记忆；原始笔记移除后，智能体在新会话中完成费用汇总，却将收款方改为攻击者指定对象。",

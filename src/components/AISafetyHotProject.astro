@@ -24,9 +24,9 @@ const zh = locale === "zh";
 <style>
   .aisafetyhot-project {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 240px;
+    grid-template-columns: minmax(0, 1fr);
     align-items: start;
-    gap: 24px;
+    gap: 16px;
     padding-block: 16px;
     border-bottom: 1px solid var(--line);
     margin-bottom: 24px;
@@ -38,8 +38,4 @@ const zh = locale === "zh";
   .aisafetyhot-project h3 a:hover { color: var(--blue); text-decoration: underline; text-underline-offset: 4px; }
   .project-meta { margin: 4px 0 8px; font-size: 13px; color: var(--muted); }
   .project-description { margin: 8px 0 0; }
-  @media (max-width: 600px) {
-    .aisafetyhot-project { grid-template-columns: minmax(0, 1fr); gap: 12px; }
-    .project-preview { max-width: 280px; }
-  }
 </style>

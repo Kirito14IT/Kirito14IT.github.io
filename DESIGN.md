@@ -89,11 +89,13 @@ Body prose uses normal weight and a compact, readable line height. Article text 
 
 Desktop pages use a centered container with a maximum width of 1280px, a 220px sidebar, and a 48px column gap. The gap reduces to 36px below 1100px. At 900px and below the sidebar becomes a visible, stacked identity header with contacts alongside the avatar. The avatar is 170px on desktop and 110px on mobile; a small location mark precedes the city. Small screens retain both navigation and language switching without adding a duplicate navigation row.
 
-Section headings sit above a thin rule. Navigation stays on one horizontally scrollable row. News occupies a pale, bordered, 10px-rounded scroll window, 320px high on desktop and 280px on mobile; screenshot links open a full-size native dialog. Homepage publications pair a 400px uncropped figure at left with text at right, reduce to 340px on compact desktops, then stack at 900px and below. Lists of projects and notes use flat rows. Research experience uses native details/summary disclosures, while education uses two compact rows. Acknowledgements precede the visitor map.
+Section headings sit above a thin rule. Navigation stays on one horizontally scrollable row. News occupies a pale, bordered, 10px-rounded scroll window, 320px high on desktop and 280px on mobile; screenshot links open a full-size native dialog. Homepage publications pair a 360px uncropped figure at left with text at right, reduce to 320px on compact desktops, then stack at 900px and below with figures occupying 90% of the available width. Lists of projects and notes use flat rows. Research experience uses native details/summary disclosures, while education uses two compact rows. Acknowledgements precede the visitor map.
 
 ## Elevation & Depth
 
 Content rows remain unboxed and flat. Homepage paper images have the explicitly requested 2px 3px 6px rgba(0,0,0,.18) shadow. The internship callout uses a pale-blue surface and 4px blue left rule. News uses a pale rounded border. Separation elsewhere comes from whitespace and thin rules. The existing floating assistant and optional interaction effects are functional exceptions kept outside the content hierarchy.
+
+The AISafetyHot project introduction sits above its full-width animated demonstration on every screen size, so the demonstration remains readable on both home and Projects pages.
 
 ## Shapes
 
@@ -107,7 +109,7 @@ Desktop and mobile share one horizontally scrollable navigation row. Homepage li
 
 ### Publication rows
 
-A figure links to the full image. Paper titles are plain bold text (700 weight). Each author line is followed only by notes for symbols that actually occur. Homepage figures carry a small upper-left rating badge, or Preprint; homepage dates and captions are hidden while full CV metadata remains. Platform resource links use official marks and underlined labels. News and Featured Projects use compact colorful live Star badges; the About total is a nonlinked inline 2.5k GitHub Stars badge. ScamWeb shows a compact rolling-30-day download count above its Hugging Face resources, with an initial fallback of 839 and a cached public-API update. Local PDF resources open directly in the browser. Existing author/status overrides remain intact.
+A figure links to the full image. Paper titles are plain bold text (700 weight). Each author line is followed only by notes for symbols that actually occur. Publication notes, status, keyword tags, and CV figure captions use normal body ink. Homepage figures carry a small upper-left rating badge, or Preprint; homepage dates and captions are hidden while full CV metadata remains. Platform resource links use official marks and underlined labels. News and Featured Projects use compact colorful live Star badges; the About total is a nonlinked inline 2.5k GitHub Stars badge. ScamWeb shows a compact rolling-30-day download count above its Hugging Face resources, with an initial fallback of 839 and a cached public-API update. Local PDF resources open directly in the browser. Existing author/status overrides remain intact.
 
 ### Disclosures
 

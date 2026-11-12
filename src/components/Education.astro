@@ -12,6 +12,7 @@ interface Props {
 const { locale, compact = false } = Astro.props;
 const { education } = getCvData(locale);
 const copy = getUi(locale);
+const compactEducation = [...education].sort((a, b) => a.period.localeCompare(b.period));
 const items = education.map((item) => ({
   ...item,
   title: item.degree,
@@ -23,7 +24,7 @@ const items = education.map((item) => ({
 <Section id="education" title={compact ? copy.sections.education : copy.cv.education} icon="🎓">
   {compact ? (
     <ul class="education-compact">
-      {education.map((item) => (
+      {compactEducation.map((item) => (
         <li>
           <span class="education-period">{item.period}</span>
           <span><strong>{item.institution}</strong> · {item.degree}</span>

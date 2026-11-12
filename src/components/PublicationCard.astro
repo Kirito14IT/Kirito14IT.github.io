@@ -4,25 +4,67 @@ import type { PublicationItem } from "@data/cv";
 import { getProfile } from "@data/profile";
 import { getUi, type Locale } from "@i18n/index";
 
-const { item, locale } = Astro.props as { item: PublicationItem; locale: Locale };
+const { item, locale, variant = "default" } = Astro.props as {
+  item: PublicationItem;
+  locale: Locale;
+  variant?: "default" | "home";
+};
 const copy = getUi(locale);
 const profileAuthor = getProfile("en").legalName;
 const fullFigureLabel = locale === "zh" ? "查看原图" : "View full-size figure";
+const isHome = variant === "home";
+const figureBadge = item.ratings?.length ? item.ratings.join(" · ") : "Preprint";
+const hasCoFirstAuthor = item.authors.some((author) => item.coFirstAuthors?.includes(author));
+const hasCorrespondingAuthor = item.authors.some((author) => item.correspondingAuthor === author);
+
+function resourceKey(url: string) {
+  try {
+    const parsed = new URL(url);
+    const hostname = parsed.hostname.toLowerCase().replace(/^www\./, "");
+    const arxivId = hostname === "arxiv.org"
+      ? parsed.pathname.match(/^\/(?:abs|pdf)\/(.+?)(?:\.pdf)?\/?$/i)?.[1]
+      : hostname === "doi.org"
+        ? parsed.pathname.match(/^\/10\.48550\/arxiv\.(.+?)\/?$/i)?.[1]
+        : undefined;
+
+    if (arxivId) return `arxiv:${arxivId.toLowerCase()}`;
+
+    parsed.hash = "";
+    parsed.hostname = hostname;
+    return parsed.href.replace(/\/$/, "");
+  } catch {
+    return url;
+  }
+}
+
+function fallbackLabel(url: string) {
+  try {
+    const hostname = new URL(url).hostname.toLowerCase().replace(/^www\./, "");
+    if (hostname === "anonymous.4open.science") return locale === "zh" ? "匿名代码" : "Code";
+    if (hostname === "undp.org") return "UNDP";
+  } catch {
+    // Relative or unparseable destinations retain the generic resource label.
+  }
+  return "Paper";
+}
+
+const publicationLinks = [...(item.links ?? [])];
+if (item.url && !publicationLinks.some((link) => resourceKey(link.url) === resourceKey(item.url!))) {
+  publicationLinks.push({ label: fallbackLabel(item.url), url: item.url });
+}
 ---
 
-<article class="publication-card">
+<article class:list={["publication-card", { "publication-card--home": isHome }]}>
   {item.frameworkImage && (
     <figure class="framework-preview">
       <a href={item.frameworkImage} target="_blank" rel="noopener noreferrer" aria-label={`${fullFigureLabel} · ${item.title}`}>
         <img src={item.frameworkImage} alt={item.frameworkAlt} loading="lazy" decoding="async" />
       </a>
-      <figcaption>{item.frameworkCaption || copy.publication.framework}</figcaption>
+      {isHome ? <span class="publication-figure-badge">{figureBadge}</span> : <figcaption>{item.frameworkCaption || copy.publication.framework}</figcaption>}
     </figure>
   )}
   <div class="publication-details">
-    <h3>
-      {item.url ? <a class="publication-title-link" href={item.url} target="_blank" rel="noopener noreferrer">{item.title}</a> : item.title}
-    </h3>
+    <h3>{item.title}</h3>
     {item.authors.length > 0 && (
       <p class="publication-authors">
         {item.authors.map((author, index) => (
@@ -39,9 +81,49 @@ const fullFigureLabel = locale === "zh" ? "查看原图" : "View full-size figur
         ))}
       </p>
     )}
-    <p class="muted">{item.role} · {item.status} · <time datetime={item.date.replaceAll(".", "-")}>{item.date}</time></p>
-    {item.links && <ResourceLinks links={item.links} />}
-    {item.ratings && <div class="rating-pills">{item.ratings.map((rating) => <span>{rating}</span>)}</div>}
+    {(hasCoFirstAuthor || hasCorrespondingAuthor) && (
+      <p class="publication-author-notes muted">
+        {hasCoFirstAuthor && <span>* {copy.publication.coFirst}</span>}
+        {hasCoFirstAuthor && hasCorrespondingAuthor && " · "}
+        {hasCorrespondingAuthor && <span>† {copy.publication.corresponding}</span>}
+      </p>
+    )}
+    <p class="muted">{item.role} · {item.status}{!isHome && <> · <time datetime={item.date.replaceAll(".", "-")}>{item.date}</time></>}</p>
+    {publicationLinks.length > 0 && <ResourceLinks links={publicationLinks} variant="publication" />}
+    {!isHome && item.ratings && <div class="rating-pills">{item.ratings.map((rating) => <span>{rating}</span>)}</div>}
     <div class="tag-list">{item.tags.map((tag) => <span>{tag}</span>)}</div>
   </div>
 </article>
+
+<style>
+  .publication-details .publication-author-notes {
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .publication-card--home .framework-preview {
+    position: relative;
+  }
+
+  .publication-card--home .framework-preview img {
+    height: auto;
+    max-height: none;
+    object-fit: contain;
+    box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.18);
+  }
+
+  .publication-figure-badge {
+    position: absolute;
+    top: 7px;
+    left: 7px;
+    max-width: calc(100% - 14px);
+    padding: 3px 7px;
+    border-radius: 3px;
+    background: #245b95;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.35;
+    pointer-events: none;
+  }
+</style>

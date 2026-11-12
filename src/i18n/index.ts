@@ -52,7 +52,8 @@ export const ui = {
       publications: "Publications",
       projects: "Projects",
       awards: "Awards",
-      services: "Services"
+      services: "Services",
+      acknowledgements: "Acknowledgements"
     },
     hero: {
       kicker: "Research Focus",
@@ -69,7 +70,7 @@ export const ui = {
       workExperience: "Work Experience",
       researchExperience: "Selected Research and Experience",
       timeline: "Timeline",
-      publications: "Selected Publications and Manuscripts",
+      publications: "Preprints and Publications",
       researchOutput: "Research output",
       projects: "Featured Projects",
       builds: "Builds and artifacts",
@@ -81,7 +82,8 @@ export const ui = {
       awards: "Awards",
       skills: "Skills",
       services: "Services",
-      academicCommunity: "Academic community"
+      academicCommunity: "Academic community",
+      acknowledgements: "Acknowledgements"
     },
     contact: {
       eyebrow: "Contact",
@@ -173,7 +175,8 @@ export const ui = {
       publications: "论文",
       projects: "项目",
       awards: "奖项",
-      services: "学术服务"
+      services: "学术服务",
+      acknowledgements: "致谢"
     },
     hero: {
       kicker: "研究方向",
@@ -190,7 +193,7 @@ export const ui = {
       workExperience: "工作经历",
       researchExperience: "科研与实践经历",
       timeline: "时间线",
-      publications: "代表论文与手稿",
+      publications: "预印本与论文",
       researchOutput: "科研成果",
       projects: "精选项目",
       builds: "研究与工程实践",
@@ -202,7 +205,8 @@ export const ui = {
       awards: "奖项",
       skills: "技能",
       services: "学术服务",
-      academicCommunity: "学术共同体"
+      academicCommunity: "学术共同体",
+      acknowledgements: "致谢"
     },
     contact: {
       eyebrow: "联系方式",

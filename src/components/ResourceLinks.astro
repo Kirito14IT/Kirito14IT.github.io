@@ -1,9 +1,49 @@
 ---
-const { links } = Astro.props as { links: Array<{ label: string; url: string }> };
+import BrandIcon from "@components/BrandIcon.astro";
+
+const { links, variant = "default" } = Astro.props as {
+  links: Array<{ label: string; url: string }>;
+  variant?: "default" | "publication";
+};
+
+const platforms: Record<string, { name: string; label: string }> = {
+  "arxiv.org": { name: "arxiv", label: "arXiv" },
+  "github.com": { name: "github", label: "GitHub" },
+  "huggingface.co": { name: "huggingface", label: "Hugging Face" }
+};
+
+function getPlatform(url: string) {
+  try {
+    const hostname = new URL(url).hostname.toLowerCase().replace(/^www\./, "");
+    return platforms[hostname];
+  } catch {
+    return undefined;
+  }
+}
 ---
 
-<div class="inline-links resource-links">
-  {links.map((link) => (
-    <a href={link.url} target="_blank" rel="noopener noreferrer">{link.label} ↗</a>
-  ))}
+<div class:list={["inline-links", "resource-links", { "resource-links--publication": variant === "publication" }]}>
+  {links.map((link) => {
+    const platform = variant === "publication" ? getPlatform(link.url) : undefined;
+    return (
+      <a class:list={{ "publication-resource-link": variant === "publication" }} href={link.url} target="_blank" rel="noopener noreferrer">
+        {platform && <BrandIcon name={platform.name} size={16} class="resource-link-icon" />}
+        <span>{platform?.label ?? link.label}{variant === "default" && " ↗"}</span>
+      </a>
+    );
+  })}
 </div>
+
+<style>
+  .publication-resource-link {
+    align-items: center;
+    gap: 5px;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  .publication-resource-link span {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+</style>

@@ -35,7 +35,6 @@ const copy = getUi(locale);
   <Section title={copy.cv.experience}><Timeline items={experiences} /></Section>
 
   <Section title={copy.cv.publications}>
-    <p class="publication-author-legend muted">* {copy.publication.coFirst} · † {copy.publication.corresponding}</p>
     <div class="publication-list">
       {publications.map((item) => <PublicationCard item={item} locale={locale} />)}
     </div>

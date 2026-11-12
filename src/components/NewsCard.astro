@@ -18,8 +18,8 @@ const copy = getUi(locale);
     ></a>
   )}
   <time>{item.date}</time>
-  {item.html ? <p set:html={item.html} /> : <p>{item.text}</p>}
+  <p>{item.emoji && <span class="news-item-emoji" aria-hidden="true">{item.emoji} </span>}{item.html ? <Fragment set:html={item.html} /> : item.text}</p>
   {item.links && <ResourceLinks links={item.links} />}
-  {item.starRepos && <RepoStars repos={item.starRepos} />}
+  {item.starRepos && <RepoStars repos={item.starRepos} variant="compact" />}
   {item.media && <NewsMedia media={item.media} locale={locale} id={id} />}
 </article>

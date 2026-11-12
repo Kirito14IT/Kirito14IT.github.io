@@ -1,7 +1,7 @@
 ---
 import type { StarRepo } from "@data/cv";
 
-const { repos } = Astro.props as { repos: StarRepo[] };
+const { repos, variant = "plain" } = Astro.props as { repos: StarRepo[]; variant?: "plain" | "compact" };
 const zh = Astro.url.pathname.startsWith("/zh/");
 const badges: Record<StarRepo, { name: string; color: string }> = {
   "wuyoscar/AISafetyHot": { name: "AISafetyHot", color: "d97706" },
@@ -10,7 +10,7 @@ const badges: Record<StarRepo, { name: string; color: string }> = {
 };
 ---
 
-<div class="repo-stars" aria-label={zh ? "项目 GitHub Stars" : "Project GitHub stars"}>
+<div class:list={["repo-stars", { "repo-stars--compact": variant === "compact" }]} aria-label={zh ? "项目 GitHub Stars" : "Project GitHub stars"}>
   {repos.map((repo) => (
     <a
       class="repo-star-badge"
@@ -41,11 +41,40 @@ const badges: Record<StarRepo, { name: string; color: string }> = {
 <style>
   .repo-stars { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 10px; }
   .repo-star-badge { display: inline-flex; align-items: center; gap: 5px; color: var(--blue); font-size: 13px; line-height: 1.4; text-decoration: none; }
-  .repo-star-badge:hover { text-decoration: underline; }
+  .repo-star-badge:hover .repo-star-name { text-decoration-thickness: 1.5px; }
   .repo-star-badge:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
   .repo-star-icon { width: 14px; height: 14px; color: #8b6a22; flex: none; }
+  .repo-star-name { text-decoration: underline; text-underline-offset: 2px; }
   .repo-star-count { color: var(--muted); font-variant-numeric: tabular-nums; }
   .repo-star-fallback { height: 18px; max-width: 90px; }
+  .repo-stars--compact { gap: 6px; margin-top: 8px; }
+  .repo-stars--compact .repo-star-badge {
+    min-height: 26px;
+    gap: 5px;
+    padding: 3px 5px 3px 7px;
+    border: 1px solid color-mix(in srgb, var(--star-accent) 35%, transparent);
+    border-radius: 6px;
+    background: color-mix(in srgb, var(--star-accent) 7%, #fff);
+    color: var(--ink);
+    font-size: 11.5px;
+    font-weight: 600;
+    line-height: 1.25;
+    white-space: nowrap;
+  }
+  .repo-stars--compact .repo-star-badge:hover { border-color: var(--star-accent); }
+  .repo-stars--compact .repo-star-icon { width: 13px; height: 13px; color: var(--star-accent); }
+  .repo-stars--compact .repo-star-count {
+    padding: 2px 5px;
+    border-radius: 3px;
+    background: color-mix(in srgb, var(--star-accent) 80%, #000);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.2;
+    font-variant-numeric: tabular-nums;
+    text-decoration: none;
+  }
+  .repo-stars--compact .repo-star-fallback { height: 16px; border-radius: 3px; }
   [hidden] { display: none; }
 </style>
 

@@ -10,11 +10,11 @@ const zh = locale === "zh";
 <article class="aisafetyhot-project">
   <div class="project-summary">
     <h3><a href="https://github.com/wuyoscar/AISafetyHot" target="_blank" rel="noopener noreferrer">AISafetyHot</a></h3>
-    <p class="project-meta">{zh ? "开源项目参与" : "Open-source participation"} · 2026.10</p>
+    <p class="project-meta">{zh ? "开源项目参与" : "Open-source participation"} · <time datetime="2026-10">2026.10</time></p>
     <p class="project-description">{zh
       ? "国庆期间参与的开源项目，聚合 AI 安全新闻、研究论文与事件，并提供面向 Agent 的 MCP 接口。"
       : "An open-source project I participated in during the National Day holiday. It brings together AI safety news, research, and events, with an MCP interface for agents."}</p>
-    <RepoStars repos={["wuyoscar/AISafetyHot"]} />
+    <RepoStars repos={["wuyoscar/AISafetyHot"]} variant="compact" />
   </div>
   <div class="project-preview">
     <AISafetyHotDemo locale={locale} />
@@ -34,7 +34,7 @@ const zh = locale === "zh";
   .project-summary { min-width: 0; }
   .project-preview { min-width: 0; max-width: 100%; }
   .project-preview :global(.aisafetyhot-demo) { margin-top: 0; }
-  .aisafetyhot-project h3 a { color: inherit; text-decoration: none; }
+  .aisafetyhot-project h3 a { color: inherit; text-decoration: underline; text-underline-offset: 4px; }
   .aisafetyhot-project h3 a:hover { color: var(--blue); text-decoration: underline; text-underline-offset: 4px; }
   .project-meta { margin: 4px 0 8px; font-size: 13px; color: var(--muted); }
   .project-description { margin: 8px 0 0; }

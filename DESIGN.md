@@ -8,6 +8,10 @@ colors:
   paper: "#ffffff"
   line: "#dddddd"
   soft: "#f7f7f7"
+  news-surface: "#f7f9fc"
+  callout-surface: "#f0f6ff"
+  callout-accent: "#2862a6"
+  publication-badge: "#245b95"
 typography:
   heading:
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif'
@@ -79,31 +83,31 @@ The palette uses blue for links, near-black text, subdued gray metadata, and pal
 
 The system sans-serif stack supports English and Chinese without a remote font dependency. Heading, body, and label roles use the exact values in the frontmatter. Publication and article-row titles are slightly smaller than section headings; technical code uses the system monospace stack.
 
-Body prose uses normal weight and a compact, readable line height. Article text is limited to 75ch; publication and timeline rows use the available content column. Dates and numeric counts use tabular numerals.
+Body prose uses normal weight and a compact, readable line height. Article text is limited to 75ch; publication and timeline rows use the available content column. Date fields use italic tabular numerals at the normal 15px body size and ink color; numeric counts stay upright. Content links are underlined at rest, while sidebar contact links are not.
 
 ## Layout
 
 Desktop pages use a centered container with a maximum width of 1280px, a 220px sidebar, and a 48px column gap. The gap reduces to 36px below 1100px. At 900px and below the sidebar becomes a visible, stacked identity header with contacts alongside the avatar. Small screens retain both navigation and language switching without adding a duplicate navigation row.
 
-Section headings sit above a thin rule. Navigation stays on one horizontally scrollable row. News occupies a vertically scrollable 320px region on desktop and 280px on mobile; screenshot links open a full-size native dialog. Publications pair a compact figure at left with text at right, then stack at 600px and below. Lists of projects and notes use flat rows. Research experience uses native details/summary disclosures, while education uses two compact rows.
+Section headings sit above a thin rule. Navigation stays on one horizontally scrollable row. News occupies a pale, bordered, 10px-rounded scroll window, 320px high on desktop and 280px on mobile; screenshot links open a full-size native dialog. Homepage publications pair a 320px uncropped figure at left with text at right, then stack at 600px and below. Lists of projects and notes use flat rows. Research experience uses native details/summary disclosures, while education uses two compact rows.
 
 ## Elevation & Depth
 
-Content rows have no shadows, glass effects, backdrop blur, or decorative background layers. Separation comes from whitespace and thin rules. The existing floating assistant and optional interaction effects are functional exceptions kept outside the content hierarchy.
+Content rows remain unboxed and flat. Homepage paper images have the explicitly requested 2px 3px 6px rgba(0,0,0,.18) shadow. The internship callout uses a pale-blue surface and 4px blue left rule. News uses a pale rounded border. Separation elsewhere comes from whitespace and thin rules. The existing floating assistant and optional interaction effects are functional exceptions kept outside the content hierarchy.
 
 ## Shapes
 
-Content has square, unboxed edges. Utility controls use a minimal corner radius from the frontmatter. The avatar remains circular. Contact icons use a consistent small SVG stroke, and the static ACMer asset retains its own identity geometry.
+Content has square, unboxed edges. Utility controls use a minimal corner radius from the frontmatter. The avatar remains circular. Contacts use original official brand marks, with standard outline icons for email and CV, and the static ACMer asset retains its own identity geometry.
 
 ## Components
 
 ### Navigation
 
-Desktop and mobile share one wrapping navigation row. Homepage links jump to sections; inner pages link to Home, CV, Projects, and Blog. Language switching remains a plain text link with a small globe where space permits.
+Desktop and mobile share one horizontally scrollable navigation row. Homepage links jump to sections; inner pages link to Home, CV, Projects, and Blog. Language switching remains a plain text link with a small globe where space permits.
 
 ### Publication rows
 
-A figure links to the full image; the text contains linked title, authorship marks, status/date metadata, resources, ratings, and tags. Resources and metadata read as inline text without pill containers. Existing homepage overrides remain intact.
+A figure links to the full image. Paper titles are plain bold text (700 weight). Each author line is followed only by notes for symbols that actually occur. Homepage figures carry a small upper-left rating badge, or Preprint; homepage dates and captions are hidden while full CV metadata remains. Platform resource links use official marks and underlined labels. News and Featured Projects use compact colorful live Star badges; the About total badge is the user-specified static ≈2.5k. Existing author/status overrides remain intact.
 
 ### Disclosures
 
@@ -115,7 +119,7 @@ Open and download actions are plain inline links. The PDF previews keep their or
 
 ### Motion and interaction
 
-The static content remains visible by default. The assistant, click feedback, and CSS meteors are retained; click and meteor layers are hidden under reduced motion. Project GIF demos loop continuously by default and show a static poster for reduced motion. The ACMer identity has no CSS animation.
+The static content remains visible by default. The assistant, click feedback, and CSS meteors are retained; click and meteor layers are hidden under reduced motion. Project GIF demos loop continuously by default and show a static poster for reduced motion. The ACMer identity floats and gently rotates with a flowing circuit and blinking cursor, as explicitly requested; reduced motion disables these animations.
 
 ## Do's and Don'ts
 
@@ -127,6 +131,6 @@ The static content remains visible by default. The assistant, click feedback, an
 
 ### Don't:
 - **Don't** add glass panels, decorative meshes, background grids, or large shadows.
-- **Don't** turn tags, ratings, or resource links into pills.
-- **Don't** add section eyebrows or animated ACMer styling.
+- **Don't** add pill containers to ordinary tags or resource links; compact Star badges and publication labels are approved exceptions.
+- **Don't** add section eyebrows. Keep ACMer animation confined to the identity mark and respect reduced motion.
 - **Don't** hide the entire sidebar on mobile or add a second mobile navigation.

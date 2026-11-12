@@ -7,7 +7,7 @@ const copy = getUi(locale);
 
 <a class="project-card" href={href}>
   <div class="card-topline">
-    <span>{item.data?.date ? item.data.date.getFullYear() : copy.projectsPage.project}</span>
+    {item.data?.date ? <time datetime={item.data.date.toISOString().slice(0, 10)}>{item.data.date.getFullYear()}</time> : <span>{copy.projectsPage.project}</span>}
     {item.data?.featured && <strong>{copy.projectsPage.featured}</strong>}
   </div>
   <h3>{item.data?.title || item.title}</h3>

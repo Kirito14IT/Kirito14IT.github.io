@@ -8,6 +8,7 @@ import PublicationCard from "@components/PublicationCard.astro";
 import AISafetyHotProject from "@components/AISafetyHotProject.astro";
 import VisitorMap from "@components/VisitorMap.astro";
 import NewsCard from "@components/NewsCard.astro";
+import BrandIcon from "@components/BrandIcon.astro";
 import { getProfile } from "@data/profile";
 import { getCvData } from "@data/cv";
 import { getUi, localizedPath, type Locale } from "@i18n/index";
@@ -17,8 +18,6 @@ const profile = getProfile(locale);
 const { news, workExperiences, experiences, publications, awards, services } = getCvData(locale);
 const copy = getUi(locale);
 const [fvl, teai] = profile.affiliations;
-const emailLabel = locale === "zh" ? "邮件" : "email";
-const [contactBeforeEmail, contactAfterEmail] = profile.contactNote.split(emailLabel);
 
 const homeJumpLinks = [
   { label: copy.homeJump.about, href: "#about" },
@@ -26,10 +25,11 @@ const homeJumpLinks = [
   { label: copy.homeJump.publications, href: "#publications" },
   { label: copy.homeJump.education, href: "#education" },
   { label: copy.homeJump.projects, href: "#projects" },
+  { label: copy.homeJump.work, href: "#work-experience" },
   { label: copy.homeJump.research, href: "#research-experience" },
   { label: copy.homeJump.awards, href: "#awards-skills" },
-  { label: copy.homeJump.work, href: "#work-experience" },
-  { label: copy.homeJump.services, href: "#services" }
+  { label: copy.homeJump.services, href: "#services" },
+  { label: copy.homeJump.acknowledgements, href: "#acknowledgements" }
 ];
 ---
 
@@ -43,16 +43,34 @@ const homeJumpLinks = [
   <Section id="about" title={copy.sections.about} icon="👋">
     <div class="about-copy">
       {locale === "zh" ? (
-        <p>我是<a href={profile.institutionUrl}>上海理工大学</a>计算机科学与技术专业大四本科生，将于 2027 年进入<a href={profile.incomingInstitutionUrl}>复旦大学</a>攻读硕士，导师为<a href={profile.advisorUrl}>{profile.advisorName}</a>老师。目前在<a href={profile.labHeadUrl}>姜育刚</a>老师负责的<a href={fvl.url} title={fvl.title}><img class="about-affiliation-logo" src={fvl.logo} alt="" width="18" height="18" />复旦大学视觉与学习实验室（FVL）</a>及<a href={teai.url} title={teai.title}><img class="about-affiliation-logo" src={teai.logo} alt="" width="18" height="18" />可信具身智能研究院（TEAI）</a>进行科研实习。研究兴趣包括基座大模型、Coding Agent、智能体后训练与强化学习，以及可信人工智能。</p>
+        <>
+          <p>Hello! 我是<strong>王志华</strong>，是<a href={profile.incomingInstitutionUrl}><BrandIcon name="fudan" size={17} class="about-affiliation-logo" />复旦大学</a> <a href={fvl.url} title={fvl.title}>FVL</a> 与 <a href={teai.url} title={teai.title}><BrandIcon name="teai" size={17} class="about-affiliation-logo" />TEAI</a> 的<strong>准硕士生</strong>，师从<a href={profile.advisorUrl}><strong>马兴军教授</strong></a>。FVL 由<a href={profile.labHeadUrl}>姜育刚教授</a>领导。我目前在<a href={profile.institutionUrl}><BrandIcon name="usst" size={17} class="about-affiliation-logo" />上海理工大学光电信息与计算机工程学院</a>攻读<strong>计算机科学与技术学士学位</strong>（<em>2023–2027</em>）。我的开源项目累计获得约 <strong>2.5k GitHub Stars</strong>。我曾获 <a href="#awards-skills"><strong>2025 ACM 上海站大学生程序设计竞赛银奖</strong></a>。</p>
+          <p>目前，我在<a href="https://www.gass.ac.cn/gass/index.html"><BrandIcon name="gass" size={17} class="about-affiliation-logo" />公安部第三研究所</a>担任 <strong>LLM 研究实习生</strong>，由 <strong>Nan Li</strong> 指导，主要研究 <strong>Web Agent 与 LLM 安全评测基准</strong>。我还与<a href="https://www.deakin.edu.au"><BrandIcon name="deakin" size={17} class="about-affiliation-logo" />迪肯大学</a>博士生 <a href="https://github.com/wuyoscar">Yutao Wu</a>、在<a href="https://www.antgroup.com"><BrandIcon name="ant" size={17} class="about-affiliation-logo" />蚂蚁集团</a>实习的博士生 <a href="https://yunhao-feng.github.io">Yunhao Feng</a> 合作，关注<strong>多智能体系统、Coding Agent 与可信 AI</strong>。</p>
+        </>
       ) : (
-        <p>I am a senior undergraduate in Computer Science and Technology at <a href={profile.institutionUrl} title={profile.institution}>USST</a> and an incoming M.Sc. student at <a href={profile.incomingInstitutionUrl}>Fudan University</a> (2027), advised by <a href={profile.advisorUrl}>{profile.advisorName}</a>. I am currently a research intern at <a href={fvl.url} title={fvl.title}><img class="about-affiliation-logo" src={fvl.logo} alt="" width="18" height="18" />Fudan FVL</a>, led by <a href={profile.labHeadUrl}>Yu-Gang Jiang</a>, and <a href={teai.url} title={teai.title}><img class="about-affiliation-logo" src={teai.logo} alt="" width="18" height="18" />TEAI</a>. My research interests include foundation models, coding agents, agent post-training and reinforcement learning, and trustworthy AI.</p>
+        <>
+          <p>Hello! I am <strong>Zhihua Wang</strong>, an <strong>incoming master's student</strong> at <a href={profile.incomingInstitutionUrl}><BrandIcon name="fudan" size={17} class="about-affiliation-logo" />Fudan</a> <a href={fvl.url} title={fvl.title}>FVL</a> and <a href={teai.url} title={teai.title}><BrandIcon name="teai" size={17} class="about-affiliation-logo" />TEAI</a>, advised by <a href={profile.advisorUrl}><strong>Prof. Xingjun Ma</strong></a>. FVL is led by <a href={profile.labHeadUrl}>Prof. Yu-Gang Jiang</a>. I am pursuing a <strong>bachelor's degree in Computer Science and Technology</strong> at the School of Optical-Electrical and Computer Engineering, <a href={profile.institutionUrl}><BrandIcon name="usst" size={17} class="about-affiliation-logo" />University of Shanghai for Science and Technology</a> (<em>2023–2027</em>). My open-source projects have received approximately <strong>2.5k GitHub Stars</strong>. I won a <a href="#awards-skills"><strong>silver medal at the 2025 ACM Shanghai Collegiate Programming Contest</strong></a>.</p>
+          <p>I am currently an <strong>LLM research intern</strong> at the <a href="https://www.gass.ac.cn/gass/index.html"><BrandIcon name="gass" size={17} class="about-affiliation-logo" />Third Research Institute of the Ministry of Public Security</a>, guided by <strong>Nan Li</strong>, working on <strong>Web Agent and LLM safety evaluation benchmarks</strong>. I also collaborate with <a href="https://github.com/wuyoscar">Yutao Wu</a>, a PhD student at <a href="https://www.deakin.edu.au"><BrandIcon name="deakin" size={17} class="about-affiliation-logo" />Deakin University</a>, and <a href="https://yunhao-feng.github.io">Yunhao Feng</a>, a PhD student interning at <a href="https://www.antgroup.com"><BrandIcon name="ant" size={17} class="about-affiliation-logo" />Ant Group</a>, on <strong>multi-agent systems, coding agents, and trustworthy AI</strong>.</p>
+        </>
       )}
-      <p>{profile.internshipSearch.description}</p>
-      <p>{contactBeforeEmail}<a href={`mailto:${profile.email}`}>{emailLabel}</a>{contactAfterEmail}</p>
+      <p><strong>{profile.researchInterests}</strong></p>
+      <div class="about-metrics" aria-label={locale === "zh" ? "开源与竞赛" : "Open source and competition"}>
+        <a class="about-stat-badge" href={profile.github} target="_blank" rel="noopener noreferrer"><BrandIcon name="github" size={14} /> GitHub Stars ≈2.5k</a>
+        <a class="about-stat-badge" href="#awards-skills"><BrandIcon name="medal" size={14} /> {locale === "zh" ? "2025 ACM 上海站银奖" : "2025 ACM Shanghai Silver"}</a>
+      </div>
+      <aside class="internship-callout" aria-label={profile.internshipSearch.title}>
+        <h3><span aria-hidden="true">💼 </span>{profile.internshipSearch.title}</h3>
+        {locale === "zh" ? (
+          <p>正在寻找<strong>基座大模型、Coding Agent、智能体后训练、Agent RL 和大模型评测</strong>相关实习。{profile.contactNote}欢迎通过邮箱联系：<strong>{profile.email}</strong>。</p>
+        ) : (
+          <p>I am seeking internships in <strong>foundation models, coding agents, agent post-training, Agent RL, and LLM evaluation</strong>. {profile.contactNote} Contact me at <strong>{profile.email}</strong>.</p>
+        )}
+        <p><span aria-hidden="true">📄 </span>{locale === "zh" ? <>附上我的<a href={localizedPath(locale, "/cv/")}>简历</a>，欢迎联系。</> : <>Here is my <a href={localizedPath(locale, "/cv/")}>CV</a>. Please feel free to get in touch.</>}</p>
+      </aside>
     </div>
   </Section>
 
-  <Section id="news" title={copy.sections.news} icon="📰">
+  <Section id="news" title={copy.sections.news} icon="🔥">
     <div class="news-scroll" role="region" aria-label={copy.sections.news} tabindex="0">
       <div class="news-list">
         {news.map((item, index) => <NewsCard item={item} locale={locale} id={`news-media-${index}`} />)}
@@ -61,7 +79,6 @@ const homeJumpLinks = [
   </Section>
 
   <Section id="publications" title={copy.sections.publications} icon="📝">
-    <p class="publication-author-legend muted">* {copy.publication.coFirst} · † {copy.publication.corresponding}</p>
     <div class="publication-list publication-list--home">
       {publications.map((item) => (
         <PublicationCard
@@ -72,6 +89,7 @@ const homeJumpLinks = [
             ratings: item.homepageRatings ?? item.ratings
           }}
           locale={locale}
+          variant="home"
         />
       ))}
     </div>
@@ -81,6 +99,10 @@ const homeJumpLinks = [
 
   <Section id="projects" title={copy.sections.projects} icon="🛠️" headingHref={localizedPath(locale, "/projects/")}>
     <AISafetyHotProject locale={locale} />
+  </Section>
+
+  <Section id="work-experience" title={copy.sections.workExperience} icon="💼">
+    <Timeline items={workExperiences} />
   </Section>
 
   <Section id="research-experience" title={copy.sections.researchExperience} icon="🔬">
@@ -93,12 +115,12 @@ const homeJumpLinks = [
     </ul>
   </Section>
 
-  <Section id="work-experience" title={copy.sections.workExperience} icon="💼">
-    <Timeline items={workExperiences} />
-  </Section>
-
   <Section id="services" title={copy.sections.services} icon="🤝">
     <ServiceList items={services} locale={locale} />
   </Section>
   <VisitorMap locale={locale} />
+
+  <Section id="acknowledgements" title={copy.sections.acknowledgements} icon="🙏">
+    <p>{locale === "zh" ? "感谢各位老师、导师和合作者的指导与支持，也感谢一路同行的学长学姐和朋友。" : "I thank my teachers, mentors, and collaborators for their guidance and support, and my senior peers and friends for accompanying me along the way."}</p>
+  </Section>
 </BaseLayout>

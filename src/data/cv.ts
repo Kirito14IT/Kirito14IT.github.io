@@ -12,6 +12,7 @@ const tipUrl = "https://signalprocessingsociety.org/publications-resources/ieee-
 const jingfengZhangUrl = "https://zjfheart.github.io/";
 const gassUrl = "https://www.gass.ac.cn/gass/index.html";
 const scamWebUrl = "https://anonymous.4open.science/r/ScamWeb-B710";
+const scamWebDatasetUrl = "https://huggingface.co/datasets/kirco567/ScamWeb-Dataset";
 const usstAcmUrl = "https://cec.usst.edu.cn/2019/" + "0523/c6556a148258/page.htm";
 const embeddedCompetitionUrl = "https://www.socchina.net/home";
 const codeWisdomLabUrl = "http://www.se.fudan.edu.cn/";
@@ -69,6 +70,7 @@ export type NewsMediaItem = { src: string; alt: string; caption: string; width: 
 
 export type NewsItem = {
   date: string;
+  emoji?: string;
   text?: string;
   html?: string;
   jumpTo?: string;
@@ -137,9 +139,9 @@ export type CvData = {
 const cvEn: CvData = {
   education: [
     {
-      degree: "Incoming M.Sc. Student",
+      degree: "Incoming CS M.S. Student",
       institution: "Fudan University",
-      period: "2027",
+      period: "2027.09 – 2030.06 (expected)",
       details: [
         { html: `Advisor: <a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">Xingjun Ma</a>.` },
         { html: `Lab Director: <a href="${yuGangJiangUrl}" target="_blank" rel="noopener noreferrer">Yu-Gang Jiang (Vice President, Fudan University)</a>.` },
@@ -154,7 +156,7 @@ const cvEn: CvData = {
       degree: "B.Eng. in Computer Science and Technology (in progress)",
       institution: "University of Shanghai for Science and Technology",
       school: "School of Optical-Electrical and Computer Engineering",
-      period: "2023.09 – present",
+      period: "2023.09 – 2027.06",
       details: [
         "Class of 2023; currently a senior undergraduate.",
         "Core academic interests: software engineering, web application development, artificial intelligence, algorithms, and high-performance programming."
@@ -164,6 +166,7 @@ const cvEn: CvData = {
   news: [
     {
       date: "2026.11.04",
+      emoji: "📣",
       html: `<a href="${memHarmBenchPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>MemHarmBench</strong></a> was recommended by Shanghai Innovation Institute and featured in MiraclePlus's <strong>Alpha Sight</strong>.`,
       links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "Code", url: memHarmBenchCodeUrl }],
       media: {
@@ -176,84 +179,100 @@ const cvEn: CvData = {
     },
     {
       date: "2026.10.26",
+      emoji: "📄",
       html: `The code for <a href="${memHarmBenchPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>${memHarmBenchTitle}</strong></a> is publicly available on GitHub, and the paper is available on arXiv.`,
       links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "Code", url: memHarmBenchCodeUrl }]
     },
     {
       date: "2026.10.26",
+      emoji: "📄",
       html: `The code for <a href="${cstPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>${cstTitle}</strong></a> is publicly available on GitHub, and the paper is available on arXiv.`,
       links: [{ label: "arXiv", url: cstPaperUrl }, { label: "Code", url: cstCodeUrl }]
     },
     {
       date: "2026.10.21",
+      emoji: "🛠️",
       html:
-        `Published a <a href="${logitechMouseFixRepoUrl}" target="_blank" rel="noopener noreferrer">Logitech mouse sleep/wake investigation and recovery scripts</a>, documenting receiver power-loss behavior and the initial filter-driver hypothesis that later testing ruled out. Updated the attribution in the <a href="${logitechMouseFixIssueUrl}" target="_blank" rel="noopener noreferrer">upstream issue</a>.`
+        `Published a <a href="${logitechMouseFixRepoUrl}" target="_blank" rel="noopener noreferrer"><strong>Logitech mouse sleep/wake investigation and recovery scripts</strong></a>, documenting receiver power-loss behavior and the initial filter-driver hypothesis that later testing ruled out. Updated the attribution in the <a href="${logitechMouseFixIssueUrl}" target="_blank" rel="noopener noreferrer">upstream issue</a>.`
     },
     {
       date: "2026.10",
+      emoji: "💻",
       starRepos: ["wuyoscar/AISafetyHot", "Kirito14IT/prompt-spider-ui"],
-      html: `Participated in the open-source projects <a href="${aiSafetyHotUrl}" target="_blank" rel="noopener noreferrer">AISafetyHot</a> and <a href="${promptSpiderUrl}" target="_blank" rel="noopener noreferrer">prompt-spider-ui</a> during China's National Day holiday.`
+      html: `Participated in the open-source projects <a href="${aiSafetyHotUrl}" target="_blank" rel="noopener noreferrer"><strong>AISafetyHot</strong></a> and <a href="${promptSpiderUrl}" target="_blank" rel="noopener noreferrer"><strong>prompt-spider-ui</strong></a> during China's National Day holiday.`
     },
     {
       date: "2026.08.13",
+      emoji: "🏆",
       html:
-        `Received the National First Prize at the National Finals of the <a href="${embeddedCompetitionUrl}" target="_blank" rel="noopener noreferrer">9th National College Student Embedded Chip and System Design Competition</a>.`
+        `Received the <strong>National First Prize</strong> at the National Finals of the <a href="${embeddedCompetitionUrl}" target="_blank" rel="noopener noreferrer"><strong>9th National College Student Embedded Chip and System Design Competition</strong></a>.`
     },
     {
       date: "2026.08",
+      emoji: "🔎",
       html:
-        `Completed research on multimodal data curation, grounded annotation, benchmark design, and training-free fraud understanding for <a href="${scamWebUrl}" target="_blank" rel="noopener noreferrer">ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages</a>.`
+        `Completed research on multimodal data curation, grounded annotation, benchmark design, and training-free fraud understanding for <a href="${scamWebUrl}" target="_blank" rel="noopener noreferrer"><strong>ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages</strong></a>.`
     },
     {
       date: "2026.07",
+      emoji: "💼",
       html:
-        `Joined <a href="${jingfengZhangUrl}" target="_blank" rel="noopener noreferrer">Advisor Jingfeng Zhang</a>'s RISE-AI Lab as a visiting student at <a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">TEAI, Fudan University</a> and began research on MemHarmBench, a benchmark for persistent-memory poisoning in agents. The work adopts a victim-centered perspective to design evaluation cases and examines who ultimately bears the loss after an agent is compromised.`
+        `Joined <a href="${jingfengZhangUrl}" target="_blank" rel="noopener noreferrer"><strong>Advisor Jingfeng Zhang</strong></a>'s RISE-AI Lab as a visiting student at <a href="${teaiUrl}" target="_blank" rel="noopener noreferrer"><strong>TEAI, Fudan University</strong></a> and began research on MemHarmBench, a benchmark for persistent-memory poisoning in agents. The work adopts a victim-centered perspective to design evaluation cases and examines who ultimately bears the loss after an agent is compromised.`
     },
     {
       date: "2026.07",
-      text:
-        "Began serving as a reviewer for NeurIPS 2026, contributing to the peer-review process for research in machine learning and artificial intelligence."
+      emoji: "📝",
+      html:
+        "Began serving as a <strong>reviewer for NeurIPS 2026</strong>, contributing to the peer-review process for research in machine learning and artificial intelligence."
     },
     {
       date: "2026.06",
+      emoji: "🤝",
       html:
-        `At <a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">TEAI, Fudan University</a>, under the guidance of <a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">Advisor Xingjun Ma</a>, I participated in an enterprise-oriented multi-agent secure collaboration project, contributing to requirements analysis, system design, implementation, and testing.`
+        `At <a href="${teaiUrl}" target="_blank" rel="noopener noreferrer"><strong>TEAI, Fudan University</strong></a>, under the guidance of <a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer"><strong>Advisor Xingjun Ma</strong></a>, I participated in an enterprise-oriented multi-agent secure collaboration project, contributing to requirements analysis, system design, implementation, and testing.`
     },
     {
       date: "2026.01 – 2026.04",
-      text:
-        "Completed an International Organization Internship through the UNDP-administered UNV platform on mangrove responses to climate change and produced a review manuscript on blue carbon mitigation."
+      emoji: "🌿",
+      html:
+        "Completed an <strong>International Organization Internship</strong> through the <strong>UNDP-administered UNV platform</strong> on mangrove responses to climate change and produced a review manuscript on blue carbon mitigation."
     },
     {
       date: "2026.03 – 2026.06",
+      emoji: "🛡️",
       starRepos: ["XSafeAI/XSafeClaw"],
       html:
-        `Joined <a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">TEAI, Fudan University</a> and, under the guidance of <a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">Advisor Xingjun Ma</a>, worked on the <a href="${xsafeclawUrl}" target="_blank" rel="noopener noreferrer">XSafeClaw</a> agent safety project, focusing on runtime integration, controlled tool calls, and safety audit workflows.`
+        `Joined <a href="${teaiUrl}" target="_blank" rel="noopener noreferrer"><strong>TEAI, Fudan University</strong></a> and, under the guidance of <a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer"><strong>Advisor Xingjun Ma</strong></a>, worked on the <a href="${xsafeclawUrl}" target="_blank" rel="noopener noreferrer"><strong>XSafeClaw</strong></a> agent safety project, focusing on runtime integration, controlled tool calls, and safety audit workflows.`
     },
     {
       date: "2026.02",
-      text:
-        "Started SafeCodeRL, a multi-agent reinforcement learning framework for safety-constrained LLM code generation."
+      emoji: "🔬",
+      html:
+        "Started <strong>SafeCodeRL</strong>, a multi-agent reinforcement learning framework for safety-constrained LLM code generation."
     },
     {
       date: "2026.01",
+      emoji: "🔍",
       html:
-        `Worked on VulnSeeker at the <a href="${codeWisdomLabUrl}" target="_blank" rel="noopener noreferrer">Fudan Software Engineering (CodeWisdom) Lab</a>, combining CodeQL static analysis with LLM-based security judgement.`
+        `Worked on VulnSeeker at the <a href="${codeWisdomLabUrl}" target="_blank" rel="noopener noreferrer"><strong>Fudan Software Engineering (CodeWisdom) Lab</strong></a>, combining CodeQL static analysis with LLM-based security judgement.`
     },
     {
       date: "2025.09",
+      emoji: "💼",
       html:
-        `Joined the <a href="${fzuKeyLabUrl}" target="_blank" rel="noopener noreferrer">Fujian Key Laboratory of Network Computing and Intelligent Information Processing</a> at Fuzhou University and, under the guidance of <a href="${yizhangLiuProfileUrl}" target="_blank" rel="noopener noreferrer">Advisor Yizhang Liu</a>, began SFMambaNet research on spectral-frequency enhanced state space models for correspondence pruning.`
+        `Joined the <a href="${fzuKeyLabUrl}" target="_blank" rel="noopener noreferrer"><strong>Fujian Key Laboratory of Network Computing and Intelligent Information Processing</strong></a> at Fuzhou University and, under the guidance of <a href="${yizhangLiuProfileUrl}" target="_blank" rel="noopener noreferrer"><strong>Advisor Yizhang Liu</strong></a>, began SFMambaNet research on spectral-frequency enhanced state space models for correspondence pruning.`
     },
     {
       date: "2025.07",
+      emoji: "🎓",
       jumpTo: "#awards-skills",
-      text: "My chapter as an ACMer officially came to an end."
+      html: "My chapter as an <strong>ACMer</strong> officially came to an end."
     },
     {
       date: "2024.05",
+      emoji: "🚀",
       html:
-        `Joined the <a href="${usstAcmUrl}" target="_blank" rel="noopener noreferrer">ACM Programming Training Team at the University of Shanghai for Science and Technology</a> and began my ACM journey. Looking forward to the challenges ahead! 🚀`
+        `Joined the <a href="${usstAcmUrl}" target="_blank" rel="noopener noreferrer"><strong>ACM Programming Training Team at the University of Shanghai for Science and Technology</strong></a> and began my ACM journey. Looking forward to the challenges ahead! 🚀`
     }
   ],
   workExperiences: [
@@ -402,7 +421,7 @@ const cvEn: CvData = {
       title: "First-author Research, SafeCodeRL",
       summary: "Designed a five-agent, constraint-aware RL workflow for secure LLM code generation.",
       organization: "Independent research collaboration",
-      period: "2026.02 – present",
+      period: "2026.02 – 2026.05",
       tags: ["AI Safety", "Multi-Agent Systems", "Constrained RL", "Secure Code Generation", "LLM Code Generation", "IoT/CPS Security", "Trustworthy AI"],
       bullets: [
         "Proposed SafeCodeRL, a multi-agent framework for dynamic safety constraints in LLM code generation.",
@@ -489,6 +508,7 @@ const cvEn: CvData = {
       status: "AAAI 2027; Will be accepted(accept*4)",
       role: "Co-first author",
       url: scamWebUrl,
+      links: [{ label: "Hugging Face", url: scamWebDatasetUrl }],
       tags: ["Multimodal Benchmark", "Cyber-enabled Fraud", "Grounded Understanding", "Evidence Localization", "LLM-VLM", "Trustworthy AI"],
       frameworkImage: "/figures/scamweb-dataset-overview.png",
       frameworkAlt: "ScamWeb dataset overview showing data sources, webpage collection and recovery, processed multimodal artifacts, expert annotations, dataset composition, and representative samples.",
@@ -511,6 +531,7 @@ const cvEn: CvData = {
       status: "Under review at IEEE Transactions on Image Processing (TIP) · arXiv preprint",
       role: "First author",
       url: "https://doi.org/10.48550/arXiv.2606.04493",
+      links: [{ label: "arXiv", url: "https://arxiv.org/abs/2606.04493" }, { label: "GitHub", url: sfmambanetCodeUrl }],
       tags: ["Computer Vision", "Correspondence Pruning", "Mamba", "State Space Model", "Frequency Domain", "Graph Neural Networks", "Two-View Geometry"],
       ratings: ["SCI Zone 1", "CCF A"],
       frameworkImage: "/figures/sfmambanet-framework.png",
@@ -549,16 +570,16 @@ const cvEn: CvData = {
   awards: [
     {
       html:
-        `National First Prize, National Finals of the <a href="${embeddedCompetitionUrl}" target="_blank" rel="noopener noreferrer">9th National College Student Embedded Chip and System Design Competition</a> — 2026.08.13`
+        `National First Prize, National Finals of the <a href="${embeddedCompetitionUrl}" target="_blank" rel="noopener noreferrer">9th National College Student Embedded Chip and System Design Competition</a> — <time datetime="2026-08-13">2026.08.13</time>`
     },
-    "National First Prize, RAICOM Robot Developer Competition, 2025",
-    "National Second Prize, LanQiao Cup C/C++ Programming Contest, 2025",
-    { html: "<strong>Silver Award</strong>, 2025 ACM Shanghai Collegiate Programming Contest" },
+    { html: `National First Prize, RAICOM Robot Developer Competition, <time datetime="2025">2025</time>` },
+    { html: `National Second Prize, LanQiao Cup C/C++ Programming Contest, <time datetime="2025">2025</time>` },
+    { html: `<strong>Silver Award</strong>, <time datetime="2025">2025</time> ACM Shanghai Collegiate Programming Contest` },
     "National Second Prize, National Computer Competency Challenge (2 awards)",
     "National Encouragement Scholarship, Five-time Recipient",
     "Scholarships: First Class (2 awards), Second Class (3 awards), Third Class (2 awards)",
-    "National Third Prize, National English Competition for College Students, 2025",
-    "Shanghai First Prize, National College Student Mathematics Competition, 2024",
+    { html: `National Third Prize, National English Competition for College Students, <time datetime="2025">2025</time>` },
+    { html: `Shanghai First Prize, National College Student Mathematics Competition, <time datetime="2024">2024</time>` },
     "First-author software copyright for a robust deep-learning watermark mobile application"
   ],
   services: [
@@ -612,9 +633,9 @@ const cvEn: CvData = {
 const cvZh: CvData = {
   education: [
     {
-      degree: "硕士研究生（即将入学）",
+      degree: "计算机科学硕士研究生（即将入学）",
       institution: "复旦大学",
-      period: "2027",
+      period: "2027.09 – 2030.06（预计）",
       details: [
         { html: `导师：<a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">马兴军</a>。` },
         { html: `实验室负责人：<a href="${yuGangJiangUrl}" target="_blank" rel="noopener noreferrer">姜育刚（复旦大学副校长）</a>。` },
@@ -629,7 +650,7 @@ const cvZh: CvData = {
       degree: "工学学士，计算机科学与技术（在读）",
       institution: "上海理工大学",
       school: "光电信息与计算机工程学院",
-      period: "2023.09 – 至今",
+      period: "2023.09 – 2027.06",
       details: [
         "2023 级本科生，目前大四在读。",
         "主要学术兴趣包括软件工程、Web 应用开发、人工智能、算法与高性能程序设计。"
@@ -639,6 +660,7 @@ const cvZh: CvData = {
   news: [
     {
       date: "2026.11.04",
+      emoji: "📣",
       html: `<a href="${memHarmBenchPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>MemHarmBench</strong></a> 获得上海创智学院论文推荐，并获奇绩创坛「<strong>奇绩信号 Alpha Sight</strong>」推荐。`,
       links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "代码", url: memHarmBenchCodeUrl }],
       media: {
@@ -651,81 +673,97 @@ const cvZh: CvData = {
     },
     {
       date: "2026.10.26",
+      emoji: "📄",
       html: `<a href="${memHarmBenchPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>${memHarmBenchTitle}</strong></a> 的代码已在 GitHub 公开，论文已发布于 arXiv。`,
       links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "代码", url: memHarmBenchCodeUrl }]
     },
     {
       date: "2026.10.26",
+      emoji: "📄",
       html: `<a href="${cstPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>${cstTitle}</strong></a> 的代码已在 GitHub 公开，论文已发布于 arXiv。`,
       links: [{ label: "arXiv", url: cstPaperUrl }, { label: "代码", url: cstCodeUrl }]
     },
     {
       date: "2026.10.21",
+      emoji: "🛠️",
       html:
-        `公开了<a href="${logitechMouseFixRepoUrl}" target="_blank" rel="noopener noreferrer">罗技鼠标待机后失灵的排查记录与恢复脚本</a>，记录接收器掉电后的异常表现，以及后续测试推翻最初过滤驱动归因的过程，并在<a href="${logitechMouseFixIssueUrl}" target="_blank" rel="noopener noreferrer">上游问题报告</a>中更正说明。`
+        `公开了<a href="${logitechMouseFixRepoUrl}" target="_blank" rel="noopener noreferrer"><strong>罗技鼠标待机后失灵的排查记录与恢复脚本</strong></a>，记录接收器掉电后的异常表现，以及后续测试推翻最初过滤驱动归因的过程，并在<a href="${logitechMouseFixIssueUrl}" target="_blank" rel="noopener noreferrer">上游问题报告</a>中更正说明。`
     },
     {
       date: "2026.10",
+      emoji: "💻",
       starRepos: ["wuyoscar/AISafetyHot", "Kirito14IT/prompt-spider-ui"],
-      html: `国庆期间参与开源项目 <a href="${aiSafetyHotUrl}" target="_blank" rel="noopener noreferrer">AISafetyHot</a> 和 <a href="${promptSpiderUrl}" target="_blank" rel="noopener noreferrer">prompt-spider-ui</a>。`
+      html: `国庆期间参与开源项目 <a href="${aiSafetyHotUrl}" target="_blank" rel="noopener noreferrer"><strong>AISafetyHot</strong></a> 和 <a href="${promptSpiderUrl}" target="_blank" rel="noopener noreferrer"><strong>prompt-spider-ui</strong></a>。`
     },
     {
       date: "2026.08.13",
+      emoji: "🏆",
       html:
-        `获得<a href="${embeddedCompetitionUrl}" target="_blank" rel="noopener noreferrer">第九届全国大学生嵌入式芯片与系统设计竞赛全国总决赛</a>全国一等奖。`
+        `获得<a href="${embeddedCompetitionUrl}" target="_blank" rel="noopener noreferrer"><strong>第九届全国大学生嵌入式芯片与系统设计竞赛全国总决赛</strong></a><strong>全国一等奖</strong>。`
     },
     {
       date: "2026.08",
+      emoji: "🔎",
       html:
-        `完成 <a href="${scamWebUrl}" target="_blank" rel="noopener noreferrer">ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages</a> 的多模态数据整理、落地式标注、基准设计与免训练诈骗理解研究。`
+        `完成 <a href="${scamWebUrl}" target="_blank" rel="noopener noreferrer"><strong>ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages</strong></a> 的多模态数据整理、落地式标注、基准设计与免训练诈骗理解研究。`
     },
     {
       date: "2026.07",
+      emoji: "💼",
       html:
-        `加入<a href="${jingfengZhangUrl}" target="_blank" rel="noopener noreferrer">导师张景锋</a>的 RISE-AI Lab，在<a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">复旦大学可信具身智能研究院（TEAI）</a>担任访问学生，启动 MemHarmBench 智能体持久性记忆投毒评测基准研究。该工作从受害者视角设计评测案例，并分析智能体遭受攻击后最终由谁承担损失。`
+        `加入<a href="${jingfengZhangUrl}" target="_blank" rel="noopener noreferrer"><strong>导师张景锋</strong></a>的 RISE-AI Lab，在<a href="${teaiUrl}" target="_blank" rel="noopener noreferrer"><strong>复旦大学可信具身智能研究院（TEAI）</strong></a>担任访问学生，启动 MemHarmBench 智能体持久性记忆投毒评测基准研究。该工作从受害者视角设计评测案例，并分析智能体遭受攻击后最终由谁承担损失。`
     },
     {
       date: "2026.07",
-      text: "开始担任 NeurIPS 2026 审稿人，参与机器学习与人工智能研究的同行评审工作。"
+      emoji: "📝",
+      html: "开始担任 <strong>NeurIPS 2026 审稿人</strong>，参与机器学习与人工智能研究的同行评审工作。"
     },
     {
       date: "2026.06",
+      emoji: "🤝",
       html:
-        `在<a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">复旦大学可信具身智能研究院（TEAI）</a>的团队中，在<a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">导师马兴军</a>指导下，参与面向企业的多智能体安全协作项目，负责需求分析、系统设计、实现与测试。`
+        `在<a href="${teaiUrl}" target="_blank" rel="noopener noreferrer"><strong>复旦大学可信具身智能研究院（TEAI）</strong></a>的团队中，在<a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer"><strong>导师马兴军</strong></a>指导下，参与面向企业的多智能体安全协作项目，负责需求分析、系统设计、实现与测试。`
     },
     {
       date: "2026.01 – 2026.04",
-      text: "通过由 UNDP 管理的 UNV 平台完成国际组织实习，研究红树林对气候变化的响应，并产出蓝碳减缓方向的综述手稿。"
+      emoji: "🌿",
+      html: "通过由 <strong>UNDP</strong> 管理的 <strong>UNV 平台</strong>完成国际组织实习，研究红树林对气候变化的响应，并产出蓝碳减缓方向的综述手稿。"
     },
     {
       date: "2026.03 – 2026.06",
+      emoji: "🛡️",
       starRepos: ["XSafeAI/XSafeClaw"],
       html:
-        `加入<a href="${teaiUrl}" target="_blank" rel="noopener noreferrer">复旦大学可信具身智能研究院（TEAI）</a>，在<a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer">马兴军老师</a>的指导下，参与 <a href="${xsafeclawUrl}" target="_blank" rel="noopener noreferrer">XSafeClaw</a> 智能体安全项目，聚焦运行时接入、受控工具调用与安全审计流程。`
+        `加入<a href="${teaiUrl}" target="_blank" rel="noopener noreferrer"><strong>复旦大学可信具身智能研究院（TEAI）</strong></a>，在<a href="${xingjunMaUrl}" target="_blank" rel="noopener noreferrer"><strong>马兴军老师</strong></a>的指导下，参与 <a href="${xsafeclawUrl}" target="_blank" rel="noopener noreferrer"><strong>XSafeClaw</strong></a> 智能体安全项目，聚焦运行时接入、受控工具调用与安全审计流程。`
     },
     {
       date: "2026.02",
-      text: "启动 SafeCodeRL 研究，探索面向安全约束大语言模型代码生成的多智能体强化学习框架。"
+      emoji: "🔬",
+      html: "启动 <strong>SafeCodeRL</strong> 研究，探索面向安全约束大语言模型代码生成的多智能体强化学习框架。"
     },
     {
       date: "2026.01",
+      emoji: "🔍",
       html:
-        `在<a href="${codeWisdomLabUrl}" target="_blank" rel="noopener noreferrer">复旦大学软件工程（CodeWisdom）实验室</a>开展 VulnSeeker 研究，将 CodeQL 静态分析与基于 LLM 的安全判断相结合。`
+        `在<a href="${codeWisdomLabUrl}" target="_blank" rel="noopener noreferrer"><strong>复旦大学软件工程（CodeWisdom）实验室</strong></a>开展 VulnSeeker 研究，将 CodeQL 静态分析与基于 LLM 的安全判断相结合。`
     },
     {
       date: "2025.09",
+      emoji: "💼",
       html:
-        `加入福州大学<a href="${fzuKeyLabUrl}" target="_blank" rel="noopener noreferrer">福建省网络计算与智能信息处理重点实验室</a>，在<a href="${yizhangLiuProfileUrl}" target="_blank" rel="noopener noreferrer">导师刘翼章</a>指导下启动 SFMambaNet 研究，探索用于对应关系剪枝的谱频增强状态空间模型。`
+        `加入福州大学<a href="${fzuKeyLabUrl}" target="_blank" rel="noopener noreferrer"><strong>福建省网络计算与智能信息处理重点实验室</strong></a>，在<a href="${yizhangLiuProfileUrl}" target="_blank" rel="noopener noreferrer"><strong>导师刘翼章</strong></a>指导下启动 SFMambaNet 研究，探索用于对应关系剪枝的谱频增强状态空间模型。`
     },
     {
       date: "2025.07",
+      emoji: "🎓",
       jumpTo: "#awards-skills",
-      text: "我的 ACMer 身份正式退役。"
+      html: "我的 <strong>ACMer</strong> 身份正式退役。"
     },
     {
       date: "2024.05",
+      emoji: "🚀",
       html:
-        `加入<a href="${usstAcmUrl}" target="_blank" rel="noopener noreferrer">上海理工大学 ACM 程序设计集训队</a>，开启了我的 ACM 生涯。期待接下来的挑战！🚀`
+        `加入<a href="${usstAcmUrl}" target="_blank" rel="noopener noreferrer"><strong>上海理工大学 ACM 程序设计集训队</strong></a>，开启了我的 ACM 生涯。期待接下来的挑战！🚀`
     }
   ],
   workExperiences: [
@@ -874,7 +912,7 @@ const cvZh: CvData = {
       title: "第一作者研究，SafeCodeRL",
       summary: "设计五智能体闭环与约束感知强化学习流程，支持安全代码生成。",
       organization: "独立科研合作",
-      period: "2026.02 – 至今",
+      period: "2026.02 – 2026.05",
       tags: ["人工智能安全", "多智能体系统", "约束强化学习", "安全代码生成", "LLM 代码生成", "IoT/CPS 安全", "可信人工智能"],
       bullets: [
         "提出 SafeCodeRL，一种面向大语言模型代码生成动态安全约束的多智能体框架。",
@@ -961,6 +999,7 @@ const cvZh: CvData = {
       status: "AAAI 2027; Will be accepted(accept*4)",
       role: "共同第一作者",
       url: scamWebUrl,
+      links: [{ label: "Hugging Face", url: scamWebDatasetUrl }],
       tags: ["多模态基准", "网络诈骗", "落地式理解", "证据定位", "LLM-VLM", "可信人工智能"],
       frameworkImage: "/figures/scamweb-dataset-overview.png",
       frameworkAlt: "ScamWeb 数据集概览，包括数据来源、网页采集与恢复、多模态处理结果、专家标注、数据集构成和代表性样本。",
@@ -983,6 +1022,7 @@ const cvZh: CvData = {
       status: "IEEE Transactions on Image Processing (TIP) 在审 · arXiv 预印本",
       role: "第一作者",
       url: "https://doi.org/10.48550/arXiv.2606.04493",
+      links: [{ label: "arXiv", url: "https://arxiv.org/abs/2606.04493" }, { label: "GitHub", url: sfmambanetCodeUrl }],
       tags: ["计算机视觉", "对应关系剪枝", "Mamba", "状态空间模型", "频域", "图神经网络", "双视图几何"],
       ratings: ["SCI 一区", "CCF A"],
       frameworkImage: "/figures/sfmambanet-framework.png",
@@ -1021,16 +1061,16 @@ const cvZh: CvData = {
   awards: [
     {
       html:
-        `<a href="${embeddedCompetitionUrl}" target="_blank" rel="noopener noreferrer">第九届全国大学生嵌入式芯片与系统设计竞赛全国总决赛</a>全国一等奖（2026.08.13）`
+        `<a href="${embeddedCompetitionUrl}" target="_blank" rel="noopener noreferrer">第九届全国大学生嵌入式芯片与系统设计竞赛全国总决赛</a>全国一等奖（<time datetime="2026-08-13">2026.08.13</time>）`
     },
-    "2025 年睿抗机器人开发者大赛国家级一等奖",
-    "2025 年蓝桥杯 C/C++ 程序设计竞赛全国二等奖",
-    { html: "2025 ACM 上海站大学生程序设计竞赛 <strong>银奖</strong>" },
+    { html: `<time datetime="2025">2025</time> 年睿抗机器人开发者大赛国家级一等奖` },
+    { html: `<time datetime="2025">2025</time> 年蓝桥杯 C/C++ 程序设计竞赛全国二等奖` },
+    { html: `<time datetime="2025">2025</time> ACM 上海站大学生程序设计竞赛 <strong>银奖</strong>` },
     "全国计算机能力挑战赛国家级二等奖（2 次）",
     "国家励志奖学金（5 次）",
     "奖学金一等奖（2 次）、二等奖（3 次）、三等奖（2 次）",
-    "2025 年全国大学生英语竞赛全国三等奖",
-    "2024 年全国大学生数学竞赛上海市一等奖",
+    { html: `<time datetime="2025">2025</time> 年全国大学生英语竞赛全国三等奖` },
+    { html: `<time datetime="2024">2024</time> 年全国大学生数学竞赛上海市一等奖` },
     "深度学习鲁棒水印移动应用软件著作权（第一作者）"
   ],
   services: [

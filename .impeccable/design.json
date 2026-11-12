@@ -3,7 +3,13 @@
   "generatedAt": "2026-11-12T00:00:00+08:00",
   "title": "Design System: Carey Academic Website",
   "extensions": {
-    "shadows": [],
+    "shadows": [
+      {
+        "name": "publication-image",
+        "value": "2px 3px 6px rgba(0,0,0,.18)",
+        "purpose": "User-requested depth for homepage paper images only."
+      }
+    ],
     "motion": [
       {
         "name": "meteor-fall",
@@ -14,6 +20,11 @@
         "name": "click-feedback",
         "value": "1120ms cubic-bezier(0.16, 1, 0.3, 1)",
         "purpose": "Retained click feedback; hidden for reduced motion."
+      },
+      {
+        "name": "acmer-float",
+        "value": "4.8s ease-in-out infinite",
+        "purpose": "Explicitly requested floating identity; circuit and cursor also animate, disabled by reduced motion."
       }
     ],
     "breakpoints": [
@@ -90,12 +101,14 @@
       "Do keep public page backgrounds white and use system sans-serif text.",
       "Do preserve clear keyboard focus, ordinary links, authorship marks, and language controls.",
       "Do use thin separators and flat content rows.",
-      "Do keep contacts visible when the sidebar stacks on mobile."
+      "Do keep contacts visible when the sidebar stacks on mobile.",
+      "Use underlined content links and plain bold publication titles with per-paper author notes.",
+      "Use the approved pale internship callout, rounded News window, and compact Star badges."
     ],
     "donts": [
       "Don't add glass panels, decorative meshes, background grids, or large shadows.",
-      "Don't turn tags, ratings, or resource links into pills.",
-      "Don't add section eyebrows or animated ACMer styling.",
+      "Don't turn ordinary tags or resource links into pills; approved compact Star and paper badges remain.",
+      "Don't add section eyebrows; keep the user-requested ACMer animation confined to the identity mark and honor reduced motion.",
       "Don't hide the entire sidebar on mobile or add a second mobile navigation."
     ]
   }

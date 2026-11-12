@@ -10,6 +10,11 @@ const requiredFiles = [
   "src/layouts/BaseLayout.astro",
   "src/components/Sidebar.astro",
   "src/components/ClickBurst.astro",
+  "src/components/BrandIcon.astro",
+  "src/components/PublicationCard.astro",
+  "src/components/ResourceLinks.astro",
+  "src/components/RepoStars.astro",
+  "src/components/NewsCard.astro",
   "src/views/HomePage.astro",
   "src/pages/index.astro",
   "src/pages/cv.astro",
@@ -42,7 +47,6 @@ const requiredPublicSnippets = [
   "wzh2657751462@gmail.com",
   "learningProgress",
   "International Organization Internship",
-  "Feel free to reach out by email",
   "meteor-shower",
   "SCI Zone 1",
   "CCF A",
@@ -74,9 +78,19 @@ const requiredPublicSnippets = [
   "ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages",
   "/figures/scamweb-dataset-overview.png",
   "Dataset and annotation overview",
-  "I am a senior undergraduate in Computer Science and Technology at USST",
-  "Institute of Trustworthy Embodied Artificial Intelligence (TEAI), Fudan University",
-  "我是上海理工大学计算机科学与技术专业大四本科生",
+  "Hello!",
+  "2.5k GitHub Stars",
+  "2025 ACM Shanghai Collegiate Programming Contest",
+  "2025 ACM 上海站大学生程序设计竞赛",
+  "2027.09 – 2030.06 (expected)",
+  "2027.09 – 2030.06（预计）",
+  "2023.09 – 2027.06",
+  "2026.02 – 2026.05",
+  "https://huggingface.co/datasets/kirco567/ScamWeb-Dataset",
+  "Preprints and Publications",
+  "预印本与论文",
+  "https://github.com/wuyoscar",
+  "https://yunhao-feng.github.io",
   "My research interests include foundation models, coding agents",
   "研究兴趣包括基座大模型、Coding Agent、智能体后训练与强化学习，以及可信人工智能。",
   "Foundation Models",
@@ -106,9 +120,7 @@ const requiredPublicSnippets = [
   "美团，打零工",
   "2024.05 – 2025.07",
   "began my ACM journey. Looking forward to the challenges ahead! 🚀",
-  "My chapter as an ACMer officially came to an end.",
   "开启了我的 ACM 生涯。期待接下来的挑战！🚀",
-  "我的 ACMer 身份正式退役。",
   "translationKey: \"website-launch\"",
   "translationKey: \"xsafeclaw\""
 ];
@@ -169,10 +181,16 @@ const home = source("src/views/HomePage.astro");
 const sidebar = source("src/components/Sidebar.astro");
 const timeline = source("src/components/Timeline.astro");
 const education = source("src/components/Education.astro");
+const publication = source("src/components/PublicationCard.astro");
+const resources = source("src/components/ResourceLinks.astro");
+const repoStars = source("src/components/RepoStars.astro");
+const newsCard = source("src/components/NewsCard.astro");
+const brandIcon = source("src/components/BrandIcon.astro");
 const cvData = source("src/data/cv.ts");
 const demo = source("src/components/AISafetyHotDemo.astro");
 const visitor = source("src/components/VisitorMap.astro");
 const stylesheet = source("src/styles/global.css");
+const dateStyles = stylesheet.match(/time\s*,[^{}]*\.timeline-date[^{}]*\.education-period[^{}]*\.article-date\s*\{([^}]*)\}/)?.[1] || "";
 const contracts = [
   ["shared styles keep the approved white system-font 15px base", /body\s*\{[^}]*background:\s*#(?:fff|ffffff)\s*;[^}]*font:\s*400\s+15px\//.test(stylesheet) && /--body:\s*-apple-system,[^;]*sans-serif/.test(stylesheet) && !/data-theme\s*=\s*["']dark|fonts\.googleapis\.com/.test(stylesheet + layout)],
   ["shared layout retains locale persistence without a theme toggle or theme preference", layout.includes("krico-locale") && !/ThemeToggle|krico-theme|data-theme-toggle/.test(layout)],
@@ -181,8 +199,21 @@ const contracts = [
   ["research collapse is opt-in and leaves other timelines expanded", /collapsible\s*=\s*false/.test(timeline) && /collapsible\s*\?\s*"details"\s*:\s*"article"/.test(timeline) && /<summary\b/.test(timeline)],
   ["research summary is optional in the shared timeline data type", /export type TimelineItem\s*=\s*\{[^}]*summary\?:\s*string/.test(cvData)],
   ["compact education is opt-in", /compact\s*=\s*false/.test(education)],
+  ["sidebar selects contact brand icons by key instead of array position", sidebar.includes("BrandIcon") && /name=\{link\.icon\}/.test(sidebar) && !/contactIcons|link,\s*index|\[index\]/.test(sidebar)],
+  ["brand icons expose a shared name, size, and class API and local brand assets", /name\??\s*:/.test(brandIcon) && /size\??\s*:/.test(brandIcon) && /class\??\s*:/.test(brandIcon) && /<img\b/.test(brandIcon) && brandIcon.includes("data-brand-icon") && !/src=["']https?:\/\//.test(brandIcon)],
+  ["About includes three biography paragraphs, a plain-email callout, and the static total", home.includes("profile.researchInterests") && home.includes('class="internship-callout"') && home.includes("profile.contactNote") && home.includes("GitHub Stars ≈2.5k") && !/mailto:|Repo Owner Stars|data-star-repo/.test(home)],
+  ["News supports optional emoji data and renders accessible decorative item icons", /export type NewsItem\s*=\s*\{[^}]*emoji\?:\s*string/.test(cvData) && /item\.emoji/.test(newsCard) && newsCard.includes('class="news-item-emoji"') && newsCard.includes('aria-hidden="true"')],
+  ["homepage publication variant omits dates, captions, and rating rows while retaining the figure badge", /variant\??\s*:/.test(publication) && publication.includes('variant === "home"') && publication.includes("!isHome") && publication.includes("publication-figure-badge") && /ratings\.join\(" · "\)/.test(publication) && publication.includes('"Preprint"') && home.includes('variant="home"')],
+  ["publication titles render as bold plain semantic headings", /<h3>\s*(?:<strong>)?\{item\.title\}(?:<\/strong>)?\s*<\/h3>/.test(publication) && !publication.includes("publication-title-link") && /\.publication-details\s+h3\s*\{[^}]*font-weight:\s*700/.test(stylesheet + publication)],
+  ["publication platform labels derive from exact URL hostnames", resources.includes('variant === "publication"') && resources.includes("new URL(url).hostname") && ["arxiv.org", "github.com", "huggingface.co"].every((host) => resources.includes(`"${host}"`)) && resources.includes("platform?.label ?? link.label")],
+  ["live repository star badges retain grouped requests and cache validation", repoStars.includes('new Map<string, HTMLAnchorElement[]>()') && repoStars.includes("groups.forEach") && repoStars.includes("krico-github-stars:") && repoStars.includes("Number.isSafeInteger") && repoStars.includes("AbortSignal.timeout(6000)")],
+  ["compact repository star badges remain opt-in with colored 26px styling", /variant\s*=\s*"plain"/.test(repoStars) && /variant\??:\s*"plain"\s*\|\s*"compact"/.test(repoStars) && repoStars.includes("repo-stars--compact") && /min-height:\s*26px/.test(repoStars) && /background:\s*color-mix\([^;]+--star-accent/.test(repoStars) && newsCard.includes('variant="compact"') && source("src/components/AISafetyHotProject.astro").includes('variant="compact"')],
+  ["shared content links stay underlined and sidebar contacts remain plain", /\ba\s*\{[^}]*text-decoration:\s*underline/.test(stylesheet) && /\.sidebar-contact[^}]*\{[^}]*text-decoration:\s*none/.test(stylesheet)],
+  ["dates retain body-sized ink-colored italic styling", [/font-style:\s*italic/, /font-size:\s*15px/, /color:\s*var\(--ink\)/].every((pattern) => pattern.test(dateStyles)) && /--ink:\s*#222(?:222)?\s*;/.test(stylesheet) && !/\.(?:news-list|post-card)\s+time\s*\{[^}]*(?:font-size:\s*(?:1[0-4]|[0-9])px|color:\s*var\(--muted\))/.test(stylesheet)],
+  ["homepage publication figures retain 320px columns without cropping", /\.publication-list--home[^{}]*\{[^}]*grid-template-columns:\s*320px\s+minmax\(0,\s*1fr\)/.test(stylesheet) && /\.publication-card--home\s+\.framework-preview\s+img\s*\{[^}]*height:\s*auto;[^}]*object-fit:\s*contain;[^}]*box-shadow:/.test(publication)],
   ["home renders all News in one scroll region", home.includes("news-scroll") && /news\.map\(/.test(home) && !/latestNews|olderNews|news-archive|news\.slice\(/.test(home)],
   ["News scroll height follows the approved desktop and mobile limits", /(?:max-)?height:\s*320px/.test(stylesheet + home) && /(?:max-)?height:\s*280px/.test(stylesheet + home)],
+  ["News scroll window retains its pale background, border, and rounded corners", /\.news-scroll\s*\{[^}]*border:\s*1px\s+solid\s+#dce3eb;[^}]*border-radius:\s*10px;[^}]*background:\s*#f7f9fc/.test(stylesheet)],
   ["AISafetyHot displays its looping animation and a reduced-motion poster with no playback controls", /src=\{animation\}/.test(demo) && /<source\b[^>]*media="\(prefers-reduced-motion: reduce\)"[^>]*srcset=\{poster\}/.test(demo) && !/data-demo-toggle|<script\b/.test(demo)],
   ["visitor map waits for viewport proximity and retains the production guard", visitor.includes("IntersectionObserver") && /rootMargin:\s*["']300px(?: 0px)?["']/.test(visitor) && visitor.includes('location.hostname !== "kirito14it.github.io"')],
   ["visitor-map timeout starts inside the actual loading function", visitor.indexOf("window.setTimeout(unavailable") > visitor.indexOf("const loadMap =") && visitor.indexOf("const loadMap =") > visitor.indexOf('location.hostname !== "kirito14it.github.io"')],

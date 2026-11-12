@@ -95,7 +95,7 @@ Section headings sit above a thin rule. Navigation stays on one horizontally scr
 
 Content rows remain unboxed and flat. Homepage paper images have the explicitly requested 2px 3px 6px rgba(0,0,0,.18) shadow. The internship callout uses a pale-blue surface and 4px blue left rule. News uses a pale rounded border. Separation elsewhere comes from whitespace and thin rules. The existing floating assistant and optional interaction effects are functional exceptions kept outside the content hierarchy.
 
-The AISafetyHot project introduction sits above its animated demonstration. The demonstration matches the homepage paper figures: 360px on desktop, 320px on compact desktops, and 90% of the content width below 900px. Home and Projects pages share these dimensions.
+The AISafetyHot project uses the same left-image/right-text composition as publication rows. Its title, description, Star badge, source credit, and website link all sit in the right column. The demonstration matches the homepage paper figures: 360px on desktop and 320px on compact desktops. At 900px and below, the image stacks above the text and uses 90% of the content width. Home and Projects pages share these dimensions.
 
 ## Shapes
 

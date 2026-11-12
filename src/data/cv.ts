@@ -43,6 +43,7 @@ const publicationCredits = {
   },
   scamWeb: {
     authors: ["Nan Li", "Zhihua Wang", "Ziyang Chen", "Yunhao Feng", "Songyang Wu"],
+    homepageAuthors: ["Zhihua Wang", "Nan Li", "Ziyang Chen", "Yunhao Feng", "Songyang Wu"],
     coFirstAuthors: ["Nan Li", "Zhihua Wang"],
     correspondingAuthor: "Songyang Wu",
     homepageRatings: ["AAAI 2027", "CCF A"],

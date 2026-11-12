@@ -90,8 +90,13 @@ if (item.url && !publicationLinks.some((link) => resourceKey(link.url) === resou
       </p>
     )}
     <p class="muted">{item.role} · {item.status}{!isHome && <> · <time datetime={item.date.replaceAll(".", "-")}>{item.date}</time></>}</p>
-    {item.datasetDownloads && <DatasetDownloads {...item.datasetDownloads} locale={locale} />}
-    {publicationLinks.length > 0 && <ResourceLinks links={publicationLinks} variant="publication" />}
+    {publicationLinks.length > 0 && (
+      <ResourceLinks links={publicationLinks} variant="publication">
+        <Fragment slot="after-huggingface">
+          {item.datasetDownloads && <DatasetDownloads {...item.datasetDownloads} locale={locale} />}
+        </Fragment>
+      </ResourceLinks>
+    )}
     {!isHome && item.ratings && <div class="rating-pills">{item.ratings.map((rating) => <span>{rating}</span>)}</div>}
     <div class="tag-list">{item.tags.map((tag) => <span>{tag}</span>)}</div>
   </div>

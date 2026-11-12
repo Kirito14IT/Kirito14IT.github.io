@@ -26,15 +26,20 @@ function getPlatform(url: string) {
   {links.map((link) => {
     const platform = variant === "publication" || variant === "platform" ? getPlatform(link.url) : undefined;
     return (
+      <>
       <a class:list={{ "publication-resource-link": variant === "publication", "platform-resource-link": variant === "platform" && Boolean(platform) }} href={link.url} target="_blank" rel="noopener noreferrer">
         {platform && <BrandIcon name={platform.name} size={16} class="resource-link-icon" />}
         <span>{platform?.label ?? link.label}{(variant === "default" || (variant === "platform" && !platform)) && " ↗"}</span>
       </a>
+      {platform?.name === "huggingface" && <slot name="after-huggingface" />}
+      </>
     );
   })}
 </div>
 
 <style>
+  .resource-links { align-items: center; }
+
   .publication-resource-link,
   .platform-resource-link {
     align-items: center;

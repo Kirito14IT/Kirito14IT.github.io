@@ -81,22 +81,24 @@ const hasToolbarNavigation = Astro.slots.has("toolbar");
       </div>
     </div>
     <ClickBurst />
+    <header class="site-header">
+      <div class:list={["page-toolbar", { "has-navigation": hasToolbarNavigation }]}>
+        {hasToolbarNavigation ? <div class="toolbar-navigation"><slot name="toolbar" /></div> : (
+          <nav class="site-navigation" aria-label={copy.sidebar.navigation}>
+            <a href={localizedPath(locale, "/")}>{copy.nav.home}</a>
+            <a href={localizedPath(locale, "/cv/")}>{copy.nav.cv}</a>
+            <a href={localizedPath(locale, "/projects/")}>{copy.nav.projects}</a>
+            <a href={localizedPath(locale, "/blog/")}>{copy.nav.blog}</a>
+          </nav>
+        )}
+        <div class="toolbar-controls">
+          <LanguageSwitcher locale={locale} pathname={Astro.url.pathname} />
+        </div>
+      </div>
+    </header>
     <div class="site-shell">
       <Sidebar locale={locale} />
       <main class="main-content" id="main-content">
-        <div class:list={["page-toolbar", { "has-navigation": hasToolbarNavigation }]}>
-          {hasToolbarNavigation ? <div class="toolbar-navigation"><slot name="toolbar" /></div> : (
-            <nav class="site-navigation" aria-label={copy.sidebar.navigation}>
-              <a href={localizedPath(locale, "/")}>{copy.nav.home}</a>
-              <a href={localizedPath(locale, "/cv/")}>{copy.nav.cv}</a>
-              <a href={localizedPath(locale, "/projects/")}>{copy.nav.projects}</a>
-              <a href={localizedPath(locale, "/blog/")}>{copy.nav.blog}</a>
-            </nav>
-          )}
-          <div class="toolbar-controls">
-            <LanguageSwitcher locale={locale} pathname={Astro.url.pathname} />
-          </div>
-        </div>
         <slot />
         <SiteFooter locale={locale} showVisitCounter={showVisitCounter} />
       </main>
@@ -104,3 +106,27 @@ const hasToolbarNavigation = Astro.slots.has("toolbar");
     <ChatBot />
   </body>
 </html>
+
+<script>
+  const header = document.querySelector<HTMLElement>(".site-header");
+  if (header) {
+    const syncHeaderHeight = () => {
+      document.documentElement.style.setProperty("--site-header-height", `${Math.ceil(header.getBoundingClientRect().height)}px`);
+    };
+    syncHeaderHeight();
+    if (typeof ResizeObserver !== "undefined") {
+      new ResizeObserver(syncHeaderHeight).observe(header);
+    } else {
+      window.addEventListener("resize", syncHeaderHeight);
+    }
+    if (window.location.hash) {
+      requestAnimationFrame(() => {
+        try {
+          document.getElementById(decodeURIComponent(window.location.hash.slice(1)))?.scrollIntoView({ behavior: "instant" });
+        } catch {
+          // Leave malformed or missing fragments to the browser.
+        }
+      });
+    }
+  }
+</script>

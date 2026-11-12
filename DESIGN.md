@@ -87,9 +87,9 @@ Body prose uses normal weight and a compact, readable line height. Article text 
 
 ## Layout
 
-Desktop pages use a centered container with a maximum width of 1280px, a 220px sidebar, and a 48px column gap. The gap reduces to 36px below 1100px. At 900px and below the sidebar becomes a visible, stacked identity header with contacts alongside the avatar. The avatar is 170px on desktop and 110px on mobile; a small location mark precedes the city. Small screens retain both navigation and language switching without adding a duplicate navigation row.
+Desktop pages use a centered container with a maximum width of 1280px, a 220px sidebar, and a 48px column gap. The gap reduces to 36px below 1100px. The sidebar follows below the global header while scrolling; on desktop viewports 800px high or shorter it stays in ordinary flow so its contacts remain reachable. At 900px and below the sidebar becomes a visible, stacked identity header with contacts alongside the avatar. The avatar is 170px on desktop and 110px on mobile; a small location mark precedes the city. Small screens retain both navigation and language switching without adding a duplicate navigation row.
 
-Section headings sit above a thin rule. Navigation stays on one horizontally scrollable row. News occupies a pale, bordered, 10px-rounded scroll window, 320px high on desktop and 280px on mobile; screenshot links open a full-size native dialog. Homepage publications pair a 360px uncropped figure at left with text at right, reduce to 320px on compact desktops, then stack at 900px and below with figures occupying 90% of the available width. Lists of projects and notes use flat rows. Research experience uses native details/summary disclosures, while education uses two compact rows. Acknowledgements precede the visitor map.
+Section headings sit above a thin rule. A full-width navigation header sits above the sidebar and main content, with both columns starting 48px below it on desktop. News occupies a pale, bordered, 10px-rounded scroll window, 320px high on desktop and 280px on mobile; screenshot links open a full-size native dialog. Homepage publications pair a 360px uncropped figure at left with text at right, reduce to 320px on compact desktops, then stack at 900px and below with figures occupying 90% of the available width. Lists of projects and notes use flat rows. Research experience uses native details/summary disclosures, while education uses two compact rows. Acknowledgements precede the visitor map.
 
 ## Elevation & Depth
 
@@ -105,7 +105,7 @@ Content has square, unboxed edges. Utility controls use a minimal corner radius 
 
 ### Navigation
 
-Desktop and mobile share one horizontally scrollable navigation row. The navigation and language switcher stick to the top of the viewport while scrolling, on an opaque white surface with a thin bottom rule. Homepage links jump to sections with an 88px anchor offset so headings remain below the toolbar; inner pages link to Home, CV, Projects, and Blog. Language switching remains a plain text link with a small globe where space permits.
+A full-width white header with a thin bottom rule stays at the viewport top from the start of the page. Its centered 1280px inner row spans the combined sidebar and main-content width. Desktop links fit on one row; narrower viewports wrap links without horizontal scrolling or clipping, while the language switcher remains visible. The sidebar and anchor/focus offsets follow the measured header height as it wraps. Homepage links jump to sections with 28px clearance below the header; inner pages link to Home, CV, Projects, and Blog. Language switching remains a plain text link with a small globe where space permits.
 
 ### Publication rows
 

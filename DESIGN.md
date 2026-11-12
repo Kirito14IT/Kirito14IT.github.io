@@ -99,7 +99,7 @@ The AISafetyHot project introduction sits above its animated demonstration. The 
 
 ## Shapes
 
-Content has square, unboxed edges. Utility controls use a minimal corner radius from the frontmatter. The avatar remains circular. Contacts use original brand marks, including Gmail, and a filled blue CV document icon. The ACMer asset retains its animated identity geometry. User-approved sentence badges use a thin border and slight rounding: the static GitHub total, ICPC medal mark, and supplied full Ant Group and MPS logos stay inline with the prose.
+Content has square, unboxed edges. Utility controls use a minimal corner radius from the frontmatter. The avatar remains circular. Contacts use original brand marks, including Gmail, and a filled blue CV document icon. The ACMer asset retains its animated identity geometry. User-approved sentence badges use a thin border and slight rounding: the static GitHub total, ICPC medal mark, and supplied full Ant Group and MPS logos stay inline with the prose. Affiliation wordmarks accompany parenthesized bold text links for Ant Group or TRIMPS. The institute’s full name is visible as ordinary, unlinked prose before its abbreviation.
 
 ## Components
 

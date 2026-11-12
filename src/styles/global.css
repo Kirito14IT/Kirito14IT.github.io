@@ -142,11 +142,13 @@ time, .timeline-date, .education-period, .article-date { font-style: italic; fon
 .publication-details { min-width: 0; }
 .publication-details h3 { margin: 0 0 5px; font-size: 16px; font-weight: 700; line-height: 1.4; }
 .publication-title-link { color: var(--blue); font-weight: 600; }
-.publication-details p { margin: 0 0 5px; font-size: 14px; }
+.publication-details p { margin: 0 0 5px; font-size: 15px; }
 .publication-authors strong { color: var(--ink); font-weight: 600; }
 .publication-author-mark { position: relative; top: -.1em; margin-left: 1px; font-size: .75em; line-height: 0; }
 .publication-author-legend { margin: -2px 0 15px; font-size: 13px; }
 .publication-details .inline-links, .publication-details .rating-pills, .publication-details .tag-list { margin-top: 5px; }
+.publication-details .inline-links { font-size: 15px; }
+.publication-details .rating-pills, .publication-details .tag-list { font-size: 14px; }
 .framework-preview { align-self: start; }
 .framework-preview a { display: block; }
 .framework-preview img { display: block; width: 100%; max-height: 145px; object-fit: contain; }

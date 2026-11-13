@@ -19,8 +19,8 @@ const shared = {
   advisorUrl: "http://xingjunma.com/",
   labHeadUrl: "https://baike.baidu.com/item/%E5%A7%9C%E8%82%B2%E5%88%9A/22131913",
   affiliations: [
-    { label: "Fudan FVL", title: "Fudan Vision and Learning Lab", url: "https://fvl.fudan.edu.cn/", logo: "/github-profile/fudan-university-logo.png" },
-    { label: "TEAI", title: "Institute of Trustworthy Embodied AI, Fudan University", url: "https://teai.fudan.edu.cn/#/", logo: "/github-profile/fudan-teai-logo.png" }
+    { label: "Fudan FVL", title: "Fudan Vision and Learning Laboratory", url: "https://fvl.fudan.edu.cn/", logo: "/github-profile/fudan-university-logo.png" },
+    { label: "TEAI", title: "Institute of Trustworthy Embodied Artificial Intelligence, Fudan University", url: "https://teai.fudan.edu.cn/#/", logo: "/github-profile/fudan-teai-logo.png" }
   ]
 };
 
@@ -38,7 +38,7 @@ export const profiles = {
     tagline:
       "I study large language models, coding agents, trustworthy AI, agent post-training, and reinforcement learning for agents (Agent RL), with an interest in reliable reasoning, memory, and tool use.",
     bio:
-      "Hello! I am Zhihua Wang, an incoming CS master's student at Fudan University's FVL, led by Prof. Yu-Gang Jiang (Vice President, Fudan University), and TEAI. I will be advised by Prof. Xingjun Ma. I am pursuing a bachelor's degree in Computer Science and Technology at the School of Optical-Electrical and Computer Engineering, University of Shanghai for Science and Technology (USST) (2023–2027). My open-source projects have received approximately 2.5k GitHub Stars, and I won an ACM silver medal.",
+      "Hello! I am Zhihua Wang, an incoming CS master's student at Fudan University's Vision and Learning Laboratory (FVL), led by Prof. Yu-Gang Jiang (Vice President, Fudan University), and the Institute of Trustworthy Embodied Artificial Intelligence (TEAI). I will be advised by Prof. Xingjun Ma. I am pursuing a bachelor's degree in Computer Science and Technology at the School of Optical-Electrical and Computer Engineering, University of Shanghai for Science and Technology (USST) (2023–2027). My open-source projects have received approximately 2.5k GitHub Stars, and I won an ACM silver medal.",
     researchInterests:
       "My research interests include foundation models, coding agents, agent post-training and reinforcement learning, and trustworthy AI.",
     contactNote:
@@ -102,7 +102,7 @@ export const profiles = {
     labHeadName: "姜育刚（复旦大学副校长）",
     tagline: "聚焦大语言模型、Coding Agent、可信AI、智能体后训练、智能体强化学习（Agent RL），关注可靠推理、记忆与工具使用。",
     bio:
-      "Hello! 我是王志华，是复旦大学 FVL（由姜育刚教授（复旦大学副校长）领导）与 TEAI 的准硕士生，师从马兴军教授。我目前在上海理工大学光电信息与计算机工程学院（USST）攻读计算机科学与技术学士学位（2023–2027）。我的开源项目累计获得约 2.5k GitHub Stars，并获 ACM 银奖。",
+      "Hello! 我是王志华，是复旦大学视觉与学习实验室（FVL，由姜育刚教授（复旦大学副校长）领导）与可信具身智能研究院（TEAI）的准硕士生，师从马兴军教授。我目前在上海理工大学光电信息与计算机工程学院（USST）攻读计算机科学与技术学士学位（2023–2027）。我的开源项目累计获得约 2.5k GitHub Stars，并获 ACM 银奖。",
     researchInterests: "我的研究兴趣包括基座大模型、Coding Agent、智能体后训练与强化学习，以及可信人工智能。",
     contactNote: "也欢迎其他方面的合作、交流与共同学习。",
     internshipSearch: {

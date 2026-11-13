@@ -38,7 +38,7 @@ export const profiles = {
     tagline:
       "I study large language models, coding agents, trustworthy AI, agent post-training, and reinforcement learning for agents (Agent RL), with an interest in reliable reasoning, memory, and tool use.",
     bio:
-      "Hello! I am Zhihua Wang, an incoming master's student at Fudan University's FVL, led by Prof. Yu-Gang Jiang (Vice President, Fudan University), and TEAI. I will be advised by Prof. Xingjun Ma. I am pursuing a bachelor's degree in Computer Science and Technology at the School of Optical-Electrical and Computer Engineering, University of Shanghai for Science and Technology (USST) (2023–2027). My open-source projects have received approximately 2.5k GitHub Stars, and I won an ACM silver medal.",
+      "Hello! I am Zhihua Wang, an incoming CS master's student at Fudan University's FVL, led by Prof. Yu-Gang Jiang (Vice President, Fudan University), and TEAI. I will be advised by Prof. Xingjun Ma. I am pursuing a bachelor's degree in Computer Science and Technology at the School of Optical-Electrical and Computer Engineering, University of Shanghai for Science and Technology (USST) (2023–2027). My open-source projects have received approximately 2.5k GitHub Stars, and I won an ACM silver medal.",
     researchInterests:
       "My research interests include foundation models, coding agents, agent post-training and reinforcement learning, and trustworthy AI.",
     contactNote:

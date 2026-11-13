@@ -21,8 +21,13 @@ function getPlatform(url: string) {
   }
 }
 
+function resourceOrder(link: { label: string; url: string }) {
+  if (link.label === "Paper" && /\.pdf(?:$|[?#])/i.test(link.url)) return 0;
+  return getPlatform(link.url)?.order ?? 3;
+}
+
 const orderedLinks = variant === "default" ? links : [...links].sort((left, right) =>
-  (getPlatform(left.url)?.order ?? 3) - (getPlatform(right.url)?.order ?? 3)
+  resourceOrder(left) - resourceOrder(right)
 );
 ---
 

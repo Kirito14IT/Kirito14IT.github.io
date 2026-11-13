@@ -76,6 +76,7 @@ const requiredPublicSnippets = [
   "2026.04 – 2026.08",
   "https://www.gass.ac.cn/gass/index.html",
   "https://github.com/Kirito14IT/ScamWeb",
+  "/papers/scamweb.pdf",
   "ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages",
   "/figures/scamweb-dataset-overview.png",
   "Dataset and annotation overview",

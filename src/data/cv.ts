@@ -12,6 +12,7 @@ const tipUrl = "https://signalprocessingsociety.org/publications-resources/ieee-
 const jingfengZhangUrl = "https://zjfheart.github.io/";
 const gassUrl = "https://www.gass.ac.cn/gass/index.html";
 const scamWebUrl = "https://github.com/Kirito14IT/ScamWeb";
+const scamWebPaperUrl = "/papers/scamweb.pdf";
 const scamWebDatasetUrl = "https://huggingface.co/datasets/kirco567/ScamWeb-Dataset";
 const usstAcmUrl = "https://cec.usst.edu.cn/2019/" + "0523/c6556a148258/page.htm";
 const embeddedCompetitionUrl = "https://www.socchina.net/home";
@@ -510,8 +511,8 @@ const cvEn: CvData = {
       title: "ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages",
       status: "AAAI 2027; Will be accepted(accept*4)",
       role: "Co-first author",
-      url: scamWebUrl,
-      links: [{ label: "Hugging Face", url: scamWebDatasetUrl }],
+      url: scamWebPaperUrl,
+      links: [{ label: "Paper", url: scamWebPaperUrl }, { label: "GitHub", url: scamWebUrl }, { label: "Hugging Face", url: scamWebDatasetUrl }],
       datasetDownloads: { repo: "kirco567/ScamWeb-Dataset", fallback: 839 },
       tags: ["Multimodal Benchmark", "Cyber-enabled Fraud", "Grounded Understanding", "Evidence Localization", "LLM-VLM", "Trustworthy AI"],
       frameworkImage: "/figures/scamweb-dataset-overview.png",
@@ -1008,8 +1009,8 @@ const cvZh: CvData = {
       title: "ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages",
       status: "AAAI 2027; Will be accepted(accept*4)",
       role: "共同第一作者",
-      url: scamWebUrl,
-      links: [{ label: "Hugging Face", url: scamWebDatasetUrl }],
+      url: scamWebPaperUrl,
+      links: [{ label: "Paper", url: scamWebPaperUrl }, { label: "GitHub", url: scamWebUrl }, { label: "Hugging Face", url: scamWebDatasetUrl }],
       datasetDownloads: { repo: "kirco567/ScamWeb-Dataset", fallback: 839 },
       tags: ["多模态基准", "网络诈骗", "落地式理解", "证据定位", "LLM-VLM", "可信人工智能"],
       frameworkImage: "/figures/scamweb-dataset-overview.png",

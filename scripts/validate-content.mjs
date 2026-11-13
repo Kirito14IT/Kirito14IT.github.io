@@ -75,7 +75,7 @@ const requiredPublicSnippets = [
   "victim-centered",
   "2026.04 – 2026.08",
   "https://www.gass.ac.cn/gass/index.html",
-  "https://anonymous.4open.science/r/ScamWeb-B710",
+  "https://github.com/Kirito14IT/ScamWeb",
   "ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages",
   "/figures/scamweb-dataset-overview.png",
   "Dataset and annotation overview",

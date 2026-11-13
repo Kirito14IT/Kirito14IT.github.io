@@ -6,10 +6,10 @@ const { links, variant = "default" } = Astro.props as {
   variant?: "default" | "publication" | "platform";
 };
 
-const platforms: Record<string, { name: string; label: string }> = {
-  "arxiv.org": { name: "arxiv", label: "arXiv" },
-  "github.com": { name: "github", label: "GitHub" },
-  "huggingface.co": { name: "huggingface", label: "Hugging Face" }
+const platforms: Record<string, { name: string; label: string; order: number }> = {
+  "arxiv.org": { name: "arxiv", label: "arXiv", order: 0 },
+  "github.com": { name: "github", label: "GitHub", order: 1 },
+  "huggingface.co": { name: "huggingface", label: "Hugging Face", order: 2 }
 };
 
 function getPlatform(url: string) {
@@ -20,10 +20,14 @@ function getPlatform(url: string) {
     return undefined;
   }
 }
+
+const orderedLinks = variant === "default" ? links : [...links].sort((left, right) =>
+  (getPlatform(left.url)?.order ?? 3) - (getPlatform(right.url)?.order ?? 3)
+);
 ---
 
 <div class:list={["inline-links", "resource-links", { "resource-links--publication": variant === "publication" }]}>
-  {links.map((link) => {
+  {orderedLinks.map((link) => {
     const platform = variant === "publication" || variant === "platform" ? getPlatform(link.url) : undefined;
     return (
       <>

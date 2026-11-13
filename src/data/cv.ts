@@ -11,7 +11,7 @@ const yuGangJiangUrl = "https://baike.baidu.com/item/%E5%A7%9C%E8%82%B2%E5%88%9A
 const tipUrl = "https://signalprocessingsociety.org/publications-resources/ieee-transactions-image-processing";
 const jingfengZhangUrl = "https://zjfheart.github.io/";
 const gassUrl = "https://www.gass.ac.cn/gass/index.html";
-const scamWebUrl = "https://anonymous.4open.science/r/ScamWeb-B710";
+const scamWebUrl = "https://github.com/Kirito14IT/ScamWeb";
 const scamWebDatasetUrl = "https://huggingface.co/datasets/kirco567/ScamWeb-Dataset";
 const usstAcmUrl = "https://cec.usst.edu.cn/2019/" + "0523/c6556a148258/page.htm";
 const embeddedCompetitionUrl = "https://www.socchina.net/home";
@@ -340,7 +340,7 @@ const cvEn: CvData = {
         }
       ],
       links: [
-        { label: "ScamWeb Anonymous Repository", url: scamWebUrl },
+        { label: "ScamWeb GitHub Repository", url: scamWebUrl },
         { label: "TEAI", url: teaiUrl },
         { label: "Third Research Institute of MPS", url: gassUrl },
         { label: "Advisor Xingjun Ma", url: xingjunMaUrl }
@@ -838,7 +838,7 @@ const cvZh: CvData = {
         }
       ],
       links: [
-        { label: "ScamWeb 匿名仓库", url: scamWebUrl },
+        { label: "ScamWeb GitHub 仓库", url: scamWebUrl },
         { label: "复旦大学 TEAI", url: teaiUrl },
         { label: "公安部第三研究所", url: gassUrl },
         { label: "导师马兴军", url: xingjunMaUrl }

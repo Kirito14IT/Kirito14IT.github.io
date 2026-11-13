@@ -17,6 +17,7 @@ medal symbol remains an inline line icon in `BrandIcon.astro`.
 | `gmail.png` | [Google Brand Resource Center](https://about.google/brand-resource-center/products-and-services/), [Google-hosted Gmail product icon](https://www.gstatic.com/images/branding/product/2x/gmail_48dp.png), retrieved 2026-11-13 |
 | `gmail-flat.png` | Gmail icon supplied by the user on 2026-11-13; original PNG copied without changes. Active Email icon; `gmail.png` retained for URL compatibility. |
 | `cv.svg` | Authored blue document/profile icon for this site; not a third-party brand mark |
+| `pdf.png` | Red PDF page icon supplied by the user on 2026-11-13; original 202×249 PNG copied unchanged and displayed at 13×16 px to retain its portrait proportions. |
 | `location.svg` | Authored orange/red location pin with a pale blue ground ellipse, following the user's supplied visual reference; not a third-party brand mark |
 | `icpc.png` | Three-color ICPC mark supplied by the user on 2026-11-13; original artwork retained without changes. [ICPC press resources](https://news.icpc.global/press/) |
 | `douyin.ico` | [Douyin favicon](https://www.douyin.com/favicon.ico) |

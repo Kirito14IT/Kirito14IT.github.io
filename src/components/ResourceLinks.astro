@@ -21,8 +21,16 @@ function getPlatform(url: string) {
   }
 }
 
+function isPdf(url: string) {
+  try {
+    return new URL(url, "https://kirito14it.github.io").pathname.toLowerCase().endsWith(".pdf");
+  } catch {
+    return false;
+  }
+}
+
 function resourceOrder(link: { label: string; url: string }) {
-  if (link.label === "Paper" && /\.pdf(?:$|[?#])/i.test(link.url)) return 0;
+  if (link.label === "Paper" && isPdf(link.url)) return 0;
   return getPlatform(link.url)?.order ?? 3;
 }
 
@@ -38,6 +46,7 @@ const orderedLinks = variant === "default" ? links : [...links].sort((left, righ
       <>
       <a class:list={{ "publication-resource-link": variant === "publication", "platform-resource-link": variant === "platform" && Boolean(platform) }} href={link.url} target="_blank" rel="noopener noreferrer">
         {platform && <BrandIcon name={platform.name} size={16} class="resource-link-icon" />}
+        {!platform && isPdf(link.url) && <BrandIcon name="pdf" size={16} width={13} class="resource-link-icon" />}
         <span>{platform?.label ?? link.label}{(variant === "default" || (variant === "platform" && !platform)) && " ↗"}</span>
       </a>
       {platform?.name === "huggingface" && <slot name="after-huggingface" />}

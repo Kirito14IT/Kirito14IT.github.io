@@ -1,8 +1,10 @@
 ---
+import { Image } from "astro:assets";
 import AcmerLogo from "@components/AcmerLogo.astro";
 import BrandIcon from "@components/BrandIcon.astro";
 import { getProfile } from "@data/profile";
 import { getUi, localizedPath, type Locale } from "@i18n/index";
+import portrait from "../assets/zhihua-wang-zhanjiang.png";
 
 const { locale } = Astro.props as { locale: Locale };
 const profile = getProfile(locale);
@@ -11,7 +13,9 @@ const copy = getUi(locale);
 
 <aside class="sidebar" aria-label={locale === "zh" ? "个人信息" : "Profile"}>
   <a class="profile-card" data-profile-card href={localizedPath(locale, "/")} aria-label={`${profile.name} ${copy.nav.home}`}>
-    <img class="avatar" src={profile.avatarUrl} alt={`${profile.name} avatar`} width="170" height="170" />
+    <span class="avatar-frame">
+      <Image class="avatar" src={portrait} alt={locale === "zh" ? `${profile.legalName}的生活照` : `${profile.legalName} portrait`} width={340} height={340} densities={[1, 2]} format="webp" quality={86} loading="eager" decoding="async" />
+    </span>
     <div class="profile-identity">
       <h1>{profile.name}</h1>
       <p>{profile.legalName}</p>

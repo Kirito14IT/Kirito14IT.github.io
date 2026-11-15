@@ -49,7 +49,8 @@ time, .timeline-date, .education-period, .article-date { font-style: italic; fon
 .sidebar { position: sticky; top: calc(var(--site-header-height) + 48px); align-self: start; min-width: 0; }
 .profile-card { display: flex; flex-direction: column; align-items: flex-start; color: var(--ink); text-decoration: none; }
 .profile-card:hover { text-decoration: none; }
-.avatar { width: 170px; height: 170px; border-radius: 50%; object-fit: cover; }
+.avatar-frame { display: block; width: 170px; height: 170px; border-radius: 50%; overflow: hidden; flex-shrink: 0; }
+.avatar { display: block; width: 100%; height: 100%; object-fit: cover; transform: scale(1.25); transform-origin: 50% 20%; }
 .profile-identity { margin-top: 14px; }
 .profile-identity h1 { margin: 0; font-size: 21px; }
 .profile-identity p { margin: 3px 0 0; }
@@ -271,7 +272,7 @@ time, .timeline-date, .education-period, .article-date { font-style: italic; fon
   .site-shell { width: calc(100% - 40px); grid-template-columns: 1fr; gap: 28px; padding-top: 28px; }
   .sidebar { position: static; display: grid; grid-template-columns: 118px minmax(0, 1fr); column-gap: 20px; align-items: start; }
   .profile-card { grid-column: 1; grid-row: 1 / 3; }
-  .avatar { width: 110px; height: 110px; }
+  .avatar-frame { width: 110px; height: 110px; }
   .profile-identity { margin-top: 8px; }
   .profile-identity h1 { font-size: 21px; }
   .profile-identity p { font-size: 14px; }

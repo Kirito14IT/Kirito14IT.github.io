@@ -13,7 +13,6 @@ const shared = {
   siteUrl: "https://kirito14it.github.io",
   email: "wzh2657751462@gmail.com",
   github: "https://github.com/Kirito14IT",
-  avatarUrl: "/avatar.png",
   institutionUrl: "https://www.usst.edu.cn/",
   incomingInstitutionUrl: "https://www.fudan.edu.cn/",
   advisorUrl: "http://xingjunma.com/",

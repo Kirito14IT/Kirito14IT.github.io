@@ -1,7 +1,7 @@
 ---
 locale: "zh"
 translationKey: "sfmambanet"
-title: "SFMambaNet: Spectral-Frequency Correspondence Pruning"
+title: "Smooth Inliers, Erratic Outliers: Frequency-Aware Mamba for Two-View Correspondence Learning"
 date: 2025-09-01
 summary: "用于高效视觉对应关系剪枝的谱频增强选择性状态空间模型。"
 tags: ["计算机视觉", "状态空间模型", "Mamba", "对应关系剪枝", "频域", "图神经网络", "双视图几何", "相机位姿估计", "外点剔除"]
@@ -19,7 +19,7 @@ SFMambaNet 探索如何为对应关系剪枝高效建模全局上下文。
 
 **论文评级：**第一作者；SCI 一区；CCF A；正在 IEEE Transactions on Image Processing（TIP）审稿。
 
-![SFMambaNet 框架图](/figures/sfmambanet-framework.png)
+![SFMambaNet 框架图](/figures/sfmambanet-framework-20261118.png)
 
 该项目将谱频感知机制引入选择性状态空间架构，目标是在保留强大全局建模能力的同时，避免 Transformer 风格全局注意力的二次复杂度增长。
 

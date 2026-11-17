@@ -3,8 +3,10 @@
 Retrieved from official sites on 2026-11-12. These marks identify linked services
 and institutions; ownership remains with their respective owners. Artwork is kept
 in its supplied colors and proportions and displayed with `object-fit: contain`.
-The CV symbol is an authored filled document/profile SVG; the legacy generic
-medal symbol remains an inline line icon in `BrandIcon.astro`.
+The active CV icon is a static thumbnail of the first page of the current Chinese
+résumé, captured on 2026-11-18. The older CV SVG remains available for URL
+compatibility; the legacy generic medal symbol remains an inline line icon in
+`BrandIcon.astro`.
 
 | Local asset | Official source |
 | --- | --- |
@@ -16,7 +18,8 @@ medal symbol remains an inline line icon in `BrandIcon.astro`.
 | `scholar.ico` | [Google Scholar favicon](https://scholar.google.com/favicon.ico) |
 | `gmail.png` | [Google Brand Resource Center](https://about.google/brand-resource-center/products-and-services/), [Google-hosted Gmail product icon](https://www.gstatic.com/images/branding/product/2x/gmail_48dp.png), retrieved 2026-11-13 |
 | `gmail-flat.png` | Gmail icon supplied by the user on 2026-11-13; original PNG copied without changes. Active Email icon; `gmail.png` retained for URL compatibility. |
-| `cv.svg` | Authored blue document/profile icon for this site; not a third-party brand mark |
+| `cv.svg` | Legacy authored blue document/profile icon; retained for URL compatibility |
+| `cv-resume-20261118.png` | Static 96×136 thumbnail rendered from the first page of the current `ZhihuaWang_cv_cn.pdf` on 2026-11-18, before this title/author update; not automatically regenerated |
 | `pdf.png` | Red PDF page icon supplied by the user on 2026-11-13; original 202×249 PNG copied unchanged and displayed at 13×16 px to retain its portrait proportions. |
 | `location.svg` | Authored orange/red location pin with a pale blue ground ellipse, following the user's supplied visual reference; not a third-party brand mark |
 | `icpc.png` | Three-color ICPC mark supplied by the user on 2026-11-13; original artwork retained without changes. [ICPC press resources](https://news.icpc.global/press/) |

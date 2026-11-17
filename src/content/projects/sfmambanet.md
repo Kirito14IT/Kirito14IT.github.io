@@ -1,7 +1,7 @@
 ---
 locale: "en"
 translationKey: "sfmambanet"
-title: "SFMambaNet: Spectral-Frequency Correspondence Pruning"
+title: "Smooth Inliers, Erratic Outliers: Frequency-Aware Mamba for Two-View Correspondence Learning"
 date: 2025-09-01
 summary: "A spectral-frequency enhanced selective state space model for efficient visual correspondence pruning."
 tags: ["Computer Vision", "State Space Models", "Mamba", "Correspondence Pruning", "Frequency Domain", "Graph Neural Networks", "Two-View Geometry", "Camera Pose Estimation", "Outlier Rejection"]
@@ -19,7 +19,7 @@ SFMambaNet investigates efficient global context modeling for correspondence pru
 
 **Paper labels:** First author; SCI Zone 1; CCF A; under review at IEEE Transactions on Image Processing (TIP).
 
-![SFMambaNet framework](/figures/sfmambanet-framework.png)
+![SFMambaNet framework](/figures/sfmambanet-framework-20261118.png)
 
 The project introduces spectral-frequency awareness into a selective state space architecture. This direction aims to avoid the quadratic scaling of Transformer-style global attention while keeping strong global modeling capacity.
 

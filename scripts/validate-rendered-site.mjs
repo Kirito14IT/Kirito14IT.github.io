@@ -138,7 +138,7 @@ const expectedCredits = [
   { authors: ["Zhihua Wang", "Yifeng Gao", "Yunhao Feng", "Rui Pan", "Baiheng Zhao", "Zixing Chen", "Nan Li"], correspondingAuthor: "Yifeng Gao", date: "2026.11.01", roles: ["First author", "第一作者"] },
   { authors: ["Nan Li", "Zhihua Wang", "Ziyang Chen", "Yunhao Feng", "Songyang Wu"], homepageAuthors: ["Zhihua Wang", "Nan Li", "Ziyang Chen", "Yunhao Feng", "Songyang Wu"], coFirstAuthors: ["Nan Li", "Zhihua Wang"], correspondingAuthor: "Songyang Wu", date: "2026.08", roles: ["Co-first author", "共同第一作者"] },
   { authors: ["Zhihua Wang", "Junfan Chen", "Zixiang Wei", "Lan Lin", "Guoxiang Tong"], correspondingAuthor: "Guoxiang Tong", date: "2026.06.02", roles: ["First author", "第一作者"] },
-  { authors: ["Zhihua Wang", "Yanping Li", "Yizhang Liu"], homepageAuthors: ["Zhihua Wang", "Yifeng Gao", "Yanping Li", "Yizhang Liu"], correspondingAuthor: "Yanping Li", date: "2026.06.03", roles: ["First author", "第一作者"] },
+  { authors: ["Zhihua Wang", "Yifeng Gao", "Yunhao Feng", "Rui Pan", "Zhouyuan Ma", "Baiheng Zhao", "Zixing Chen", "Yanping Li", "Yizhang Liu", "Xingjun Ma"], homepageAuthors: ["Zhihua Wang", "Yifeng Gao", "Yunhao Feng", "Rui Pan", "Zhouyuan Ma", "Baiheng Zhao", "Zixing Chen", "Yanping Li", "Yizhang Liu", "Xingjun Ma"], correspondingAuthor: "Xingjun Ma", date: "2026.06.03", roles: ["First author", "第一作者"] },
   { authors: ["Zhihua Wang"], date: "2026", roles: ["Sole author", "独立作者"] }
 ];
 const expectedPublicationResources = [

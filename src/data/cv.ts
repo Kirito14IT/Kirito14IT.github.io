@@ -31,6 +31,7 @@ const cstPaperUrl = "https://arxiv.org/abs/2611.01710";
 const cstCodeUrl = "https://github.com/Kirito14IT/CST-MIL";
 const safeCodeRlTitle = "SafeCodeRL: Security-Constrained Multi-Agent Reinforcement Learning for Trustworthy LLM-Generated IoT/CPS Software";
 const safeCodeRlPaperUrl = "/papers/safecoderl.pdf";
+const sfmambaNetTitle = "Smooth Inliers, Erratic Outliers: Frequency-Aware Mamba for Two-View Correspondence Learning";
 
 const publicationCredits = {
   memHarmBench: {
@@ -57,9 +58,9 @@ const publicationCredits = {
     date: "2026.06.02"
   },
   sfmambaNet: {
-    authors: ["Zhihua Wang", "Yanping Li", "Yizhang Liu"],
-    homepageAuthors: ["Zhihua Wang", "Yifeng Gao", "Yanping Li", "Yizhang Liu"],
-    correspondingAuthor: "Yanping Li",
+    authors: ["Zhihua Wang", "Yifeng Gao", "Yunhao Feng", "Rui Pan", "Zhouyuan Ma", "Baiheng Zhao", "Zixing Chen", "Yanping Li", "Yizhang Liu", "Xingjun Ma"],
+    homepageAuthors: ["Zhihua Wang", "Yifeng Gao", "Yunhao Feng", "Rui Pan", "Zhouyuan Ma", "Baiheng Zhao", "Zixing Chen", "Yanping Li", "Yizhang Liu", "Xingjun Ma"],
+    correspondingAuthor: "Xingjun Ma",
     date: "2026.06.03"
   },
   mangrove: { authors: ["Zhihua Wang"], date: "2026" }
@@ -172,7 +173,7 @@ const cvEn: CvData = {
       date: "2026.11.04",
       emoji: "📣",
       html: `<a href="${memHarmBenchPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>MemHarmBench</strong></a> was recommended by Shanghai Innovation Institute and featured in MiraclePlus's <strong>Alpha Sight</strong>.`,
-      links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "Code", url: memHarmBenchCodeUrl }],
+      links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "Code", url: memHarmBenchCodeUrl }, { label: "Hugging Face", url: memHarmBenchDatasetUrl }],
       media: {
         src: "/news/memharmbench-alpha-sight-recommendation-20261104.png",
         alt: "Alpha Sight's 2026.11.04 digest recommending MemHarmBench, highlighted in the original screenshot.",
@@ -185,7 +186,7 @@ const cvEn: CvData = {
       date: "2026.10.26",
       emoji: "📄",
       html: `The code for <a href="${memHarmBenchPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>${memHarmBenchTitle}</strong></a> is publicly available on GitHub, and the paper is available on arXiv.`,
-      links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "Code", url: memHarmBenchCodeUrl }]
+      links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "Code", url: memHarmBenchCodeUrl }, { label: "Hugging Face", url: memHarmBenchDatasetUrl }]
     },
     {
       date: "2026.10.26",
@@ -452,7 +453,7 @@ const cvEn: CvData = {
         },
         {
           html:
-            `This work led to our manuscript <a href="https://arxiv.org/abs/2606.04493" target="_blank" rel="noopener noreferrer">SFMambaNet: Spectral-Frequency Enhanced Selective State Space Model for Correspondence Pruning</a>, currently under review at <a href="${tipUrl}" target="_blank" rel="noopener noreferrer">IEEE Transactions on Image Processing (TIP)</a> and available as an arXiv preprint.`
+            `This work led to our manuscript <a href="https://arxiv.org/abs/2606.04493" target="_blank" rel="noopener noreferrer">${sfmambaNetTitle}</a>, currently under review at <a href="${tipUrl}" target="_blank" rel="noopener noreferrer">IEEE Transactions on Image Processing (TIP)</a> and available as an arXiv preprint.`
         }
       ],
       links: [
@@ -532,14 +533,14 @@ const cvEn: CvData = {
     },
     {
       ...publicationCredits.sfmambaNet,
-      title: "SFMambaNet: Spectral-Frequency Enhanced Selective State Space Model for Correspondence Pruning",
+      title: sfmambaNetTitle,
       status: "Under review at IEEE Transactions on Image Processing (TIP) · arXiv preprint",
       role: "First author",
       url: "https://doi.org/10.48550/arXiv.2606.04493",
       links: [{ label: "arXiv", url: "https://arxiv.org/abs/2606.04493" }, { label: "GitHub", url: sfmambanetCodeUrl }],
       tags: ["Computer Vision", "Correspondence Pruning", "Mamba", "State Space Model", "Frequency Domain", "Graph Neural Networks", "Two-View Geometry"],
       ratings: ["SCI Zone 1", "CCF A"],
-      frameworkImage: "/figures/sfmambanet-framework.png",
+      frameworkImage: "/figures/sfmambanet-framework-20261118.png",
       frameworkAlt: "SFMambaNet framework diagram showing pruning blocks, local spectral-geometric feature extraction, spectral-global aggregation, and verification."
     },
     {
@@ -673,7 +674,7 @@ const cvZh: CvData = {
       date: "2026.11.04",
       emoji: "📣",
       html: `<a href="${memHarmBenchPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>MemHarmBench</strong></a> 获得上海创智学院论文推荐，并获奇绩创坛「<strong>奇绩信号 Alpha Sight</strong>」推荐。`,
-      links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "代码", url: memHarmBenchCodeUrl }],
+      links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "代码", url: memHarmBenchCodeUrl }, { label: "Hugging Face", url: memHarmBenchDatasetUrl }],
       media: {
         src: "/news/memharmbench-alpha-sight-recommendation-20261104.png",
         alt: "奇绩信号 Alpha Sight 于 2026.11.04 推荐 MemHarmBench 的原始截图，红框标注相关条目。",
@@ -686,7 +687,7 @@ const cvZh: CvData = {
       date: "2026.10.26",
       emoji: "📄",
       html: `<a href="${memHarmBenchPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>${memHarmBenchTitle}</strong></a> 的代码已在 GitHub 公开，论文已发布于 arXiv。`,
-      links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "代码", url: memHarmBenchCodeUrl }]
+      links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "代码", url: memHarmBenchCodeUrl }, { label: "Hugging Face", url: memHarmBenchDatasetUrl }]
     },
     {
       date: "2026.10.26",
@@ -950,7 +951,7 @@ const cvZh: CvData = {
         },
         {
           html:
-            `相关工作 <a href="https://arxiv.org/abs/2606.04493" target="_blank" rel="noopener noreferrer">SFMambaNet: Spectral-Frequency Enhanced Selective State Space Model for Correspondence Pruning</a> 正在 <a href="${tipUrl}" target="_blank" rel="noopener noreferrer">IEEE Transactions on Image Processing (TIP)</a> 审稿，并已发布 arXiv 预印本。`
+            `相关工作 <a href="https://arxiv.org/abs/2606.04493" target="_blank" rel="noopener noreferrer">${sfmambaNetTitle}</a> 正在 <a href="${tipUrl}" target="_blank" rel="noopener noreferrer">IEEE Transactions on Image Processing (TIP)</a> 审稿，并已发布 arXiv 预印本。`
         }
       ],
       links: [
@@ -1030,14 +1031,14 @@ const cvZh: CvData = {
     },
     {
       ...publicationCredits.sfmambaNet,
-      title: "SFMambaNet: Spectral-Frequency Enhanced Selective State Space Model for Correspondence Pruning",
+      title: sfmambaNetTitle,
       status: "IEEE Transactions on Image Processing (TIP) 在审 · arXiv 预印本",
       role: "第一作者",
       url: "https://doi.org/10.48550/arXiv.2606.04493",
       links: [{ label: "arXiv", url: "https://arxiv.org/abs/2606.04493" }, { label: "GitHub", url: sfmambanetCodeUrl }],
       tags: ["计算机视觉", "对应关系剪枝", "Mamba", "状态空间模型", "频域", "图神经网络", "双视图几何"],
       ratings: ["SCI 一区", "CCF A"],
-      frameworkImage: "/figures/sfmambanet-framework.png",
+      frameworkImage: "/figures/sfmambanet-framework-20261118.png",
       frameworkAlt: "SFMambaNet 框架图，展示剪枝模块、局部谱几何特征提取、谱全局聚合与验证模块。"
     },
     {

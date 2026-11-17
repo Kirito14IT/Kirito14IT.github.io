@@ -59,7 +59,7 @@ const requiredPublicSnippets = [
   "导师刘翼章",
   "SCI Zone 3",
   "CCF C",
-  "/figures/sfmambanet-framework.png",
+  "/figures/sfmambanet-framework-20261118.png",
   "/figures/safecoderl-framework.png",
   "meteor-layer",
   "Array.from({ length: 8 }",

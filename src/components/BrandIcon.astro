@@ -9,7 +9,7 @@ interface Props {
 const { name, size = 20, width = size, class: className } = Astro.props;
 const assets: Record<string, string> = {
   email: "/brand-icons/gmail-flat.png",
-  cv: "/brand-icons/cv.svg",
+  cv: "/brand-icons/cv-resume-20261118.png",
   pdf: "/brand-icons/pdf.png",
   location: "/brand-icons/location.svg",
   icpc: "/brand-icons/icpc.png",
@@ -36,7 +36,7 @@ const lineIcons: Record<string, string> = {
 
 {source ? (
   <img
-    class:list={["brand-icon", className]}
+    class:list={["brand-icon", className, { "brand-icon--cv-thumbnail": name === "cv" }]}
     data-brand-icon={name}
     src={source}
     width={width}
@@ -73,5 +73,9 @@ const lineIcons: Record<string, string> = {
     stroke-width: 1.6;
     stroke-linecap: round;
     stroke-linejoin: round;
+  }
+  .brand-icon--cv-thumbnail {
+    border: 1px solid #d5d9df;
+    background: #fff;
   }
 </style>

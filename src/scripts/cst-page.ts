@@ -1,87 +1,7 @@
-import { traceStages } from "../data/cst";
 import type { figures, messageAP, recall } from "../data/cst";
 
 function setPressed(buttons: NodeListOf<HTMLButtonElement>, selected: HTMLButtonElement) {
   buttons.forEach((button) => button.setAttribute("aria-pressed", String(button === selected)));
-}
-
-const motionPreference = matchMedia("(prefers-reduced-motion: reduce)");
-const trace = document.querySelector<HTMLElement>("[data-trace]");
-if (trace) {
-  const stageButtons = trace.querySelectorAll<HTMLButtonElement>("[data-trace-step]");
-  const sourceButtons = trace.querySelectorAll<HTMLButtonElement>("[data-trace-to]");
-  const sourceMessages = trace.querySelectorAll<HTMLElement>("[data-source]");
-  const replyNodes = trace.querySelectorAll<HTMLElement>("[data-reply-node]");
-  const toggle = trace.querySelector<HTMLButtonElement>("[data-loop-toggle]")!;
-  const title = trace.querySelector<HTMLElement>("[data-stage-title]")!;
-  const detail = trace.querySelector<HTMLElement>("[data-stage-detail]")!;
-  const announcement = trace.querySelector<HTMLElement>("[data-trace-announcement]")!;
-  const progressLine = trace.querySelector<HTMLElement>(".trace-progress span")!;
-  const duration = 3200;
-  let stage = 0;
-  let playing = false;
-  let timeout: number | undefined;
-  let progress: Animation | undefined;
-
-  function setStage(index: number) {
-    stage = index;
-    trace!.dataset.stage = String(index);
-    title.textContent = traceStages[index].title;
-    detail.textContent = traceStages[index].detail;
-    stageButtons.forEach((button, i) => {
-      if (i === index) button.setAttribute("aria-current", "step");
-      else button.removeAttribute("aria-current");
-    });
-  }
-
-  function schedule() {
-    window.clearTimeout(timeout);
-    progress?.cancel();
-    if (!playing) return;
-    if (!motionPreference.matches) {
-      progress = progressLine.animate([{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }], { duration, fill: "forwards" });
-    }
-    timeout = window.setTimeout(() => {
-      setStage((stage + 1) % traceStages.length);
-      schedule();
-    }, duration);
-  }
-
-  function setPlaying(value: boolean) {
-    playing = value;
-    trace!.dataset.playing = String(value);
-    toggle.textContent = value ? "Pause replay" : "Play replay";
-    schedule();
-  }
-
-  toggle.hidden = false;
-  toggle.addEventListener("click", () => setPlaying(!playing));
-  stageButtons.forEach((button, index) => button.addEventListener("click", () => {
-    setStage(index);
-    schedule();
-  }));
-
-  sourceButtons.forEach((button) => button.addEventListener("click", () => {
-    const target = button.dataset.traceTo;
-    setPressed(sourceButtons, button);
-    sourceMessages.forEach((message) => message.classList.toggle("trace-target", message.dataset.source === target));
-    replyNodes.forEach((node) => node.classList.toggle("trace-target", node.dataset.replyNode === target));
-    announcement.textContent = "Highlighted message " + target + " in the source thread.";
-    setStage(2);
-    schedule();
-  }));
-
-  motionPreference.addEventListener("change", (event) => setPlaying(!event.matches));
-  setPlaying(!motionPreference.matches);
-}
-
-const method = document.querySelector<HTMLElement>("[data-method-panel]");
-if (method) {
-  const buttons = method.querySelectorAll<HTMLButtonElement>("[data-method]");
-  buttons.forEach((button) => button.addEventListener("click", () => {
-    method.dataset.methodActive = button.dataset.method;
-    setPressed(buttons, button);
-  }));
 }
 
 for (const switcher of document.querySelectorAll<HTMLElement>("[data-switcher]")) {
@@ -141,16 +61,40 @@ if (selection) {
   const choices = selection.querySelectorAll<HTMLButtonElement>("[data-example-budget]");
   const messages = selection.querySelectorAll<HTMLElement>("[data-selection-position]");
   const note = selection.querySelector<HTMLElement>("[data-example-note]")!;
+  const replay = selection.querySelector<HTMLButtonElement>("[data-replay-selection]")!;
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
   const notes = [
     "With one message, both selectors start with m1.",
     "At two messages, group round-robin reaches both topics, while risk order stays on the team topic.",
     "With room for all three messages, both selectors reach both topics.",
   ];
+
+  function replaySelection() {
+    if (reducedMotion.matches) return;
+    messages.forEach((message) => {
+      if (message.hidden) return;
+      message.getAnimations().forEach((animation) => animation.cancel());
+      const delay = (Number(message.dataset.selectionPosition) - 1) * 150;
+      message.animate(
+        [
+          { transform: "translateY(9px)", opacity: 0.3, boxShadow: "inset 0 0 0 1px transparent" },
+          { transform: "translateY(0)", opacity: 1, boxShadow: "inset 0 0 0 1px #86dfcb90", offset: 0.55 },
+          { transform: "translateY(0)", opacity: 1, boxShadow: "inset 0 0 0 1px transparent" },
+        ],
+        { duration: 630, delay, easing: "cubic-bezier(.2,.65,.3,1)", fill: "backwards" },
+      );
+    });
+  }
+
+  replay.hidden = reducedMotion.matches;
+  reducedMotion.addEventListener("change", () => { replay.hidden = reducedMotion.matches; });
+  replay.addEventListener("click", replaySelection);
   choices.forEach((button) => button.addEventListener("click", () => {
     const budget = Number(button.dataset.exampleBudget);
     setPressed(choices, button);
     messages.forEach((message) => { message.hidden = Number(message.dataset.selectionPosition) > budget; });
     note.textContent = notes[budget - 1];
+    replaySelection();
   }));
 }
 
@@ -175,15 +119,25 @@ if (recallPanel) {
   const cohort = recallPanel.querySelector<HTMLSelectElement>("[data-cohort]")!;
   const choices = recallPanel.querySelectorAll<HTMLButtonElement>("[data-budget]");
   const bars = recallPanel.querySelectorAll<HTMLElement>("[data-recall-bar]");
+  const heatmap = recallPanel.querySelectorAll<HTMLElement>("[data-heatmap-col]");
   const scope = recallPanel.querySelector<HTMLElement>("[data-recall-scope]")!;
   let index = 3;
 
   function update() {
     const cohortData = data[cohort.value as keyof typeof recall];
-    scope.textContent = cohortData.scope;
+    if (scope.textContent !== cohortData.scope) scope.textContent = cohortData.scope;
     bars.forEach((row, i) => {
       const value = cohortData.rows[i][index];
       updateBar(row, value, 50, value.toFixed(2) + "%");
+    });
+    heatmap.forEach((cell) => {
+      const column = Number(cell.dataset.heatmapCol);
+      cell.toggleAttribute("data-active", column === index);
+      if (cell.dataset.heatmapRow === undefined) return;
+      const value = cohortData.rows[Number(cell.dataset.heatmapRow)][column];
+      cell.textContent = value.toFixed(2);
+      cell.style.setProperty("--intensity", (value * 1.8) + "%");
+      cell.toggleAttribute("data-strong", value >= 35);
     });
   }
 

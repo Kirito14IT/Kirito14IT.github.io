@@ -99,18 +99,18 @@ const citationMeta = paper.authors.map(({ name }) => name);
                 ))}
               </div>
               <div class="trace-columns">
+                <canvas class="signal-layer" data-trace-signals aria-hidden="true"></canvas>
                 <div class="source-column">
                   <div class="trace-label">Source thread <span>Hacker News</span></div>
                   <ol class="source-messages">
                     {traceMessages.map(({ id, parent, before, phrase, after }, index) => (
-                      <li id={"cst-source-" + id} class:list={["source-message", {"is-evidence": Boolean(phrase)}]} data-source={id} style={"--reply-depth:" + index}>
+                      <li id={"cst-source-" + id} class="source-message" data-source={id} style={"--reply-depth:" + index}>
                         <div class="message-id"><strong>{id}</strong><span>reply to {parent}</span></div>
                         <p>{before}{phrase && <mark>{phrase}</mark>}{after}</p>
                       </li>
                     ))}
                   </ol>
                 </div>
-                <div class="trace-connector" aria-hidden="true"><span></span></div>
                 <div class="evidence-column">
                   <div class="trace-label">Evidence group</div>
                   <h2>karma / flagging</h2>
@@ -123,7 +123,7 @@ const citationMeta = paper.authors.map(({ name }) => name);
                   ))}
                   <div class="reply-caption">Reply path</div>
                   <div class="reply-path" aria-label="m8 to m9 to m10 to m11">
-                    {traceMessages.map(({ id, phrase }) => <span data-reply-node={id} class:list={{ "path-evidence": Boolean(phrase) }}>{id}</span>)}
+                    {traceMessages.map(({ id, phrase }, index) => <span data-reply-node={id} class:list={{ "path-evidence": Boolean(phrase) }} style={"--reply-index:" + index}>{id}</span>)}
                   </div>
                 </div>
               </div>
@@ -153,7 +153,7 @@ const citationMeta = paper.authors.map(({ name }) => name);
         </div>
       </div>
 
-      <section class="section shell method" id="method" aria-labelledby="method-title">
+      <section class="section shell method" id="method" aria-labelledby="method-title" data-motion-section>
         <div class="section-heading">
           <p class="section-label">Method</p>
           <h2 id="method-title">Three decisions in one review.</h2>
@@ -167,18 +167,21 @@ const citationMeta = paper.authors.map(({ name }) => name);
                 <span class="method-text"><strong>{question}</strong><span>{text}</span></span>
               </button>
             ))}
+            <button type="button" class="figure-follow" data-follow-figure aria-pressed="true" hidden>Follow replay</button>
           </div>
           <figure class="framework" id="framework-figure">
             <button type="button" class="framework-art" data-open-figure="framework" aria-label="Enlarge Figure 3, CST framework">
               <img src={assets + "framework.webp"} alt="CST framework: shared character and semantic features feed risk scoring, discussion ranking and the separate evidence organization branch." width="1800" height="1013" loading="lazy" decoding="async" />
               <span class="spotlight" aria-hidden="true"></span>
+              <canvas class="signal-layer framework-signals" data-framework-signals aria-hidden="true"></canvas>
+              <span class="framework-scan" aria-hidden="true"></span>
             </button>
             <figcaption><span>Figure 3</span> Shared features, discussion ranking and source-linked review</figcaption>
           </figure>
         </div>
       </section>
 
-      <section class="section lab" id="explore" aria-labelledby="explore-title">
+      <section class="section lab" id="explore" aria-labelledby="explore-title" data-motion-section>
         <div class="shell">
           <div class="section-heading">
             <p class="section-label">Explore the examples</p>
@@ -215,6 +218,7 @@ const citationMeta = paper.authors.map(({ name }) => name);
                 <div class="segmented" aria-label="Messages per reviewer">
                   {[1, 2, 3].map((budget) => <button type="button" data-example-budget={budget} aria-pressed={budget === 2 ? "true" : "false"}>{budget} {budget === 1 ? "message" : "messages"}</button>)}
                 </div>
+                <button class="figure-follow" type="button" data-replay-selection hidden>Replay selection</button>
                 <p class="lab-note" data-example-note aria-live="polite">At two messages, group round-robin reaches both topics, while risk order stays on the team topic.</p>
               </div>
               <div class="selection-compare">
@@ -227,7 +231,7 @@ const citationMeta = paper.authors.map(({ name }) => name);
                     <ol>
                       {indices.map((messageIndex, position) => {
                         const { id, topic, text } = exampleMessages[messageIndex];
-                        return <li class="sample-message" data-selection-position={position + 1} hidden={position >= 2}><span><code>{id}</code><span class={"topic-tag " + topic}>{topic}</span></span><p>{text}</p></li>;
+                        return <li class="sample-message" data-selection-position={position + 1} hidden={position >= 2} style={"--sample-order:" + position}><span><code>{id}</code><span class={"topic-tag " + topic}>{topic}</span></span><p>{text}</p></li>;
                       })}
                     </ol>
                   </div>
@@ -263,7 +267,7 @@ const citationMeta = paper.authors.map(({ name }) => name);
         </div>
       </section>
 
-      <section class="section results" id="results" aria-labelledby="results-title">
+      <section class="section results" id="results" aria-labelledby="results-title" data-motion-section>
         <div class="shell">
           <div class="section-heading">
             <p class="section-label">Evaluation</p>
@@ -299,6 +303,29 @@ const citationMeta = paper.authors.map(({ name }) => name);
                   ))}
                 </ul>
                 <div class="chart-axis" aria-hidden="true"><span>0%</span><span>25%</span><span>50%</span></div>
+                <div class="heatmap-panel">
+                  <table class="recall-heatmap" data-heatmap>
+                    <caption>Recall across budgets (%)</caption>
+                    <thead>
+                      <tr>
+                        <th scope="col">Selector</th>
+                        {budgets.map((budget, index) => <th scope="col" data-heatmap-col={index} data-active={index === 3 ? "true" : undefined}>{budget}</th>)}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {selectors.map((selector, i) => (
+                        <tr>
+                          <th scope="row">{selector}</th>
+                          {recall.full.rows[i].map((value, j) => (
+                            <td data-heatmap-col={j} data-heatmap-row={i} data-active={j === 3 ? "true" : undefined} data-strong={value >= 35 ? "true" : undefined} style={"--intensity:" + value * 1.8 + "%;--heat-order:" + (i + j)}>
+                              {value.toFixed(2)}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
                 <p class="chart-note">Figure 4. Recall is measured across all dangerous messages in the selected cohort. Every discussion receives the selected budget.</p>
               </div>
 
@@ -336,19 +363,41 @@ const citationMeta = paper.authors.map(({ name }) => name);
                 <div><dt>Source location success</dt><dd>≥97.3%</dd></div>
               </dl>
               <p>Paired comparisons with the same reading budget. Time is measured within reviewer.</p>
+              <figure class="review-time">
+                <figcaption>Paired review time (% of reference)</figcaption>
+                <div><span>Reference display</span><strong>100%</strong></div>
+                <span class="bar-track" aria-hidden="true"><span style="--size:100%"></span></span>
+                <div><span>Grouped evidence</span><strong>≤72.7%</strong></div>
+                <span class="bar-track" aria-hidden="true"><span style="--size:72.7%"></span></span>
+              </figure>
             </aside>
           </div>
         </div>
       </section>
 
-      <section class="section shell gallery-section" id="figures" aria-labelledby="figures-title">
+      <section class="section shell gallery-section" id="figures" aria-labelledby="figures-title" data-motion-section>
         <div class="section-heading">
           <p class="section-label">Paper figures</p>
           <h2 id="figures-title">See the original figures.</h2>
         </div>
+        <figure class="review-replay" aria-label="Walkthrough of Figure 8">
+          <button type="button" class="review-art" data-open-figure="web-review" aria-label="Enlarge Figure 8, source-linked evidence review">
+            <img src={assets + "web-review.webp"} alt="CST review interface with the original discussion, sourced phrases and reply path." width="1440" height="930" loading="lazy" decoding="async" />
+            <span class="review-focus" aria-hidden="true"></span>
+          </button>
+          <figcaption class="review-steps">
+            <p class="data-label">Figure 8</p>
+            <h3>From a phrase back to its reply.</h3>
+            <ol>
+              <li data-review-step="0"><strong>Original discussion</strong><span>Keep the intervening reply in the thread.</span></li>
+              <li data-review-step="1"><strong>Phrase and message ID</strong><span>Locate “flagging” in the original text of m9.</span></li>
+              <li data-review-step="2"><strong>Reply path</strong><span>Trace the chain from m8 through m11.</span></li>
+            </ol>
+          </figcaption>
+        </figure>
         <div class="figure-gallery">
-          {Object.entries(figures).filter(([key]) => key !== "framework").map(([key, figure]) => (
-            <button type="button" class="figure-card" data-open-figure={key} aria-label={"Enlarge Figure " + figure.number + ", " + figure.name}>
+          {Object.entries(figures).filter(([key]) => key !== "framework" && key !== "web-review").map(([key, figure], index) => (
+            <button type="button" class="figure-card" data-open-figure={key} style={"--card-order:" + index} aria-label={"Enlarge Figure " + figure.number + ", " + figure.name}>
               <span class="thumbnail"><img src={assets + key + ".webp"} alt="" width={figure.width} height={figure.height} loading="lazy" decoding="async" /></span>
               <span class="figure-meta"><span>Figure {figure.number}</span><span class="arrow-out" aria-hidden="true"></span></span>
               <strong>{figure.name}</strong>
@@ -392,6 +441,7 @@ const citationMeta = paper.authors.map(({ name }) => name);
 
     <script>
       import "../../scripts/cst-page";
+      import "../../scripts/cst-motion";
     </script>
   </body>
 </html>

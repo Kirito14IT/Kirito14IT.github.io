@@ -1,0 +1,397 @@
+---
+import { paper, bibtex, traceStages, traceMessages, exampleMessages, selectors, budgets, recall, messageAP, cpuTimes, figures } from "../../data/cst";
+import "../../styles/cst.css";
+
+const assets = "/CST/assets/";
+const labTabs = [
+  { id: "context", label: "Reply context" },
+  { id: "selection", label: "Evidence selection" },
+  { id: "presentation", label: "Evidence layout" },
+];
+const resultTabs = [
+  { id: "recall", label: "Evidence recall" },
+  { id: "ap", label: "Message AP" },
+  { id: "cpu", label: "CPU service cost" },
+];
+const methodSteps = [
+  { key: "queue", question: "Where to look?", text: "A frozen multilingual encoder and character features score messages. Discussion ranking uses those scores, pooled semantics, and reply statistics." },
+  { key: "select", question: "What to read?", text: "Group related messages and select across groups to cover distinct risks within the same reading budget." },
+  { key: "verify", question: "How to check?", text: "Open the phrase at its original text span and follow the parent links to see what the message replies to." },
+];
+const apModels = ["MiniLM + LR", "XLM-R", "CST"];
+const citationMeta = paper.authors.map(({ name }) => name);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0b181a" />
+    <meta name="description" content={paper.description} />
+    <meta name="citation_title" content={paper.title} />
+    {citationMeta.map((name) => <meta name="citation_author" content={name} />)}
+    <meta name="citation_publication_date" content="2026-11-01" />
+    <meta name="citation_arxiv_id" content="2611.01710" />
+    <meta name="citation_pdf_url" content={paper.pdf} />
+    <meta property="og:title" content={paper.title} />
+    <meta property="og:description" content={paper.description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={paper.url} />
+    <meta property="og:image" content={new URL("assets/framework.webp", paper.url).href} />
+    <meta property="og:image:alt" content="The CST framework for source-linked moderation" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href={paper.url} />
+    <link rel="icon" type="image/svg+xml" href={assets + "logo.svg"} />
+    <title>{paper.title}</title>
+  </head>
+  <body>
+    <a class="skip" href="#main-content">Skip to content</a>
+    <header class="topbar">
+      <nav class="shell nav" aria-label="Project navigation">
+        <a class="brand" href="/CST/" aria-label="CST project home">
+          <img src={assets + "logo.svg"} alt="" width="34" height="34" />
+          <span>CST</span>
+        </a>
+        <div class="nav-links">
+          <a href="#method">Method</a>
+          <a href="#explore">Explore</a>
+          <a href="#results">Results</a>
+          <a href="#citation">Citation</a>
+        </div>
+        <a class="nav-paper" href={paper.arxiv} target="_blank" rel="noopener noreferrer">arXiv<span class="arrow-out" aria-hidden="true"></span></a>
+      </nav>
+    </header>
+
+    <main id="main-content">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-grain" aria-hidden="true"></div>
+        <div class="shell hero-grid">
+          <div class="hero-copy">
+            <p class="paper-id"><span></span> arXiv preprint <span class="id-number">2611.01710</span></p>
+            <h1 id="hero-title">Find the risk.<br /><em>Trace it back.</em></h1>
+            <p class="paper-title">{paper.title}</p>
+            <p class="hero-description">{paper.description} The pipeline runs on a CPU.</p>
+            <div class="hero-links">
+              <a class="button primary" href={paper.arxiv} target="_blank" rel="noopener noreferrer">Read the paper<span class="arrow-out" aria-hidden="true"></span></a>
+              <a class="button secondary" href={paper.github} target="_blank" rel="noopener noreferrer"><img src="/brand-icons/github.svg" alt="" width="18" height="18" />GitHub</a>
+            </div>
+            <div class="paper-credits">
+              <p class="authors">
+                {paper.authors.map(({ name, affiliations }) => <span>{name}<sup>{affiliations}</sup></span>)}
+              </p>
+              <p class="affiliations"><sup>1</sup> Fudan University <span>·</span> <sup>2</sup> University of Shanghai for Science and Technology <span>·</span> <sup>3</sup> Alibaba Group</p>
+              <p class="affiliations"><sup>†</sup> Corresponding author</p>
+            </div>
+          </div>
+
+          <div class="trace-wrap">
+            <div class="trace-board" data-trace data-stage="0" data-playing="false">
+              <div class="trace-head">
+                <div><span class="pulse-dot"></span><strong>Source trace</strong></div>
+                <button class="play-control" type="button" data-loop-toggle hidden>Pause replay</button>
+              </div>
+              <div class="trace-stages" aria-label="Replay stages">
+                {traceStages.map((stage, index) => (
+                  <button type="button" data-trace-step={index} aria-current={index === 0 ? "step" : undefined}>
+                    <span class="stage-index">{String(index + 1).padStart(2, "0")}</span><span>{stage.name}</span>
+                  </button>
+                ))}
+              </div>
+              <div class="trace-columns">
+                <div class="source-column">
+                  <div class="trace-label">Source thread <span>Hacker News</span></div>
+                  <ol class="source-messages">
+                    {traceMessages.map(({ id, parent, before, phrase, after }, index) => (
+                      <li id={"cst-source-" + id} class:list={["source-message", {"is-evidence": Boolean(phrase)}]} data-source={id} style={"--reply-depth:" + index}>
+                        <div class="message-id"><strong>{id}</strong><span>reply to {parent}</span></div>
+                        <p>{before}{phrase && <mark>{phrase}</mark>}{after}</p>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+                <div class="trace-connector" aria-hidden="true"><span></span></div>
+                <div class="evidence-column">
+                  <div class="trace-label">Evidence group</div>
+                  <h2>karma / flagging</h2>
+                  {traceMessages.filter(({ phrase }) => phrase).map(({ id, phrase, span, score }) => (
+                    <button class="evidence-message" type="button" data-trace-to={id} aria-controls={"cst-source-" + id} aria-pressed="false">
+                      <span class="evidence-top"><strong>{phrase}</strong><span class="mini-arrow" aria-hidden="true"></span></span>
+                      <code>{span}</code>
+                      <span class="evidence-score">Attack score <b>{score}</b></span>
+                    </button>
+                  ))}
+                  <div class="reply-caption">Reply path</div>
+                  <div class="reply-path" aria-label="m8 to m9 to m10 to m11">
+                    {traceMessages.map(({ id, phrase }) => <span data-reply-node={id} class:list={{ "path-evidence": Boolean(phrase) }}>{id}</span>)}
+                  </div>
+                </div>
+              </div>
+              <div class="trace-caption">
+                <strong data-stage-title>{traceStages[0].title}</strong>
+                <p data-stage-detail>{traceStages[0].detail}</p>
+              </div>
+              <span class="screen-reader" data-trace-announcement aria-live="polite"></span>
+              <div class="trace-progress" aria-hidden="true"><span></span></div>
+            </div>
+            <p class="trace-credit">Illustrative thread from Figures 3 and 8 <span>·</span> <a href="#figures">View paper figures</a></p>
+          </div>
+        </div>
+      </section>
+
+      <div class="findings">
+        <div class="shell findings-grid">
+          <a href="#results" data-result-link="ap">
+            <strong>6<span>/</span>6</strong><span>message tasks with higher AP than fine-tuned XLM-R</span><span class="arrow-out" aria-hidden="true"></span>
+          </a>
+          <a href="#results" data-result-link="cpu">
+            <strong>2.62<span>×</span></strong><span>the speed of XLM-R on the matched CPU service</span><span class="arrow-out" aria-hidden="true"></span>
+          </a>
+          <a href="#human-review">
+            <strong><span>≥</span>27.3<span>%</span></strong><span>less review time with grouped evidence</span><span class="arrow-out" aria-hidden="true"></span>
+          </a>
+        </div>
+      </div>
+
+      <section class="section shell method" id="method" aria-labelledby="method-title">
+        <div class="section-heading">
+          <p class="section-label">Method</p>
+          <h2 id="method-title">Three decisions in one review.</h2>
+          <p>CST ranks discussions by risk, then separately selects and organizes evidence for review. Grouping leaves the risk scores unchanged.</p>
+        </div>
+        <div class="method-grid" data-method-panel data-method-active="queue">
+          <div class="method-steps" aria-label="Highlight a stage in Figure 3">
+            {methodSteps.map(({ key, question, text }, index) => (
+              <button type="button" class="method-step" data-method={key} aria-pressed={index === 0 ? "true" : "false"} aria-controls="framework-figure">
+                <span class="method-index">{String(index + 1).padStart(2, "0")}</span>
+                <span class="method-text"><strong>{question}</strong><span>{text}</span></span>
+              </button>
+            ))}
+          </div>
+          <figure class="framework" id="framework-figure">
+            <button type="button" class="framework-art" data-open-figure="framework" aria-label="Enlarge Figure 3, CST framework">
+              <img src={assets + "framework.webp"} alt="CST framework: shared character and semantic features feed risk scoring, discussion ranking and the separate evidence organization branch." width="1800" height="1013" loading="lazy" decoding="async" />
+              <span class="spotlight" aria-hidden="true"></span>
+            </button>
+            <figcaption><span>Figure 3</span> Shared features, discussion ranking and source-linked review</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="section lab" id="explore" aria-labelledby="explore-title">
+        <div class="shell">
+          <div class="section-heading">
+            <p class="section-label">Explore the examples</p>
+            <h2 id="explore-title">What changes when you group the evidence?</h2>
+            <p>Use the illustrative threads from Figures 1 and 2 to separate reply context, message selection, and presentation.</p>
+          </div>
+          <div class="lab-surface" data-switcher="lab">
+            <div class="tabs" role="tablist" aria-label="Paper examples">
+              {labTabs.map(({ id, label }, i) => <button type="button" role="tab" id={"lab-tab-" + id} aria-controls={"lab-" + id} aria-selected={i === 0 ? "true" : "false"} tabindex={i === 0 ? 0 : -1} data-tab={id}>{label}</button>)}
+            </div>
+
+            <div class="lab-panel" role="tabpanel" id="lab-context" aria-labelledby="lab-tab-context" data-panel="context">
+              <div class="lab-copy">
+                <p class="data-label">Figure 1</p>
+                <h3>Same reply, different stance.</h3>
+                <p>Change Alex’s message and watch what Sam’s “I agree.” endorses.</p>
+                <div class="segmented" aria-label="Parent message">
+                  <button type="button" data-context="exclusion" aria-pressed="true">Exclusion</button>
+                  <button type="button" data-context="objection" aria-pressed="false">Objection</button>
+                </div>
+              </div>
+              <div class="example-thread" data-context-thread data-choice="exclusion">
+                <div class="example-message parent-message"><span>Alex</span><p>We should<span data-negation hidden> <mark>not</mark></span> remove her from the group.</p></div>
+                <div class="example-message reply-message"><span>Sam · reply to Alex</span><p>I agree.</p></div>
+                <p class="stance-note" data-stance aria-live="polite">Sam supports the removal.</p>
+              </div>
+            </div>
+
+            <div class="lab-panel" role="tabpanel" id="lab-selection" aria-labelledby="lab-tab-selection" data-panel="selection" hidden>
+              <div class="lab-copy">
+                <p class="data-label">Figure 2a</p>
+                <h3>Spend the same budget differently.</h3>
+                <p>The discussion and risk order are fixed. Pick how many messages a reviewer can read.</p>
+                <div class="segmented" aria-label="Messages per reviewer">
+                  {[1, 2, 3].map((budget) => <button type="button" data-example-budget={budget} aria-pressed={budget === 2 ? "true" : "false"}>{budget} {budget === 1 ? "message" : "messages"}</button>)}
+                </div>
+                <p class="lab-note" data-example-note aria-live="polite">At two messages, group round-robin reaches both topics, while risk order stays on the team topic.</p>
+              </div>
+              <div class="selection-compare">
+                {[
+                  { title: "Risk order", indices: [0, 1, 2] },
+                  { title: "Group round-robin", indices: [0, 2, 1] },
+                ].map(({ title, indices }) => (
+                  <div class="compare-column">
+                    <h4>{title}</h4>
+                    <ol>
+                      {indices.map((messageIndex, position) => {
+                        const { id, topic, text } = exampleMessages[messageIndex];
+                        return <li class="sample-message" data-selection-position={position + 1} hidden={position >= 2}><span><code>{id}</code><span class={"topic-tag " + topic}>{topic}</span></span><p>{text}</p></li>;
+                      })}
+                    </ol>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div class="lab-panel" role="tabpanel" id="lab-presentation" aria-labelledby="lab-tab-presentation" data-panel="presentation" hidden>
+              <div class="lab-copy">
+                <p class="data-label">Figure 2b</p>
+                <h3>Rearrange the same three messages.</h3>
+                <p>Switch layouts. The message IDs, wording, risk scores, and source links stay fixed in the paper comparison.</p>
+                <div class="segmented" aria-label="Evidence layout">
+                  <button type="button" data-layout="grouped" aria-pressed="true">Grouped</button>
+                  <button type="button" data-layout="flat" aria-pressed="false">Flat list</button>
+                </div>
+              </div>
+              <div class="evidence-layout">
+                <div class="layout-view" data-layout-view="grouped">
+                  {["team", "accent"].map((topic) => (
+                    <div class="layout-group">
+                      <h4>{topic}</h4>
+                      <ol>{exampleMessages.filter((message) => message.topic === topic).map(({ id, text }) => <li><code>{id}</code> {text}</li>)}</ol>
+                    </div>
+                  ))}
+                </div>
+                <div class="layout-view layout-flat" data-layout-view="flat" hidden>
+                  <ol>{[0, 2, 1].map((i) => <li><code>{exampleMessages[i].id}</code> {exampleMessages[i].text}</li>)}</ol>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section results" id="results" aria-labelledby="results-title">
+        <div class="shell">
+          <div class="section-heading">
+            <p class="section-label">Evaluation</p>
+            <h2 id="results-title">Compare the results.</h2>
+            <p>Explore the paper’s evidence recall, classification performance, and end-to-end CPU cost.</p>
+          </div>
+          <div class="results-grid">
+            <div class="results-card" data-switcher="results">
+              <div class="tabs" role="tablist" aria-label="Evaluation metrics">
+                {resultTabs.map(({ id, label }, i) => <button type="button" role="tab" id={"result-tab-" + id} aria-controls={"result-" + id} aria-selected={i === 0 ? "true" : "false"} tabindex={i === 0 ? 0 : -1} data-tab={id}>{label}</button>)}
+              </div>
+
+              <div class="result-panel" role="tabpanel" id="result-recall" aria-labelledby="result-tab-recall" data-panel="recall" data-recall={JSON.stringify(recall)}>
+                <div class="chart-controls">
+                  <label>Cohort
+                    <select data-cohort>
+                      <option value="full">Full test set</option>
+                      <option value="isolated">Isolated test set</option>
+                    </select>
+                  </label>
+                  <div class="budget-control"><span>Messages per discussion</span>
+                    <div class="segmented" aria-label="Messages per discussion">
+                      {budgets.map((budget, index) => <button type="button" data-budget={index} aria-pressed={budget === 10 ? "true" : "false"}>{budget}</button>)}
+                    </div>
+                  </div>
+                </div>
+                <p class="chart-scope" data-recall-scope aria-live="polite">{recall.full.scope}</p>
+                <ul class="bar-chart" aria-label="Evidence recall percentage by selector">
+                  {selectors.map((label, i) => (
+                    <li class:list={{ "highlight-bar": i === 3 }} data-recall-bar>
+                      <span>{label}</span><span class="bar-track" aria-hidden="true"><span style={"--size:" + recall.full.rows[i][3] * 2 + "%"}></span></span><strong>{recall.full.rows[i][3].toFixed(2)}%</strong>
+                    </li>
+                  ))}
+                </ul>
+                <div class="chart-axis" aria-hidden="true"><span>0%</span><span>25%</span><span>50%</span></div>
+                <p class="chart-note">Figure 4. Recall is measured across all dangerous messages in the selected cohort. Every discussion receives the selected budget.</p>
+              </div>
+
+              <div class="result-panel" role="tabpanel" id="result-ap" aria-labelledby="result-tab-ap" data-panel="ap" data-ap={JSON.stringify(messageAP)} hidden>
+                <div class="chart-controls">
+                  <label>Message task
+                    <select data-ap-task>
+                      {messageAP.map(({ label }, index) => <option value={index}>{label}</option>)}
+                    </select>
+                  </label>
+                </div>
+                <p class="chart-scope">Average precision on the test set</p>
+                <ul class="bar-chart" aria-label="Message average precision by method">
+                  {apModels.map((label, i) => <li class:list={{ "highlight-bar": i === 2 }} data-ap-bar><span>{label}</span><span class="bar-track" aria-hidden="true"><span style={"--size:" + messageAP[0].values[i] * 100 + "%"}></span></span><strong>{messageAP[0].values[i].toFixed(3)}</strong></li>)}
+                </ul>
+                <div class="chart-axis" aria-hidden="true"><span>0</span><span>0.5</span><span>1.0</span></div>
+                <p class="chart-note">Table 3. XLM-R is fully fine-tuned. CST uses a frozen sentence encoder with character features.</p>
+              </div>
+
+              <div class="result-panel" role="tabpanel" id="result-cpu" aria-labelledby="result-tab-cpu" data-panel="cpu" hidden>
+                <p class="chart-scope">Mean total processing time · lower is better</p>
+                <ul class="bar-chart" aria-label="Mean CPU processing time by method">
+                  {cpuTimes.map(({ label, value, accent }) => <li class:list={{ "highlight-bar": accent }}><span>{label}</span><span class="bar-track" aria-hidden="true"><span style={"--size:" + value / 4 + "%"}></span></span><strong>{value.toFixed(2)} s</strong></li>)}
+                </ul>
+                <div class="chart-axis" aria-hidden="true"><span>0 s</span><span>200 s</span><span>400 s</span></div>
+                <p class="chart-note">Figure 6 and Section 5.7. Three four-thread passes over 136 SCCD discussions and 8,028 messages, including scoring and evidence outputs.</p>
+              </div>
+            </div>
+            <aside class="human-card" id="human-review">
+              <p class="data-label">Human review · Table 7</p>
+              <h3>Faster reviews with grouped evidence.</h3>
+              <dl>
+                <div><dt>Less time to review</dt><dd>≥27.3%</dd></div>
+                <div><dt>Decision accuracy</dt><dd>≥94.7%</dd></div>
+                <div><dt>Source location success</dt><dd>≥97.3%</dd></div>
+              </dl>
+              <p>Paired comparisons with the same reading budget. Time is measured within reviewer.</p>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="section shell gallery-section" id="figures" aria-labelledby="figures-title">
+        <div class="section-heading">
+          <p class="section-label">Paper figures</p>
+          <h2 id="figures-title">See the original figures.</h2>
+        </div>
+        <div class="figure-gallery">
+          {Object.entries(figures).filter(([key]) => key !== "framework").map(([key, figure]) => (
+            <button type="button" class="figure-card" data-open-figure={key} aria-label={"Enlarge Figure " + figure.number + ", " + figure.name}>
+              <span class="thumbnail"><img src={assets + key + ".webp"} alt="" width={figure.width} height={figure.height} loading="lazy" decoding="async" /></span>
+              <span class="figure-meta"><span>Figure {figure.number}</span><span class="arrow-out" aria-hidden="true"></span></span>
+              <strong>{figure.name}</strong>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <section class="citation" id="citation" aria-labelledby="citation-title">
+        <div class="shell citation-grid">
+          <div class="section-heading">
+            <p class="section-label">Citation</p>
+            <h2 id="citation-title">Cite CST.</h2>
+            <p>Read the full paper on arXiv or use the BibTeX entry in your bibliography.</p>
+            <div class="citation-links"><a href={paper.pdf} target="_blank" rel="noopener noreferrer">PDF<span class="arrow-out" aria-hidden="true"></span></a><a href={paper.github} target="_blank" rel="noopener noreferrer">Code<span class="arrow-out" aria-hidden="true"></span></a></div>
+          </div>
+          <div class="bib-card">
+            <div class="bib-toolbar"><span>BibTeX</span><button type="button" data-copy-bib>Copy BibTeX</button></div>
+            <pre><code id="citation-text">{bibtex}</code></pre>
+            <span class="screen-reader" data-copy-status aria-live="polite"></span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="shell footer">
+      <a class="brand" href="/CST/"><img src={assets + "logo.svg"} alt="" width="28" height="28" /><span>CST</span></a>
+      <a href="/#publications">Back to publications<span class="arrow-out" aria-hidden="true"></span></a>
+    </footer>
+
+    <dialog class="figure-dialog" data-figure-dialog aria-labelledby="enlarged-caption" data-figures={JSON.stringify(figures)}>
+      <div>
+        <header>
+          <p id="enlarged-caption"></p>
+          <button type="button" data-close-figure aria-label="Close enlarged figure">Close</button>
+        </header>
+        <img data-enlarged-figure alt="" />
+        <a data-open-original target="_blank" rel="noopener noreferrer">Open image<span class="arrow-out" aria-hidden="true"></span></a>
+      </div>
+    </dialog>
+
+    <script>
+      import "../../scripts/cst-page";
+    </script>
+  </body>
+</html>

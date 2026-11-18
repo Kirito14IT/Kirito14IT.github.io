@@ -143,7 +143,7 @@ const expectedCredits = [
 ];
 const expectedPublicationResources = [
   { url: "https://arxiv.org/abs/2611.01700", links: ["https://arxiv.org/abs/2611.01700", "https://github.com/Kirito14IT/MemHarmBench", "https://huggingface.co/datasets/kirco567/MemHarmBench", "https://kirito14it.github.io/MemHarmBench/"] },
-  { url: "https://arxiv.org/abs/2611.01710", links: ["https://arxiv.org/abs/2611.01710", "https://github.com/Kirito14IT/CST-MIL"] },
+  { url: "https://arxiv.org/abs/2611.01710", links: ["https://arxiv.org/abs/2611.01710", "https://github.com/Kirito14IT/CST-MIL", "https://kirito14it.github.io/CST/"] },
   { url: "/papers/scamweb.pdf", links: ["/papers/scamweb.pdf", "https://github.com/Kirito14IT/ScamWeb", "https://huggingface.co/datasets/kirco567/ScamWeb-Dataset"] },
   { url: "/papers/safecoderl.pdf", links: [] },
   { url: "https://doi.org/10.48550/arXiv.2606.04493", links: ["https://arxiv.org/abs/2606.04493", "https://github.com/Kirito14IT/SFMambaNet"] },

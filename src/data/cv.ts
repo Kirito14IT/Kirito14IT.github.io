@@ -30,6 +30,8 @@ const memHarmBenchDatasetUrl = "https://huggingface.co/datasets/kirco567/MemHarm
 const memHarmBenchProjectUrl = "https://kirito14it.github.io/MemHarmBench/";
 const cstPaperUrl = "https://arxiv.org/abs/2611.01710";
 const cstCodeUrl = "https://github.com/Kirito14IT/CST-MIL";
+const cstProjectUrl = "https://kirito14it.github.io/CST/";
+const cstProjectLogo = "/CST/assets/project-page.png";
 const safeCodeRlTitle = "SafeCodeRL: Security-Constrained Multi-Agent Reinforcement Learning for Trustworthy LLM-Generated IoT/CPS Software";
 const safeCodeRlPaperUrl = "/papers/safecoderl.pdf";
 const sfmambaNetTitle = "Smooth Inliers, Erratic Outliers: Frequency-Aware Mamba for Two-View Correspondence Learning";
@@ -502,7 +504,7 @@ const cvEn: CvData = {
       homepageStatus: "arXiv preprint",
       role: "First author",
       url: cstPaperUrl,
-      links: [{ label: "arXiv", url: cstPaperUrl }, { label: "Code", url: cstCodeUrl }],
+      links: [{ label: "arXiv", url: cstPaperUrl }, { label: "Code", url: cstCodeUrl }, { label: "Project Page", url: cstProjectUrl, logo: cstProjectLogo }],
       tags: ["Risk Triage", "Source-Grounded Evidence", "Web Discussions", "Multilingual NLP", "CPU Inference"],
       frameworkImage: "/figures/cst-framework-original.png",
       frameworkAlt: "Original CST framework diagram: source-local context, lightweight feature fusion and topic discovery, risk triage, and source-grounded evidence for review.",
@@ -1000,7 +1002,7 @@ const cvZh: CvData = {
       homepageStatus: "arXiv 预印本",
       role: "第一作者",
       url: cstPaperUrl,
-      links: [{ label: "arXiv", url: cstPaperUrl }, { label: "代码", url: cstCodeUrl }],
+      links: [{ label: "arXiv", url: cstPaperUrl }, { label: "代码", url: cstCodeUrl }, { label: "项目主页", url: cstProjectUrl, logo: cstProjectLogo }],
       tags: ["风险分诊", "来源可追溯证据", "网络讨论", "多语言自然语言处理", "CPU 推理"],
       frameworkImage: "/figures/cst-framework-original.png",
       frameworkAlt: "CST 论文原始框架图：来源上下文、轻量特征融合与主题发现、风险分诊及来源可追溯的复核证据。",

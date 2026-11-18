@@ -235,20 +235,14 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&l
     requestAnimationFrame(() => { ctx.cursor.style.transition = "none"; const cc = centerOf("open"); if (cc) place(cc.x, cc.y); });
   }
 
-  /* ---- mode manager: tour the three victims once, then rest; the lead words steer it ---- */
-  let mode = "user", started = false, visible = false, paused = false, advances = 0, settled = false;
+  /* ---- mode manager: an endless loop user → owner → external → user …; the lead words jump to a case ---- */
+  let mode = "user", started = false, visible = true;
   const syncPlats = () => plats.forEach((p) => p.classList.toggle("on", p.dataset.mode === mode));
-  const held = () => paused || !visible;
-  function holdThenAdvance() { at(held() ? 600 : 3400, () => { if (held()) holdThenAdvance(); else advance(); }); }
-  function advance() { advances++; switchTo(ORDER[(ORDER.indexOf(mode) + 1) % ORDER.length]); }
-  function settleHome() { settled = true; mode = "user"; syncPlats(); showDone("user"); }
-  function runActive() {
-    run(mode, () => {
-      if (settled) return;
-      if (advances < ORDER.length - 1) holdThenAdvance();
-      else at(2600, settleHome);
-    });
-  }
+  // after each case the judge card stays up for a beat, then the next case starts. The loop
+  // never ends; it only waits (without resetting) while the hero is scrolled out of view.
+  function holdThenAdvance() { at(3400, function wait() { if (!visible) { at(700, wait); return; } advance(); }); }
+  function advance() { switchTo(ORDER[(ORDER.indexOf(mode) + 1) % ORDER.length]); }
+  function runActive() { run(mode, holdThenAdvance); }
   function switchTo(m, immediate) {
     clearAll(); mode = m; syncPlats(); parkCursor();
     at(immediate ? 120 : 260, runActive);
@@ -257,33 +251,30 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&l
   plats.forEach((p) => {
     const m = p.dataset.mode;
     p.setAttribute("tabindex", "0"); p.setAttribute("role", "button");
-    // a visitor's pick always wins: it starts the walkthrough if the observer has not yet,
-    // and ends the automatic tour so the chosen case stays on screen
+    // a visitor's pick jumps straight to that case (starting the loop if the observer has not yet),
+    // and the loop carries on from there
     const go = () => {
       if (reduce) { mode = m; syncPlats(); showDone(m); return; }
       if (started && m === mode) return;
-      started = true; settled = true; switchTo(m, true);
+      started = true; switchTo(m, true);
     };
-    p.addEventListener("pointerenter", () => { paused = true; go(); });
-    p.addEventListener("pointerleave", () => { paused = false; });
+    p.addEventListener("pointerenter", go);
     p.addEventListener("click", go);
     p.addEventListener("focus", go);
-    p.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); if (m === mode && started && !reduce) { settled = true; switchTo(m, true); } else go(); } });
+    p.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); if (m === mode && started && !reduce) switchTo(m, true); else go(); } });
   });
 
   syncPlats();
   if (reduce) { showDone("user"); return; }
   reset("user"); parkCursor();
   if ("IntersectionObserver" in window) {
+    visible = false;
     const io = new IntersectionObserver((es) => es.forEach((e) => {
       visible = e.isIntersecting;
       if (visible && !started) { started = true; at(900, runActive); }
-    }), { threshold: 0.25 });
-    // until the observer reports, a visitor's own pick still runs (see go above)
+    }), { threshold: 0.15 });
     io.observe(stage);
-  } else { visible = true; started = true; runActive(); }
-  stage.addEventListener("pointerenter", () => { if (started) paused = true; });
-  stage.addEventListener("pointerleave", () => { paused = false; });
+  } else { started = true; runActive(); }
 })();
 
 /* ---------- hero stat popovers ---------- */
@@ -329,53 +320,7 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&l
 (function () {
   "use strict";
 
-  /* ---- results card — Table 1 (IPI/DPI) and Table 2 (stakeholder views under IPI) ---- */
-  const lbBody = document.getElementById("lb-body"), lbFoot = document.getElementById("lb-foot");
-  if (lbBody) {
-    const ICON = { openclaw: "OpenClaw", claudecode: "Claude Code", openai: "GPT-5", google: "Gemini-2.5-Flash" };
-    const img = (k) => `<img src="assets/icons/${k}.png" alt="${ICON[k]}" width="16" height="16" loading="lazy" />`;
-    const row = (i, icons, label, sub, asr, utdr, atar, cls) =>
-      `<div class="lb-row${cls ? " " + cls : ""}" role="listitem" style="--i:${i}">` +
-      `<span class="lb-ico">${icons.map(img).join("")}</span>` +
-      `<span class="lb-model">${esc(label)}${sub ? ` <span class="lb-org">· ${esc(sub)}</span>` : ""}</span>` +
-      `<span class="lb-track"><span class="lb-fill" style="--w:${(asr / 100).toFixed(4)}"></span></span>` +
-      `<span class="lb-val">${asr.toFixed(2)}</span><span class="lb-val sub">${utdr.toFixed(2)}</span><span class="lb-val sub">${atar.toFixed(2)}</span></div>`;
-    const VIEWS = {
-      ipi: {
-        rows: [["openclaw", "openai", 75.00, 13.33, 6.67], ["openclaw", "google", 76.39, 17.82, 8.10], ["claudecode", "openai", 62.50, 12.31, 3.41], ["claudecode", "google", 59.38, 16.04, 3.33]],
-        avg: [["openclaw", 75.69, 15.58, 7.38], ["claudecode", 60.94, 14.18, 3.37]],
-        foot: ["Indirect prompt injection", "rates (%) condition on confirmed retention and fully judged triggers", "three full-catalog repetitions pooled", "<b>55.71%</b> of eligible IPI episodes combine ASR = 1, UTDR = 0, ATAR = 0"],
-      },
-      dpi: {
-        rows: [["openclaw", "openai", 88.10, 16.67, 7.14], ["openclaw", "google", 90.00, 20.00, 7.50], ["claudecode", "openai", 81.82, 14.77, 3.41], ["claudecode", "google", 75.00, 19.05, 4.76]],
-        avg: [["openclaw", 89.05, 18.33, 7.32], ["claudecode", 78.41, 16.91, 4.09]],
-        foot: ["Direct prompt injection", "rates (%) on the same conditional denominator", "every configuration adopts more under DPI than under its own IPI condition"],
-      },
-      victim: {
-        groups: [
-          ["User", [["openclaw", 79.03, 19.86, 5.74], ["claudecode", 64.20, 17.95, 2.77]]],
-          ["Workspace / project owner", [["openclaw", 64.58, 10.65, 14.54], ["claudecode", 51.14, 10.00, 6.36]]],
-          ["External stakeholder", [["openclaw", 79.58, 15.90, 4.63], ["claudecode", 64.20, 14.38, 2.18]]],
-        ],
-        foot: ["Indirect prompt injection", "each rate (%) averages the two backbone-specific rates after pooling repetitions"],
-      },
-    };
-    function render(view) {
-      const v = VIEWS[view]; let h = "", i = 0;
-      if (v.rows) {
-        v.rows.forEach(([a, b, asr, u, t]) => { h += row(i++, [a, b], ICON[a], ICON[b], asr, u, t); });
-        v.avg.forEach(([a, asr, u, t]) => { h += row(i++, [a], ICON[a], "average", asr, u, t, "avg"); });
-      } else {
-        v.groups.forEach(([g, rows]) => { h += `<div class="lb-grp">${esc(g)}</div>`; rows.forEach(([a, asr, u, t]) => { h += row(i++, [a], ICON[a], "both backbones", asr, u, t); }); });
-      }
-      lbBody.innerHTML = h; lbFoot.innerHTML = v.foot.map((s) => `<span>${s}</span>`).join("");
-    }
-    document.querySelectorAll("#lb .lb-tab").forEach((tab) => tab.addEventListener("click", () => {
-      document.querySelectorAll("#lb .lb-tab").forEach((x) => { const on = x === tab; x.classList.toggle("on", on); x.setAttribute("aria-selected", String(on)); });
-      render(tab.dataset.view);
-    }));
-    render("ipi");
-  }
+  /* ---- results card: see js/figs.js ---- */
 
   /* ---- figure tabs ---- */
   const figTabs = document.querySelectorAll("#figtabs .cov-tab");
@@ -383,6 +328,15 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&l
     figTabs.forEach((x) => { const on = x === tab; x.classList.toggle("on", on); x.setAttribute("aria-selected", String(on)); });
     document.querySelectorAll("#figtabs .figpanel").forEach((p) => p.classList.toggle("on", p.dataset.fig === tab.dataset.fig));
   }));
+  // deep links: #results-objective, #results-factors, #results-visual open that figure tab
+  const openFromHash = () => {
+    const m = /^#results-(objective|factors|visual)$/.exec(location.hash);
+    if (!m) return;
+    const tab = document.querySelector(`#figtabs .cov-tab[data-fig="${m[1]}"]`);
+    if (tab) { setTimeout(() => tab.click(), 0); document.getElementById("figtabs")?.scrollIntoView(); }
+  };
+  addEventListener("hashchange", openFromHash);
+  addEventListener("load", openFromHash);
 
   /* ---- the live HF dataset viewer: one quiet dropdown swaps the configuration ---- */
   const hfFrame = document.getElementById("hf-frame");

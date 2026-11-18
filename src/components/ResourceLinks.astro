@@ -51,7 +51,7 @@ const orderedLinks = variant === "default" ? links : [...links].sort((left, righ
           <>
             {platform && <BrandIcon name={platform.name} size={16} class="resource-link-icon" />}
             {!platform && isPdf(link.url) && <BrandIcon name="pdf" size={16} width={13} class="resource-link-icon" />}
-            {variant === "publication" && !platform && !isPdf(link.url) && <BrandIcon name="globe" size={16} class="resource-link-icon" />}
+            {variant === "publication" && !platform && !isPdf(link.url) && <BrandIcon name="www" size={16} class="resource-link-icon" />}
           </>
         )}
         <span>{platform?.label ?? link.label}{(variant === "default" || (variant === "platform" && !platform)) && " ↗"}</span>

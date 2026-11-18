@@ -260,4 +260,4 @@ const reveal = new IntersectionObserver((entries, observer) => {
     observer.unobserve(target);
   });
 }, { threshold: 0.12 });
-document.querySelectorAll("[data-motion-section] .section-heading, .figure-card, .review-replay, .bar-chart, .recall-heatmap, .human-card").forEach((element) => reveal.observe(element));
+document.querySelectorAll("[data-motion-section] .section-heading, .review-replay, .human-card").forEach((element) => reveal.observe(element));

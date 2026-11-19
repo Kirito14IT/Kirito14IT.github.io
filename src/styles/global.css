@@ -303,6 +303,7 @@ time, .timeline-date, .education-period, .article-date { font-style: italic; fon
   .service-meta { display: flex; gap: 10px; }
   .section-heading-row { gap: 10px; }
   .internship-callout { padding: 14px 16px; }
+  .site-footer:has(.visit-counter) { padding-bottom: 64px; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

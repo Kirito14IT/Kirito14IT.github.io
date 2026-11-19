@@ -2,37 +2,39 @@
 import manifest from "../../public/cv/resume-manifest.json";
 import type { Locale } from "@i18n/index";
 
+// The concise one-page Chinese CV sits in a closed disclosure; the detailed
+// Chinese CV is the primary Chinese download in ResumeDownloads.
 const { locale } = Astro.props as { locale: Locale };
 const isChinese = locale === "zh";
-const resume = manifest.resumes.zhDetailed;
+const resume = manifest.resumes.zh;
 const url = `${resume.path}?v=${resume.sha256.slice(0, 12)}`;
 ---
 
-<details class="detailed-resume" data-detailed-resume>
+<details class="collapsed-resume" data-collapsed-resume>
   <summary>
-    <span>{isChinese ? "详细中文版" : "Detailed Chinese CV"}</span>
+    <span>{isChinese ? "精简版中文简历" : "Concise Chinese CV"}</span>
     <span class="disclosure-hint">{isChinese ? "点击展开" : "Expand to view"}</span>
   </summary>
-  <div class="detailed-resume-content">
-    <p class="detailed-meta">{isChinese ? "最近更新：" : "Last updated: "}<time datetime={resume.updatedDate}>{resume.updatedDate.replaceAll("-", ".")}</time> · PDF · {resume.pageCount} {isChinese ? "页" : resume.pageCount === 1 ? "page" : "pages"}</p>
-    <div class="detailed-actions">
+  <div class="collapsed-resume-content">
+    <p class="collapsed-meta">{isChinese ? "最近更新：" : "Last updated: "}<time datetime={resume.updatedDate}>{resume.updatedDate.replaceAll("-", ".")}</time> · PDF · {resume.pageCount} {isChinese ? "页" : resume.pageCount === 1 ? "page" : "pages"}</p>
+    <div class="collapsed-actions">
       <a class="button ghost" href={url} target="_blank" rel="noopener noreferrer">{isChinese ? "新窗口打开" : "Open PDF"}</a>
-      <a class="button ghost" href={url} download="Wang-Zhihua-CV-CN-Detailed.pdf">{isChinese ? "下载详细版" : "Download detailed CV"}</a>
+      <a class="button ghost" href={url} download="ZhihuaWang_cv_cn_concise.pdf">{isChinese ? "下载精简版" : "Download concise CV"}</a>
     </div>
-    <div data-detailed-preview></div>
-    <template data-detailed-template>
-      <iframe src={`${url}#view=FitH`} title={isChinese ? "详细中文版 PDF" : "Detailed Chinese CV PDF"} class="detailed-preview"></iframe>
+    <div data-collapsed-preview></div>
+    <template data-collapsed-template>
+      <iframe src={`${url}#view=FitH`} title={isChinese ? "精简版中文简历 PDF" : "Concise Chinese CV PDF"} class="collapsed-preview"></iframe>
     </template>
-    <p class="detailed-meta">{isChinese ? "若浏览器无法显示预览，可点击上方按钮打开或下载。" : "If the preview is unavailable, use the buttons above to open or download the PDF."}</p>
+    <p class="collapsed-meta">{isChinese ? "若浏览器无法显示预览，可点击上方按钮打开或下载。" : "If the preview is unavailable, use the buttons above to open or download the PDF."}</p>
   </div>
 </details>
 
 <script>
-  document.querySelectorAll<HTMLDetailsElement>("[data-detailed-resume]").forEach((details) => {
+  document.querySelectorAll<HTMLDetailsElement>("[data-collapsed-resume]").forEach((details) => {
     details.addEventListener("toggle", () => {
       if (!details.open || details.dataset.loaded === "true") return;
-      const template = details.querySelector<HTMLTemplateElement>("[data-detailed-template]");
-      const container = details.querySelector("[data-detailed-preview]");
+      const template = details.querySelector<HTMLTemplateElement>("[data-collapsed-template]");
+      const container = details.querySelector("[data-collapsed-preview]");
       if (template && container) {
         container.append(template.content.cloneNode(true));
         details.dataset.loaded = "true";
@@ -42,16 +44,16 @@ const url = `${resume.path}?v=${resume.sha256.slice(0, 12)}`;
 </script>
 
 <style>
-  .detailed-resume { padding: 17px 0; margin: 0 0 28px; min-width: 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .collapsed-resume { padding: 17px 0; margin: 0 0 28px; min-width: 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
   summary { cursor: pointer; font-size: 15px; font-weight: 600; }
   summary::marker { color: var(--blue); }
   .disclosure-hint { font-size: 13px; color: var(--muted); font-weight: 400; margin-left: 12px; }
   details[open] .disclosure-hint { display: none; }
-  .detailed-resume-content { padding-top: 12px; }
-  .detailed-meta { font-size: 13px; color: var(--muted); }
-  .detailed-actions { display: flex; gap: 16px; flex-wrap: wrap; margin: 12px 0 16px; }
-  .detailed-actions .button { padding: 0; border: 0; font-size: 14px; }
-  .detailed-actions .button:hover { text-decoration: underline; }
-  .detailed-preview { display: block; width: 100%; height: 1050px; border: 1px solid var(--line); background: #fff; }
-  @media (max-width: 680px) { .detailed-preview { height: 650px; } }
+  .collapsed-resume-content { padding-top: 12px; }
+  .collapsed-meta { font-size: 13px; color: var(--muted); }
+  .collapsed-actions { display: flex; gap: 16px; flex-wrap: wrap; margin: 12px 0 16px; }
+  .collapsed-actions .button { padding: 0; border: 0; font-size: 14px; }
+  .collapsed-actions .button:hover { text-decoration: underline; }
+  .collapsed-preview { display: block; width: 100%; height: 1050px; border: 1px solid var(--line); background: #fff; }
+  @media (max-width: 680px) { .collapsed-preview { height: 650px; } }
 </style>

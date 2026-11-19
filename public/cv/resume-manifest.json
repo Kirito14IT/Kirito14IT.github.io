@@ -1,23 +1,23 @@
 {
-  "schemaVersion": 1,
-  "resumes": {
-    "en": {
-      "path": "/cv/ZhihuaWang_cv_en.pdf",
-      "updatedDate": "2026-11-19",
-      "sha256": "eac310b15f72511c9fbc609ed5c734a7dc26f3038a36e6e76f73cdb863d0b9e1",
-      "pageCount": 2
-    },
-    "zh": {
-      "path": "/cv/ZhihuaWang_cv_cn.pdf",
-      "updatedDate": "2026-11-19",
-      "sha256": "adf61969af41ed055fc97b4221cab6d111243c7692b231bdb2587d0a2a51dccc",
-      "pageCount": 1
-    },
-    "zhDetailed": {
-      "path": "/cv/resume-zh_CN-detailed-20261101.pdf",
-      "updatedDate": "2026-11-19",
-      "sha256": "7a6c5d4e1648e02d99ba7bcda4f1ddad9cac088810fce43e0304b24cced8e234",
-      "pageCount": 1
-    }
-  }
+    "schemaVersion":  1,
+    "resumes":  {
+                    "en":  {
+                               "path":  "/cv/ZhihuaWang_cv_en.pdf",
+                               "updatedDate":  "2026-11-19",
+                               "sha256":  "eac310b15f72511c9fbc609ed5c734a7dc26f3038a36e6e76f73cdb863d0b9e1",
+                               "pageCount":  2
+                           },
+                    "zh":  {
+                               "path":  "/cv/ZhihuaWang_cv_cn.pdf",
+                               "updatedDate":  "2026-11-19",
+                               "sha256":  "adf61969af41ed055fc97b4221cab6d111243c7692b231bdb2587d0a2a51dccc",
+                               "pageCount":  1
+                           },
+                    "zhDetailed":  {
+                                       "path":  "/cv/resume-zh_CN-detailed.pdf",
+                                       "updatedDate":  "2026-11-20",
+                                       "sha256":  "509f0dfef224d99eb570eefc99e6a04fcf26045ffb7616cc76237b8413b78814",
+                                       "pageCount":  2
+                                   }
+                }
 }

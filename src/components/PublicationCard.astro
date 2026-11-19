@@ -4,6 +4,7 @@ import DatasetDownloads from "@components/DatasetDownloads.astro";
 import type { PublicationItem } from "@data/cv";
 import { getProfile } from "@data/profile";
 import { getUi, type Locale } from "@i18n/index";
+import "../styles/pub-demos.css";
 
 const { item, locale, variant = "default" } = Astro.props as {
   item: PublicationItem;
@@ -14,6 +15,16 @@ const copy = getUi(locale);
 const profileAuthor = getProfile("en").legalName;
 const fullFigureLabel = locale === "zh" ? "查看原图" : "View full-size figure";
 const isHome = variant === "home";
+/* homepage figures play an animated walkthrough of their paper; the figure itself stays in the markup */
+const demoByFigure: Record<string, string> = {
+  "/figures/scamweb-dataset-overview.png": "scamweb",
+  "/figures/memharmbench-cross-session-en.webp": "memharmbench",
+  "/figures/cst-framework-original.png": "cst",
+  "/figures/safecoderl-framework.png": "safecoderl",
+  "/figures/sfmambanet-framework-20261118.png": "sfmambanet",
+  "/figures/mangrove-carbon-dynamics.png": "mangrove",
+};
+const demo = isHome && item.frameworkImage ? demoByFigure[item.frameworkImage] : undefined;
 const figureBadge = item.ratings?.length ? item.ratings.join(" · ") : "Preprint";
 const hasCoFirstAuthor = item.authors.some((author) => item.coFirstAuthors?.includes(author));
 const hasCorrespondingAuthor = item.authors.some((author) => item.correspondingAuthor === author);
@@ -57,7 +68,7 @@ if (item.url && !publicationLinks.some((link) => resourceKey(link.url) === resou
 
 <article class:list={["publication-card", { "publication-card--home": isHome }]}>
   {item.frameworkImage && (
-    <figure class="framework-preview">
+    <figure class="framework-preview" data-demo={demo}>
       <a href={item.frameworkImage} target="_blank" rel="noopener noreferrer" aria-label={`${fullFigureLabel} · ${item.title}`}>
         <img src={item.frameworkImage} alt={item.frameworkAlt} loading="lazy" decoding="async" />
       </a>
@@ -101,6 +112,10 @@ if (item.url && !publicationLinks.some((link) => resourceKey(link.url) === resou
     <div class="tag-list">{item.tags.map((tag) => <span>{tag}</span>)}</div>
   </div>
 </article>
+
+<script>
+  import "../scripts/pub-demos/index.js";
+</script>
 
 <style>
   .publication-details .publication-author-notes {

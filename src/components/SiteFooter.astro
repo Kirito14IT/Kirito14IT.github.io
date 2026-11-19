@@ -43,7 +43,7 @@ visitorBadgeUrl.searchParams.set("label", copy.footer.visitsLabel);
 visitorBadgeUrl.searchParams.set("labelColor", "#e8f6ff");
 visitorBadgeUrl.searchParams.set("countColor", "#2563eb");
 visitorBadgeUrl.searchParams.set("style", "flat");
-visitorBadgeUrl.searchParams.set("labelStyle", "lower");
+visitorBadgeUrl.searchParams.set("labelStyle", "none");
 ---
 
 <footer class="site-footer" data-site-footer>
@@ -59,7 +59,7 @@ visitorBadgeUrl.searchParams.set("labelStyle", "lower");
         <img
           src={visitorBadgeUrl.toString()}
           alt={copy.footer.visitsAlt}
-          width="76"
+          width={locale === "en" ? 182 : 76}
           height="20"
           loading="eager"
           fetchpriority="low"

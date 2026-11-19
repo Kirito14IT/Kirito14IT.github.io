@@ -151,8 +151,8 @@ export const ui = {
       updated: "Last updated:",
       showVisits: "Show total homepage visits",
       hideVisits: "Hide total homepage visits",
-      visitsAlt: "Total homepage visits",
-      visitsLabel: "visits",
+      visitsAlt: "Visits since the beginning",
+      visitsLabel: "Visits since the beginning",
       unavailable: "Unavailable"
     },
     newsJump: "{date} update: jump to competition awards",

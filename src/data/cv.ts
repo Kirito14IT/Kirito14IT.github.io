@@ -5,8 +5,7 @@ const fzuKeyLabUrl = "https://ncip.fzu.edu.cn/index.htm";
 const xsafeclawUrl = "https://github.com/XSafeAI/XSafeClaw";
 const vulnseekerUrl = "https://github.com/Kirito14IT/VulnSeeker";
 const sfmambanetCodeUrl = "https://github.com/Kirito14IT/SFMambaNet";
-const sfmambanetProjectUrl = "https://kirito14it.github.io/SFMambaNet/";
-const sfmambanetProjectLogo = "/SFMambaNet/assets/logo-64.png";
+const sfmambanetProject = { url: "https://kirito14it.github.io/SFMambaNet/", logo: "/SFMambaNet/assets/logo-64.png" };
 const teaiUrl = "https://teai.fudan.edu.cn/";
 const xingjunMaUrl = "http://xingjunma.com/";
 const yuGangJiangUrl = "https://baike.baidu.com/item/%E5%A7%9C%E8%82%B2%E5%88%9A/22131913";
@@ -29,11 +28,10 @@ const cstTitle = "CST: Lightweight Risk Triage with Source-Grounded Evidence for
 const memHarmBenchPaperUrl = "https://arxiv.org/abs/2611.01700";
 const memHarmBenchCodeUrl = "https://github.com/Kirito14IT/MemHarmBench";
 const memHarmBenchDatasetUrl = "https://huggingface.co/datasets/kirco567/MemHarmBench";
-const memHarmBenchProjectUrl = "https://kirito14it.github.io/MemHarmBench/";
+const memHarmBenchProject = { url: "https://kirito14it.github.io/MemHarmBench/", logo: "/MemHarmBench/assets/logo-128.png" };
 const cstPaperUrl = "https://arxiv.org/abs/2611.01710";
 const cstCodeUrl = "https://github.com/Kirito14IT/CST-MIL";
-const cstProjectUrl = "https://kirito14it.github.io/CST/";
-const cstProjectLogo = "/CST/assets/project-page.png";
+const cstProject = { url: "https://kirito14it.github.io/CST/", logo: "/CST/assets/logo.svg" };
 const safeCodeRlTitle = "SafeCodeRL: Security-Constrained Multi-Agent Reinforcement Learning for Trustworthy LLM-Generated IoT/CPS Software";
 const safeCodeRlPaperUrl = "/papers/safecoderl.pdf";
 const sfmambaNetTitle = "Smooth Inliers, Erratic Outliers: Frequency-Aware Mamba for Two-View Correspondence Learning";
@@ -178,7 +176,7 @@ const cvEn: CvData = {
       date: "2026.11.04",
       emoji: "📣",
       html: `<a href="${memHarmBenchPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>MemHarmBench</strong></a> was recommended by Shanghai Innovation Institute and featured in MiraclePlus's <strong>Alpha Sight</strong>.`,
-      links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "Code", url: memHarmBenchCodeUrl }, { label: "Hugging Face", url: memHarmBenchDatasetUrl }],
+      links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "Code", url: memHarmBenchCodeUrl }, { label: "Hugging Face", url: memHarmBenchDatasetUrl }, { label: "Project Page", ...memHarmBenchProject }],
       media: {
         src: "/news/memharmbench-alpha-sight-recommendation-20261104.png",
         alt: "Alpha Sight's 2026.11.04 digest recommending MemHarmBench, highlighted in the original screenshot.",
@@ -191,13 +189,13 @@ const cvEn: CvData = {
       date: "2026.10.26",
       emoji: "📄",
       html: `The code for <a href="${memHarmBenchPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>${memHarmBenchTitle}</strong></a> is publicly available on GitHub, and the paper is available on arXiv.`,
-      links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "Code", url: memHarmBenchCodeUrl }, { label: "Hugging Face", url: memHarmBenchDatasetUrl }]
+      links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "Code", url: memHarmBenchCodeUrl }, { label: "Hugging Face", url: memHarmBenchDatasetUrl }, { label: "Project Page", ...memHarmBenchProject }]
     },
     {
       date: "2026.10.26",
       emoji: "📄",
       html: `The code for <a href="${cstPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>${cstTitle}</strong></a> is publicly available on GitHub, and the paper is available on arXiv.`,
-      links: [{ label: "arXiv", url: cstPaperUrl }, { label: "Code", url: cstCodeUrl }]
+      links: [{ label: "arXiv", url: cstPaperUrl }, { label: "Code", url: cstCodeUrl }, { label: "Project Page", ...cstProject }]
     },
     {
       date: "2026.10.21",
@@ -463,6 +461,7 @@ const cvEn: CvData = {
       ],
       links: [
         { label: "SFMambaNet Code", url: sfmambanetCodeUrl },
+        { label: "Project Page", ...sfmambanetProject },
         { label: "FZU Key Lab", url: fzuKeyLabUrl },
         { label: "Advisor Yizhang Liu", url: yizhangLiuProfileUrl },
         { label: "IEEE TIP", url: tipUrl },
@@ -493,7 +492,7 @@ const cvEn: CvData = {
       homepageStatus: "arXiv preprint",
       role: "First author",
       url: memHarmBenchPaperUrl,
-      links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "Code", url: memHarmBenchCodeUrl }, { label: "Hugging Face", url: memHarmBenchDatasetUrl }, { label: "Project Page", url: memHarmBenchProjectUrl }],
+      links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "Code", url: memHarmBenchCodeUrl }, { label: "Hugging Face", url: memHarmBenchDatasetUrl }, { label: "Project Page", ...memHarmBenchProject }],
       tags: ["LLM Agents", "Persistent Memory", "Cross-Session Prompt Injection", "Victim-Centric Evaluation", "Agent Safety", "Benchmark"],
       frameworkImage: "/figures/memharmbench-cross-session-en.webp",
       frameworkAlt: "MemHarmBench Figure 1: an instruction from an external note is retained in memory; after the note is removed, a new session completes the expense summary but changes its recipient to the attacker's choice.",
@@ -506,7 +505,7 @@ const cvEn: CvData = {
       homepageStatus: "arXiv preprint",
       role: "First author",
       url: cstPaperUrl,
-      links: [{ label: "arXiv", url: cstPaperUrl }, { label: "Code", url: cstCodeUrl }, { label: "Project Page", url: cstProjectUrl, logo: cstProjectLogo }],
+      links: [{ label: "arXiv", url: cstPaperUrl }, { label: "Code", url: cstCodeUrl }, { label: "Project Page", ...cstProject }],
       tags: ["Risk Triage", "Source-Grounded Evidence", "Web Discussions", "Multilingual NLP", "CPU Inference"],
       frameworkImage: "/figures/cst-framework-original.png",
       frameworkAlt: "Original CST framework diagram: source-local context, lightweight feature fusion and topic discovery, risk triage, and source-grounded evidence for review.",
@@ -542,7 +541,7 @@ const cvEn: CvData = {
       status: "Under review at IEEE Transactions on Image Processing (TIP) · arXiv preprint",
       role: "First author",
       url: "https://doi.org/10.48550/arXiv.2606.04493",
-      links: [{ label: "arXiv", url: "https://arxiv.org/abs/2606.04493" }, { label: "GitHub", url: sfmambanetCodeUrl }, { label: "Project Page", url: sfmambanetProjectUrl, logo: sfmambanetProjectLogo }],
+      links: [{ label: "arXiv", url: "https://arxiv.org/abs/2606.04493" }, { label: "GitHub", url: sfmambanetCodeUrl }, { label: "Project Page", ...sfmambanetProject }],
       tags: ["Computer Vision", "Correspondence Pruning", "Mamba", "State Space Model", "Frequency Domain", "Graph Neural Networks", "Two-View Geometry"],
       ratings: ["SCI Zone 1", "CCF A"],
       frameworkImage: "/figures/sfmambanet-framework-20261118.png",
@@ -679,7 +678,7 @@ const cvZh: CvData = {
       date: "2026.11.04",
       emoji: "📣",
       html: `<a href="${memHarmBenchPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>MemHarmBench</strong></a> 获得上海创智学院论文推荐，并获奇绩创坛「<strong>奇绩信号 Alpha Sight</strong>」推荐。`,
-      links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "代码", url: memHarmBenchCodeUrl }, { label: "Hugging Face", url: memHarmBenchDatasetUrl }],
+      links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "代码", url: memHarmBenchCodeUrl }, { label: "Hugging Face", url: memHarmBenchDatasetUrl }, { label: "项目主页", ...memHarmBenchProject }],
       media: {
         src: "/news/memharmbench-alpha-sight-recommendation-20261104.png",
         alt: "奇绩信号 Alpha Sight 于 2026.11.04 推荐 MemHarmBench 的原始截图，红框标注相关条目。",
@@ -692,13 +691,13 @@ const cvZh: CvData = {
       date: "2026.10.26",
       emoji: "📄",
       html: `<a href="${memHarmBenchPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>${memHarmBenchTitle}</strong></a> 的代码已在 GitHub 公开，论文已发布于 arXiv。`,
-      links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "代码", url: memHarmBenchCodeUrl }, { label: "Hugging Face", url: memHarmBenchDatasetUrl }]
+      links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "代码", url: memHarmBenchCodeUrl }, { label: "Hugging Face", url: memHarmBenchDatasetUrl }, { label: "项目主页", ...memHarmBenchProject }]
     },
     {
       date: "2026.10.26",
       emoji: "📄",
       html: `<a href="${cstPaperUrl}" target="_blank" rel="noopener noreferrer"><strong>${cstTitle}</strong></a> 的代码已在 GitHub 公开，论文已发布于 arXiv。`,
-      links: [{ label: "arXiv", url: cstPaperUrl }, { label: "代码", url: cstCodeUrl }]
+      links: [{ label: "arXiv", url: cstPaperUrl }, { label: "代码", url: cstCodeUrl }, { label: "项目主页", ...cstProject }]
     },
     {
       date: "2026.10.21",
@@ -961,6 +960,7 @@ const cvZh: CvData = {
       ],
       links: [
         { label: "SFMambaNet 代码", url: sfmambanetCodeUrl },
+        { label: "项目主页", ...sfmambanetProject },
         { label: "福州大学重点实验室", url: fzuKeyLabUrl },
         { label: "导师刘翼章", url: yizhangLiuProfileUrl },
         { label: "IEEE TIP", url: tipUrl },
@@ -991,7 +991,7 @@ const cvZh: CvData = {
       homepageStatus: "arXiv 预印本",
       role: "第一作者",
       url: memHarmBenchPaperUrl,
-      links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "代码", url: memHarmBenchCodeUrl }, { label: "Hugging Face", url: memHarmBenchDatasetUrl }, { label: "项目主页", url: memHarmBenchProjectUrl }],
+      links: [{ label: "arXiv", url: memHarmBenchPaperUrl }, { label: "代码", url: memHarmBenchCodeUrl }, { label: "Hugging Face", url: memHarmBenchDatasetUrl }, { label: "项目主页", ...memHarmBenchProject }],
       tags: ["LLM 智能体", "持久记忆", "跨会话提示注入", "受害者中心评测", "智能体安全", "评测基准"],
       frameworkImage: "/figures/memharmbench-cross-session-en.webp",
       frameworkAlt: "MemHarmBench 图 1：外部笔记中的恶意指令被保留为记忆；原始笔记移除后，智能体在新会话中完成费用汇总，却将收款方改为攻击者指定对象。",
@@ -1004,7 +1004,7 @@ const cvZh: CvData = {
       homepageStatus: "arXiv 预印本",
       role: "第一作者",
       url: cstPaperUrl,
-      links: [{ label: "arXiv", url: cstPaperUrl }, { label: "代码", url: cstCodeUrl }, { label: "项目主页", url: cstProjectUrl, logo: cstProjectLogo }],
+      links: [{ label: "arXiv", url: cstPaperUrl }, { label: "代码", url: cstCodeUrl }, { label: "项目主页", ...cstProject }],
       tags: ["风险分诊", "来源可追溯证据", "网络讨论", "多语言自然语言处理", "CPU 推理"],
       frameworkImage: "/figures/cst-framework-original.png",
       frameworkAlt: "CST 论文原始框架图：来源上下文、轻量特征融合与主题发现、风险分诊及来源可追溯的复核证据。",
@@ -1040,7 +1040,7 @@ const cvZh: CvData = {
       status: "IEEE Transactions on Image Processing (TIP) 在审 · arXiv 预印本",
       role: "第一作者",
       url: "https://doi.org/10.48550/arXiv.2606.04493",
-      links: [{ label: "arXiv", url: "https://arxiv.org/abs/2606.04493" }, { label: "GitHub", url: sfmambanetCodeUrl }, { label: "项目主页", url: sfmambanetProjectUrl, logo: sfmambanetProjectLogo }],
+      links: [{ label: "arXiv", url: "https://arxiv.org/abs/2606.04493" }, { label: "GitHub", url: sfmambanetCodeUrl }, { label: "项目主页", ...sfmambanetProject }],
       tags: ["计算机视觉", "对应关系剪枝", "Mamba", "状态空间模型", "频域", "图神经网络", "双视图几何"],
       ratings: ["SCI 一区", "CCF A"],
       frameworkImage: "/figures/sfmambanet-framework-20261118.png",

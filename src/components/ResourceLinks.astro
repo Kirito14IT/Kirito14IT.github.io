@@ -44,7 +44,7 @@ const orderedLinks = variant === "default" ? links : [...links].sort((left, righ
     const platform = variant === "publication" || variant === "platform" ? getPlatform(link.url) : undefined;
     return (
       <>
-      <a class:list={{ "publication-resource-link": variant === "publication", "platform-resource-link": variant === "platform" && Boolean(platform) }} href={link.url} target="_blank" rel="noopener noreferrer">
+      <a class:list={{ "publication-resource-link": variant === "publication", "platform-resource-link": variant === "platform" && Boolean(platform || link.logo) }} href={link.url} target="_blank" rel="noopener noreferrer">
         {link.logo ? (
           <img class="resource-link-icon resource-link-logo" src={link.logo} width="16" height="16" alt="" decoding="async" />
         ) : (
@@ -54,7 +54,7 @@ const orderedLinks = variant === "default" ? links : [...links].sort((left, righ
             {variant === "publication" && !platform && !isPdf(link.url) && <BrandIcon name="www" size={16} class="resource-link-icon" />}
           </>
         )}
-        <span>{platform?.label ?? link.label}{(variant === "default" || (variant === "platform" && !platform)) && " ↗"}</span>
+        <span>{platform?.label ?? link.label}{(variant === "default" || (variant === "platform" && !platform && !link.logo)) && " ↗"}</span>
       </a>
       {platform?.name === "huggingface" && <slot name="after-huggingface" />}
       </>

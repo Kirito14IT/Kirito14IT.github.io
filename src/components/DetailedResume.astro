@@ -14,7 +14,7 @@ const url = `${resume.path}?v=${resume.sha256.slice(0, 12)}`;
     <span class="disclosure-hint">{isChinese ? "点击展开" : "Expand to view"}</span>
   </summary>
   <div class="detailed-resume-content">
-    <p class="detailed-meta">{isChinese ? "最近更新：" : "Last updated: "}<time datetime={resume.updatedDate}>{resume.updatedDate.replaceAll("-", ".")}</time> · PDF · {resume.pageCount} {isChinese ? "页" : "page"}</p>
+    <p class="detailed-meta">{isChinese ? "最近更新：" : "Last updated: "}<time datetime={resume.updatedDate}>{resume.updatedDate.replaceAll("-", ".")}</time> · PDF · {resume.pageCount} {isChinese ? "页" : resume.pageCount === 1 ? "page" : "pages"}</p>
     <div class="detailed-actions">
       <a class="button ghost" href={url} target="_blank" rel="noopener noreferrer">{isChinese ? "新窗口打开" : "Open PDF"}</a>
       <a class="button ghost" href={url} download="Wang-Zhihua-CV-CN-Detailed.pdf">{isChinese ? "下载详细版" : "Download detailed CV"}</a>

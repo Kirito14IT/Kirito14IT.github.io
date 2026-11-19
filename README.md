@@ -67,7 +67,7 @@ gh repo create Kirito14IT/Kirito14IT.github.io --public --source . --remote orig
 
 - 中文页面：https://kirito14it.github.io/zh/cv/
 - English page: https://kirito14it.github.io/cv/
-- 主要展示 `public/cv/ZhihuaWang_cv_en.pdf` 和 `public/cv/ZhihuaWang_cv_cn.pdf`，英文内容由简洁中文版翻译而来；详细版 `resume-zh_CN-detailed-20261101.pdf` 放在默认折叠区域。
+- 主要展示 `public/cv/ZhihuaWang_cv_en.pdf` 和 `public/cv/ZhihuaWang_cv_cn.pdf`，英文内容由简洁中文版翻译而来；详细版 `resume-zh_CN-detailed.pdf` 放在默认折叠区域。
 - `public/cv/resume-manifest.json` 记录每份 PDF 的更新时间、页数和 SHA-256；预览地址使用内容哈希更新缓存。
 - 本地源文件是 `D:\Resume\resume\ZhihuaWang_cv_en.tex`、`ZhihuaWang_cv_cn.tex` 与详细版源文件；单次构建、发布脚本及使用说明位于该目录的 `scripts` 文件夹。
 - 已移除本地后台监控、恢复任务和登录启动项；保存文件不会触发自动上传。

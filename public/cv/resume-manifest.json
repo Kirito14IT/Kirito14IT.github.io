@@ -4,19 +4,19 @@
     "en": {
       "path": "/cv/ZhihuaWang_cv_en.pdf",
       "updatedDate": "2026-11-19",
-      "sha256": "6ee13add250fdaeead5337b8793f3430428a05e52baa438b32d37d82c3ffc176",
+      "sha256": "eac310b15f72511c9fbc609ed5c734a7dc26f3038a36e6e76f73cdb863d0b9e1",
       "pageCount": 2
     },
     "zh": {
       "path": "/cv/ZhihuaWang_cv_cn.pdf",
       "updatedDate": "2026-11-19",
-      "sha256": "c70d8536faa448cf547b7292253865b7c969010a6b370402ddcf30b8618cedea",
+      "sha256": "adf61969af41ed055fc97b4221cab6d111243c7692b231bdb2587d0a2a51dccc",
       "pageCount": 1
     },
     "zhDetailed": {
       "path": "/cv/resume-zh_CN-detailed-20261101.pdf",
       "updatedDate": "2026-11-19",
-      "sha256": "56b8a18cc3a2ca744fe13bab9cef3b1cf3dbb8d91f76f0642db8e91da646df11",
+      "sha256": "7a6c5d4e1648e02d99ba7bcda4f1ddad9cac088810fce43e0304b24cced8e234",
       "pageCount": 1
     }
   }

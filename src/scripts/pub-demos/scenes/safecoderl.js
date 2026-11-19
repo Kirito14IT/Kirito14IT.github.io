@@ -42,14 +42,14 @@ export default {
   id: "safecoderl",
   size: [W, H],
   bg: C.bg,
-  duration: 16500,
-  poster: 15600,
+  duration: 17200,
+  poster: 16000,
   draw(ctx, t, state, stage) {
     const zh = stage.lang === "zh", L = T[zh ? "zh" : "en"];
     /* ---------- five-agent closed loop ---------- */
     const loopGlow = seg(t, 6900, 7300) * (1 - seg(t, 12300, 12700));
     panel(ctx, 8, 36, 232, 226, L.loop, loopGlow);
-    const lp = ease.out(seg(t, 300, 2600));
+    const lp = ease.out(seg(t, 200, 1400));
     ctx.save();
     ctx.strokeStyle = "rgba(61,106,168,.5)"; ctx.lineWidth = 1.2; ctx.setLineDash([3, 3]);
     ctx.beginPath(); ctx.arc(LOOP.x, LOOP.y, LOOP.r, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * lp); ctx.stroke(); ctx.setLineDash([]);
@@ -63,7 +63,7 @@ export default {
       tok = [LOOP.x + LOOP.r * Math.cos(ang), LOOP.y + LOOP.r * Math.sin(ang)];
     }
     NODES.forEach((n, i) => {
-      const [x, y] = npos(i), p = ease.spring(seg(t, 200 + i * 300, 900 + i * 300));
+      const [x, y] = npos(i), p = ease.spring(seg(t, 150 + i * 150, 750 + i * 150));
       if (p <= 0) return;
       const near = tok ? Math.max(0, 1 - Math.hypot(tok[0] - x, tok[1] - y) / 30) : 0;
       const sec = i === 2 && t > 7600 && t < 9200;

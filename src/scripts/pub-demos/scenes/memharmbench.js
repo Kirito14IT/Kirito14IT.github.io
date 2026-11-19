@@ -1,7 +1,7 @@
 /* MemHarmBench: the paper's Figure 1 as a scrolling comic storyboard.
    Session 1 imports a note whose rule the agent keeps as a default; the note is removed;
    in session 2 an ordinary summary passes every field check and still pays Harbor Clearing. */
-import { clamp, lerp, seg, ease, rr, box, text, font, typed, check, dot } from "../engine.js";
+import { clamp, lerp, seg, ease, rr, box, text, font, check, dot } from "../engine.js";
 
 const W = 480, H = 480;
 const C = {
@@ -75,7 +75,7 @@ function bubble(ctx, s, y, p) {
   ctx.fillStyle = "#fff"; ctx.strokeStyle = C.bubble; ctx.lineWidth = 1.6;
   ctx.beginPath(); ctx.moveTo(x + 1, y + 14); ctx.lineTo(x - 9, y + 22); ctx.lineTo(x + 1, y + 26); ctx.fill(); ctx.stroke();
   ctx.fillStyle = "#fff"; ctx.fillRect(x + 0.2, y + 15, 3, 10);
-  text(ctx, typed(s, seg(p, 0.2, 1)), x + 16, y + 25, { size: 16, color: C.ink, max: w - 26 });
+  text(ctx, s, x + 16, y + 25, { size: 16, color: C.ink, max: w - 26 });
   ctx.restore();
 }
 function narration(ctx, s, x, y, w, p) {
@@ -91,17 +91,19 @@ export default {
   id: "memharmbench",
   size: [W, H],
   bg: "#ffffff",
-  duration: 16500,
-  poster: 15400,
+  duration: 14600,
+  poster: 12800,
   draw(ctx, t, st, stage) {
     const L = T[stage.lang] || T.en;
     /* the camera follows the story down the storyboard */
-    const cam = lerp(0, 190, ease.inOut(seg(t, 6800, 8300))) + lerp(0, 120, ease.inOut(seg(t, 13200, 14600)));
-    ctx.save(); ctx.translate(0, 30 - cam);
+    const cam = lerp(0, 190, ease.inOut(seg(t, 3800, 5000))) + lerp(0, 120, ease.inOut(seg(t, 8000, 9000)));
+    /* at the end the camera pulls back to the whole storyboard and holds it */
+    const zb = ease.inOut(seg(t, 10500, 11600)), fit = 0.686, sc = lerp(1, fit, zb);
+    ctx.save(); ctx.translate(lerp(0, (W - W * fit) / 2, zb), 0); ctx.scale(sc, sc); ctx.translate(0, 30 - lerp(cam, 0, zb));
     /* ---------- session 1 ---------- */
-    header(ctx, 12, L.s1, C.s1, C.s1bg, seg(t, 150, 900));
-    bubble(ctx, L.ask1, 58, seg(t, 700, 1900));
-    const tp = ease.spring(seg(t, 1900, 2800));
+    header(ctx, 12, L.s1, C.s1, C.s1bg, seg(t, 0, 350));
+    bubble(ctx, L.ask1, 58, seg(t, 150, 650));
+    const tp = ease.spring(seg(t, 450, 1050));
     if (tp > 0) {
       const x = 90 + (1 - tp) * 30, y = 108;
       ctx.save(); ctx.globalAlpha *= clamp(tp * 2);
@@ -118,27 +120,27 @@ export default {
       ctx.restore();
     }
     /* the imported note, pinned like a sticky note */
-    const np = ease.spring(seg(t, 3000, 4000)), gone = seg(t, 6600, 7400);
-    if (np > 0 && gone < 1) {
+    const np = ease.spring(seg(t, 800, 1400)), gone = seg(t, 3300, 3900);
+    if (np > 0) {
       const x = 90, y = 178;
-      ctx.save(); ctx.globalAlpha *= clamp(np * 2) * (1 - gone);
+      ctx.save(); ctx.globalAlpha *= clamp(np * 2) * (1 - 0.6 * gone);
       ctx.translate(x + 185, y); ctx.rotate((1 - np) * -0.08 + gone * 0.05); ctx.translate(-(x + 185), -y + (1 - np) * -26 + gone * 10);
       box(ctx, x, y, 370, 78, { r: 8, fill: C.note, stroke: C.noteLine, lw: 1.6 });
       ctx.fillStyle = "#f4a63b"; rr(ctx, x + 12, y + 18, 26, 34, 3); ctx.fill();
       ctx.strokeStyle = "#fff"; ctx.lineWidth = 1.6; [26, 32, 38, 44].forEach((yy) => { ctx.beginPath(); ctx.moveTo(x + 17, y + yy); ctx.lineTo(x + 33, y + yy); ctx.stroke(); });
       text(ctx, L.note, x + 50, y + 24, { size: 16, weight: 700, color: C.noteInk });
-      text(ctx, typed(L.note1, seg(t, 3500, 4200)), x + 50, y + 46, { size: 14, color: C.ink });
-      const hl = seg(t, 4300, 5000);
+      text(ctx, L.note1, x + 50, y + 46, { size: 14, color: C.ink });
+      const hl = seg(t, 1500, 1900);
       font(ctx, 15, 700);
       const wa = ctx.measureText(L.note2a).width;
       if (hl > 0) { ctx.fillStyle = "rgba(255, 214, 102, .85)"; ctx.fillRect(x + 48, y + 54, (wa + 4) * ease.out(hl), 15); }
-      text(ctx, typed(L.note2a, seg(t, 4200, 4700)), x + 50, y + 66, { size: 15, weight: 700, color: C.red });
-      text(ctx, typed(L.note2b, seg(t, 4600, 4900)), x + 50 + wa, y + 66, { size: 14, color: C.ink });
-      if (gone > 0) { ctx.strokeStyle = "rgba(31,41,51,.7)"; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(x + 10, y + 40); ctx.lineTo(x + 10 + 350 * ease.out(gone * 2), y + 40); ctx.stroke(); }
+      text(ctx, L.note2a, x + 50, y + 66, { size: 15, weight: 700, color: C.red });
+      text(ctx, L.note2b, x + 50 + wa, y + 66, { size: 14, color: C.ink });
+      if (gone > 0) { ctx.strokeStyle = "rgba(31,41,51,.7)"; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(x + 10, y + 40); ctx.lineTo(x + 10 + 350 * ease.out(clamp(gone * 2)), y + 40); ctx.stroke(); }
       ctx.restore();
     }
     /* retained default, written into memory */
-    const kp = ease.spring(seg(t, 5100, 6000));
+    const kp = ease.spring(seg(t, 1800, 2400));
     if (kp > 0) {
       const x = 118, y = 274;
       ctx.save(); ctx.globalAlpha *= clamp(kp * 2);
@@ -148,14 +150,14 @@ export default {
       box(ctx, x, y, 318, 76, { r: 12, fill: C.mem, stroke: C.memLine, lw: 1.6 });
       text(ctx, L.kept, x + 16, y + 24, { size: 17, weight: 700, color: C.memInk });
       text(ctx, L.kept2, x + 16, y + 44, { size: 14, color: C.ink });
-      const vp = seg(t, 5600, 6300);
+      const vp = seg(t, 2200, 2600);
       box(ctx, x + 16, y + 50, 286 * ease.out(vp), 21, { r: 3, fill: C.redBg, stroke: C.red, lw: 1.4 });
-      text(ctx, typed(L.val, seg(t, 5800, 6400)), x + 159, y + 66, { size: 16, weight: 700, color: C.red, align: "center" });
+      text(ctx, L.val, x + 159, y + 66, { size: 16, weight: 700, color: C.red, align: "center", alpha: seg(t, 2300, 2600) });
       robot(ctx, 458, y + 30, 0.95, false);
       ctx.restore();
     }
     /* the note leaves; the default stays */
-    const dv = seg(t, 6900, 7500);
+    const dv = seg(t, 3500, 4000);
     if (dv > 0) {
       ctx.save(); ctx.globalAlpha *= dv;
       ctx.strokeStyle = "#9aa5b1"; ctx.lineWidth = 1.2; ctx.setLineDash([5, 4]);
@@ -166,9 +168,9 @@ export default {
       ctx.restore();
     }
     /* ---------- session 2 ---------- */
-    header(ctx, 400, L.s2, C.s2, C.s2bg, seg(t, 7900, 8600));
-    bubble(ctx, L.ask2, 446, seg(t, 8600, 9800));
-    const sp = ease.spring(seg(t, 10500, 11400));
+    header(ctx, 400, L.s2, C.s2, C.s2bg, seg(t, 4500, 5000));
+    bubble(ctx, L.ask2, 446, seg(t, 4800, 5300));
+    const sp = ease.spring(seg(t, 5300, 5900));
     if (sp > 0) {
       const x = 90, y = 498;
       ctx.save(); ctx.globalAlpha *= clamp(sp * 2);
@@ -176,24 +178,24 @@ export default {
       text(ctx, L.sum, x + 16, y + 25, { size: 17, weight: 700, color: C.s2 });
       let fx = x + 16;
       L.f.forEach((f, i) => {
-        const k = seg(t, 11300 + i * 380, 11700 + i * 380);
+        const k = seg(t, 5900 + i * 300, 6200 + i * 300);
         if (k <= 0) return;
         text(ctx, f, fx, y + 50, { size: 15, color: C.ink, alpha: clamp(k * 2) });
         font(ctx, 15, 400); const w = ctx.measureText(f).width;
         check(ctx, fx + w + 9, y + 45, 10, "#2f9e5a", k);
         fx += w + 30;
       });
-      const rk = seg(t, 12500, 13100);
+      const rk = seg(t, 7000, 7400);
       if (rk > 0) {
         text(ctx, L.rec, x + 16, y + 74, { size: 15, color: C.ink, alpha: clamp(rk * 2) });
         font(ctx, 15, 400); const w = ctx.measureText(L.rec + " ").width;
         box(ctx, x + 16 + w, y + 59, 200 * ease.out(rk), 21, { r: 3, fill: C.redBg, stroke: C.red, lw: 1.4 });
-        text(ctx, typed(L.val, rk), x + 16 + w + 100, y + 75, { size: 16, weight: 700, color: C.red, align: "center" });
+        text(ctx, L.val, x + 16 + w + 100, y + 75, { size: 16, weight: 700, color: C.red, align: "center" });
       }
       robot(ctx, 452, y + 40, 0.95, t > 12600);
       ctx.restore();
       /* the stored default is what fills the field */
-      const link = seg(t, 12200, 12900) * (1 - seg(t, 14000, 14400));
+      const link = seg(t, 6800, 7400) * (1 - seg(t, 9600, 10000));
       if (link > 0) {
         ctx.save(); ctx.globalAlpha *= link;
         ctx.strokeStyle = C.memLine; ctx.lineWidth = 2; ctx.setLineDash([4, 3]); ctx.lineDashOffset = -t / 40;
@@ -202,7 +204,7 @@ export default {
       }
     }
     /* verdicts */
-    [[seg(t, 13100, 13700), L.ok, "#2f9e5a", 24], [seg(t, 13400, 14000), L.bad, C.red, 252]].forEach(([p, s, col, x], i) => {
+    [[seg(t, 7600, 8100), L.ok, "#2f9e5a", 24], [seg(t, 7800, 8300), L.bad, C.red, 252]].forEach(([p, s, col, x], i) => {
       if (p <= 0) return;
       const e = ease.spring(p);
       ctx.save(); ctx.globalAlpha *= clamp(p * 2);
@@ -213,10 +215,10 @@ export default {
       text(ctx, s, x + 34, 619, { size: 15, weight: 700, color: col, max: 164 });
       ctx.restore();
     });
-    text(ctx, L.stats, 240, 656, { size: 13, weight: 700, align: "center", color: C.soft, alpha: seg(t, 14400, 15000), max: 440 });
+    text(ctx, L.stats, 240, 656, { size: 13, weight: 700, align: "center", color: C.soft, alpha: seg(t, 8800, 9300), max: 440 });
     ctx.restore();
     /* comic narration boxes */
-    narration(ctx, L.later, 70, 40, 340, seg(t, 7200, 7600) * (1 - seg(t, 9200, 9600)));
-    narration(ctx, L.end, 30, 438, 420, seg(t, 14200, 14700) * (1 - seg(t, 16100, 16400)));
+    narration(ctx, L.later, 70, 40, 340, seg(t, 3900, 4300) * (1 - seg(t, 5600, 6000)));
+    narration(ctx, L.end, 30, 438, 420, seg(t, 9000, 9400) * (1 - seg(t, 10300, 10600)));
   },
 };

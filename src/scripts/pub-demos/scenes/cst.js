@@ -67,7 +67,7 @@ function p1(ctx, t, L) {
   text(ctx, L.title, x + 10, y + 56, { size: 10.4, weight: 700, color: "#1f2933" });
   text(ctx, L.excerpt, x + 10, y + 65, { size: 7, color: "#6b7785" });
   MSGS.forEach((m, i) => {
-    const a = ease.out(seg(t, 250 + i * 450, 750 + i * 450));
+    const a = ease.out(seg(t, 150 + i * 250, 550 + i * 250));
     if (a <= 0) return;
     const yy = y + 70 + i * 37;
     ctx.save(); ctx.globalAlpha *= a; ctx.translate(0, (1 - a) * 6);
@@ -224,8 +224,8 @@ export default {
   id: "cst",
   size: [W, H],
   bg: "#ffffff",
-  duration: 16600,
-  poster: 15400,
+  duration: 17200,
+  poster: 15800,
   draw(ctx, t, state, stage) {
     const L = T[stage.lang] || T.en;
     /* camera: pan across, then pull back to the whole figure */

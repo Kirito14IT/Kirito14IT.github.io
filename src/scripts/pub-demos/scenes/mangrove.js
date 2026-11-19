@@ -67,8 +67,8 @@ export default {
   id: "mangrove",
   size: [W, H],
   bg: "#ffffff",
-  duration: 16000,
-  poster: 15200,
+  duration: 17200,
+  poster: 16000,
   create() {
     const r = rand(9);
     return {
@@ -117,7 +117,7 @@ export default {
     const sg = ctx.createLinearGradient(0, IL.y + 166, 0, IL.y + IL.h);
     sg.addColorStop(0, "#8b6b4a"); sg.addColorStop(1, "#5d4630");
     ctx.fillStyle = sg; ctx.fillRect(IL.x, IL.y + 166, IL.w, IL.h - 166);
-    st.grains.forEach((g) => { const a = seg(t, g.at, g.at + 300); if (a > 0) dot(ctx, g.x, g.y, 1.3, "#2b1d12", a * (1 - seg(t, 15600, 15950))); });
+    st.grains.forEach((g) => { const a = seg(t, g.at, g.at + 300); if (a > 0) dot(ctx, g.x, g.y, 1.3, "#2b1d12", a); });
     /* trees */
     const cleared = 0;
     [[IL.x + 34, 0.62], [IL.x + 72, 1], [IL.x + 128, 1.06], [IL.x + 172, 0.7]].forEach(([x, k], i) => tree(ctx, x, IL.y + 168, k, Math.sin(s * 1.2 + i) * 1.4, cleared && i === 3 ? "#9e9e9e" : null));
@@ -138,13 +138,13 @@ export default {
       for (let k = 0; k < 14; k++) { const q = (s * 0.35 + k / 14) % 1; dot(ctx, IL.x + IL.w - 30 - q * 120, wy - 12 + q * 22 + Math.sin(k) * 3, 1.6, "#8e7cc3", nl * (1 - q)); }
     }
     /* carbon flows */
-    const inA = seg(t, 300, 900) * (1 - seg(t, 15600, 15950));
+    const inA = seg(t, 300, 900);
     ctx.globalAlpha = inA;
     arrow(ctx, IL.x + 96, IL.y + 34, IL.x + 96, IL.y + 64, "#2e8b57", 2.4, 7, ease.out(seg(t, 400, 1200)));
     for (let k = 0; k < 6; k++) { const q = (s * 0.6 + k / 6) % 1; dot(ctx, IL.x + 96 + Math.sin(k * 2) * 6, IL.y + 30 + q * 120, 1.6, "#2e8b57", 0.8 * inA * (1 - q)); }
     arrow(ctx, IL.x + 100, IL.y + 128, IL.x + 100, IL.y + 160, "#6b4f35", 2.4, 7, ease.out(seg(t, 1400, 2200)));
     ctx.globalAlpha = 1;
-    const outA = seg(t, 9200, 9800) * (1 - seg(t, 15600, 15950));
+    const outA = seg(t, 9200, 9800);
     if (outA > 0) {
       ctx.globalAlpha = outA;
       st.co2.forEach((c) => { const q = (s * 0.4 + c.ph) % 1; dot(ctx, c.x, IL.y + 166 - q * 70, 1.8, "#2b6cb0", 0.7 * (1 - q)); });
@@ -158,7 +158,7 @@ export default {
     lab(L.stock, IL.x + 98, IL.y + IL.h - 8, "rgba(255,255,255,.92)", "#5d4630", seg(t, 2400, 2900) * (1 - seg(t, 4000, 4300)));
     lab(L.slr, IL.x + 98, IL.y + IL.h - 8, "rgba(255,255,255,.92)", "#1f5ea8", seg(t, 4300, 4700) * (1 - seg(t, 5400, 5700)));
     lab(L.sq, IL.x + 150, IL.y + 100, "rgba(255,255,255,.92)", "#d93025", seg(t, 5700, 6100) * (1 - seg(t, 6800, 7100)));
-    lab(L.ndc, IL.x + 98, IL.y + 62, "rgba(47,133,90,.95)", "#fff", seg(t, 14600, 15000) * (1 - seg(t, 15700, 15950)));
+    lab(L.ndc, IL.x + 98, IL.y + 62, "rgba(47,133,90,.95)", "#fff", seg(t, 14600, 15000));
     ctx.restore();
     box(ctx, IL.x, IL.y, IL.w, IL.h, { r: 8, stroke: "#c8d7cf", lw: 1 });
     /* ---------- columns of icons ---------- */
@@ -169,13 +169,13 @@ export default {
       if (on > 0) arrow(ctx, 70, 72 + i * 48, IL.x - 4, 72 + i * 48 + (IL.y + 100 - (72 + i * 48)) * 0.3, `rgba(42,157,143,${on})`, 1.2, 4, ease.out(on));
     });
     PK.forEach((k, i) => {
-      const on = seg(t, 9400 + i * 700, 9800 + i * 700) * (1 - seg(t, 15600, 15950));
+      const on = seg(t, 9400 + i * 700, 9800 + i * 700);
       const y = 80 + i * 62;
       badge(ctx, k, 350, y, "#2b6cb0", on, L.pw[i]);
       if (on > 0) arrow(ctx, IL.x + IL.w + 2, y, 332, y, `rgba(43,108,176,${on})`, 1.4, 5, ease.out(on));
     });
     OK.forEach((k, i) => {
-      const on = seg(t, OC_AT[i], OC_AT[i] + 400) * (1 - seg(t, 15600, 15950));
+      const on = seg(t, OC_AT[i], OC_AT[i] + 400);
       badge(ctx, k, 436, 72 + i * 48, "#2f855a", on, L.oc[i]);
       if (on > 0.9) check(ctx, 450, 60 + i * 48, 7, "#2f855a", seg(t, OC_AT[i] + 300, OC_AT[i] + 600));
     });

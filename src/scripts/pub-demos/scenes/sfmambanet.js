@@ -74,7 +74,8 @@ function panelA(ctx, t, st) {
 
 function row(ctx, t, st, key, y, t0, lang) {
   const O = st.d.o[key], p = clamp(seg(t, t0 + 200, t0 + 3400));
-  const appear = ease.out(seg(t, t0 - 300, t0 + 300));
+  /* the panel frames and axes are there from the start; only the scan animates */
+  const appear = ease.out(seg(t, 300, 800));
   if (appear <= 0) return;
   ctx.save();
   /* the first view in gray, keypoints coloured by scan position */

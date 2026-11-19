@@ -98,17 +98,17 @@ export default {
   id: "scamweb",
   size: [W, H],
   bg: "#ffffff",
-  duration: 17000,
-  poster: 15000,
+  duration: 14500,
+  poster: 12500,
   draw(ctx, t, state, stage) {
     const zh = stage.lang === "zh", L = T[zh ? "zh" : "en"];
-    const zin = ease.inOut(seg(t, 9400, 10600)), zout = ease.inOut(seg(t, 15800, 16800));
+    const zin = ease.inOut(seg(t, 3300, 4400)), zout = ease.inOut(seg(t, 10100, 11100));
     const z = zin * (1 - zout);
     /* ---------- the dataset figure ---------- */
     if (z < 1) {
       ctx.save(); ctx.globalAlpha = 1 - z;
       /* sources */
-      const sp = (i) => ease.spring(seg(t, 200 + i * 140, 800 + i * 140));
+      const sp = (i) => ease.spring(seg(t, 60 + i * 60, 460 + i * 60));
       headTag(ctx, L.src, 40, 38, 76, C.blue);
       SOURCES[zh ? "zh" : "en"].forEach((s, i) => {
         const p = sp(i); if (p <= 0) return;
@@ -119,12 +119,12 @@ export default {
       });
       /* URL particles into the pool and the funnel */
       for (let i = 0; i < 26; i++) {
-        const q = seg(t, 900 + i * 90, 1900 + i * 90);
+        const q = seg(t, 300 + i * 70, 1100 + i * 70);
         if (q <= 0 || q >= 1) continue;
         const sx = 20 + (i % 2) * 74 + (i % 7) * 7, sy = 64 + (i % 3) * 20, tx = 82, ty = 128;
         dot(ctx, lerp(sx, tx, ease.inOut(q)), lerp(sy, ty, ease.inOut(q)), 1.6, C.blue, 0.8);
       }
-      const pool = ease.out(seg(t, 1200, 1800));
+      const pool = ease.out(seg(t, 250, 650));
       ctx.save(); ctx.globalAlpha *= pool;
       chip(ctx, L.pool, 10, 120, 146, 17, C.peach, C.peachLine, "#8a4b16", 7.4);
       box(ctx, 10, 146, 146, 32, { r: 4, fill: C.pink, stroke: C.pinkLine, dash: [2, 2] });
@@ -132,7 +132,7 @@ export default {
       L.subs.forEach((s, i) => chip(ctx, s, 16 + i * 35, 159, 31, 13, "#fff", C.pinkLine, "#ad1457", 6.6));
       ctx.restore();
       /* active / inactive collection */
-      const ac = ease.out(seg(t, 2600, 3300));
+      const ac = ease.out(seg(t, 450, 850));
       ctx.save(); ctx.globalAlpha *= ac;
       [[L.act, 10], [L.ina, 84]].forEach(([s, x], i) => {
         box(ctx, x, 186, 70, 48, { r: 4, fill: "#f4faf2", stroke: "#a9cf9c" });
@@ -142,7 +142,7 @@ export default {
         text(ctx, s[2], x + 35, 229, { size: 5.8, align: "center", color: C.soft, max: 66 });
       });
       ctx.restore();
-      const pr = ease.out(seg(t, 3200, 3900));
+      const pr = ease.out(seg(t, 600, 1000));
       ctx.save(); ctx.globalAlpha *= pr;
       box(ctx, 10, 242, 146, 62, { r: 4, fill: C.blueBg, stroke: C.dash, dash: [2, 2] });
       headTag(ctx, L.proc, 40, 236, 86, C.blue);
@@ -155,7 +155,7 @@ export default {
       /* funnel */
       const fx = 250, fy = 40;
       L.funnel.forEach((s, i) => {
-        const p = ease.out(seg(t, 1600 + i * 500, 2200 + i * 500));
+        const p = ease.out(seg(t, 200 + i * 150, 600 + i * 150));
         if (p <= 0) return;
         const wTop = 104 - i * 26, wBot = 104 - (i + 1) * 26, y = fy + i * 19;
         ctx.save(); ctx.globalAlpha *= p;
@@ -167,15 +167,15 @@ export default {
       /* particles thinning through the funnel */
       for (let i = 0; i < 18; i++) {
         const q = (t / 1600 + i / 18) % 1, keep = i % 3 === 0;
-        if (t < 2000 || t > 8200 || (!keep && q > 0.55)) continue;
+        if (t < 500 || t > 4200 || (!keep && q > 0.55)) continue;
         dot(ctx, fx + Math.sin(i * 2.1) * (30 - q * 26), fy + q * 70, 1.4, "#3d85c6", 0.7);
       }
       /* magnifier */
-      ctx.strokeStyle = "#3d85c6"; ctx.lineWidth = 2; ctx.globalAlpha = (1 - z) * ease.out(seg(t, 2800, 3400));
+      ctx.strokeStyle = "#3d85c6"; ctx.lineWidth = 2; ctx.globalAlpha = (1 - z) * ease.out(seg(t, 700, 1000));
       ctx.beginPath(); ctx.arc(fx - 4, fy + 84, 7, 0, 6.2832); ctx.moveTo(fx + 1, fy + 89); ctx.lineTo(fx + 7, fy + 95); ctx.stroke();
       ctx.globalAlpha = 1 - z;
       /* donut: scam (expert 3,416 + semi-automatic 4,368) and benign 2,242 */
-      const dx = 238, dy = 232, R0 = 34, R1 = 60, dp = ease.inOut(seg(t, 5000, 6400));
+      const dx = 238, dy = 232, R0 = 34, R1 = 60, dp = ease.inOut(seg(t, 500, 1500));
       /* as in the figure: scam on top (expert 3,416 right, semi-automatic 4,368 left), benign 2,242 at the bottom */
       const segs = [[3416, C.red], [2242, C.green], [4368, C.purple]], tot = 10026;
       let a0 = (-72.8 * Math.PI) / 180;
@@ -185,7 +185,7 @@ export default {
         a0 = a0 + (n / tot) * Math.PI * 2 * dp;
       });
       if (dp > 0.5) {
-        const k = seg(t, 6000, 6500);
+        const k = seg(t, 1200, 1600);
         ctx.save(); ctx.globalAlpha *= k;
         dot(ctx, dx, dy, R0 - 2, "#fff");
         text(ctx, L.web, dx, dy + 3, { size: 8.4, weight: 700, align: "center", color: C.ink });
@@ -200,7 +200,7 @@ export default {
       const sum = SUB.reduce((a, s) => a + s[0], 0);
       let b0 = -Math.PI * 0.42;
       SUB.forEach(([n, en, zhn], i) => {
-        const p = ease.out(seg(t, 6200 + i * 140, 6900 + i * 140));
+        const p = ease.out(seg(t, 900 + i * 80, 1500 + i * 80));
         const span = (n / sum) * Math.PI * 0.84;
         if (p > 0) {
           const r2 = R1 + 4 + 36 * p;
@@ -213,7 +213,7 @@ export default {
         }
         b0 += span;
       });
-      const tg = ease.spring(seg(t, 7000, 7700));
+      const tg = ease.spring(seg(t, 1400, 1900));
       if (tg > 0) {
         ctx.save(); ctx.globalAlpha *= clamp(tg * 2);
         L.tags.forEach((s, i) => { box(ctx, 290, 120 + i * 18, 66, 14, { r: 3, fill: "#fff8ec", stroke: "#f6b26b" }); text(ctx, s, 323, 130 + i * 18, { size: 7, weight: 700, align: "center", color: "#a35d0b", max: 62 }); });
@@ -221,15 +221,18 @@ export default {
         ctx.restore();
       }
       /* sample screenshots */
-      const sm = ease.out(seg(t, 7800, 8600));
+      const sm = ease.out(seg(t, 300, 800));
       ctx.save(); ctx.globalAlpha *= sm;
       box(ctx, 362, 38, 110, 296, { r: 4, fill: "#f7fbf5", stroke: "#b6d7a8", dash: [3, 2] });
       headTag(ctx, L.samples, 386, 32, 62, C.greenD);
       samplePage(ctx, THUMB, false);
+      /* once annotated, the sample keeps its evidence boxes in the finished figure */
+      const ann = seg(t, 10600, 11100);
+      if (ann > 0) { ctx.save(); ctx.globalAlpha *= ann; ctx.strokeStyle = C.box; ctx.lineWidth = 1; REG.forEach(([x, y, w, h]) => ctx.strokeRect(THUMB.x + (x * THUMB.w) / 308, THUMB.y + (y * THUMB.h) / 314, (w * THUMB.w) / 308, (h * THUMB.h) / 314)); ctx.restore(); }
       const palettes = [["#1b1f2e", "#f2c94c"], ["#0f2a3f", "#56ccf2"], ["#2d1b3d", "#bb6bd9"], ["#13261b", "#27ae60"], ["#2b1a12", "#f2994a"], ["#f4f1ea", "#c0392b"], ["#101820", "#f5b041"], ["#eef3fb", "#2e86de"], ["#1e1e1e", "#e84393"]];
       palettes.forEach(([bg, ac], i) => {
         const c = i + 1, X = 366 + (c % 2) * 54, Y = 58 + Math.floor(c / 2) * 56;
-        const p = ease.out(seg(t, 7900 + i * 70, 8400 + i * 70));
+        const p = ease.out(seg(t, 400 + i * 50, 800 + i * 50));
         ctx.save(); ctx.globalAlpha *= p;
         box(ctx, X, Y, 50, 51, { r: 3, fill: bg, stroke: "#c9d2dc", lw: 0.6 });
         box(ctx, X + 5, Y + 8, 28, 5, { r: 2, fill: ac }); box(ctx, X + 5, Y + 17, 40, 3, { r: 1.5, fill: bg.startsWith("#f") || bg.startsWith("#e") ? "rgba(0,0,0,.18)" : "rgba(255,255,255,.35)" });
@@ -248,16 +251,16 @@ export default {
       const on = z > 0.98 ? 1 : 0;
       if (on) {
         /* ScamDet output panel */
-        const op = ease.out(seg(t, 10500, 11000)) * (1 - seg(t, 15600, 15900));
+        const op = ease.out(seg(t, 4300, 4700)) * (1 - seg(t, 10000, 10300));
         ctx.save(); ctx.globalAlpha = op;
         box(ctx, 326, 36, 146, 314, { r: 4, fill: "#fbfcfe", stroke: "#c9d2dc" });
         text(ctx, L.out, 336, 54, { size: 10.6, weight: 700, color: C.ink });
         const kv = (k, v, y, col, at) => { const p = seg(t, at, at + 400); text(ctx, k, 336, y, { size: 7.6, color: C.soft }); text(ctx, v, 336, y + 13, { size: 10, weight: 800, color: col, alpha: p }); };
-        kv(L.label, L.labelV, 72, C.box, 10800);
-        kv(L.type, L.typeV, 102, C.box, 11300);
+        kv(L.label, L.labelV, 72, C.box, 4600);
+        kv(L.type, L.typeV, 102, C.box, 5000);
         let y = 132;
         L.rats.forEach((r, i) => {
-          const p = ease.out(seg(t, 12000 + i * 550, 12500 + i * 550));
+          const p = ease.out(seg(t, 5500 + i * 550, 5900 + i * 550));
           const lines = wrap(ctx, r, 112, 8.4, 600);
           const hgt = 10 + lines.length * 10.5;
           if (p > 0) {
@@ -270,12 +273,12 @@ export default {
           }
           y += hgt + 5;
         });
-        const nt = seg(t, 14400, 14900);
+        const nt = seg(t, 7900, 8300);
         if (nt > 0) wrap(ctx, L.note, 126, 7.6, 600).forEach((ln, j) => text(ctx, ln, 336, 318 + j * 10, { size: 7.6, weight: 600, color: C.soft, alpha: nt }));
         ctx.restore();
         /* grounded boxes on the page */
         REG.forEach(([x, y2, w, h], i) => {
-          const p = ease.spring(seg(t, 11500 + i * 550, 12200 + i * 550)) * (1 - seg(t, 15600, 15900));
+          const p = ease.spring(seg(t, 5300 + i * 550, 5900 + i * 550)) * (1 - seg(t, 10000, 10300));
           if (p <= 0) return;
           const X = FULL.x + x, Y = FULL.y + y2, pad = (1 - p) * 10;
           ctx.save(); ctx.globalAlpha = clamp(p * 2);

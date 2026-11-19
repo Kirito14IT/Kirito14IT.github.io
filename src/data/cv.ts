@@ -296,7 +296,7 @@ const cvEn: CvData = {
       ]
     },
     {
-      title: "International Organization (United Nations Volunteers) - UNDP, Research Intern (Online)",
+      title: "International Organization (United Nations Volunteers) - UNDP Data Research Intern (Online)",
       period: "2026.01 – 2026.04"
     },
     {
@@ -796,7 +796,7 @@ const cvZh: CvData = {
       ]
     },
     {
-      title: "国际组织（联合国志愿人员组织）- UNDP，研究实习生（线上）",
+      title: "国际组织（联合国志愿人员组织）- UNDP 数据研究实习生（线上）",
       period: "2026.01 – 2026.04"
     },
     {

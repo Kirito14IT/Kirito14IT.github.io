@@ -1,250 +1,192 @@
-/* Mangrove review (UNDP / UNV): blue carbon under two kinds of pressure, as a living coastal cross-section.
-   Numbers from the manuscript: mean stock 738.9 Mg C per ha with 76.5 % in soil; accretion about 2.0 mm a year
-   in conserved stands; survival unlikely once relative sea-level rise passes 6.1 mm a year; coastal squeeze,
-   nutrient loading and clearing as local stressors; conservation, nutrient management and NDC accounting as responses. */
-import { C, rgba, clamp, lerp, seg, ease, rr, panel, text, font, dot, rand } from "../engine.js";
+/* Mangrove review (UNDP / UNV): the manuscript's carbon-dynamics figure as a living infographic.
+   Columns as in the figure: climate stressors, the mangrove ecosystem, blue carbon pathways, mitigation outcomes.
+   Numbers from the manuscript: 738.9 Mg C per ha with 76.5 % in soil; accretion about 2.0 mm a year in conserved
+   stands against a 6.1 mm a year sea-level-rise threshold; coastal squeeze, nutrient loading, storm and heat stress. */
+import { clamp, lerp, seg, ease, rr, box, text, font, wrap, dot, check, arrow, rand } from "../engine.js";
 
-const TREES = [140, 164, 190, 216, 240, 264, 288, 312].map((x, i) => ({ x, h: 46 + ((i * 37) % 17), w: 22 + ((i * 13) % 7) }));
-const CLEARED = [5, 6];
+const W = 480, H = 270;
+const IL = { x: 104, y: 56, w: 196, h: 194 };
+const COLH = [["#2a9d8f", 8, 90], ["#1f6f50", 104, 196], ["#2b6cb0", 308, 84], ["#2f855a", 398, 76]];
 const T = {
   en: {
-    stock: "738.9 Mg C per ha", soil: "76.5% stored in soil", co2: "CO₂",
-    slr: "Relative sea-level rise", acc: "accretion ≈ 2.0 mm/yr", thr: "threshold 6.1 mm/yr", drown: "drowning risk",
-    squeeze: "coastal squeeze", wall: "seawall", np: "N, P loading", cleared: "clearing releases carbon",
-    acts: ["Protect, leave room to migrate", "Manage nutrient loading", "Count blue carbon in NDCs"],
-    area: "81,484 km² in 118 countries",
+    heads: ["Climate stressors", "Mangrove ecosystem", "Blue carbon pathways", "Mitigation outcomes"],
+    st: ["Sea-level rise", "Coastal squeeze", "Nutrient loading", "Storm & heat stress"],
+    pw: ["Soil–air CO₂ efflux", "Particulate organic carbon export", "Dissolved inorganic carbon export"],
+    oc: ["Carbon storage & sequestration", "Coastal protection & resilience", "Monitoring & assessment", "Policy & sustainable management"],
+    npp: "Net primary productivity (NPP)", bio: "Biomass carbon", sed: "Sediment carbon storage",
+    stock: "738.9 Mg C per ha · 76.5% in soil", slr: "accretion ≈ 2.0 mm/yr · threshold 6.1 mm/yr", sq: "no room to migrate", ndc: "Count blue carbon in national NDCs",
+    leg: ["Carbon input", "Carbon storage", "Carbon outputs"],
   },
   zh: {
-    stock: "每公顷 738.9 Mg 碳", soil: "76.5% 储存在土壤中", co2: "CO₂",
-    slr: "相对海平面上升", acc: "淤积 ≈ 2.0 毫米/年", thr: "阈值 6.1 毫米/年", drown: "淹没风险",
-    squeeze: "海岸挤压", wall: "海堤", np: "氮、磷负荷", cleared: "砍伐释放碳",
-    acts: ["保护并留出迁移空间", "管理养分负荷", "把蓝碳纳入 NDC"],
-    area: "全球 81,484 km²，分布于 118 个国家",
+    heads: ["气候压力", "红树林生态系统", "蓝碳通量", "减缓成效"],
+    st: ["海平面上升", "海岸挤压", "养分负荷", "风暴与热胁迫"],
+    pw: ["土壤–大气 CO₂ 排放", "颗粒有机碳输出", "溶解无机碳输出"],
+    oc: ["碳储存与封存", "海岸防护与韧性", "监测与评估", "政策与可持续管理"],
+    npp: "净初级生产力（NPP）", bio: "生物量碳", sed: "沉积物碳储存",
+    stock: "每公顷 738.9 Mg 碳 · 76.5% 在土壤", slr: "淤积 ≈ 2.0 毫米/年 · 阈值 6.1 毫米/年", sq: "无处迁移", ndc: "把蓝碳纳入国家 NDC",
+    leg: ["碳输入", "碳储存", "碳输出"],
   },
 };
+const ST_AT = [4200, 5500, 6800, 8100];
+const OC_AT = [12200, 12900, 13600, 14300];
 
-const ground = (x) => {
-  if (x < 110) return 234 + 3 * Math.sin(x / 24);
-  if (x < 330) { const p = (x - 110) / 220, s = p * p * (3 - 2 * p); return lerp(226, 178, s) + 2 * Math.sin(x / 17); }
-  return 172;
-};
+function glyph(ctx, kind, x, y, col) {
+  ctx.save(); ctx.translate(x, y); ctx.strokeStyle = col; ctx.fillStyle = col; ctx.lineWidth = 1.4; ctx.lineCap = "round"; ctx.lineJoin = "round";
+  ctx.beginPath();
+  if (kind === "slr") { [2, 6].forEach((yy) => { ctx.moveTo(-7, yy); ctx.quadraticCurveTo(-3.5, yy - 3, 0, yy); ctx.quadraticCurveTo(3.5, yy + 3, 7, yy); }); ctx.moveTo(0, -1); ctx.lineTo(0, -8); ctx.moveTo(-3, -5); ctx.lineTo(0, -8); ctx.lineTo(3, -5); }
+  if (kind === "sq") { ctx.rect(2, -7, 4, 14); ctx.moveTo(-8, 0); ctx.lineTo(-1, 0); ctx.moveTo(-4, -3); ctx.lineTo(-1, 0); ctx.lineTo(-4, 3); }
+  if (kind === "nut") { ctx.moveTo(-8, -4); ctx.lineTo(1, -4); ctx.lineTo(1, -1); ctx.moveTo(-8, -1); ctx.lineTo(-2, -1); [[1, 3], [4, 6], [-2, 6]].forEach(([dx, dy]) => { ctx.moveTo(dx + 1.2, dy); ctx.arc(dx, dy, 1.2, 0, 6.2832); }); }
+  if (kind === "storm") { ctx.moveTo(-7, 0); ctx.quadraticCurveTo(-8, -6, -2, -6); ctx.quadraticCurveTo(0, -10, 4, -6); ctx.quadraticCurveTo(9, -5, 7, 0); ctx.closePath(); ctx.moveTo(0, 1); ctx.lineTo(-2, 5); ctx.lineTo(1, 5); ctx.lineTo(-1, 9); }
+  if (kind === "co2") { ctx.moveTo(-4, 6); ctx.lineTo(-4, -2); ctx.moveTo(-6, 0); ctx.lineTo(-4, -2); ctx.lineTo(-2, 0); ctx.moveTo(4, 6); ctx.lineTo(4, -2); ctx.moveTo(2, 0); ctx.lineTo(4, -2); ctx.lineTo(6, 0); ctx.moveTo(-6, -6); ctx.lineTo(6, -6); }
+  if (kind === "poc") { [[-4, -3], [2, -4], [-1, 2], [5, 2], [-5, 4]].forEach(([dx, dy]) => { ctx.moveTo(dx + 1.8, dy); ctx.arc(dx, dy, 1.8, 0, 6.2832); }); }
+  if (kind === "dic") { [[-5, -3], [0, -5], [5, -2], [-3, 3], [3, 4]].forEach(([dx, dy]) => { ctx.moveTo(dx + 1, dy); ctx.arc(dx, dy, 1, 0, 6.2832); }); ctx.moveTo(-7, 8); ctx.quadraticCurveTo(-3, 5, 0, 8); ctx.quadraticCurveTo(3, 11, 7, 8); }
+  if (kind === "store") { ctx.moveTo(-8, 5); ctx.lineTo(8, 5); ctx.moveTo(0, 5); ctx.lineTo(0, -4); ctx.moveTo(0, -1); ctx.quadraticCurveTo(-6, -2, -6, -7); ctx.quadraticCurveTo(-1, -7, 0, -2); ctx.moveTo(0, -3); ctx.quadraticCurveTo(5, -4, 6, -8); ctx.quadraticCurveTo(1, -9, 0, -4); }
+  if (kind === "prot") { ctx.moveTo(0, -7); ctx.lineTo(6, -4.5); ctx.lineTo(5.5, 1); ctx.quadraticCurveTo(4, 5, 0, 7); ctx.quadraticCurveTo(-4, 5, -5.5, 1); ctx.lineTo(-6, -4.5); ctx.closePath(); ctx.moveTo(-3.5, 0); ctx.quadraticCurveTo(-1.5, -2, 0, 0); ctx.quadraticCurveTo(1.5, 2, 3.5, 0); }
+  if (kind === "mon") { ctx.moveTo(-7, 6); ctx.lineTo(7, 6); [[-5, 3], [-1, -1], [3, -4]].forEach(([dx, h]) => { ctx.moveTo(dx, 6); ctx.lineTo(dx, h); }); ctx.moveTo(-7, -2); ctx.lineTo(-2, -5); ctx.lineTo(1, -3); ctx.lineTo(7, -8); }
+  if (kind === "pol") { ctx.moveTo(-8, -3); ctx.lineTo(0, -8); ctx.lineTo(8, -3); ctx.closePath(); [-5, -1.7, 1.7, 5].forEach((dx) => { ctx.moveTo(dx, -1); ctx.lineTo(dx, 5); }); ctx.moveTo(-8, 7); ctx.lineTo(8, 7); }
+  ctx.stroke(); ctx.restore();
+}
+function badge(ctx, kind, x, y, col, on, label, lang) {
+  const p = clamp(on);
+  dot(ctx, x, y, 14, p > 0 ? col : "#ffffff");
+  ctx.strokeStyle = col; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.arc(x, y, 14, 0, 6.2832); ctx.stroke();
+  if (p > 0 && p < 1) { ctx.strokeStyle = col; ctx.globalAlpha = 1 - p; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(x, y, 14 + 8 * p, 0, 6.2832); ctx.stroke(); ctx.globalAlpha = 1; }
+  glyph(ctx, kind, x, y, p > 0 ? "#ffffff" : col);
+  wrap(ctx, label, 74, 7, 600).slice(0, 2).forEach((ln, j) => text(ctx, ln, x, y + 24 + j * 8.4, { size: 7, weight: 600, align: "center", color: "#1f2933" }));
+}
+function tree(ctx, x, base, s, sway, tint) {
+  ctx.save(); ctx.translate(x, base);
+  ctx.strokeStyle = "#7a5a3c"; ctx.lineWidth = 1.4 * s;
+  for (let k = -3; k <= 3; k++) { ctx.beginPath(); ctx.moveTo(k * 1.4 * s, -16 * s); ctx.quadraticCurveTo(k * 6 * s, -12 * s, k * 9 * s, 2); ctx.stroke(); }
+  ctx.lineWidth = 3 * s; ctx.beginPath(); ctx.moveTo(0, -14 * s); ctx.lineTo(sway, -40 * s); ctx.stroke();
+  [[-12, -46, 14, "#2e7d32"], [10, -48, 13, "#388e3c"], [-2, -58, 15, "#43a047"], [-16, -56, 10, "#66bb6a"], [14, -60, 10, "#4caf50"]].forEach(([dx, dy, r, c]) => { ctx.fillStyle = tint || c; ctx.beginPath(); ctx.arc(dx * s + sway, dy * s, r * s, 0, 6.2832); ctx.fill(); });
+  ctx.restore();
+}
 
 export default {
-  duration: 15400,
-  poster: 14000,
-  seed: 4.6,
-  mood: [
-    [0, { v: 0.75, c: 0.7, m: 0.05 }],
-    [3800, { v: 0.8, c: 0.6, m: 0.1 }],
-    [6600, { v: 0.6, c: 0.25, m: 0.8 }],
-    [8400, { v: 0.7, c: 0.3, m: 0.6 }],
-    [10200, { v: 0.6, c: 0.2, m: 0.85 }],
-    [11800, { v: 0.75, c: 0.75, m: 0.15 }],
-    [15400, { v: 0.75, c: 0.7, m: 0.05 }],
-  ],
-  steps: [
-    { at: 0, label: { en: "Blue carbon", zh: "蓝碳" }, caption: { en: "Mangroves pull CO₂ into their canopy and lock most of the carbon in waterlogged soil.", zh: "红树林把 CO₂ 吸入树冠，并把大部分碳封存在浸水的土壤中。" } },
-    { at: 3800, label: { en: "Sea-level rise", zh: "海平面上升" }, caption: { en: "Sediment accretion keeps them above water, until relative sea-level rise passes about 6.1 mm a year.", zh: "沉积淤积让它们不被淹没，直到相对海平面上升超过约 6.1 毫米/年。" } },
-    { at: 7600, label: { en: "Local pressure", zh: "本地压力" }, caption: { en: "Seawalls block landward retreat; effluent, aquaculture and clearing change nutrients and release carbon.", zh: "海堤阻断向陆迁移；污水、养殖与砍伐改变养分并释放碳。" } },
-    { at: 11400, label: { en: "Mitigation", zh: "应对" }, caption: { en: "The review's answer: conserve, manage nutrients, and bring local blue-carbon data into national plans (NDCs).", zh: "综述的结论：加强保护、管理养分，并把本地蓝碳数据纳入国家自主贡献（NDC）。" } },
-  ],
+  id: "mangrove",
+  size: [W, H],
+  bg: "#ffffff",
+  duration: 16000,
+  poster: 15200,
   create() {
-    const r = rand(5);
-    const stored = Array.from({ length: 150 }, (_, i) => {
-      const tr = TREES[i % TREES.length];
-      return { x: tr.x + (r() - 0.5) * 34, d: 10 + r() * 50, at: 400 + i * 22 + r() * 300, tree: i % TREES.length };
-    });
-    const flow = Array.from({ length: 34 }, (_, i) => ({ tree: i % TREES.length, ph: r(), sx: r() * 480, sp: 0.8 + r() * 0.5 }));
-    const nutr = Array.from({ length: 26 }, () => ({ ph: r(), y: r() * 6 }));
-    const rel = Array.from({ length: 22 }, () => ({ ph: r(), x: (r() - 0.5) * 40 }));
-    return { stored, flow, nutr, rel };
+    const r = rand(9);
+    return {
+      grains: Array.from({ length: 70 }, (_, i) => ({ x: IL.x + 10 + r() * (IL.w - 20), y: 226 + r() * 20, at: 900 + i * 40 })),
+      co2: Array.from({ length: 16 }, () => ({ x: IL.x + 30 + r() * 140, ph: r() })),
+    };
   },
   draw(ctx, t, st, stage) {
-    const L = T[stage.lang] || T.en;
-    const s = t / 1000;
-    const slr = ease.inOut(seg(t, 4200, 7000));
-    const sea = 198 - 12 * slr - 6 * seg(t, 11600, 14000) * 0;
-    const clear = seg(t, 9200, 10000) * (1 - seg(t, 12200, 13600));
-    const regrow = seg(t, 12400, 13800);
-    /* ---------- ground and soil ---------- */
-    ctx.beginPath(); ctx.moveTo(0, 300);
-    for (let x = 0; x <= 480; x += 6) ctx.lineTo(x, ground(x));
-    ctx.lineTo(480, 300); ctx.closePath();
-    const sg = ctx.createLinearGradient(0, 170, 0, 300);
-    sg.addColorStop(0, "#1b1140"); sg.addColorStop(1, "#08041a");
-    ctx.fillStyle = sg; ctx.fill();
-    ctx.strokeStyle = rgba(C.purple, 0.55); ctx.lineWidth = 1.2; ctx.beginPath();
-    for (let x = 0; x <= 480; x += 6) (x ? ctx.lineTo(x, ground(x)) : ctx.moveTo(x, ground(x))); ctx.stroke();
-    /* strata */
-    [14, 30, 50].forEach((d, k) => {
-      ctx.strokeStyle = rgba(C.violet, 0.28 - k * 0.06); ctx.lineWidth = 1; ctx.beginPath();
-      for (let x = 0; x <= 480; x += 8) { const y = ground(x) + d + Math.sin(x / 31 + k) * 2; x ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
-      ctx.stroke();
-    });
-    /* accretion: a fresh sediment layer grows under the forest while the sea rises */
-    const acc = seg(t, 4400, 7200) * (1 - seg(t, 14800, 15300));
-    if (acc > 0) {
-      ctx.fillStyle = rgba(C.cyan, 0.16 * acc); ctx.beginPath();
-      for (let x = 118; x <= 330; x += 6) { const y = ground(x) - 3 * acc; x === 118 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); }
-      for (let x = 330; x >= 118; x -= 6) ctx.lineTo(x, ground(x)); ctx.closePath(); ctx.fill();
-    }
-    /* stored carbon: glowing grains that accumulate in the soil */
-    st.stored.forEach((p) => {
-      const a = seg(t, p.at, p.at + 400);
-      if (a <= 0) return;
-      const lost = CLEARED.includes(p.tree) ? clear : 0;
-      const y = ground(p.x) + p.d;
-      dot(ctx, p.x, y - lost * 30 * p.d / 60, 1.2, lost > 0.2 ? C.magenta : C.cyan, a * (0.7 - 0.3 * lost) * (1 - seg(t, 15000, 15350)), 3);
-    });
-    /* ---------- sea ---------- */
-    let shore = 0;
-    for (let x = 0; x < 330; x += 2) if (ground(x) < sea) { shore = x; break; }
-    ctx.beginPath(); ctx.moveTo(0, sea);
-    for (let x = 0; x <= shore; x += 4) ctx.lineTo(x, sea + Math.sin(x / 16 + s * 1.8) * 1.6 + Math.sin(x / 7 - s * 2.6) * 0.6);
-    for (let x = shore; x >= 0; x -= 4) ctx.lineTo(x, ground(x));
-    ctx.closePath();
-    const wg = ctx.createLinearGradient(0, sea, 0, 240);
-    wg.addColorStop(0, rgba(C.cyan, 0.32)); wg.addColorStop(0.35, rgba(C.blue, 0.22)); wg.addColorStop(1, rgba(C.violet, 0.08));
-    ctx.fillStyle = wg; ctx.fill();
-    ctx.strokeStyle = rgba(C.cyan, 0.75); ctx.lineWidth = 1.1; ctx.shadowColor = C.cyan; ctx.shadowBlur = 6;
-    ctx.beginPath();
-    for (let x = 0; x <= shore; x += 4) { const y = sea + Math.sin(x / 16 + s * 1.8) * 1.6 + Math.sin(x / 7 - s * 2.6) * 0.6; x ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
-    ctx.stroke(); ctx.shadowBlur = 0;
-    /* ---------- land: seawall and town ---------- */
-    ctx.fillStyle = "#140c34"; ctx.strokeStyle = rgba(C.purple, 0.6); ctx.lineWidth = 1;
-    rr(ctx, 336, 142, 10, 31, 2); ctx.fill(); ctx.stroke();
-    [[356, 128, 22], [382, 112, 18], [404, 136, 26], [434, 120, 20], [458, 132, 18]].forEach(([x, y, w], i) => {
-      ctx.fillStyle = "#120a2e"; ctx.fillRect(x, y, w, 172 - y);
-      ctx.strokeStyle = rgba(C.purple, 0.35); ctx.strokeRect(x + 0.5, y + 0.5, w - 1, 172 - y - 1);
-      for (let wy = y + 6; wy < 166; wy += 9) for (let wx = x + 4; wx < x + w - 3; wx += 7) { const on = ((wx * 7 + wy * 3 + i) % 5) < 2; if (on) { ctx.fillStyle = rgba(C.cyan, 0.4 + 0.2 * Math.sin(s + wx)); ctx.fillRect(wx, wy, 2, 2.4); } }
-    });
-    text(ctx, L.wall, 341, 136, { size: 7.4, weight: 700, align: "center", color: rgba(C.ink, 0.55) });
-    /* ---------- trees ---------- */
-    TREES.forEach((tr, i) => {
-      const gy = ground(tr.x), cleared = CLEARED.includes(i);
-      const alive = cleared ? 1 - clear + regrow * clear : 1;
-      const grow = cleared && regrow > 0 && clear > 0 ? 0.4 + 0.6 * regrow : 1;
-      const drown = i < 2 ? seg(t, 6000, 6800) * (1 - seg(t, 11600, 12600)) : 0;
-      if (alive <= 0.02) return;
-      ctx.save(); ctx.globalAlpha = alive;
-      const sway = Math.sin(s * 1.3 + i) * 1.2;
-      const top = gy - tr.h * grow;
-      /* prop roots */
-      ctx.strokeStyle = drown > 0.3 ? rgba(C.magenta, 0.7) : rgba(C.pink, 0.55); ctx.lineWidth = 1;
-      for (let k = -2; k <= 2; k++) { ctx.beginPath(); ctx.moveTo(tr.x + k * 1.2, gy - 14 * grow); ctx.quadraticCurveTo(tr.x + k * 6, gy - 10 * grow, tr.x + k * 8, gy + 1); ctx.stroke(); }
-      ctx.strokeStyle = rgba(C.ink, 0.55); ctx.lineWidth = 1.6;
-      ctx.beginPath(); ctx.moveTo(tr.x, gy - 12 * grow); ctx.quadraticCurveTo(tr.x + sway, (gy + top) / 2, tr.x + sway, top + 8); ctx.stroke();
-      /* canopy */
-      [[-0.6, 0.0, 0.62], [0.55, 0.12, 0.56], [0.02, -0.32, 0.6]].forEach(([dx, dy, r]) => {
-        const cx = tr.x + sway + dx * tr.w * grow, cy = top + 8 + dy * tr.w * grow, rad = r * tr.w * grow;
-        const g = ctx.createRadialGradient(cx, cy - rad * 0.3, rad * 0.1, cx, cy, rad);
-        const col = drown > 0.3 ? C.magenta : C.cyan;
-        g.addColorStop(0, rgba(col, 0.55)); g.addColorStop(0.6, rgba(drown > 0.3 ? C.pink : "#1fb6a8", 0.38)); g.addColorStop(1, rgba(C.violet, 0.05));
-        ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(cx, cy, rad, rad * 0.78, 0, 0, 6.2832); ctx.fill();
-      });
+    const zh = stage.lang === "zh", L = T[zh ? "zh" : "en"], s = t / 1000;
+    /* column headers */
+    COLH.forEach(([c, x, w], i) => {
+      const p = ease.out(seg(t, 100 + i * 120, 600 + i * 120));
+      ctx.save(); ctx.globalAlpha = p;
+      box(ctx, x, 36, w, 15, { r: 7.5, fill: c });
+      text(ctx, L.heads[i], x + w / 2, 46.4, { size: 8, weight: 700, align: "center", color: "#fff", max: w - 8 });
       ctx.restore();
     });
-    /* seedlings reaching for the land, stopped by the seawall */
-    const mig = seg(t, 7800, 9000);
-    if (mig > 0) {
-      [320, 328].forEach((x, k) => {
-        const p = ease.spring(seg(t, 7800 + k * 300, 8600 + k * 300));
-        const gy = ground(x);
-        ctx.strokeStyle = rgba(C.cyan, 0.8 * p); ctx.lineWidth = 1.2;
-        ctx.beginPath(); ctx.moveTo(x, gy); ctx.lineTo(x, gy - 10 * p); ctx.stroke();
-        dot(ctx, x, gy - 11 * p, 3 * p, "#1fb6a8", 0.9 * p);
-      });
-      const sq = seg(t, 8600, 9200) * (1 - seg(t, 11800, 12600));
-      if (sq > 0) {
-        ctx.save(); ctx.globalAlpha = sq;
-        ctx.strokeStyle = C.magenta; ctx.lineWidth = 1.6; ctx.shadowColor = C.magenta; ctx.shadowBlur = 10;
-        ctx.beginPath(); ctx.moveTo(316, 150); ctx.lineTo(333, 150); ctx.lineTo(333, 172); ctx.moveTo(330, 114); ctx.lineTo(330, 148); ctx.stroke(); ctx.shadowBlur = 0;
-        panel(ctx, 287, 96, 86, 18, { r: 9, fill: rgba(C.magenta, 0.2), stroke: rgba(C.magenta, 0.8) });
-        text(ctx, L.squeeze, 330, 108.4, { size: 8.4, weight: 800, align: "center", color: "#ff9ccd" });
-        ctx.restore();
-      }
+    /* ---------- illustration ---------- */
+    ctx.save();
+    rr(ctx, IL.x, IL.y, IL.w, IL.h, 8); ctx.clip();
+    const sky = ctx.createLinearGradient(0, IL.y, 0, IL.y + 130);
+    sky.addColorStop(0, "#dff1fb"); sky.addColorStop(1, "#f8fcff");
+    ctx.fillStyle = sky; ctx.fillRect(IL.x, IL.y, IL.w, IL.h);
+    /* sun and birds */
+    const storm = seg(t, 8100, 8600) * (1 - seg(t, 12000, 12800));
+    dot(ctx, IL.x + 26, IL.y + 22, 9, "#f9c74f", 1 - 0.6 * storm);
+    ctx.strokeStyle = "rgba(249,199,79,.8)"; ctx.lineWidth = 1.2;
+    for (let k = 0; k < 8; k++) { const a = k * 0.785 + s * 0.3; ctx.beginPath(); ctx.moveTo(IL.x + 26 + Math.cos(a) * 12, IL.y + 22 + Math.sin(a) * 12); ctx.lineTo(IL.x + 26 + Math.cos(a) * 15, IL.y + 22 + Math.sin(a) * 15); ctx.stroke(); }
+    ctx.strokeStyle = "#5f6b7a"; ctx.lineWidth = 1;
+    [0, 1, 2].forEach((k) => { const bx = IL.x + ((s * 14 + k * 60) % (IL.w + 30)) - 10, by = IL.y + 18 + k * 9; ctx.beginPath(); ctx.moveTo(bx - 4, by - 2); ctx.quadraticCurveTo(bx - 2, by - 3, bx, by); ctx.quadraticCurveTo(bx + 2, by - 3, bx + 4, by - 2); ctx.stroke(); });
+    if (storm > 0) {
+      ctx.globalAlpha = storm;
+      ctx.fillStyle = "#9aa5b1"; [[150, 30, 16], [166, 24, 18], [184, 30, 15]].forEach(([dx, dy, r]) => { ctx.beginPath(); ctx.arc(IL.x + dx, IL.y + dy, r, 0, 6.2832); ctx.fill(); });
+      ctx.strokeStyle = "#f9c74f"; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(IL.x + 168, IL.y + 42); ctx.lineTo(IL.x + 162, IL.y + 54); ctx.lineTo(IL.x + 168, IL.y + 54); ctx.lineTo(IL.x + 161, IL.y + 68); ctx.stroke();
+      ctx.globalAlpha = 1;
     }
-    /* ---------- CO₂ into the canopy and down into the soil ---------- */
-    const flowOn = 1 - seg(t, 3600, 4200) + seg(t, 11800, 12600) * 1;
-    if (flowOn > 0.02) st.flow.forEach((f) => {
-      const tr = TREES[f.tree];
-      if (CLEARED.includes(f.tree) && clear > 0.3) return;
-      const q = (s * 0.32 * f.sp + f.ph) % 1;
-      let x, y, col = C.cyan;
-      const gy = ground(tr.x), top = gy - tr.h;
-      if (q < 0.5) { const k = ease.inOut(q / 0.5); x = lerp(f.sx, tr.x, k); y = lerp(52, top + 8, k); }
-      else { const k = (q - 0.5) / 0.5; x = tr.x + Math.sin(k * 6) * 2; y = lerp(top + 8, gy + 30, k); col = "#7ff7e8"; }
-      dot(ctx, x, y, 1.4, col, clamp(flowOn) * 0.9, 3);
+    /* water, rising during the sea-level-rise step */
+    const rise = ease.inOut(seg(t, 4200, 5300)) * (1 - seg(t, 12000, 12800) * 0.6);
+    const wy = IL.y + 140 - 10 * rise;
+    const wg = ctx.createLinearGradient(0, wy, 0, IL.y + IL.h);
+    wg.addColorStop(0, "#9ad3ec"); wg.addColorStop(1, "#4a9cc8");
+    ctx.fillStyle = wg; ctx.beginPath(); ctx.moveTo(IL.x, wy);
+    for (let x = 0; x <= IL.w; x += 6) ctx.lineTo(IL.x + x, wy + Math.sin(x / 14 + s * 1.6) * 1.6);
+    ctx.lineTo(IL.x + IL.w, IL.y + IL.h); ctx.lineTo(IL.x, IL.y + IL.h); ctx.closePath(); ctx.fill();
+    /* sediment with stored carbon */
+    const sg = ctx.createLinearGradient(0, IL.y + 166, 0, IL.y + IL.h);
+    sg.addColorStop(0, "#8b6b4a"); sg.addColorStop(1, "#5d4630");
+    ctx.fillStyle = sg; ctx.fillRect(IL.x, IL.y + 166, IL.w, IL.h - 166);
+    st.grains.forEach((g) => { const a = seg(t, g.at, g.at + 300); if (a > 0) dot(ctx, g.x, g.y, 1.3, "#2b1d12", a * (1 - seg(t, 15600, 15950))); });
+    /* trees */
+    const cleared = 0;
+    [[IL.x + 34, 0.62], [IL.x + 72, 1], [IL.x + 128, 1.06], [IL.x + 172, 0.7]].forEach(([x, k], i) => tree(ctx, x, IL.y + 168, k, Math.sin(s * 1.2 + i) * 1.4, cleared && i === 3 ? "#9e9e9e" : null));
+    /* coastal squeeze: a seawall on the landward edge */
+    const sq = seg(t, 5500, 6000) * (1 - seg(t, 12600, 13400) * 0.5);
+    if (sq > 0) {
+      ctx.globalAlpha = sq;
+      ctx.fillStyle = "#8d99a6"; ctx.fillRect(IL.x + IL.w - 12, IL.y + 104, 12, 64);
+      ctx.strokeStyle = "#d93025"; ctx.lineWidth = 1.4; ctx.setLineDash([3, 2]);
+      ctx.beginPath(); ctx.moveTo(IL.x + 150, IL.y + 112); ctx.lineTo(IL.x + IL.w - 16, IL.y + 112); ctx.stroke(); ctx.setLineDash([]);
+      ctx.beginPath(); ctx.moveTo(IL.x + IL.w - 22, IL.y + 106); ctx.lineTo(IL.x + IL.w - 16, IL.y + 112); ctx.lineTo(IL.x + IL.w - 22, IL.y + 118); ctx.stroke();
+      ctx.globalAlpha = 1;
+    }
+    /* nutrient loading from an outfall */
+    const nl = seg(t, 6800, 7300) * (1 - seg(t, 12600, 13400));
+    if (nl > 0) {
+      ctx.fillStyle = `rgba(110,110,120,${nl})`; ctx.fillRect(IL.x + IL.w - 30, wy - 18, 30, 6);
+      for (let k = 0; k < 14; k++) { const q = (s * 0.35 + k / 14) % 1; dot(ctx, IL.x + IL.w - 30 - q * 120, wy - 12 + q * 22 + Math.sin(k) * 3, 1.6, "#8e7cc3", nl * (1 - q)); }
+    }
+    /* carbon flows */
+    const inA = seg(t, 300, 900) * (1 - seg(t, 15600, 15950));
+    ctx.globalAlpha = inA;
+    arrow(ctx, IL.x + 96, IL.y + 34, IL.x + 96, IL.y + 64, "#2e8b57", 2.4, 7, ease.out(seg(t, 400, 1200)));
+    for (let k = 0; k < 6; k++) { const q = (s * 0.6 + k / 6) % 1; dot(ctx, IL.x + 96 + Math.sin(k * 2) * 6, IL.y + 30 + q * 120, 1.6, "#2e8b57", 0.8 * inA * (1 - q)); }
+    arrow(ctx, IL.x + 100, IL.y + 128, IL.x + 100, IL.y + 160, "#6b4f35", 2.4, 7, ease.out(seg(t, 1400, 2200)));
+    ctx.globalAlpha = 1;
+    const outA = seg(t, 9200, 9800) * (1 - seg(t, 15600, 15950));
+    if (outA > 0) {
+      ctx.globalAlpha = outA;
+      st.co2.forEach((c) => { const q = (s * 0.4 + c.ph) % 1; dot(ctx, c.x, IL.y + 166 - q * 70, 1.8, "#2b6cb0", 0.7 * (1 - q)); });
+      ctx.globalAlpha = 1;
+    }
+    /* labels inside the illustration */
+    const lab = (s0, x, y, fill, col, a) => { if (a <= 0) return; font(ctx, 7.4, 700); const w = ctx.measureText(s0).width + 12; ctx.save(); ctx.globalAlpha = a; box(ctx, x - w / 2, y - 9, w, 13, { r: 6.5, fill }); text(ctx, s0, x, y, { size: 7.4, weight: 700, align: "center", color: col }); ctx.restore(); };
+    lab(L.npp, IL.x + 98, IL.y + 14 + 0, "rgba(255,255,255,.9)", "#1f6f50", seg(t, 500, 1000));
+    lab(L.bio, IL.x + 100, IL.y + 122, "#1f6f50", "#fff", seg(t, 1000, 1500));
+    lab(L.sed, IL.x + 100, IL.y + 182, "rgba(43,29,18,.85)", "#fff", seg(t, 1800, 2300));
+    lab(L.stock, IL.x + 98, IL.y + IL.h - 8, "rgba(255,255,255,.92)", "#5d4630", seg(t, 2400, 2900) * (1 - seg(t, 4000, 4300)));
+    lab(L.slr, IL.x + 98, IL.y + IL.h - 8, "rgba(255,255,255,.92)", "#1f5ea8", seg(t, 4300, 4700) * (1 - seg(t, 5400, 5700)));
+    lab(L.sq, IL.x + 150, IL.y + 100, "rgba(255,255,255,.92)", "#d93025", seg(t, 5700, 6100) * (1 - seg(t, 6800, 7100)));
+    lab(L.ndc, IL.x + 98, IL.y + 62, "rgba(47,133,90,.95)", "#fff", seg(t, 14600, 15000) * (1 - seg(t, 15700, 15950)));
+    ctx.restore();
+    box(ctx, IL.x, IL.y, IL.w, IL.h, { r: 8, stroke: "#c8d7cf", lw: 1 });
+    /* ---------- columns of icons ---------- */
+    const SK = ["slr", "sq", "nut", "storm"], OK = ["store", "prot", "mon", "pol"], PK = ["co2", "poc", "dic"];
+    SK.forEach((k, i) => {
+      const on = seg(t, ST_AT[i], ST_AT[i] + 400) * (1 - seg(t, 12000, 12600));
+      badge(ctx, k, 52, 72 + i * 48, "#2a9d8f", on, L.st[i]);
+      if (on > 0) arrow(ctx, 70, 72 + i * 48, IL.x - 4, 72 + i * 48 + (IL.y + 100 - (72 + i * 48)) * 0.3, `rgba(42,157,143,${on})`, 1.2, 4, ease.out(on));
     });
-    if (seg(t, 600, 1100) * (1 - seg(t, 3600, 4000)) > 0) {
-      const a = seg(t, 600, 1100) * (1 - seg(t, 3600, 4000));
-      ctx.save(); ctx.globalAlpha = a;
-      text(ctx, L.co2, 70, 70, { size: 12, weight: 800, color: "#9ff8ff", glow: rgba(C.cyan, 0.8) });
-      text(ctx, L.co2, 214, 58, { size: 10, weight: 800, color: "#9ff8ff", glow: rgba(C.cyan, 0.8), alpha: 0.75 });
-      panel(ctx, 352, 186, 116, 40, { r: 9, fill: "rgba(7,3,26,.74)", stroke: rgba(C.cyan, 0.55) });
-      text(ctx, L.stock, 360, 202, { size: 9.6, weight: 800, color: "#9ff8ff", max: 102 });
-      text(ctx, L.soil, 360, 217, { size: 8.6, weight: 600, color: rgba(C.ink, 0.8), max: 102 });
-      ctx.restore();
-    }
-    /* ---------- sea-level gauge ---------- */
-    const ga = seg(t, 3900, 4300) * (1 - seg(t, 7500, 7900));
-    if (ga > 0) {
-      ctx.save(); ctx.globalAlpha = ga;
-      const G = { x: 14, y: 44, w: 196, h: 56 };
-      panel(ctx, G.x, G.y, G.w, G.h, { r: 9, fill: "rgba(7,3,26,.76)" });
-      text(ctx, L.slr, G.x + 10, G.y + 14, { size: 8.8, weight: 800 });
-      const bx0 = G.x + 10, bx1 = G.x + G.w - 12, by = G.y + 26, mm = (v) => lerp(bx0, bx1, v / 8);
-      rr(ctx, bx0, by, bx1 - bx0, 6, 3); ctx.fillStyle = "rgba(247,244,255,.1)"; ctx.fill();
-      const rate = lerp(1, 7.2, slr);
-      const gr = ctx.createLinearGradient(bx0, 0, bx1, 0); gr.addColorStop(0, C.cyan); gr.addColorStop(0.7, C.purple); gr.addColorStop(1, C.magenta);
-      rr(ctx, bx0, by, mm(rate) - bx0, 6, 3); ctx.fillStyle = gr; ctx.fill();
-      ctx.strokeStyle = C.cyan; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(mm(2), by - 3); ctx.lineTo(mm(2), by + 9); ctx.stroke();
-      ctx.strokeStyle = C.magenta; ctx.beginPath(); ctx.moveTo(mm(6.1), by - 3); ctx.lineTo(mm(6.1), by + 9); ctx.stroke();
-      text(ctx, L.acc, bx0, by + 21, { size: 7.4, weight: 700, color: "#9ff8ff" });
-      text(ctx, L.thr, bx1, by + 21, { size: 7.4, weight: 700, align: "right", color: "#ff9ccd" });
-      const over = seg(t, 6000, 6400);
-      if (over > 0) { panel(ctx, 66, 150, 70, 18, { r: 9, fill: rgba(C.magenta, 0.22 * over), stroke: rgba(C.magenta, 0.85 * over) }); text(ctx, L.drown, 101, 162.4, { size: 8, weight: 800, align: "center", color: "#ff9ccd", alpha: over }); }
-      ctx.restore();
-    }
-    /* ---------- local stressors: nutrients from the town, carbon from clearing ---------- */
-    const ns = seg(t, 7800, 8400) * (1 - seg(t, 11800, 12600));
-    if (ns > 0) {
-      st.nutr.forEach((n) => {
-        const q = (s * 0.18 + n.ph) % 1, x = lerp(352, 200, q), y = ground(x) - 4 - n.y;
-        dot(ctx, x, y, 1.4, C.purple, ns * 0.9, 3);
-      });
-      ctx.save(); ctx.globalAlpha = ns;
-      panel(ctx, 352, 186, 92, 18, { r: 9, fill: rgba(C.purple, 0.24), stroke: rgba(C.purple, 0.8) });
-      text(ctx, L.np, 398, 198.4, { size: 8.2, weight: 800, align: "center", color: "#e4d2ff" });
-      ctx.restore();
-    }
-    if (clear > 0) {
-      const cx = (TREES[5].x + TREES[6].x) / 2;
-      st.rel.forEach((p) => {
-        const q = (s * 0.4 + p.ph) % 1, y = lerp(ground(cx) + 10, 70, q);
-        dot(ctx, cx + p.x + Math.sin(q * 9) * 4, y, 1.5, C.magenta, clear * (1 - q) * (1 - regrow), 3);
-      });
-      ctx.save(); ctx.globalAlpha = clear * (1 - regrow);
-      panel(ctx, cx - 92, 70, 124, 18, { r: 9, fill: rgba(C.magenta, 0.2), stroke: rgba(C.magenta, 0.8) });
-      text(ctx, L.cleared, cx - 30, 82.4, { size: 8.2, weight: 800, align: "center", color: "#ff9ccd", max: 116 });
-      ctx.restore();
-    }
-    /* ---------- responses ---------- */
-    const ra = seg(t, 11800, 12200) * (1 - seg(t, 14800, 15200));
-    if (ra > 0) {
-      L.acts.forEach((a, i) => {
-        const p = ease.spring(seg(t, 11900 + i * 320, 12700 + i * 320));
-        if (p <= 0) return;
-        font(ctx, 9, 800);
-        const w = ctx.measureText(a).width + 26, x = 14, y = 44 + i * 26;
-        ctx.save(); ctx.globalAlpha = ra * clamp(p * 2); ctx.translate(-(1 - p) * 20, 0);
-        panel(ctx, x, y, w, 20, { r: 10, fill: rgba(C.cyan, 0.14), stroke: rgba(C.cyan, 0.75), glow: rgba(C.cyan, 0.7), blur: 10 });
-        dot(ctx, x + 11, y + 10, 3, C.cyan, 1, 2.4);
-        text(ctx, a, x + 20, y + 13.6, { size: 9, weight: 800, color: "#c9fbff" });
-        ctx.restore();
-      });
-      const fa = seg(t, 13200, 13800) * (1 - seg(t, 14800, 15200));
-      if (fa > 0) text(ctx, L.area, 466, 56, { size: 9.2, weight: 700, align: "right", color: rgba(C.ink, 0.75 * fa) });
-    }
+    PK.forEach((k, i) => {
+      const on = seg(t, 9400 + i * 700, 9800 + i * 700) * (1 - seg(t, 15600, 15950));
+      const y = 80 + i * 62;
+      badge(ctx, k, 350, y, "#2b6cb0", on, L.pw[i]);
+      if (on > 0) arrow(ctx, IL.x + IL.w + 2, y, 332, y, `rgba(43,108,176,${on})`, 1.4, 5, ease.out(on));
+    });
+    OK.forEach((k, i) => {
+      const on = seg(t, OC_AT[i], OC_AT[i] + 400) * (1 - seg(t, 15600, 15950));
+      badge(ctx, k, 436, 72 + i * 48, "#2f855a", on, L.oc[i]);
+      if (on > 0.9) check(ctx, 450, 60 + i * 48, 7, "#2f855a", seg(t, OC_AT[i] + 300, OC_AT[i] + 600));
+    });
+    /* legend */
+    const lg = seg(t, 600, 1200);
+    ctx.save(); ctx.globalAlpha = lg;
+    arrow(ctx, 112, 262, 130, 262, "#2e8b57", 1.6, 4, 1); text(ctx, L.leg[0], 134, 265, { size: 7, color: "#3e4c59" });
+    font(ctx, 7, 400); const w1 = ctx.measureText(L.leg[0]).width;
+    box(ctx, 146 + w1, 258, 14, 8, { r: 2, fill: "#5d4630" }); text(ctx, L.leg[1], 164 + w1, 265, { size: 7, color: "#3e4c59" });
+    const w2 = ctx.measureText(L.leg[1]).width;
+    arrow(ctx, 176 + w1 + w2, 262, 194 + w1 + w2, 262, "#2b6cb0", 1.6, 4, 1); text(ctx, L.leg[2], 198 + w1 + w2, 265, { size: 7, color: "#3e4c59" });
+    ctx.restore();
   },
 };

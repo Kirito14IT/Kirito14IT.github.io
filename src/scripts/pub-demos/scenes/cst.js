@@ -1,307 +1,281 @@
-/* CST: three decisions in one review (paper Figures 2, 3 and 8).
-   Where to look: messages scored on a CPU, discussions ordered by risk from 144 features.
-   What to read: group related messages; round-robin covers both topics within a two-message budget.
-   How to check: open the phrase at its source span and follow the reply path. */
-import { C, rgba, clamp, lerp, seg, ease, rr, panel, text, typed, wrap, font, dot, check } from "../engine.js";
+/* CST: the paper's Figure 3 as a camera move. The view pans across the five numbered panels
+   (web discussion, shared representations, discussion ranking, independent organization, source-linked review),
+   each animating its step, then pulls back to the whole figure with the reported results. */
+import { clamp, lerp, seg, ease, rr, box, text, font, wrap, dot, check, arrow } from "../engine.js";
 
+const W = 480, H = 270;
+const PW = 226, PH = 222, PY = 30, X0 = 12, STEP = 244;
+const px = (k) => X0 + k * STEP;
+const WORLD = X0 + 5 * STEP;
+const COL = ["#1f5ea8", "#138a8a", "#6a3ea1", "#c56a00", "#177e7e"];
+const TINT = ["#eef4fb", "#e9f6f6", "#f2edf9", "#fdf3e6", "#e9f5f5"];
 const T = {
   en: {
-    cpu: "CPU · 4 threads", enc: ["MiniLM sentence", "+ char 2–5-grams", "logistic heads"],
-    risk: "Discussion risk", feats: ["semantics 128", "attack 10", "replies 6"], ranker: "144 features → logistic ranker",
-    grouped: "Grouped messages", budget: "Reading budget: 2 messages", riskOrder: "Risk order", rr: "Group round-robin",
-    one: "1 topic", two: "2 topics", same: "Risk scores stay unchanged",
-    thread: "Source thread · Hacker News", evidence: "Evidence group", path: "Reply path",
-    stats: [["6 of 6", "message tasks above fine-tuned XLM-R in AP"], ["2.62×", "faster than XLM-R on the same CPU service"], ["≥27.3%", "less review time with grouped evidence"]],
+    heads: ["Web discussion", "Shared representations", "Discussion ranking", "Independent organization", "Source-linked review"],
+    ask: [null, null, "Where to look?", "What to read?", "How to check?"],
+    community: "Community", title: "Moderation discussion", excerpt: "Thread excerpt", reply: "Reply to",
+    minilm: "MiniLM", sv: "Sentence vectors e", cg: "Character 2–5 grams", cf: "Character features h", concat: "Concatenate [h; e]",
+    heads2: "Logistic heads", att: "Attack", hate: "Hate", spam: "Spam/scam", scores: "Message scores r",
+    sem: "Semantics", atk: "Attack", rep: "Replies", feats: "144 features", ranker: "Logistic ranker", dscore: "Discussion score s",
+    group: "Group messages", extract: "Extract names + spans", ro: "Read-only e, r", nofb: "No prediction feedback",
+    inspect: "Inspect discussion", kf: "karma / flagging", as: "Attack score", links: "Original reply links",
+    flow: ["Text", "e, r", "Queue", "Evidence"],
+    res: [["6 of 6", "message tasks with higher AP than fine-tuned XLM-R"], ["2.62×", "faster than XLM-R on the same CPU service"], ["≥27.3%", "less review time with grouped evidence"]],
   },
   zh: {
-    cpu: "CPU · 4 线程", enc: ["MiniLM 句向量", "+ 字符 2–5-gram", "逻辑回归头"],
-    risk: "讨论串风险", feats: ["语义 128", "攻击 10", "回复 6"], ranker: "144 维特征 → 逻辑回归排序",
-    grouped: "分组后的消息", budget: "阅读预算：2 条消息", riskOrder: "按风险顺序", rr: "分组轮询",
-    one: "覆盖 1 个话题", two: "覆盖 2 个话题", same: "风险分数保持不变",
-    thread: "原始讨论 · Hacker News", evidence: "证据组", path: "回复链",
-    stats: [["6 项", "消息任务 AP 全部超过微调 XLM-R"], ["2.62×", "同一 CPU 服务上比 XLM-R 更快"], ["≥27.3%", "分组证据让审核时间更短"]],
+    heads: ["网络讨论", "共享表示", "讨论串排序", "独立组织证据", "溯源审核"],
+    ask: [null, null, "看哪里？", "读什么？", "怎么核验？"],
+    community: "社区", title: "版务讨论", excerpt: "讨论节选", reply: "回复",
+    minilm: "MiniLM", sv: "句向量 e", cg: "字符 2–5-gram", cf: "字符特征 h", concat: "拼接 [h; e]",
+    heads2: "逻辑回归头", att: "攻击", hate: "仇恨", spam: "垃圾/诈骗", scores: "消息分数 r",
+    sem: "语义", atk: "攻击", rep: "回复", feats: "144 维特征", ranker: "逻辑回归排序器", dscore: "讨论串分数 s",
+    group: "消息分组", extract: "提取名称与片段", ro: "只读 e, r", nofb: "不回传预测",
+    inspect: "查看讨论", kf: "karma / flagging", as: "攻击分数", links: "原始回复链接",
+    flow: ["文本", "e, r", "队列", "证据"],
+    res: [["6 项", "消息任务的 AP 全部超过微调 XLM-R"], ["2.62×", "同一 CPU 服务上比 XLM-R 更快"], ["≥27.3%", "分组证据让审核时间更短"]],
   },
 };
-/* Figures 1–2: an illustrative discussion; the order is the risk order of the paper's example */
-const MSG = [
-  { id: "m1", topic: "team", text: "Leave the team.", risk: 0.86 },
-  { id: "m2", topic: "team", text: "Nobody wants you on the team.", risk: 0.74 },
-  { id: "m3", topic: "accent", text: "Your accent is ridiculous.", risk: 0.61 },
+/* Figure 3, panel 1: the Hacker News thread excerpt */
+const MSGS = [
+  { u: "Culonavirus", id: "m8", to: "m1", c: "#e8b04b", s: "What kinds of user flags are there and why are they not public?" },
+  { u: "rezonant", id: "m9", to: "m8", c: "#6fbf73", s: "It's just the flagging you already have access to …" },
+  { u: "s1artibartfast", id: "m10", to: "m9", c: "#e57373", s: "At some point you get the option to vouch for flagged posts as well." },
+  { u: "mkl", id: "m11", to: "m10", c: "#9575cd", s: ">30 karma, same as flagging:" },
 ];
-/* Figure 8: the thread behind the evidence */
-const THREAD = [
-  { id: "m8", d: 0, text: "What kinds of user flags are there and why are they not public?" },
-  { id: "m9", d: 1, pre: "It's just the ", phrase: "flagging", post: " you already have access to …" },
-  { id: "m10", d: 2, text: "At some point you get the option to vouch for flagged posts as well." },
-  { id: "m11", d: 3, pre: ">30 ", phrase: "karma", post: ", same as flagging:" },
-];
-const QUEUE = [0.32, 0.81, 0.18, 0.55, 0.41];
-/* Table 3 (AP: fine-tuned XLM-R, CST), Figure 6 (CPU seconds), Table 7 (paired review time) */
-const AP = [[0.683, 0.712], [0.859, 0.887], [0.978, 0.986], [0.864, 0.893], [0.854, 0.879], [0.972, 0.981]];
-const CPU = [["MiniLM + LR", 117.93], ["XLM-R", 332.42], ["CST", 126.69]];
+const ACT = [[0, 2700], [2700, 5300], [6100, 8400], [9300, 11200], [11200, 13300]];
 
-function chipIcon(ctx, x, y, w, h, glow) {
-  panel(ctx, x, y, w, h, { r: 8, fill: "rgba(22, 12, 64, .85)", stroke: rgba(C.cyan, 0.4 + 0.5 * glow), glow: glow > 0.05 ? rgba(C.cyan, glow) : null, blur: 14 });
-  ctx.strokeStyle = rgba(C.cyan, 0.45); ctx.lineWidth = 1.2;
-  for (let i = 0; i < 6; i++) {
-    const yy = y + 12 + i * ((h - 24) / 5);
-    ctx.beginPath(); ctx.moveTo(x - 5, yy); ctx.lineTo(x, yy); ctx.moveTo(x + w, yy); ctx.lineTo(x + w + 5, yy); ctx.stroke();
+function head(ctx, k, L, on) {
+  const x = px(k);
+  box(ctx, x, PY, PW, PH, { r: 6, fill: TINT[k], stroke: on ? COL[k] : "rgba(31,41,51,.18)", lw: on ? 1.6 : 1 });
+  rr(ctx, x, PY, PW, 22, 6); ctx.fillStyle = COL[k]; ctx.fill();
+  ctx.fillRect(x, PY + 12, PW, 10);
+  dot(ctx, x + 13, PY + 11, 7, "#fff");
+  text(ctx, String(k + 1), x + 13, PY + 14.6, { size: 9.5, weight: 700, align: "center", color: COL[k] });
+  text(ctx, L.heads[k], x + 25, PY + 15.4, { size: 10.6, weight: 700, color: "#fff", max: PW - 32 });
+  if (L.ask[k]) {
+    font(ctx, 8.4, 700); const w = ctx.measureText(L.ask[k]).width + 12;
+    box(ctx, x + PW - w - 4, PY + PH - 17, w, 13, { r: 6.5, fill: "#fff", stroke: COL[k], lw: 1 });
+    text(ctx, L.ask[k], x + PW - w / 2 - 4, PY + PH - 7.6, { size: 8.4, weight: 700, align: "center", color: COL[k] });
   }
 }
 
+function p1(ctx, t, L) {
+  const x = px(0), y = PY;
+  box(ctx, x + 8, y + 27, PW - 16, 15, { r: 3, fill: "#16467d" });
+  ctx.strokeStyle = "#fff"; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(x + 17, y + 34.5, 4, 0, 6.2832); ctx.moveTo(x + 13, y + 34.5); ctx.lineTo(x + 21, y + 34.5); ctx.stroke();
+  text(ctx, L.community, x + 26, y + 38, { size: 8.6, weight: 700, color: "#fff" });
+  text(ctx, L.title, x + 10, y + 56, { size: 10.4, weight: 700, color: "#1f2933" });
+  text(ctx, L.excerpt, x + 10, y + 65, { size: 7, color: "#6b7785" });
+  MSGS.forEach((m, i) => {
+    const a = ease.out(seg(t, 250 + i * 450, 750 + i * 450));
+    if (a <= 0) return;
+    const yy = y + 70 + i * 37;
+    ctx.save(); ctx.globalAlpha *= a; ctx.translate(0, (1 - a) * 6);
+    dot(ctx, x + 17, yy + 8, 7, m.c);
+    dot(ctx, x + 17, yy + 6, 2.6, "#fff"); ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(x + 17, yy + 12.5, 3.8, Math.PI, 0); ctx.fill();
+    text(ctx, m.u, x + 28, yy + 7, { size: 8.4, weight: 700, color: "#1f2933" });
+    font(ctx, 8.4, 700); const nw = ctx.measureText(m.u).width;
+    box(ctx, x + 31 + nw, yy - 0.5, 17, 9.5, { r: 2, fill: "#dceaf8" });
+    text(ctx, m.id, x + 39.5 + nw, yy + 6.8, { size: 6.8, weight: 700, align: "center", color: COL[0] });
+    text(ctx, L.reply + " " + m.to, x + 28, yy + 15, { size: 6.4, color: "#6b7785" });
+    wrap(ctx, m.s, PW - 42, 7.4).slice(0, 2).forEach((ln, j) => text(ctx, ln, x + 28, yy + 23.5 + j * 8.6, { size: 7.4, color: "#1f2933" }));
+    ctx.restore();
+  });
+}
+
+function p2(ctx, t, L) {
+  const x = px(1), y = PY, a = seg(t, 2700, 3000);
+  const fill = (t0) => ease.out(seg(t, t0, t0 + 700));
+  box(ctx, x + 8, y + 28, 102, 64, { r: 4, fill: "#fff", stroke: "rgba(19,138,138,.35)" });
+  box(ctx, x + 116, y + 28, 102, 64, { r: 4, fill: "#fff", stroke: "rgba(19,138,138,.35)" });
+  /* MiniLM chip */
+  ctx.strokeStyle = COL[1]; ctx.lineWidth = 1.2; rr(ctx, x + 40, y + 36, 22, 22, 3); ctx.stroke();
+  for (let i = 0; i < 4; i++) { ctx.beginPath(); ctx.moveTo(x + 44 + i * 5, y + 33); ctx.lineTo(x + 44 + i * 5, y + 36); ctx.moveTo(x + 44 + i * 5, y + 58); ctx.lineTo(x + 44 + i * 5, y + 61); ctx.stroke(); }
+  [[70, 40], [78, 48], [70, 56], [86, 44]].forEach(([dx, dy], i) => dot(ctx, x + dx, y + dy, 2.6, ["#4a86d6", "#8e7cc3", "#138a8a", "#e8b04b"][i], 0.4 + 0.6 * fill(2900)));
+  text(ctx, L.minilm, x + 59, y + 74, { size: 8.6, weight: 700, align: "center", color: "#1f2933" });
+  text(ctx, L.sv, x + 59, y + 85, { size: 7, align: "center", color: "#52606d" });
+  /* character n-grams */
+  ["a", "b", "c", "#"].forEach((ch, i) => {
+    const k = fill(3000 + i * 120);
+    box(ctx, x + 136 + i * 16, y + 38 + (i % 2) * 6, 14, 14, { r: 2, fill: ["#e8b04b", "#e57373", "#6fbf73", "#9575cd"][i], stroke: null });
+    ctx.save(); ctx.globalAlpha *= 0.4 + 0.6 * k;
+    text(ctx, ch, x + 143 + i * 16, y + 48.5 + (i % 2) * 6, { size: 9, weight: 700, align: "center", color: "#fff" });
+    ctx.restore();
+  });
+  text(ctx, L.cg, x + 167, y + 74, { size: 8.2, weight: 700, align: "center", color: "#1f2933", max: 96 });
+  text(ctx, L.cf, x + 167, y + 85, { size: 7, align: "center", color: "#52606d", max: 96 });
+  /* concatenation */
+  text(ctx, L.concat, x + PW / 2, y + 106, { size: 8.6, weight: 700, align: "center", color: "#1f2933" });
+  const cf = fill(3500);
+  for (let i = 0; i < 14; i++) {
+    const on = i / 14 < cf;
+    box(ctx, x + 14 + i * 14, y + 111, 12, 9, { r: 1.5, fill: on ? (i < 6 ? "#e8b04b" : "#4a86d6") : "rgba(31,41,51,.1)" });
+  }
+  /* logistic heads */
+  box(ctx, x + 8, y + 128, PW - 16, 58, { r: 4, fill: "#fff", stroke: "rgba(19,138,138,.35)" });
+  text(ctx, L.heads2, x + PW / 2, y + 141, { size: 8.8, weight: 700, align: "center", color: "#1f2933" });
+  [[L.att, "#d93025", 0.62], [L.hate, "#7e57c2", 0.31], [L.spam, "#2e7d32", 0.18]].forEach(([n, c, v], i) => {
+    const xx = x + 16 + i * 66, k = fill(3900 + i * 200);
+    text(ctx, n, xx, y + 156, { size: 8, weight: 700, color: c, max: 62 });
+    box(ctx, xx, y + 161, 56, 5, { r: 2.5, fill: "rgba(31,41,51,.1)" });
+    box(ctx, xx, y + 161, 56 * v * k, 5, { r: 2.5, fill: c });
+  });
+  text(ctx, L.scores, x + PW / 2, y + 180, { size: 7.4, align: "center", color: "#52606d" });
+  /* tokens flowing in from the thread */
+  if (a > 0 && t < 4000) {
+    for (let i = 0; i < 8; i++) {
+      const q = seg(t, 2700 + i * 120, 3500 + i * 120);
+      if (q <= 0 || q >= 1) continue;
+      const sx = px(0) + PW - 6, sy = PY + 90 + (i % 4) * 30, tx = x + (i % 2 ? 167 : 59), ty = y + 46;
+      dot(ctx, lerp(sx, tx, ease.inOut(q)), lerp(sy, ty, ease.inOut(q)) - Math.sin(q * Math.PI) * 18, 2.2, i % 2 ? "#e8b04b" : "#4a86d6");
+    }
+  }
+}
+
+function p3(ctx, t, L, state) {
+  const x = px(2), y = PY;
+  const g = (t0) => ease.out(seg(t, t0, t0 + 800));
+  /* three feature groups */
+  [[L.sem, "128-D"], [L.atk, "10-D"], [L.rep, "6-D"]].forEach(([n, d], i) => {
+    const xx = x + 8 + i * 72;
+    box(ctx, xx, y + 28, 66, 66, { r: 4, fill: "#fff", stroke: "rgba(106,62,161,.3)" });
+    text(ctx, n, xx + 33, y + 39, { size: 8, weight: 700, align: "center", color: "#1f2933", max: 62 });
+    text(ctx, d, xx + 33, y + 48, { size: 6.8, align: "center", color: "#52606d" });
+    const k = g(6200 + i * 250);
+    if (i === 0) for (let j = 0; j < 18; j++) dot(ctx, xx + 10 + ((j * 37) % 46), y + 56 + ((j * 17) % 30), 1.8, ["#4a86d6", "#8e7cc3", "#e57373", "#26a69a"][j % 4], k);
+    if (i === 1) for (let j = 0; j < 10; j++) { const hh = (8 + ((j * 7) % 22)) * k; box(ctx, xx + 8 + j * 5.2, y + 88 - hh, 4, hh, { r: 1, fill: "#d93025" }); }
+    if (i === 2) {
+      ctx.strokeStyle = "#26a69a"; ctx.lineWidth = 1.3;
+      const nodes = [[33, 56], [20, 70], [46, 70], [13, 84], [27, 84], [46, 84]], edges = [[0, 1], [0, 2], [1, 3], [1, 4], [2, 5]];
+      edges.forEach(([a, b], j) => { if (j / edges.length < k) { ctx.beginPath(); ctx.moveTo(xx + nodes[a][0], y + nodes[a][1]); ctx.lineTo(xx + nodes[b][0], y + nodes[b][1]); ctx.stroke(); } });
+      nodes.forEach(([nx, ny], j) => { if (j / nodes.length < k + 0.2) dot(ctx, xx + nx, y + ny, 3, "#26a69a"); });
+    }
+  });
+  /* 144 features */
+  text(ctx, L.feats, x + PW / 2, y + 107, { size: 8.6, weight: 700, align: "center", color: "#1f2933" });
+  const f = g(7000), fw = PW - 28;
+  [[128, "#8e7cc3"], [10, "#d93025"], [6, "#26a69a"]].reduce((acc, [n, c]) => { const w = (fw * n) / 144; box(ctx, x + 14 + acc, y + 112, Math.max(0, w * f - 0.5), 8, { r: 1.5, fill: c }); return acc + w; }, 0);
+  box(ctx, x + 14, y + 112, fw, 8, { r: 1.5, stroke: "rgba(31,41,51,.25)" });
+  /* logistic ranker and the queue */
+  box(ctx, x + 40, y + 128, PW - 80, 22, { r: 4, fill: "#fff", stroke: "rgba(106,62,161,.45)" });
+  text(ctx, L.ranker, x + PW / 2, y + 142.5, { size: 8.8, weight: 700, align: "center", color: COL[2] });
+  text(ctx, L.dscore, x + PW / 2, y + 159, { size: 7.2, align: "center", color: "#52606d" });
+  const scores = [0.34, 0.83, 0.21, 0.58], order = [1, 3, 0, 2], sp = ease.spring(seg(t, 7600, 8300));
+  scores.forEach((v, i) => {
+    const r1 = order.indexOf(i), yy = y + 164 + lerp(i, r1, sp) * 9.6;
+    const top = r1 === 0 && sp > 0.5;
+    box(ctx, x + 30, yy, PW - 60, 8, { r: 2, fill: top ? "rgba(217,48,37,.14)" : "#fff", stroke: top ? "#d93025" : "rgba(31,41,51,.18)" });
+    box(ctx, x + 32, yy + 2, (PW - 64) * v * g(7300), 4, { r: 2, fill: top ? "#d93025" : COL[2] });
+  });
+}
+
+function p4(ctx, t, L) {
+  const x = px(3), y = PY, k = ease.inOut(seg(t, 9400, 10400));
+  box(ctx, x + 8, y + 28, PW - 16, 86, { r: 4, fill: "#fff", stroke: "rgba(197,106,0,.3)" });
+  text(ctx, L.group, x + PW / 2, y + 108, { size: 8.6, weight: 700, align: "center", color: "#1f2933" });
+  const B = [[30, 50, 0], [150, 46, 1], [70, 80, 0], [110, 54, 1], [176, 82, 1], [46, 72, 0]];
+  B.forEach(([bx, by, g], i) => {
+    const tx = g ? 150 + (i % 2) * 18 : 46 + (i % 3) * 16, ty = g ? 52 + (i % 3) * 10 : 54 + (i % 2) * 14;
+    const cx = x + lerp(bx, tx, k), cy = y + lerp(by, ty, k);
+    box(ctx, cx - 12, cy - 7, 24, 14, { r: 7, fill: g ? "rgba(197,106,0,.22)" : "rgba(31,94,168,.18)", stroke: g ? "#c56a00" : "#1f5ea8", lw: 1 });
+    [0, 1, 2].forEach((j) => dot(ctx, cx - 6 + j * 6, cy, 1.4, g ? "#c56a00" : "#1f5ea8"));
+  });
+  if (k > 0.8) { ctx.strokeStyle = "rgba(197,106,0,.55)"; ctx.setLineDash([3, 2]); ctx.lineWidth = 1; rr(ctx, x + 140, y + 36, 64, 52, 8); ctx.stroke(); ctx.strokeStyle = "rgba(31,94,168,.55)"; rr(ctx, x + 22, y + 38, 70, 52, 8); ctx.stroke(); ctx.setLineDash([]); }
+  /* extract names + spans */
+  box(ctx, x + 8, y + 120, PW - 16, 46, { r: 4, fill: "#fff", stroke: "rgba(197,106,0,.3)" });
+  ctx.fillStyle = "#c56a00"; ctx.beginPath(); ctx.moveTo(x + 22, y + 130); ctx.lineTo(x + 46, y + 130); ctx.lineTo(x + 37, y + 142); ctx.lineTo(x + 37, y + 152); ctx.lineTo(x + 31, y + 155); ctx.lineTo(x + 31, y + 142); ctx.closePath(); ctx.fill();
+  const sp = ease.out(seg(t, 10200, 10900));
+  [0, 1, 2].forEach((j) => { box(ctx, x + 60, y + 130 + j * 9, 110, 4, { r: 2, fill: "rgba(31,41,51,.14)" }); if (j !== 1) box(ctx, x + 60 + j * 24, y + 129 + j * 9, 30 * sp, 6, { r: 2, fill: "rgba(255,193,7,.7)" }); });
+  text(ctx, L.extract, x + 60, y + 161, { size: 8, weight: 700, color: "#1f2933" });
+  /* read-only */
+  box(ctx, x + 8, y + 172, PW - 16, 30, { r: 4, fill: "#fff7e6", stroke: "rgba(197,106,0,.5)" });
+  ctx.strokeStyle = "#c56a00"; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.arc(x + 24, y + 183, 4.5, Math.PI, 0); ctx.stroke();
+  box(ctx, x + 17, y + 183, 14, 11, { r: 2, fill: "#c56a00" });
+  text(ctx, L.ro, x + 40, y + 184, { size: 8.4, weight: 700, color: "#7a4300" });
+  text(ctx, L.nofb, x + 40, y + 195, { size: 7.2, color: "#7a4300" });
+}
+
+function p5(ctx, t, L) {
+  const x = px(4), y = PY;
+  box(ctx, x + 8, y + 28, PW - 16, 18, { r: 3, fill: "#fff", stroke: "rgba(23,126,126,.4)" });
+  ctx.strokeStyle = COL[4]; ctx.lineWidth = 1.3; ctx.beginPath(); ctx.arc(x + 20, y + 37, 4.5, 0, 6.2832); ctx.stroke();
+  text(ctx, L.inspect, x + 30, y + 40.5, { size: 8.6, weight: 700, color: "#1f2933" });
+  /* folder */
+  ctx.fillStyle = "#e8b04b"; rr(ctx, x + 12, y + 56, 20, 14, 2); ctx.fill(); rr(ctx, x + 12, y + 53, 9, 5, 1.5); ctx.fill();
+  text(ctx, L.kf, x + 38, y + 66, { size: 9.4, weight: 700, color: "#1f2933" });
+  [["m9", "flagging", "0.092", 11300], ["m11", "karma", "0.619", 11700]].forEach(([id, ph, sc, at], i) => {
+    const a = ease.out(seg(t, at, at + 500));
+    const yy = y + 78 + i * 46;
+    ctx.save(); ctx.globalAlpha *= 0.25 + 0.75 * a;
+    box(ctx, x + 8, yy, PW - 16, 38, { r: 4, fill: "#fff", stroke: i === 1 && t > 12200 ? "#d93025" : "rgba(23,126,126,.35)", lw: i === 1 && t > 12200 ? 1.6 : 1 });
+    text(ctx, id, x + 16, yy + 14, { size: 8.6, weight: 700, color: COL[4] });
+    font(ctx, 9.4, 700); const pw = ctx.measureText(ph).width;
+    if (a > 0) { ctx.fillStyle = "rgba(255,213,79,.8)"; ctx.fillRect(x + 42, yy + 5, (pw + 6) * a, 12); }
+    text(ctx, ph, x + 45, yy + 14, { size: 9.4, weight: 700, color: "#1f2933" });
+    text(ctx, L.as + " " + sc, x + 16, yy + 30, { size: 8, color: "#52606d" });
+    /* outbound link icon */
+    ctx.strokeStyle = COL[4]; ctx.lineWidth = 1.2; rr(ctx, x + PW - 30, yy + 8, 12, 12, 2); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x + PW - 24, yy + 14); ctx.lineTo(x + PW - 16, yy + 6); ctx.moveTo(x + PW - 20, yy + 6); ctx.lineTo(x + PW - 16, yy + 6); ctx.lineTo(x + PW - 16, yy + 10); ctx.stroke();
+    ctx.restore();
+  });
+}
+
 export default {
-  duration: 15200,
-  poster: 11800,
-  seed: 2.1,
-  mood: [
-    [0, { v: 0.85, c: 0.5, m: 0.05 }],
-    [2600, { v: 0.8, c: 0.45, m: 0.15 }],
-    [3300, { v: 0.6, c: 0.2, m: 0.75 }],
-    [4300, { v: 0.85, c: 0.55, m: 0.15 }],
-    [8100, { v: 0.85, c: 0.5, m: 0.12 }],
-    [9500, { v: 0.6, c: 0.2, m: 0.85 }],
-    [11600, { v: 0.75, c: 0.6, m: 0.2 }],
-    [15200, { v: 0.85, c: 0.5, m: 0.05 }],
-  ],
-  steps: [
-    { at: 0, label: { en: "Where to look?", zh: "看哪里？" }, caption: { en: "Messages are scored on a CPU, and whole discussions are ordered by risk.", zh: "在 CPU 上为每条消息打分，再按风险为整个讨论串排序。" } },
-    { at: 4200, label: { en: "What to read?", zh: "读什么？" }, caption: { en: "Related messages are grouped; round-robin picks cover both topics within two messages.", zh: "相关消息先分组，轮询选取让两条消息就覆盖两个话题。" } },
-    { at: 8200, label: { en: "How to check?", zh: "怎么核验？" }, caption: { en: "Each phrase opens at its original span, and the reply path shows what it answers.", zh: "每个短语都能回到原文片段，回复链说明它在回应谁。" } },
-    { at: 12300, label: { en: "Results", zh: "结果" }, caption: { en: "Lightweight and checkable: higher AP on every message task, 2.62× faster than XLM-R on CPU.", zh: "轻量且可核验：每项消息任务 AP 更高，CPU 上比 XLM-R 快 2.62 倍。" } },
-  ],
+  id: "cst",
+  size: [W, H],
+  bg: "#ffffff",
+  duration: 16600,
+  poster: 15400,
   draw(ctx, t, state, stage) {
     const L = T[stage.lang] || T.en;
-    /* ---------- step 1: score on CPU, order discussions ---------- */
-    const s1 = seg(t, 100, 500) * (1 - seg(t, 4000, 4400));
-    if (s1 > 0) {
-      ctx.save(); ctx.globalAlpha = s1;
-      const EN = { x: 150, y: 96, w: 96, h: 112 };
-      /* incoming messages */
-      for (let i = 0; i < 7; i++) {
-        const p = seg(t, 300 + i * 360, 1500 + i * 360);
-        if (p <= 0 || p >= 1) continue;
-        const x = lerp(-90, EN.x - 4, ease.inOut(p)), y = 70 + (i % 4) * 46 + Math.sin(i) * 6;
-        ctx.save(); ctx.globalAlpha *= clamp((1 - p) * 6) * clamp(p * 5);
-        panel(ctx, x, y, 92, 30, { r: 7, fill: "rgba(22,12,64,.8)", stroke: "rgba(196,176,255,.28)" });
-        dot(ctx, x + 11, y + 15, 5, i % 3 === 1 ? C.pink : C.purple, 0.9);
-        rr(ctx, x + 21, y + 9, 54 - (i % 3) * 8, 4, 2); ctx.fillStyle = "rgba(247,244,255,.4)"; ctx.fill();
-        rr(ctx, x + 21, y + 17, 38 + (i % 2) * 14, 4, 2); ctx.fillStyle = "rgba(247,244,255,.22)"; ctx.fill();
-        ctx.restore();
-      }
-      const busy = 0.25 + 0.6 * Math.max(0, Math.sin(t / 180)) * seg(t, 700, 900) * (1 - seg(t, 3400, 3800));
-      chipIcon(ctx, EN.x, EN.y, EN.w, EN.h, busy);
-      text(ctx, L.cpu, EN.x + EN.w / 2, EN.y - 8, { size: 9.4, weight: 800, align: "center", color: C.cyan, glow: rgba(C.cyan, 0.7) });
-      L.enc.forEach((s, i) => text(ctx, s, EN.x + EN.w / 2, EN.y + 30 + i * 22, { size: 8.6, weight: i === 2 ? 700 : 600, align: "center", color: i === 2 ? "#9ff8ff" : rgba(C.ink, 0.86), max: EN.w - 10 }));
-      /* scores flying to the queue */
-      const Q = { x: 266, y: 74, w: 200 };
-      for (let i = 0; i < 7; i++) {
-        const p = seg(t, 1500 + i * 360, 2100 + i * 360);
-        if (p <= 0 || p >= 1) continue;
-        const row = i % 5, ax = EN.x + EN.w + 4, ay = EN.y + 30 + (i % 3) * 22, bx = Q.x + 30, by = Q.y + row * 36 + 14;
-        const e = ease.inOut(p);
-        dot(ctx, lerp(ax, bx, e), lerp(ay, by, e) - Math.sin(e * Math.PI) * 14, 2.2, QUEUE[row] > 0.6 ? C.magenta : C.cyan, 1, 3);
-      }
-      /* the discussion queue, re-ordered by risk */
-      text(ctx, L.risk, Q.x, Q.y - 22, { size: 9.6, weight: 800 });
-      L.feats.forEach((f, i) => { const p = seg(t, 900 + i * 150, 1300 + i * 150); if (p > 0) { font(ctx, 7.6, 700); const w = ctx.measureText(f).width + 10; const x = Q.x + [0, 66, 116][i]; rr(ctx, x, Q.y - 15, w, 12, 6); ctx.fillStyle = rgba(C.purple, 0.3 * p); ctx.fill(); text(ctx, f, x + 5, Q.y - 6.4, { size: 7.6, weight: 700, color: rgba(C.ink, 0.85 * p) }); } });
-      const sorted = QUEUE.map((v, i) => ({ v, i })).sort((a, b) => b.v - a.v);
-      const sp = ease.spring(seg(t, 2900, 3700));
-      QUEUE.forEach((v, i) => {
-        const fill = clamp(seg(t, 1700, 3000) * 1.1) * v;
-        const rank0 = i, rank1 = sorted.findIndex((o) => o.i === i);
-        const y = Q.y + lerp(rank0, rank1, sp) * 36;
-        const top = rank1 === 0 && sp > 0.5;
-        panel(ctx, Q.x, y, Q.w, 28, { r: 7, fill: top ? "rgba(255,0,110,.14)" : "rgba(22,12,64,.72)", stroke: top ? rgba(C.magenta, 0.85) : "rgba(196,176,255,.22)", glow: top ? rgba(C.magenta, 0.8) : null, blur: 12 });
-        ctx.strokeStyle = rgba(C.ink, 0.55); ctx.lineWidth = 1.2;
-        [0, 1, 2].forEach((k) => { ctx.beginPath(); ctx.moveTo(Q.x + 10 + k * 3, y + 9 + k * 5); ctx.lineTo(Q.x + 24, y + 9 + k * 5); ctx.stroke(); });
-        rr(ctx, Q.x + 34, y + 11, Q.w - 46, 6, 3); ctx.fillStyle = "rgba(247,244,255,.1)"; ctx.fill();
-        if (fill > 0) { const g = ctx.createLinearGradient(Q.x + 34, 0, Q.x + Q.w - 12, 0); g.addColorStop(0, C.cyan); g.addColorStop(0.6, C.purple); g.addColorStop(1, C.magenta); rr(ctx, Q.x + 34, y + 11, (Q.w - 46) * fill, 6, 3); ctx.fillStyle = g; ctx.fill(); }
-      });
-      text(ctx, L.ranker, Q.x, Q.y + 5 * 36 + 10, { size: 8.6, weight: 700, color: rgba(C.ink, 0.7 * seg(t, 2600, 3000)) });
-      ctx.restore();
+    /* camera: pan across, then pull back to the whole figure */
+    const pan = [[0, 0], [5300, 0], [6100, STEP], [8400, STEP], [9300, 3 * STEP]];
+    let cx = 0;
+    for (let i = 1; i < pan.length; i++) if (t >= pan[i - 1][0]) cx = t >= pan[i][0] ? pan[i][1] : lerp(pan[i - 1][1], pan[i][1], ease.inOut(seg(t, pan[i - 1][0], pan[i][0])));
+    const z = ease.inOut(seg(t, 13300, 14300));
+    const s = lerp(1, W / (WORLD + 8), z), camX = lerp(cx, 0, z), oy = lerp(0, 14, z);
+    ctx.save();
+    ctx.translate(0, oy); ctx.scale(s, s); ctx.translate(-camX, 0);
+    /* the reply links run back from the review to the thread */
+    const lk = Math.max(seg(t, 12300, 12900), z);
+    ctx.strokeStyle = lk > 0 ? `rgba(23,126,126,${0.35 + 0.6 * lk})` : "rgba(31,41,51,.25)";
+    ctx.lineWidth = 1.2 + lk * 0.8;
+    ctx.setLineDash([4, 3]); ctx.lineDashOffset = t / 40;
+    ctx.beginPath(); ctx.moveTo(px(4) + PW / 2, PY); ctx.bezierCurveTo(px(4) + PW / 2, 6, px(0) + PW / 2, 6, px(0) + PW / 2, PY); ctx.stroke(); ctx.setLineDash([]);
+    text(ctx, L.links, (px(0) + px(4) + PW) / 2, 13, { size: 9, weight: 700, align: "center", color: "#177e7e" });
+    for (let k = 0; k < 5; k++) {
+      const on = t >= ACT[k][0] && t < ACT[k][1] && z === 0;
+      head(ctx, k, L, on);
     }
-    /* ---------- step 2: group, then spend the budget ---------- */
-    const s2 = seg(t, 4200, 4600) * (1 - seg(t, 8000, 8400));
-    if (s2 > 0) {
-      ctx.save(); ctx.globalAlpha = s2;
-      text(ctx, L.grouped, 16, 54, { size: 9.6, weight: 800 });
-      const groups = [{ k: "team", ids: [0, 1], y: 64 }, { k: "accent", ids: [2], y: 150 }];
-      const pos = {};
-      groups.forEach((g, gi) => {
-        const gp = ease.spring(seg(t, 4400 + gi * 300, 5200 + gi * 300));
-        if (gp <= 0) return;
-        const h = 22 + g.ids.length * 30;
-        ctx.save(); ctx.globalAlpha *= clamp(gp * 2); ctx.translate(-(1 - gp) * 16, 0);
-        panel(ctx, 14, g.y, 218, h, { r: 9, fill: "rgba(22,12,64,.7)", stroke: rgba(gi ? C.pink : C.purple, 0.6) });
-        text(ctx, g.k, 24, g.y + 14, { size: 8.6, weight: 800, color: gi ? "#ff9ccd" : "#c9a7ff" });
-        g.ids.forEach((m, j) => {
-          const y = g.y + 20 + j * 30;
-          const msg = MSG[m];
-          pos[m] = [14, y];
-          rr(ctx, 22, y, 202, 25, 6); ctx.fillStyle = "rgba(247,244,255,.05)"; ctx.fill();
-          text(ctx, msg.id, 30, y + 16, { size: 8.6, weight: 800, mono: true, color: C.cyan });
-          text(ctx, msg.text, 52, y + 16, { size: 9.4, weight: 600, max: 128 });
-          rr(ctx, 186, y + 10, 30, 5, 2.5); ctx.fillStyle = "rgba(247,244,255,.12)"; ctx.fill();
-          rr(ctx, 186, y + 10, 30 * msg.risk, 5, 2.5); ctx.fillStyle = C.magenta; ctx.fill();
-        });
-        ctx.restore();
-      });
-      text(ctx, L.same, 16, 230, { size: 8.4, weight: 600, color: rgba(C.ink, 0.6 * seg(t, 5300, 5700)) });
-      /* two ways to spend a budget of two messages */
-      const bp = seg(t, 5400, 5800);
-      if (bp > 0) {
-        ctx.globalAlpha = s2 * bp;
-        text(ctx, L.budget, 246, 54, { size: 9.6, weight: 800 });
-        const lanes = [{ name: L.riskOrder, pick: [0, 1], cov: L.one, good: false, y: 66 }, { name: L.rr, pick: [0, 2], cov: L.two, good: true, y: 148 }];
-        lanes.forEach((ln, li) => {
-          const lp = seg(t, 5600 + li * 700, 6200 + li * 700);
-          panel(ctx, 244, ln.y, 222, 72, { r: 9, fill: ln.good && lp > 0.6 ? "rgba(0,240,255,.07)" : "rgba(22,12,64,.7)", stroke: ln.good && lp > 0.6 ? rgba(C.cyan, 0.8) : "rgba(196,176,255,.24)", glow: ln.good && lp > 0.6 ? rgba(C.cyan, 0.6) : null, blur: 12 });
-          text(ctx, ln.name, 254, ln.y + 15, { size: 9, weight: 800, color: ln.good ? "#9ff8ff" : rgba(C.ink, 0.8) });
-          ln.pick.forEach((m, k) => {
-            const kp = ease.spring(seg(t, 5800 + li * 700 + k * 260, 6400 + li * 700 + k * 260));
-            if (kp <= 0) return;
-            const x = 254 + k * 104, y = ln.y + 24;
-            ctx.save(); ctx.translate(x + 48, y + 12); ctx.scale(kp, kp); ctx.translate(-(x + 48), -(y + 12));
-            rr(ctx, x, y, 96, 24, 6); ctx.fillStyle = MSG[m].topic === "team" ? rgba(C.purple, 0.32) : rgba(C.pink, 0.32); ctx.fill();
-            text(ctx, MSG[m].id, x + 8, y + 15.6, { size: 8.4, weight: 800, mono: true, color: C.cyan });
-            text(ctx, MSG[m].topic, x + 28, y + 15.6, { size: 8.6, weight: 700, color: rgba(C.ink, 0.9) });
-            ctx.restore();
-          });
-          const cp = seg(t, 6500 + li * 700, 6900 + li * 700);
-          if (cp > 0) {
-            text(ctx, ln.cov, 254, ln.y + 63, { size: 9, weight: 800, color: ln.good ? C.cyan : rgba(C.ink, 0.55), alpha: cp });
-            if (ln.good) check(ctx, 452, ln.y + 59, 11, C.cyan, cp);
-          }
-        });
-      }
-      ctx.restore();
-    }
-    /* ---------- step 3: source-linked review ---------- */
-    const s3 = seg(t, 8200, 8600) * (1 - seg(t, 12100, 12500));
-    if (s3 > 0) {
-      ctx.save(); ctx.globalAlpha = s3;
-      text(ctx, L.thread, 16, 54, { size: 9.6, weight: 800 });
-      const rows = [];
-      let y = 62;
-      THREAD.forEach((m, i) => {
-        const x = 16 + m.d * 14, w = 280 - m.d * 14;
-        const full = m.text || m.pre + m.phrase + m.post;
-        const lines = wrap(ctx, full, w - 44, 9, 600);
-        const h = 12 + lines.length * 12;
-        const p = ease.out(seg(t, 8300 + i * 180, 8800 + i * 180));
-        rows.push({ x, y, w, h, m });
-        ctx.save(); ctx.globalAlpha *= p;
-        const lit = (i === 3 && t > 9500) || (t > 10200 + (3 - i) * 380 && t < 12100);
-        panel(ctx, x, y, w, h, { r: 7, fill: "rgba(22,12,64,.72)", stroke: lit ? rgba(C.cyan, 0.7) : "rgba(196,176,255,.22)" });
-        text(ctx, m.id, x + 8, y + 15, { size: 8.4, weight: 800, mono: true, color: C.cyan });
-        /* the text, with the phrase highlighted once selected */
-        let xx = x + 34, yy = y + 15, pos = 0;
-        const pStart = m.pre ? m.pre.length : -1, pEnd = m.pre ? m.pre.length + m.phrase.length : -1;
-        const hot = i === 3 ? seg(t, 9400, 9800) : i === 1 ? 0.35 * seg(t, 9000, 9400) : 0;
-        font(ctx, 9, 600);
-        lines.forEach((ln) => {
-          xx = x + 34;
-          const start = Math.max(pos, full.indexOf(ln, pos));
-          pos = start + ln.length;
-          for (let j = 0; j < ln.length; j++) {
-            const idx = start + j, ch = ln[j];
-            const inP = idx >= pStart && idx < pEnd;
-            if (inP && hot > 0) { const cw = ctx.measureText(ch).width; ctx.fillStyle = rgba(C.magenta, 0.5 * hot); ctx.fillRect(xx - 0.5, yy - 9, cw + 1, 12); }
-            ctx.fillStyle = inP && hot > 0 ? "#fff" : "rgba(247,244,255,.86)";
-            ctx.fillText(ch, xx, yy);
-            if (inP && i === 3 && !state.k11) state.k11 = [xx, yy - 3];
-            xx += ctx.measureText(ch).width;
-          }
-          yy += 12;
-        });
-        ctx.restore();
-        y += h + 6;
-      });
-      /* evidence group */
-      const E = { x: 310, y: 62, w: 156 };
-      const ep = ease.spring(seg(t, 8700, 9400));
-      if (ep > 0) {
-        ctx.save(); ctx.globalAlpha *= clamp(ep * 2); ctx.translate((1 - ep) * 16, 0);
-        panel(ctx, E.x, E.y, E.w, 118, { r: 9, fill: "rgba(22,12,64,.78)", stroke: rgba(C.magenta, 0.55) });
-        text(ctx, L.evidence + " · karma / flagging", E.x + 10, E.y + 16, { size: 8.6, weight: 800, max: E.w - 18 });
-        [["flagging", "m9[14,22)", "0.092", 1], ["karma", "m11[4,9)", "0.619", 3]].forEach(([ph, span, sc, idx], k) => {
-          const yy = E.y + 28 + k * 42, on = k === 1 && t > 9300;
-          rr(ctx, E.x + 8, yy, E.w - 16, 36, 7); ctx.fillStyle = on ? rgba(C.magenta, 0.22) : "rgba(247,244,255,.05)"; ctx.fill();
-          if (on) { ctx.strokeStyle = rgba(C.magenta, 0.9); ctx.lineWidth = 1.2; ctx.shadowColor = C.magenta; ctx.shadowBlur = 10; rr(ctx, E.x + 8, yy, E.w - 16, 36, 7); ctx.stroke(); ctx.shadowBlur = 0; }
-          text(ctx, "“" + ph + "”", E.x + 16, yy + 15, { size: 10, weight: 800, color: on ? "#ff8fbd" : rgba(C.ink, 0.9) });
-          text(ctx, span, E.x + 16, yy + 29, { size: 8, mono: true, weight: 600, color: rgba(C.ink, 0.65) });
-          text(ctx, sc, E.x + E.w - 16, yy + 22, { size: 11, weight: 800, align: "right", color: on ? C.magenta : C.cyan });
-        });
-        ctx.restore();
-        /* chip → phrase in its source message */
-        const lk = seg(t, 9300, 9700);
-        if (lk > 0 && state.k11) {
-          const ax = E.x + 8, ay = E.y + 28 + 42 + 18, [bx, by] = state.k11;
-          ctx.strokeStyle = rgba(C.magenta, 0.85); ctx.lineWidth = 1.3; ctx.shadowColor = C.magenta; ctx.shadowBlur = 8;
-          ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(lerp(ax, bx + 20, ease.inOut(lk)), lerp(ay, by, ease.inOut(lk))); ctx.stroke(); ctx.shadowBlur = 0;
-        }
-      }
-      /* the reply path, from the evidence back to the question */
-      const pp = seg(t, 10100, 11700);
-      if (pp > 0 && rows.length === 4) {
-        text(ctx, L.path + " · m11 → m10 → m9 → m8", E.x, E.y + 140, { size: 9, weight: 800, color: C.cyan, alpha: seg(t, 10100, 10500), max: E.w + 4 });
-        ctx.strokeStyle = C.cyan; ctx.lineWidth = 1.6; ctx.shadowColor = C.cyan; ctx.shadowBlur = 8; ctx.lineCap = "round";
-        for (let i = 3; i > 0; i--) {
-          const k = ease.inOut(seg(pp, (3 - i) / 3, (4 - i) / 3));
-          if (k <= 0) continue;
-          const a = rows[i], b = rows[i - 1];
-          const x = a.x + 6, y0 = a.y + 4, y1 = b.y + b.h - 2;
-          ctx.beginPath(); ctx.moveTo(x, y0); ctx.lineTo(x, lerp(y0, y1 + 4, k)); ctx.stroke();
-          if (k > 0.95) dot(ctx, x, y1 + 4, 2.4, C.cyan, 1, 3);
-        }
-        ctx.shadowBlur = 0;
-      }
-      ctx.restore();
-    }
-    /* ---------- step 4: results ---------- */
-    const s4 = seg(t, 12300, 12700) * (1 - seg(t, 14700, 15100));
-    if (s4 > 0) {
-      ctx.save(); ctx.globalAlpha = s4;
-      L.stats.forEach(([big, small], i) => {
-        const p = ease.spring(seg(t, 12400 + i * 260, 13200 + i * 260));
+    p1(ctx, t, L); p2(ctx, t, L); p3(ctx, t, L, state); p4(ctx, t, L); p5(ctx, t, L);
+    /* flows between panels */
+    [[0, 1, L.flow[0], 2700], [1, 2, L.flow[1], 5600]].forEach(([a, b, lab, at]) => {
+      const k = ease.out(seg(t, at, at + 500)), ya = PY + PH / 2;
+      arrow(ctx, px(a) + PW + 2, ya, px(b) - 2, ya, "#52606d", 1.4, 5, Math.max(k, z));
+      text(ctx, lab, (px(a) + PW + px(b)) / 2, ya - 5, { size: 7.6, weight: 700, align: "center", color: "#52606d", alpha: Math.max(k, z) });
+    });
+    [[2, 4, L.flow[2], 11000, 14], [3, 4, L.flow[3], 10900, 0]].forEach(([a, b, lab, at, drop]) => {
+      const k = Math.max(ease.out(seg(t, at, at + 500)), z), yb = PY + PH + 6 + drop;
+      if (k <= 0) return;
+      ctx.strokeStyle = "#52606d"; ctx.lineWidth = 1.2; ctx.beginPath();
+      ctx.moveTo(px(a) + PW / 2, PY + PH); ctx.lineTo(px(a) + PW / 2, yb); ctx.lineTo(lerp(px(a) + PW / 2, px(b) + 40 + drop, k), yb); ctx.stroke();
+      if (k > 0.95) arrow(ctx, px(b) + 40 + drop, yb, px(b) + 40 + drop, PY + PH + 1, "#52606d", 1.2, 4, 1);
+      text(ctx, lab, lerp(px(a) + PW / 2, px(b) + 40 + drop, 0.5), yb - 2, { size: 7.4, weight: 700, align: "center", color: "#52606d", alpha: k });
+    });
+    ctx.restore();
+    /* the reported results under the whole figure */
+    if (z > 0) {
+      const fy = oy + (PY + PH + 30) * s + 10;
+      L.res.forEach(([big, small], i) => {
+        const p = ease.spring(seg(t, 14000 + i * 220, 14700 + i * 220));
         if (p <= 0) return;
-        const x = 16 + i * 152, y = 50, w = 144, h = 214;
-        ctx.save(); ctx.globalAlpha *= clamp(p * 2); ctx.translate(0, (1 - p) * 24);
-        panel(ctx, x, y, w, h, { r: 12, fill: "rgba(22,12,64,.72)", stroke: rgba(i === 1 ? C.cyan : C.purple, 0.55), glow: rgba(i === 1 ? C.cyan : C.purple, 0.55), blur: 14 });
-        const g = ctx.createLinearGradient(x, 0, x + w, 0);
-        g.addColorStop(0, C.cyan); g.addColorStop(1, i === 2 ? C.magenta : C.purple);
-        font(ctx, big.length > 4 ? 28 : 32, 900); ctx.fillStyle = g; ctx.textAlign = "left"; ctx.shadowColor = rgba(C.purple, 0.9); ctx.shadowBlur = 14;
-        ctx.fillText(big, x + 14, y + 50); ctx.shadowBlur = 0;
-        wrap(ctx, small, w - 28, 9.6, 600).forEach((ln, j) => text(ctx, ln, x + 14, y + 72 + j * 14, { size: 9.6, weight: 600, color: rgba(C.ink, 0.86) }));
-        const cy = y + 118, ch = 76, gp = ease.out(seg(t, 12900 + i * 260, 13900 + i * 260));
-        ctx.strokeStyle = "rgba(247,244,255,.14)"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x + 12, cy + ch); ctx.lineTo(x + w - 12, cy + ch); ctx.stroke();
-        if (i === 0) {
-          AP.forEach(([xr, cst], k) => {
-            const bx = x + 16 + k * 20, f = (v) => ((v - 0.6) / 0.4) * ch * gp;
-            rr(ctx, bx, cy + ch - f(xr), 7, f(xr), 2); ctx.fillStyle = "rgba(247,244,255,.3)"; ctx.fill();
-            rr(ctx, bx + 8, cy + ch - f(cst), 7, f(cst), 2); ctx.fillStyle = C.cyan; ctx.fill();
-          });
-          text(ctx, "XLM-R", x + 14, cy + ch + 13, { size: 7.6, weight: 700, color: rgba(C.ink, 0.55) });
-          text(ctx, "CST", x + 52, cy + ch + 13, { size: 7.6, weight: 800, color: C.cyan });
-          text(ctx, "AP 0.6–1.0", x + w - 14, cy + ch + 13, { size: 7.4, align: "right", color: rgba(C.ink, 0.45) });
-        } else if (i === 1) {
-          CPU.forEach(([name, sec], k) => {
-            const by = cy + 6 + k * 24, bw = ((w - 66) * sec / 340) * gp, hot = name === "CST";
-            text(ctx, name, x + 14, by, { size: 7.8, weight: 700, color: hot ? C.cyan : rgba(C.ink, 0.6) });
-            rr(ctx, x + 14, by + 4, bw, 6, 3); ctx.fillStyle = hot ? C.cyan : "rgba(247,244,255,.3)"; ctx.fill();
-            text(ctx, sec.toFixed(1) + " s", x + 18 + bw, by + 10, { size: 7.4, weight: 700, color: rgba(C.ink, 0.7) });
-          });
-        } else {
-          [[stage.lang === "zh" ? "参考展示" : "reference", 1], [stage.lang === "zh" ? "分组证据" : "grouped", 0.727]].forEach(([name, v], k) => {
-            const by = cy + 14 + k * 30, bw = (w - 54) * v * gp, hot = k === 1;
-            text(ctx, name, x + 14, by, { size: 7.8, weight: 700, color: hot ? "#ff8fbd" : rgba(C.ink, 0.6) });
-            rr(ctx, x + 14, by + 4, bw, 7, 3.5); ctx.fillStyle = hot ? C.magenta : "rgba(247,244,255,.3)"; ctx.fill();
-            text(ctx, (hot ? "≤" : "") + Math.round(v * 1000) / 10 + "%", x + 18 + bw, by + 11, { size: 7.6, weight: 700, color: rgba(C.ink, 0.75) });
-          });
-        }
+        const x = 14 + i * 156, w = 148;
+        ctx.save(); ctx.globalAlpha = clamp(p * 2); ctx.translate(0, (1 - p) * 10);
+        box(ctx, x, fy, w, 112, { r: 6, fill: TINT[[0, 2, 4][i]], stroke: COL[[0, 2, 4][i]], lw: 1.2 });
+        text(ctx, big, x + 12, fy + 36, { size: 26, weight: 800, color: COL[[0, 2, 4][i]] });
+        wrap(ctx, small, w - 22, 10.4, 600).slice(0, 3).forEach((ln, j) => text(ctx, ln, x + 12, fy + 58 + j * 14, { size: 10.4, weight: 600, color: "#1f2933" }));
         ctx.restore();
       });
-      ctx.restore();
     }
   },
 };

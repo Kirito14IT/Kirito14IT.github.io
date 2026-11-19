@@ -1,229 +1,164 @@
-/* SafeCodeRL: the five-agent closed loop with constraint-aware RL (paper Figure 2).
-   Planner decomposes an IoT telemetry task, Code writes, the shield blocks a CWE-89 pattern before the sandbox,
-   Security and Test report, the Critic turns feedback into reward and cost, the Lagrangian penalty steers PPO,
-   and the rewrite passes with no medium- or high-severity vulnerability. */
-import { C, rgba, clamp, lerp, seg, ease, rr, panel, text, typed, font, dot, check, wrap } from "../engine.js";
+/* SafeCodeRL: the paper's Figure 2 on its own cream ground. A code artifact travels the five-agent closed loop;
+   the hard shield deflects dangerous actions before the sandbox; the soft constraint raises the Lagrange multiplier
+   while the security cost exceeds δ; the secure artifact closes with the reported numbers. */
+import { clamp, lerp, seg, ease, rr, box, text, font, dot, check, cross, arrow } from "../engine.js";
 
-const RING = { x: 98, y: 156, r: 70 };
-const AGENTS = [
-  { k: "plan", en: "Planner", zh: "规划", a: -90 },
-  { k: "code", en: "Code", zh: "代码", a: -18 },
-  { k: "sec", en: "Security", zh: "安全", a: 54 },
-  { k: "test", en: "Test", zh: "测试", a: 126 },
-  { k: "critic", en: "Critic", zh: "评审", a: 198 },
+const W = 480, H = 340;
+const C = { bg: "#fbf7ec", panel: "#fffdf7", line: "#d8cfb8", title: "#3a3a33", blue: "#3d6aa8", green: "#4e8a4a", red: "#b93a32", orange: "#c77d2a", ink: "#2f3a45", soft: "#6b6b60" };
+const LOOP = { x: 124, y: 158, r: 72 };
+const NODES = [
+  { a: -90, en: ["Planner", "Task DAG / JSON plan"], zh: ["规划", "任务 DAG / JSON 计划"] },
+  { a: -18, en: ["Code", "Generate / edit / AST patch"], zh: ["代码", "生成 / 编辑 / AST 补丁"] },
+  { a: 54, en: ["Security", "Static + role audit"], zh: ["安全", "静态 + 角色审计"] },
+  { a: 126, en: ["Test", "Docker sandbox"], zh: ["测试", "Docker 沙箱"] },
+  { a: 198, en: ["Critic", "Reward / routing / update"], zh: ["评审", "奖励 / 路由 / 更新"] },
 ];
-const ED = { x: 196, y: 44, w: 272, h: 142 };
-const CODE0 = [
-  ['@app.get("/telemetry")', "dec"],
-  ["def read(sensor_id):", "def"],
-  ['    q = "SELECT * FROM readings WHERE id=" + sensor_id', "bad"],
-  ["    return db.execute(q)", "bad"],
-];
-const CODE1 = [
-  ['    q = "SELECT * FROM readings WHERE id = ?"', "good"],
-  ["    return db.execute(q, (sensor_id,))", "good"],
+const ACTIONS = [
+  { s: "os.system(cmd)", bad: true }, { s: "parameterized query", bad: false }, { s: "SQL concat", bad: true },
+  { s: "unsafe path", bad: true }, { s: "bounded read", bad: false }, { s: "shell=True", bad: true },
 ];
 const T = {
-  en: { task: "Task · sensor telemetry API", sub: ["read rows by sensor_id", "security context: SQL input"], shield: "Shield · blocked before sandbox", cwe: "CWE-89 SQL injection", report: "CWE-89 · severity high", tests: "sandbox tests", reward: "reward", cost: "cost", lambda: "Lagrangian λ", ppo: "PPO update", pass: "Secure pass", passSub: "tests pass · no medium/high flaw", sp: "Secure Pass@1 on 25 IoT/CPS tasks", vr: "vulnerability rate, Llama-3-8B", vrAfter: "after two rounds", tasks: ["telemetry", "gateway", "config", "aggregation", "parsing"] },
-  zh: { task: "任务 · 传感器遥测接口", sub: ["按 sensor_id 读取数据", "安全上下文：SQL 输入"], shield: "屏蔽 · 沙箱执行前拦截", cwe: "CWE-89 SQL 注入", report: "CWE-89 · 高危", tests: "沙箱测试", reward: "奖励", cost: "代价", lambda: "拉格朗日 λ", ppo: "PPO 更新", pass: "安全通过", passSub: "测试通过 · 无中高危漏洞", sp: "25 个 IoT/CPS 任务的 Secure Pass@1", vr: "漏洞率（Llama-3-8B）", vrAfter: "两轮之后", tasks: ["遥测", "网关", "配置", "聚合", "解析"] },
+  en: { loop: "Five-Agent Closed Loop", refine: "Iterative refinement", shield: "Hard Shield", filter: "Shield filter", danger: "Dangerous action", sandbox: "Sandbox execution", blocked: "blocked", opt: "Constraint-Aware Optimization", viol: "λ ↑ if violations", out: "Secure Output Artifact", checks: ["Tests passed", "High-risk vulns ↓", "Functionality preserved"], sp: "Secure Pass@1 on 25 IoT/CPS tasks", sh: "actions blocked by the shield", shd: "SQL injection 660 · path traversal 440 · command injection 320", vr: "vulnerability rate 42.5% → ≈10% after two rounds (Llama-3-8B)" },
+  zh: { loop: "五智能体闭环", refine: "迭代优化", shield: "硬屏蔽", filter: "屏蔽过滤器", danger: "危险动作", sandbox: "沙箱执行", blocked: "已拦截", opt: "约束感知优化", viol: "违规时 λ ↑", out: "安全输出产物", checks: ["测试通过", "高危漏洞 ↓", "功能保持"], sp: "25 个 IoT/CPS 任务的 Secure Pass@1", sh: "个动作被屏蔽拦截", shd: "SQL 注入 660 · 路径穿越 440 · 命令注入 320", vr: "漏洞率 42.5% → 两轮后约 10%（Llama-3-8B）" },
 };
+const npos = (i) => { const a = (NODES[i].a * Math.PI) / 180; return [LOOP.x + LOOP.r * Math.cos(a), LOOP.y + LOOP.r * Math.sin(a)]; };
 
-function agentPos(i) { const a = (AGENTS[i].a * Math.PI) / 180; return [RING.x + RING.r * Math.cos(a), RING.y + RING.r * Math.sin(a)]; }
-
-function glyph(ctx, k, x, y, color) {
-  ctx.save(); ctx.translate(x, y);
-  ctx.strokeStyle = color; ctx.lineWidth = 1.5; ctx.lineCap = "round"; ctx.lineJoin = "round";
+function panel(ctx, x, y, w, h, title, glow) {
+  box(ctx, x, y, w, h, { r: 5, fill: C.panel, stroke: glow > 0 ? `rgba(61,106,168,${0.35 + 0.6 * glow})` : C.line, lw: glow > 0 ? 1.6 : 1 });
+  text(ctx, title, x + w / 2, y + 16, { size: 11.4, weight: 700, serif: true, align: "center", color: C.title });
+}
+function glyph(ctx, i, x, y, col) {
+  ctx.save(); ctx.translate(x, y); ctx.strokeStyle = col; ctx.fillStyle = col; ctx.lineWidth = 1.3; ctx.lineCap = "round"; ctx.lineJoin = "round";
   ctx.beginPath();
-  if (k === "plan") { [-4, 0, 4].forEach((yy) => { ctx.moveTo(-5, yy); ctx.lineTo(-4, yy); ctx.moveTo(-1.5, yy); ctx.lineTo(5.5, yy); }); }
-  else if (k === "code") { ctx.moveTo(-3, -4); ctx.lineTo(-6.5, 0); ctx.lineTo(-3, 4); ctx.moveTo(3, -4); ctx.lineTo(6.5, 0); ctx.lineTo(3, 4); ctx.moveTo(1.2, -5); ctx.lineTo(-1.2, 5); }
-  else if (k === "sec") { ctx.moveTo(0, -6.5); ctx.lineTo(5.5, -4); ctx.lineTo(5, 1.5); ctx.quadraticCurveTo(4, 5, 0, 7); ctx.quadraticCurveTo(-4, 5, -5, 1.5); ctx.lineTo(-5.5, -4); ctx.closePath(); }
-  else if (k === "test") { ctx.moveTo(-2.5, -6); ctx.lineTo(-2.5, -1.5); ctx.lineTo(-6, 5.5); ctx.lineTo(6, 5.5); ctx.lineTo(2.5, -1.5); ctx.lineTo(2.5, -6); ctx.moveTo(-3.8, -6); ctx.lineTo(3.8, -6); ctx.moveTo(-4.2, 2); ctx.lineTo(4.2, 2); }
-  else if (k === "critic") { ctx.moveTo(0, -6); ctx.lineTo(0, 6); ctx.moveTo(-6, -3); ctx.lineTo(6, -3); ctx.moveTo(-6, -3); ctx.lineTo(-8, 2); ctx.lineTo(-4, 2); ctx.closePath(); ctx.moveTo(6, -3); ctx.lineTo(4, 2); ctx.lineTo(8, 2); ctx.closePath(); ctx.moveTo(-3, 6); ctx.lineTo(3, 6); }
+  if (i === 0) { [-3.5, 0, 3.5].forEach((yy) => { ctx.moveTo(-4.5, yy); ctx.lineTo(-3.5, yy); ctx.moveTo(-1.5, yy); ctx.lineTo(5, yy); }); }
+  if (i === 1) { ctx.moveTo(-2.5, -3.5); ctx.lineTo(-5.5, 0); ctx.lineTo(-2.5, 3.5); ctx.moveTo(2.5, -3.5); ctx.lineTo(5.5, 0); ctx.lineTo(2.5, 3.5); }
+  if (i === 2) { ctx.moveTo(0, -5.5); ctx.lineTo(4.6, -3.4); ctx.lineTo(4.2, 1); ctx.quadraticCurveTo(3.2, 4.2, 0, 5.8); ctx.quadraticCurveTo(-3.2, 4.2, -4.2, 1); ctx.lineTo(-4.6, -3.4); ctx.closePath(); }
+  if (i === 3) { ctx.moveTo(-5.5, 1); ctx.lineTo(5.5, 1); ctx.quadraticCurveTo(5, 5, 0, 5.2); ctx.quadraticCurveTo(-5, 5, -5.5, 1); [-3.5, 0, 3.5].forEach((xx) => { ctx.rect(xx - 1.3, -2.6, 2.6, 2.6); }); }
+  if (i === 4) { ctx.moveTo(0, -5); ctx.lineTo(0, 5); ctx.moveTo(-5, -2.5); ctx.lineTo(5, -2.5); ctx.moveTo(-5, -2.5); ctx.lineTo(-6.5, 1.5); ctx.lineTo(-3.5, 1.5); ctx.closePath(); ctx.moveTo(5, -2.5); ctx.lineTo(3.5, 1.5); ctx.lineTo(6.5, 1.5); ctx.closePath(); ctx.moveTo(-2.5, 5); ctx.lineTo(2.5, 5); }
   ctx.stroke(); ctx.restore();
 }
-function shieldPath(ctx, x, y, s) {
-  ctx.beginPath();
-  ctx.moveTo(x, y - s); ctx.lineTo(x + s * 0.82, y - s * 0.62); ctx.lineTo(x + s * 0.74, y + s * 0.2);
-  ctx.quadraticCurveTo(x + s * 0.56, y + s * 0.78, x, y + s * 1.04); ctx.quadraticCurveTo(x - s * 0.56, y + s * 0.78, x - s * 0.74, y + s * 0.2);
-  ctx.lineTo(x - s * 0.82, y - s * 0.62); ctx.closePath();
-}
-const ACTIVE = [[300, 3000, 0], [3000, 6400, 1], [6700, 7700, 2], [7600, 8600, 3], [8500, 9600, 4], [9500, 10800, 1], [10900, 11800, 3], [11000, 11900, 2]];
-
-function codeColor(kind) { return kind === "bad" ? "#ff8fbd" : kind === "good" ? "#8ff6ff" : kind === "dec" ? "#c9a7ff" : "rgba(247,244,255,.92)"; }
 
 export default {
-  duration: 15200,
-  poster: 13600,
-  seed: 2.7,
-  mood: [
-    [0, { v: 0.85, c: 0.5, m: 0.05 }],
-    [4900, { v: 0.85, c: 0.4, m: 0.12 }],
-    [5400, { v: 0.6, c: 0.12, m: 1 }],
-    [6800, { v: 0.7, c: 0.2, m: 0.55 }],
-    [9800, { v: 0.8, c: 0.5, m: 0.25 }],
-    [11200, { v: 0.7, c: 0.85, m: 0.08 }],
-    [15200, { v: 0.85, c: 0.5, m: 0.05 }],
-  ],
-  steps: [
-    { at: 0, label: { en: "Plan", zh: "规划" }, caption: { en: "The Planner decomposes an IoT telemetry task and extracts its security-relevant context.", zh: "规划智能体拆解 IoT 遥测任务，并提取与安全相关的上下文。" } },
-    { at: 3000, label: { en: "Generate and shield", zh: "生成与屏蔽" }, caption: { en: "The Code agent writes; the shield blocks an SQL-injection pattern (CWE-89) before the sandbox.", zh: "代码智能体编写代码；屏蔽机制在沙箱执行前拦下 SQL 注入模式（CWE-89）。" } },
-    { at: 6700, label: { en: "Audit, test, learn", zh: "审计 · 测试 · 学习" }, caption: { en: "Security and Test report; the Critic turns them into reward and cost, and a Lagrangian penalty steers PPO.", zh: "安全与测试智能体反馈，评审智能体转为奖励与代价，拉格朗日惩罚引导 PPO 更新。" } },
-    { at: 10900, label: { en: "Secure pass", zh: "安全通过" }, caption: { en: "The rewrite passes its tests with no high-risk flaw: 89.3% Secure Pass@1 on 25 IoT/CPS tasks.", zh: "重写后的代码通过测试且无高危漏洞：25 个 IoT/CPS 任务上 Secure Pass@1 为 89.3%。" } },
-  ],
+  id: "safecoderl",
+  size: [W, H],
+  bg: C.bg,
+  duration: 16500,
+  poster: 15600,
   draw(ctx, t, state, stage) {
-    const L = T[stage.lang] || T.en;
-    const fadeAll = 1 - seg(t, 14700, 15100);
-    ctx.save(); ctx.globalAlpha = fadeAll;
-    /* ---------- the closed loop ---------- */
-    const ra = seg(t, 100, 700);
-    ctx.save(); ctx.globalAlpha *= ra;
-    ctx.strokeStyle = "rgba(196,176,255,.22)"; ctx.lineWidth = 1.2; ctx.setLineDash([3, 5]); ctx.lineDashOffset = -t / 50;
-    ctx.beginPath(); ctx.arc(RING.x, RING.y, RING.r, 0, 6.2832); ctx.stroke(); ctx.setLineDash([]);
-    /* a pulse that travels Planner → Code → Security → Test → Critic */
-    const lap = (t % 3800) / 3800, ang = -Math.PI / 2 + lap * Math.PI * 2;
-    const g = ctx.createConicGradient ? ctx.createConicGradient(ang - 0.9, RING.x, RING.y) : null;
-    if (g) { g.addColorStop(0, rgba(C.cyan, 0)); g.addColorStop(0.14, rgba(C.cyan, 0.9)); g.addColorStop(0.15, rgba(C.cyan, 0)); g.addColorStop(1, rgba(C.cyan, 0)); ctx.strokeStyle = g; ctx.lineWidth = 2.4; ctx.beginPath(); ctx.arc(RING.x, RING.y, RING.r, 0, 6.2832); ctx.stroke(); }
-    AGENTS.forEach((ag, i) => {
-      const [x, y] = agentPos(i);
-      let act = 0;
-      ACTIVE.forEach(([a, b, k]) => { if (k === i) act = Math.max(act, seg(t, a, a + 250) * (1 - seg(t, b - 200, b))); });
-      const warn = i === 2 && t > 6700 && t < 8000;
-      const col = warn ? C.magenta : C.cyan;
-      const p = ease.spring(seg(t, 200 + i * 120, 900 + i * 120));
-      ctx.save(); ctx.translate(x, y); ctx.scale(p * (1 + 0.12 * act), p * (1 + 0.12 * act));
-      ctx.fillStyle = act > 0 ? rgba(col, 0.22) : "rgba(22,12,64,.92)";
-      ctx.beginPath(); ctx.arc(0, 0, 16, 0, 6.2832); ctx.fill();
-      ctx.strokeStyle = act > 0 ? col : "rgba(196,176,255,.4)"; ctx.lineWidth = 1.4;
-      if (act > 0) { ctx.shadowColor = col; ctx.shadowBlur = 14 * act; }
-      ctx.beginPath(); ctx.arc(0, 0, 16, 0, 6.2832); ctx.stroke(); ctx.shadowBlur = 0;
-      glyph(ctx, ag.k, 0, 0, act > 0 ? "#ffffff" : "rgba(247,244,255,.75)");
-      ctx.restore();
-      text(ctx, stage.lang === "zh" ? ag.zh : ag.en, x, y + 28, { size: 8.6, weight: 700, align: "center", color: act > 0 ? (warn ? "#ff8fbd" : "#9ff8ff") : rgba(C.ink, 0.7) });
-    });
+    const zh = stage.lang === "zh", L = T[zh ? "zh" : "en"];
+    /* ---------- five-agent closed loop ---------- */
+    const loopGlow = seg(t, 6900, 7300) * (1 - seg(t, 12300, 12700));
+    panel(ctx, 8, 36, 232, 226, L.loop, loopGlow);
+    const lp = ease.out(seg(t, 300, 2600));
+    ctx.save();
+    ctx.strokeStyle = "rgba(61,106,168,.5)"; ctx.lineWidth = 1.2; ctx.setLineDash([3, 3]);
+    ctx.beginPath(); ctx.arc(LOOP.x, LOOP.y, LOOP.r, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * lp); ctx.stroke(); ctx.setLineDash([]);
     ctx.restore();
-    /* IoT/CPS task suite under the loop: lights up when the code passes securely */
-    L.tasks.forEach((name, i) => {
-      const x = 16 + i * 34, y = 268, on = seg(t, 11600 + i * 140, 12000 + i * 140);
-      rr(ctx, x, y - 10, 30, 22, 5); ctx.fillStyle = on > 0 ? rgba(C.cyan, 0.12 + 0.25 * on) : "rgba(22,12,64,.7)"; ctx.fill();
-      ctx.strokeStyle = on > 0 ? rgba(C.cyan, 0.4 + 0.5 * on) : "rgba(196,176,255,.22)"; ctx.lineWidth = 1; rr(ctx, x, y - 10, 30, 22, 5); ctx.stroke();
-      dot(ctx, x + 15, y - 2, 2.2, on > 0 ? C.cyan : "rgba(247,244,255,.35)", 1, on > 0 ? 3 : 0);
-      text(ctx, name, x + 15, y + 8.5, { size: 5.8, weight: 700, align: "center", color: rgba(C.ink, 0.6 + 0.4 * on), max: 28 });
-    });
-    /* ---------- the editor ---------- */
-    const ep = seg(t, 300, 900);
-    ctx.save(); ctx.globalAlpha *= ep;
-    panel(ctx, ED.x, ED.y, ED.w, ED.h, { r: 10, fill: "rgba(10, 6, 34, .9)", stroke: "rgba(196,176,255,.3)" });
-    [0, 1, 2].forEach((i) => { ctx.fillStyle = [C.magenta, C.purple, C.cyan][i]; ctx.globalAlpha = ep * fadeAll * 0.75; ctx.beginPath(); ctx.arc(ED.x + 12 + i * 9, ED.y + 11, 2.5, 0, 6.2832); ctx.fill(); });
-    ctx.globalAlpha = ep * fadeAll;
-    text(ctx, typed(L.task, seg(t, 500, 1400)), ED.x + 44, ED.y + 14, { size: 8.8, weight: 700, color: rgba(C.ink, 0.85) });
-    /* planner sub-tasks */
-    L.sub.forEach((s, i) => {
-      const p = ease.spring(seg(t, 1300 + i * 350, 2000 + i * 350)) * (1 - seg(t, 2900, 3200));
+    text(ctx, L.refine, LOOP.x, LOOP.y + 4, { size: 9.6, serif: true, italic: true, align: "center", color: C.soft, alpha: seg(t, 2200, 2800) });
+    /* the artifact travelling the loop: one slow lap, then a faster refinement lap */
+    let tok = null;
+    if (t > 2400 && t < 12600) {
+      const a = t < 3200 ? seg(t, 2400, 3200) * 0.2 : t < 7000 ? 0.2 : t < 10400 ? 0.2 + 0.8 * seg(t, 7000, 10400) : 1 + seg(t, 10400, 12400);
+      const ang = -Math.PI / 2 + a * Math.PI * 2;
+      tok = [LOOP.x + LOOP.r * Math.cos(ang), LOOP.y + LOOP.r * Math.sin(ang)];
+    }
+    NODES.forEach((n, i) => {
+      const [x, y] = npos(i), p = ease.spring(seg(t, 200 + i * 300, 900 + i * 300));
       if (p <= 0) return;
-      font(ctx, 8.4, 700);
-      const w = ctx.measureText(s).width + 16, x = ED.x + 12, y = ED.y + 30 + i * 22;
-      ctx.save(); ctx.globalAlpha *= clamp(p); ctx.translate(-(1 - p) * 10, 0);
-      rr(ctx, x, y, w, 17, 8.5); ctx.fillStyle = i ? rgba(C.magenta, 0.2) : rgba(C.purple, 0.3); ctx.fill();
-      text(ctx, s, x + 8, y + 11.8, { size: 8.4, weight: 700, color: i ? "#ff9ccd" : "#d8c6ff" });
+      const near = tok ? Math.max(0, 1 - Math.hypot(tok[0] - x, tok[1] - y) / 30) : 0;
+      const sec = i === 2 && t > 7600 && t < 9200;
+      ctx.save(); ctx.translate(x, y); ctx.scale(p, p);
+      box(ctx, -38, -17, 76, 34, { r: 5, fill: "#fff", stroke: sec ? C.red : near > 0 ? C.blue : C.line, lw: near > 0 || sec ? 1.6 : 1 });
+      dot(ctx, -28, -7, 6, sec ? C.red : C.blue);
+      text(ctx, String(i + 1), -28, -4.2, { size: 7.6, weight: 700, align: "center", color: "#fff" });
+      glyph(ctx, i, 30, -6, C.blue);
+      const nm = zh ? n.zh : n.en;
+      text(ctx, nm[0] + (zh ? "智能体" : " Agent"), -19, -4, { size: 8.4, weight: 700, serif: true, color: C.title, max: 38 });
+      text(ctx, nm[1], 0, 11, { size: 6.4, align: "center", color: C.soft, max: 72 });
       ctx.restore();
     });
-    /* code: first draft, then the rewrite */
-    const rew = seg(t, 9700, 10500);
-    const lines = CODE0.map((l, i) => (i >= 2 && rew > 0 ? CODE1[i - 2] : l));
-    lines.forEach(([s, kind], i) => {
-      const y = ED.y + 34 + i * 18;
-      const st = 3100 + i * 650;
-      let shown;
-      if (i >= 2 && rew > 0) shown = typed(s, seg(t, 9750 + (i - 2) * 350, 10350 + (i - 2) * 350));
-      else shown = typed(s, seg(t, st, st + 600));
-      if (!shown) return;
-      text(ctx, String(i + 1), ED.x + 16, y + 12, { size: 8, mono: true, color: rgba(C.ink, 0.35), align: "right" });
-      if (kind === "bad" && t > 5300 && rew <= 0) { rr(ctx, ED.x + 22, y, ED.w - 30, 16, 3); ctx.fillStyle = rgba(C.magenta, 0.16 + 0.08 * Math.sin(t / 160)); ctx.fill(); }
-      if (kind === "good") { rr(ctx, ED.x + 22, y, ED.w - 30, 16, 3); ctx.fillStyle = rgba(C.cyan, 0.12); ctx.fill(); }
-      text(ctx, shown, ED.x + 26, y + 11.6, { size: 8.4, mono: true, weight: 500, color: codeColor(kind), max: ED.w - 34 });
+    if (tok) { dot(ctx, tok[0], tok[1], 5.2, "#fff"); ctx.strokeStyle = C.blue; ctx.lineWidth = 1.4; rr(ctx, tok[0] - 3.4, tok[1] - 4.2, 6.8, 8.4, 1); ctx.stroke(); }
+    /* CWE findings at the Security agent */
+    ["CWE-89", "CWE-22", "CWE-78"].forEach((c, i) => {
+      const p = ease.spring(seg(t, 7700 + i * 220, 8300 + i * 220)) * (1 - seg(t, 10200, 10600));
+      if (p <= 0) return;
+      const [x, y] = npos(2);
+      ctx.save(); ctx.globalAlpha *= clamp(p * 2);
+      box(ctx, x - 64 + i * 43, y + 21, 40, 12, { r: 6, fill: "#fbe9e7", stroke: C.red, lw: 0.9 });
+      text(ctx, c, x - 44 + i * 43, y + 29.6, { size: 6.8, weight: 700, mono: true, align: "center", color: C.red });
+      ctx.restore();
     });
+    text(ctx, "R_total = R_func + λ_sec · R_sec", LOOP.x, 255, { size: 8.8, serif: true, italic: true, align: "center", color: C.title, alpha: seg(t, 9000, 9600) });
+    /* ---------- hard shield ---------- */
+    const sg = seg(t, 3100, 3400) * (1 - seg(t, 7000, 7400));
+    panel(ctx, 248, 36, 224, 126, L.shield, sg);
+    const SX = 362, SY = 104;
+    ctx.save(); ctx.translate(SX, SY);
+    ctx.beginPath(); ctx.moveTo(0, -20); ctx.lineTo(16, -13); ctx.lineTo(15, 3); ctx.quadraticCurveTo(12, 15, 0, 22); ctx.quadraticCurveTo(-12, 15, -15, 3); ctx.lineTo(-16, -13); ctx.closePath();
+    ctx.fillStyle = "#e3ecf7"; ctx.fill(); ctx.strokeStyle = C.blue; ctx.lineWidth = 1.6; ctx.stroke();
     ctx.restore();
-    /* the shield slams onto the unsafe lines */
-    const sp = ease.spring(seg(t, 5200, 5900)) * (1 - seg(t, 9500, 9800));
-    if (sp > 0) {
-      const sx = ED.x + ED.w - 26, sy = ED.y + 84;
-      ctx.save(); ctx.globalAlpha *= clamp(sp * 2);
-      ctx.translate(sx, sy); const sc = 1.8 - 0.8 * sp; ctx.scale(sc, sc); ctx.translate(-sx, -sy);
-      shieldPath(ctx, sx, sy, 14); ctx.fillStyle = rgba(C.magenta, 0.85); ctx.shadowColor = C.magenta; ctx.shadowBlur = 18; ctx.fill(); ctx.shadowBlur = 0;
-      ctx.strokeStyle = "#fff"; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(sx - 5, sy - 2); ctx.lineTo(sx + 5, sy + 8); ctx.moveTo(sx + 5, sy - 2); ctx.lineTo(sx - 5, sy + 8); ctx.stroke();
+    text(ctx, L.filter, SX, SY + 4, { size: 7.2, weight: 700, align: "center", color: C.blue, max: 30 });
+    /* sandbox and the reject bin */
+    box(ctx, 418, 66, 48, 30, { r: 4, fill: "#eef5ec", stroke: C.green });
+    ctx.strokeStyle = C.green; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(426, 84); ctx.quadraticCurveTo(442, 92, 458, 80); ctx.stroke();
+    [0, 1, 2].forEach((k) => box(ctx, 430 + k * 7, 73, 6, 5, { r: 1, fill: C.green }));
+    text(ctx, L.sandbox, 442, 106, { size: 6.8, weight: 700, align: "center", color: C.green, max: 56 });
+    box(ctx, 418, 120, 48, 24, { r: 4, fill: "#fbe9e7", stroke: C.red });
+    cross(ctx, 442, 129, 9, C.red, 1);
+    text(ctx, L.danger, 442, 141, { size: 6.4, weight: 700, align: "center", color: C.red, max: 46 });
+    let blocked = 0;
+    ACTIONS.forEach((a, i) => {
+      const t0 = 3300 + i * 600, p = seg(t, t0, t0 + 900);
+      if (p <= 0 || p >= 1) { if (p >= 1 && a.bad) blocked++; return; }
+      let x, y;
+      if (p < 0.5) { const k = ease.inOut(p / 0.5); x = lerp(258, SX - 50, k); y = lerp(70 + (i % 3) * 22, SY - 6, k); }
+      else { const k = ease.inOut((p - 0.5) / 0.5); x = lerp(SX - 50, 400, k); y = a.bad ? lerp(SY - 6, 126, k) + Math.sin(k * Math.PI) * -10 : lerp(SY - 6, 76, k); }
+      ctx.save(); ctx.globalAlpha *= clamp((1 - p) * 6);
+      font(ctx, 7.4, 500, "mono"); const w = ctx.measureText(a.s).width + 10;
+      box(ctx, x - w / 2, y - 7, w, 14, { r: 3, fill: p > 0.5 ? (a.bad ? "#fbe9e7" : "#eef5ec") : "#fff", stroke: p > 0.5 ? (a.bad ? C.red : C.green) : C.line });
+      text(ctx, a.s, x, y + 2.8, { size: 7.4, mono: true, align: "center", color: p > 0.5 ? (a.bad ? C.red : C.green) : C.ink });
       ctx.restore();
-      const lp = seg(t, 5600, 6000);
-      ctx.save(); ctx.globalAlpha *= lp;
-      panel(ctx, ED.x + 26, ED.y + 112, ED.w - 64, 24, { r: 7, fill: rgba(C.magenta, 0.18), stroke: rgba(C.magenta, 0.85), glow: C.magenta, blur: 10 });
-      text(ctx, L.shield, ED.x + 34, ED.y + 122, { size: 8, weight: 800, color: "#ff9ccd" });
-      text(ctx, L.cwe, ED.x + 34, ED.y + 132.4, { size: 8, weight: 700, mono: true, color: rgba(C.ink, 0.92) });
-      ctx.restore();
-    }
+      if (p >= 0.5 && a.bad) blocked += 0;
+    });
+    text(ctx, blocked + " " + L.blocked, 258, 152, { size: 8, weight: 700, color: C.red, alpha: seg(t, 3600, 4000) });
     /* ---------- constraint-aware optimization ---------- */
-    const op = seg(t, 6700, 7100) * (1 - seg(t, 10700, 11000));
-    const O = { x: ED.x, y: 196, w: ED.w, h: 92 };
-    if (op > 0) {
-      ctx.save(); ctx.globalAlpha *= op;
-      panel(ctx, O.x, O.y, O.w, O.h, { r: 10, fill: "rgba(22,12,64,.78)" });
-      /* Security report and Test run */
-      const r1 = ease.spring(seg(t, 6800, 7400));
-      if (r1 > 0) { rr(ctx, O.x + 10, O.y + 10, 112, 18, 9); ctx.fillStyle = rgba(C.magenta, 0.22 * r1); ctx.fill(); text(ctx, L.report, O.x + 18, O.y + 22.4, { size: 8.2, weight: 800, color: "#ff9ccd", alpha: r1 }); }
-      const tp = seg(t, 7700, 8500);
-      if (tp > 0) {
-        text(ctx, L.tests, O.x + 132, O.y + 22.4, { size: 8.2, weight: 700, color: rgba(C.ink, 0.8) });
-        rr(ctx, O.x + 196, O.y + 16, 64, 6, 3); ctx.fillStyle = "rgba(247,244,255,.12)"; ctx.fill();
-        rr(ctx, O.x + 196, O.y + 16, 64 * tp, 6, 3); ctx.fillStyle = C.cyan; ctx.fill();
-      }
-      /* Critic: reward and cost, then the Lagrange multiplier */
-      const cp = seg(t, 8600, 9200);
-      if (cp > 0) {
-        [[L.reward, 0.62, C.cyan], [L.cost, 0.78, C.magenta]].forEach(([n, v, col], i) => {
-          const y = O.y + 44 + i * 18;
-          text(ctx, n, O.x + 12, y + 7, { size: 8, weight: 700, color: rgba(C.ink, 0.75) });
-          rr(ctx, O.x + 48, y + 1, 76, 6, 3); ctx.fillStyle = "rgba(247,244,255,.1)"; ctx.fill();
-          rr(ctx, O.x + 48, y + 1, 76 * v * ease.out(cp), 6, 3); ctx.fillStyle = col; ctx.fill();
-        });
-        /* λ gauge */
-        const gx = O.x + 176, gy = O.y + 76, gr = 24, lam = ease.out(seg(t, 8900, 9800));
-        ctx.lineWidth = 5; ctx.lineCap = "round";
-        ctx.strokeStyle = "rgba(247,244,255,.12)"; ctx.beginPath(); ctx.arc(gx, gy, gr, Math.PI, 0); ctx.stroke();
-        const gg = ctx.createLinearGradient(gx - gr, 0, gx + gr, 0); gg.addColorStop(0, C.cyan); gg.addColorStop(1, C.magenta);
-        ctx.strokeStyle = gg; ctx.beginPath(); ctx.arc(gx, gy, gr, Math.PI, Math.PI + Math.PI * (0.25 + 0.55 * lam)); ctx.stroke();
-        const na = Math.PI + Math.PI * (0.25 + 0.55 * lam);
-        ctx.strokeStyle = "#fff"; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(gx, gy); ctx.lineTo(gx + Math.cos(na) * (gr - 6), gy + Math.sin(na) * (gr - 6)); ctx.stroke();
-        text(ctx, L.lambda, gx, gy + 12, { size: 7.6, weight: 700, align: "center", color: rgba(C.ink, 0.75) });
-        /* PPO update arrow back to the Code agent */
-        const pu = seg(t, 9400, 10000);
-        if (pu > 0) {
-          rr(ctx, O.x + 212, O.y + 34, 52, 18, 9); ctx.fillStyle = rgba(C.cyan, 0.2 * pu); ctx.fill();
-          text(ctx, L.ppo, O.x + 238, O.y + 46.4, { size: 8, weight: 800, align: "center", color: "#9ff8ff", alpha: pu });
-        }
-      }
+    const og = seg(t, 8800, 9200) * (1 - seg(t, 12300, 12700));
+    panel(ctx, 248, 170, 224, 92, L.opt, og);
+    text(ctx, "max R_func   s.t.   E[C_sec] ≤ δ", 360, 202, { size: 10.6, serif: true, italic: true, align: "center", color: C.title });
+    ["PPO", "GAE", "Lagrange λ"].forEach((s, i) => { font(ctx, 7.6, 700); const w = ctx.measureText(s).width + 12, x = 262 + [0, 34, 68][i]; box(ctx, x, 210, w, 13, { r: 3, fill: "#fff", stroke: C.line }); text(ctx, s, x + w / 2, 219.4, { size: 7.6, weight: 700, align: "center", color: C.blue }); });
+    /* the security cost against its budget δ, and λ responding */
+    const viol = seg(t, 8800, 9600) * (1 - seg(t, 10600, 11800));
+    const cost = 0.32 + 0.48 * viol, del = 0.5, bx = 262, bw = 140, by = 236;
+    box(ctx, bx, by, bw, 7, { r: 3.5, fill: "#efe8d6" });
+    box(ctx, bx, by, bw * cost, 7, { r: 3.5, fill: cost > del ? C.red : C.green });
+    ctx.strokeStyle = C.title; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(bx + bw * del, by - 4); ctx.lineTo(bx + bw * del, by + 11); ctx.stroke();
+    text(ctx, "δ", bx + bw * del + 3, by - 1, { size: 8, serif: true, italic: true, color: C.title });
+    text(ctx, "E[C_sec]", bx, by + 18, { size: 7, serif: true, italic: true, color: C.soft });
+    const lam = 0.4 + 0.9 * ease.out(seg(t, 9000, 10600));
+    text(ctx, "λ = " + lam.toFixed(2), 464, by + 6, { size: 9, weight: 700, mono: true, align: "right", color: C.orange });
+    text(ctx, L.viol, 464, by + 18, { size: 7, align: "right", color: C.orange, alpha: viol });
+    if (t > 10800 && t < 12800) text(ctx, L.vr, 360, 268, { size: 6.8, align: "center", color: C.soft, alpha: seg(t, 10800, 11200) * (1 - seg(t, 12400, 12800)) });
+    /* ---------- secure output artifact ---------- */
+    const fo = seg(t, 12600, 13000);
+    box(ctx, 8, 270, 464, 62, { r: 5, fill: fo > 0 ? `rgba(238,245,236,${fo})` : C.panel, stroke: fo > 0 ? C.green : C.line, lw: fo > 0 ? 1.6 : 1 });
+    text(ctx, L.out, 20, 285, { size: 11, weight: 700, serif: true, color: C.title });
+    L.checks.forEach((s2, i) => {
+      const k = seg(t, 12800 + i * 300, 13200 + i * 300), y = 298 + i * 11.5;
+      if (k > 0) check(ctx, 25, y - 3, 8, C.green, k); else dot(ctx, 25, y - 3, 2.4, C.line);
+      text(ctx, s2, 34, y, { size: 8, weight: 600, color: k > 0 ? C.green : C.soft, max: 150 });
+    });
+    const np = ease.out(seg(t, 13400, 14600)), na = seg(t, 13200, 13600);
+    if (na > 0) {
+      ctx.save(); ctx.globalAlpha *= na;
+      text(ctx, (89.3 * np).toFixed(1) + "%", 196, 303, { size: 20, weight: 800, color: C.green });
+      text(ctx, L.sp, 196, 316, { size: 7.4, color: C.soft, max: 120 });
+      text(ctx, Math.round(1420 * np).toLocaleString("en-US"), 326, 300, { size: 13, weight: 800, color: C.red });
+      text(ctx, L.sh, 326, 311, { size: 7.4, weight: 700, color: C.red, max: 140 });
+      text(ctx, L.shd, 326, 322, { size: 6.2, color: C.soft, max: 140 });
       ctx.restore();
     }
-    /* ---------- secure pass and the numbers ---------- */
-    const fp = seg(t, 10900, 11300);
-    if (fp > 0) {
-      ctx.save(); ctx.globalAlpha *= fp;
-      panel(ctx, O.x, O.y, O.w, O.h, { r: 10, fill: "rgba(0,240,255,.06)", stroke: rgba(C.cyan, 0.6), glow: rgba(C.cyan, 0.6), blur: 12 });
-      check(ctx, O.x + 20, O.y + 22, 14, C.cyan, seg(t, 11000, 11500));
-      text(ctx, L.pass, O.x + 34, O.y + 21, { size: 11, weight: 900, color: "#9ff8ff", glow: rgba(C.cyan, 0.8) });
-      text(ctx, L.passSub, O.x + 34, O.y + 34, { size: 8, weight: 600, color: rgba(C.ink, 0.75) });
-      const np = ease.out(seg(t, 11600, 12600));
-      const g2 = ctx.createLinearGradient(O.x + 12, 0, O.x + 120, 0); g2.addColorStop(0, C.cyan); g2.addColorStop(1, C.purple);
-      font(ctx, 26, 900); ctx.fillStyle = g2; ctx.textAlign = "left"; ctx.shadowColor = rgba(C.cyan, 0.8); ctx.shadowBlur = 12;
-      ctx.fillText((89.3 * np).toFixed(1) + "%", O.x + 12, O.y + 70); ctx.shadowBlur = 0;
-      text(ctx, L.sp, O.x + 12, O.y + 84, { size: 7.6, weight: 700, color: rgba(C.ink, 0.78), max: 122 });
-      /* vulnerability rate: 42.5 % → about 10 % after two rounds */
-      const cx0 = O.x + 150, cx1 = O.x + 258, cy0 = O.y + 50, cy1 = O.y + 78, k = ease.inOut(seg(t, 12000, 13000));
-      text(ctx, L.vr, cx0, O.y + 44, { size: 7.4, weight: 700, color: rgba(C.ink, 0.7), max: cx1 - cx0 + 6 });
-      const y0 = lerp(cy1, cy0, 42.5 / 45), y1 = lerp(cy1, cy0, 10 / 45);
-      ctx.strokeStyle = C.magenta; ctx.lineWidth = 2; ctx.shadowColor = C.magenta; ctx.shadowBlur = 8;
-      ctx.beginPath(); ctx.moveTo(cx0 + 4, y0); ctx.lineTo(lerp(cx0 + 4, cx1 - 6, k), lerp(y0, y1, k)); ctx.stroke(); ctx.shadowBlur = 0;
-      dot(ctx, cx0 + 4, y0, 2.6, C.magenta); text(ctx, "42.5%", cx0 + 10, y0 + 3, { size: 7.6, weight: 800, color: "#ff9ccd" });
-      if (k > 0.98) { dot(ctx, cx1 - 6, y1, 2.6, C.cyan); text(ctx, "≈10%", cx1 - 10, y1 - 5, { size: 7.6, weight: 800, align: "right", color: "#9ff8ff" }); text(ctx, L.vrAfter, cx1 - 6, cy1 + 9, { size: 6.8, align: "right", color: rgba(C.ink, 0.6) }); }
-      ctx.restore();
-    }
-    ctx.restore();
+    /* the loop hands the artifact to the shield and the optimizer */
+    if (t > 3000 && t < 7200) arrow(ctx, 210, 128, 252, 104, C.blue, 1.2, 4, ease.out(seg(t, 3000, 3400)));
+    if (t > 8800 && t < 12400) arrow(ctx, 196, 214, 252, 220, C.orange, 1.2, 4, ease.out(seg(t, 8800, 9200)));
   },
 };

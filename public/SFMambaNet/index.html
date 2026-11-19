@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SFMambaNet — Smooth Inliers, Erratic Outliers: Frequency-Aware Mamba for Two-View Correspondence Learning</title>
+<meta name="description" content="SFMambaNet scans putative matches cluster by cluster and filters its Mamba scans with learnable frequency-domain gates: 73.83% mAP@5° on unseen YFCC100M scenes without RANSAC, with 2.01M parameters." />
+<link rel="canonical" href="https://kirito14it.github.io/SFMambaNet/" />
+<meta name="theme-color" content="#040919" />
+<link rel="preload" href="assets/fonts/Urbanist.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="assets/fonts/GeistMono.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png" />
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="SFMambaNet — Smooth Inliers, Erratic Outliers" />
+<meta property="og:description" content="Frequency-aware Mamba for two-view correspondence learning: scan matches cluster by cluster, gate the scans in the frequency domain." />
+<meta property="og:url" content="https://kirito14it.github.io/SFMambaNet/" />
+<meta property="og:image" content="https://kirito14it.github.io/SFMambaNet/assets/og.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="SFMambaNet — Smooth Inliers, Erratic Outliers" />
+<meta name="twitter:description" content="Frequency-aware Mamba for two-view correspondence learning: 73.83% mAP@5° on unseen YFCC100M scenes without RANSAC, 2.01M parameters." />
+<meta name="twitter:image" content="https://kirito14it.github.io/SFMambaNet/assets/og.jpg" />
+<link rel="stylesheet" href="css/style.css" />
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body id="top">
+<!-- Site design adapted from the CUA-Lite landing page (https://cua-lite.github.io/), used with its author's permission.
+     Every number and every match line on this page comes from the SFMambaNet paper (arXiv 2606.04493). -->
+<div class="sky" aria-hidden="true"><i></i><i></i><i></i></div>
+<div class="progress" aria-hidden="true"><i></i></div>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#top"><img src="assets/logo-64.png" alt="" width="30" height="30" /><b>SFMambaNet</b></a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="#insight">Insight</a>
+      <a href="#method">Method</a>
+      <a href="#results">Results</a>
+      <a href="#analysis">Analysis</a>
+      <a href="#code">Code</a>
+      <span class="nav-sep" aria-hidden="true"></span>
+      <div class="nav-cta">
+        <a class="btn sm" href="https://arxiv.org/abs/2606.04493" target="_blank" rel="noopener">Paper</a>
+        <a class="btn sm" href="https://github.com/Kirito14IT/SFMambaNet" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn sm" href="#cite">BibTeX</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main>
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div class="container">
+    <span class="chip reveal"><i></i>arXiv 2606.04493 · two-view correspondence learning</span>
+    <h1 class="reveal"><span class="line"><span class="w-smooth">Smooth</span> inliers,</span><span class="line"><span class="w-erratic">erratic</span> outliers.</span></h1>
+    <p class="sub reveal"><b>SFMambaNet</b>: Frequency-Aware Mamba for Two-View Correspondence Learning</p>
+    <p class="lead-in reveal">Correct matches between two photos shift together; wrong ones jump against their neighbours. SFMambaNet <b>scans the matches cluster by cluster</b>, where that difference becomes one of frequency, and <b>filters its Mamba scans with learnable frequency-domain gates</b>.</p>
+    <p class="authors reveal">
+      <span class="nb"><a href="https://kirito14it.github.io/">Zhihua Wang</a><sup>1,2,*</sup></span>,
+      <span class="nb">Yifeng Gao<sup>1</sup></span>,
+      <span class="nb"><a href="https://yunhao-feng.github.io" target="_blank" rel="noopener">Yunhao Feng</a><sup>3</sup></span>,
+      <span class="nb">Rui Pan<sup>1</sup></span>,
+      <span class="nb">Zhouyuan Ma<sup>1</sup></span>,
+      <span class="nb">Baiheng Zhao<sup>1</sup></span>,
+      <span class="nb">Zixing Chen<sup>1</sup></span>,
+      <span class="nb">Yanping Li<sup>4</sup></span>,
+      <span class="nb">Yizhang Liu<sup>5</sup></span>,
+      <span class="nb"><a href="http://xingjunma.com/" target="_blank" rel="noopener">Xingjun Ma</a><sup>1,6,†</sup></span>
+    </p>
+    <p class="affils reveal">
+      <span class="nb"><sup>1</sup>Fudan University</span><span class="sep">·</span>
+      <span class="nb"><sup>2</sup>University of Shanghai for Science and Technology</span><span class="sep">·</span>
+      <span class="nb"><sup>3</sup>Ant Group</span><span class="sep">·</span>
+      <span class="nb"><sup>4</sup>Shanghai Jiao Tong University</span><span class="sep">·</span>
+      <span class="nb"><sup>5</sup>Fuzhou University</span><span class="sep">·</span>
+      <span class="nb"><sup>6</sup>Shanghai Innovation Institute</span>
+    </p>
+    <p class="notes reveal"><sup>*</sup>Work completed during an internship at Fudan University · <sup>†</sup>Corresponding author</p>
+    <div class="cta reveal">
+      <a class="btn solid" href="https://arxiv.org/abs/2606.04493" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg>Paper</a>
+      <a class="btn" href="https://github.com/Kirito14IT/SFMambaNet" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>Code</a>
+      <a class="btn" href="#cite"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5a2 2 0 0 0 2 2h1M16 3h1a2 2 0 0 1 2 2v5a2 2 0 0 0 2 2 2 2 0 0 0-2 2v5a2 2 0 0 1-2 2h-1"/></svg>BibTeX</a>
+    </div>
+
+    <div class="theater reveal" id="heroTheater" data-scene="s2">
+      <div class="th-bar">
+        <div class="th-title"><b>Pruning, live</b><span>Buckingham Palace · YFCC100M · unseen scene</span></div>
+        <div class="pills" role="tablist" aria-label="Method">
+          <button class="pill on bad" data-m="putative" role="tab" aria-selected="true">Putative</button>
+          <button class="pill" data-m="bclnet" role="tab" aria-selected="false">BCLNet</button>
+          <button class="pill" data-m="matchmamba" role="tab" aria-selected="false">MatchMamba</button>
+          <button class="pill" data-m="sfmambanet" role="tab" aria-selected="false">SFMambaNet</button>
+        </div>
+        <div class="counts" aria-live="polite"><span class="g"><i></i><b>556</b><em>inliers</em></span><span class="r"><i></i><b>1,444</b><em>outliers</em></span></div>
+      </div>
+      <div class="th-stage" style="aspect-ratio:2.6791">
+        <img class="l" style="left:0;width:49.768%" src="assets/scenes/s2-l.webp" alt="Buckingham Palace, first view" />
+        <img class="r" style="left:50.232%;width:49.768%" src="assets/scenes/s2-r.webp" alt="Buckingham Palace, second view" />
+        <canvas aria-hidden="true"></canvas>
+        <div class="th-beam" aria-hidden="true"></div>
+      </div>
+      <div class="th-foot"><span class="legend"><span class="g">inlier</span><span class="r">outlier</span></span><span><b>Putative</b>: all 2,000 nearest-neighbour SIFT matches · each method: the matches it keeps · lines as drawn in the paper</span></div>
+    </div>
+
+    <ul class="stats" data-stagger>
+      <li class="stat hot reveal"><b><span class="n" data-count="73.83" data-dec="2">73.83</span><small>%</small></b><span>mAP@5° on unseen YFCC100M scenes · SIFT, no RANSAC</span></li>
+      <li class="stat reveal"><b><span class="n" data-count="3.60" data-dec="2" data-prefix="+">+3.60</span></b><span>points over MatchMamba, at fewer parameters and FLOPs</span></li>
+      <li class="stat reveal"><b><span class="n" data-count="2.01" data-dec="2">2.01</span><small>M</small></b><span>parameters · 5.01 GFLOPs · 4.80 ms per pair</span></li>
+      <li class="stat reveal"><b><span class="n" data-count="84" data-dec="0">84</span><small>%</small></b><span>of inlier energy in the lowest tenth of frequencies, scanned by cluster (outliers: 15%)</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= 01 INSIGHT ================= -->
+<section class="section" id="insight">
+  <div class="container center">
+    <p class="eyebrow reveal">01 · Insight</p>
+    <h2 class="reveal">Frequency needs an <em>order</em>.</h2>
+    <p class="lead reveal">Correspondences form a set, and a set has no spectrum until it is read in some order. <b>Read at random</b>, where each match lands in the second image is noise for inliers and outliers alike. <b>Read cluster by cluster</b>, the inliers move in smooth, low-frequency steps while the outliers stay erratic.</p>
+  </div>
+  <div class="container">
+    <div class="card pair-card reveal">
+      <div class="sp-head"><b>a · Putative matches</b><span>Notre-Dame · 150 of 2,000 SIFT matches drawn</span></div>
+      <div class="th-stage" id="pairStage" style="aspect-ratio:3.4573">
+        <img class="l" style="left:0;width:48.8%" src="assets/teaser/pair-l.webp" alt="Notre-Dame de Paris, south facade, first view" loading="lazy" />
+        <img class="r" style="left:51.27%;width:48.73%" src="assets/teaser/pair-r.webp" alt="Notre-Dame de Paris, south facade, second view" loading="lazy" />
+        <canvas aria-hidden="true"></canvas>
+      </div>
+    </div>
+    <div class="scan-ctl reveal">
+      <div class="tabs" id="orderTabs" role="tablist" aria-label="Scan order">
+        <button class="tab on" data-o="random" role="tab" aria-selected="true">b · Random order</button>
+        <button class="tab" data-o="cluster" role="tab" aria-selected="false">c · Cluster by cluster</button>
+      </div>
+      <button class="play" id="scanPlay" type="button" aria-pressed="false">Pause</button>
+    </div>
+    <div class="scan" id="scanGrid" data-stagger>
+      <div class="card scan-panel fx reveal">
+        <div class="sp-head"><b>Scan order</b><span id="ordName">random order</span></div>
+        <div class="sp-canvas"><img src="assets/teaser/gray.webp" alt="First view in gray, keypoints coloured by scan position" loading="lazy" /><canvas id="scanDots" aria-hidden="true"></canvas></div>
+        <div class="sp-bar"><u id="scanCursor"></u></div>
+        <div class="sp-cap"><span>first</span><span>colour = position in the scan</span><span>last</span></div>
+      </div>
+      <div class="card scan-panel fx reveal">
+        <div class="sp-head"><b>Where each match lands</b><span>u′ in the second view</span></div>
+        <div class="sp-canvas"><canvas id="scanLand" aria-hidden="true"></canvas></div>
+        <div class="sp-cap"><span><span style="color:var(--out)">●</span> outliers <span style="color:var(--inl)">—</span> inliers</span><span>scan position →</span></div>
+      </div>
+      <div class="card scan-panel fx reveal">
+        <div class="sp-head"><b>Spectrum of u′</b><span>relative power · log–log</span></div>
+        <div class="sp-canvas"><svg id="scanSpec" viewBox="0 0 712 423" aria-hidden="true"></svg></div>
+        <div class="sp-cap"><span>frequency, cycles per match →</span><span>dotted: flat spectrum</span></div>
+      </div>
+    </div>
+    <div class="verdict" data-stagger>
+      <div class="card fx reveal"><b class="g" id="vInl">9.9%</b><span>of the <b>inliers'</b> energy sits in the lowest tenth of frequencies</span></div>
+      <div class="card fx reveal"><b class="r" id="vOut">10.0%</b><span>of the <b>outliers'</b> energy sits there</span></div>
+      <div class="card fx reveal"><b class="c">10%</b><span>is what a flat, noise-like spectrum puts there; a random order gives exactly that to both classes</span></div>
+    </div>
+    <p class="fig-note reveal">Rebuilt from the paper's first figure with its own data: N = 2,000 SIFT matches between two CC0 photographs of Notre-Dame de Paris by Chabe01 (Wikimedia Commons), labelled with an estimated epipolar geometry (462 inliers, 1,538 outliers). The cluster order visits 32 k-means clusters of first-view keypoints one after another; spectra average 200 orders. Details in Appendix K.</p>
+  </div>
+</section>
+
+<!-- ================= 02 METHOD ================= -->
+<section class="section" id="method">
+  <div class="container center">
+    <p class="eyebrow reveal">02 · Method</p>
+    <h2 class="reveal">Prune twice, <em>verify</em> once.</h2>
+    <p class="lead reveal">Two pruning blocks each keep the more reliable half of the matches. A verification block then fits the essential matrix with a weighted eight-point solver and re-checks <b>all N</b> matches, which recovers inliers dropped along the way. Frequency enters every pruning block twice: locally in LSGA, globally in SIGM.</p>
+  </div>
+  <div class="container">
+    <div class="card arch reveal">
+      <svg id="archSvg" role="img" aria-label="Architecture of SFMambaNet: N putative matches pass two pruning blocks that each keep the more reliable half, then a verification block re-checks all N matches"></svg>
+      <p class="arch-hint">Click a block · strands are matches: green inliers, red outliers</p>
+    </div>
+    <div class="blocks" data-stagger>
+      <div class="card blockcard fx reveal" data-for="b1 b2">
+        <span class="bc-k">Inside each pruning block · local</span>
+        <h3>Local Spectral-Geometric Feature Extractor</h3>
+        <p>Embeds the N × 4 coordinates, links every match to its k nearest neighbours, and refines it with its neighbourhood through LSGA.</p>
+        <ul class="pipe"><li>Up projection</li><li>ResNet ×4</li><li>KNN graph</li><li>ResNet ×4</li><li class="hl">LSGA ×1</li></ul>
+      </div>
+      <div class="card blockcard fx reveal" data-for="b1 b2">
+        <span class="bc-k">Inside each pruning block · global</span>
+        <h3>Spectral-Global Context Aggregator</h3>
+        <p>Gathers global consensus along the cluster order with three SIGM blocks, predicts an inlier weight for every match, and keeps the top half.</p>
+        <ul class="pipe"><li>ResNet ×4</li><li class="hl">SIGM ×3</li><li>ResNet ×4</li><li class="ok">weights W<sub>k</sub></li></ul>
+      </div>
+      <div class="card blockcard fx reveal" data-for="v">
+        <span class="bc-k">Verification</span>
+        <h3>Verification Block</h3>
+        <p>Estimates Ê from the surviving matches, measures the epipolar distance of all N matches, and keeps every match below a threshold.</p>
+        <ul class="pipe"><li>W<sub>2</sub>, C<sub>2</sub></li><li>weighted 8-point</li><li>Ê</li><li>distance of all N</li><li class="ok">keep if below threshold</li></ul>
+      </div>
+    </div>
+    <div class="modules" data-stagger>
+      <div class="card module fx reveal">
+        <span class="bc-k">Local · LSGA</span>
+        <h3>Local Spectral-Geometric Attention</h3>
+        <p>Relative neighbour offsets ΔC are lifted into Fourier features with a fixed Gaussian projection B, so a small difference in motion becomes a large difference in the encoding. A local attention weighs neighbours by feature similarity and geometric consistency, and DiffPool groups the matches into clusters whose order Π defines the scan.</p>
+        <svg id="lsgaAnim" viewBox="0 0 520 226" role="img" aria-label="Animation: nearby inlier and outlier offsets agree at low frequency and separate at high frequency; tokens are reordered by cluster, scanned forward and backward, and restored to their input order"></svg>
+        <p class="eq"><b>E<sub>freq</sub></b> = [ sin(2π<b>B</b>ΔC) ; cos(2π<b>B</b>ΔC) ] &nbsp;·&nbsp; <b>Π</b> = Order(DiffPool(F<sup>M</sup>)) &nbsp;·&nbsp; F<sup>G</sup> = Π<sup>−1</sup>(BiMamba(Π F<sup>M</sup>))</p>
+      </div>
+      <div class="card module fx reveal">
+        <span class="bc-k">Global · SIGM</span>
+        <h3>Spectral-Integrated Global Mamba</h3>
+        <p>A forward Mamba scan runs along the cluster order. Its output is gated in the frequency domain, flipped, scanned backwards and gated again, so the second scan reads filtered features. The complex-valued gates learn amplitude and phase per channel and frequency, and leave Mamba's state transition untouched.</p>
+        <svg id="sigmAnim" viewBox="0 0 520 236" role="img" aria-label="Animation: a feature sequence along the cluster order passes a forward Mamba scan, a frequency gate that removes high-frequency deviations, a flip, a backward scan and a second gate"></svg>
+        <p class="eq"><b>F<sup>S</sup><sub>fwd</sub></b> = IFFT( FFT(Mamba(Π F<sup>GL</sup>)) ⊙ <b>W<sup>1</sup></b> ) &nbsp;→&nbsp; Flip &nbsp;→&nbsp; Mamba &nbsp;→&nbsp; ⊙ <b>W<sup>2</sup></b> &nbsp;→&nbsp; LN( · + · + · )</p>
+      </div>
+    </div>
+    <div class="cost reveal">
+      <span><b>O(DN log N)</b> per FFT</span>
+      <span><b>O(DN)</b> per scan</span>
+      <span>12 spectral gates · <b>&lt; 5%</b> of the parameters</span>
+      <span><b>2.01M</b> parameters · <b>5.01</b> GFLOPs</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 03 RESULTS ================= -->
+<section class="section" id="results">
+  <div class="container center">
+    <p class="eyebrow reveal">03 · Results</p>
+    <h2 class="reveal">More accurate, <em>and</em> lighter.</h2>
+    <p class="lead reveal">Without RANSAC, SFMambaNet is the most accurate pruner on every split of relative pose estimation, with SIFT and with SuperPoint. It also gives the best precision and F-score in outlier removal and the best homography accuracy, with slightly fewer parameters and FLOPs than MatchMamba.</p>
+  </div>
+  <div class="container">
+    <div class="res-grid">
+      <div class="card board fx reveal" id="board">
+        <div class="bd-head"><b>Relative pose estimation</b><span>mAP@5° (%) · no RANSAC</span></div>
+        <div class="bd-tabs bd-tabs-row">
+          <div class="tabs" data-k="set" role="tablist" aria-label="Dataset and descriptor">
+            <button class="tab on" data-v="y" role="tab">YFCC100M · SIFT</button>
+            <button class="tab" data-v="s" role="tab">SUN3D · SIFT</button>
+            <button class="tab" data-v="p" role="tab">YFCC100M · SuperPoint</button>
+          </div>
+          <div class="tabs" data-k="split" role="tablist" aria-label="Split">
+            <button class="tab" data-v="k" role="tab">Known</button>
+            <button class="tab on" data-v="u" role="tab">Unknown</button>
+          </div>
+        </div>
+        <div class="bd-body" id="bdBody"></div>
+        <p class="bd-foot" id="bdFoot"></p>
+      </div>
+      <div class="side-stack">
+        <div class="card chart fx reveal" id="effChart">
+          <div class="bd-head"><b>Accuracy vs. cost</b>
+            <div class="tabs" role="tablist" aria-label="Cost axis"><button class="tab on" data-x="flops" role="tab">FLOPs</button><button class="tab" data-x="ait" role="tab">Inference time</button></div>
+          </div>
+          <svg id="effSvg" viewBox="0 0 460 300" role="img" aria-label="Bubble chart of mAP at 5 degrees against cost for seven pruners; SFMambaNet is the most accurate at a lower cost than MatchMamba"></svg>
+          <div class="tip" id="effTip" role="status"></div>
+          <p class="ho-note">YFCC100M unknown · SIFT · no RANSAC · circle area ∝ parameters · baseline costs as reported for MatchMamba's comparison</p>
+        </div>
+        <div class="card homo fx reveal" id="homo">
+          <div class="bd-head"><b>Homography · HPatches</b>
+            <div class="tabs" role="tablist" aria-label="Corner error threshold"><button class="tab on" data-t="0" role="tab">&lt; 3 px</button><button class="tab" data-t="1" role="tab">&lt; 5 px</button><button class="tab" data-t="2" role="tab">&lt; 10 px</button></div>
+          </div>
+          <div class="ho-axis"><span><i id="hoLo">64%</i><i id="hoHi">74%</i></span></div>
+          <div class="ho-body" id="hoBody"></div>
+          <p class="ho-note">Accuracy (%) at corner error below the threshold · trained on YFCC100M with SIFT · axis zoomed to the range shown</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card heat fx reveal" id="heat" style="max-width:1120px;margin:14px auto 0">
+      <div class="bd-head"><b>Outlier removal · SIFT</b><span>precision · recall · F-score (%) · brighter = higher within a column · outlined = best</span></div>
+      <div class="hm" id="hm"></div>
+    </div>
+
+    <div class="gallery reveal" id="gallery">
+      <div class="gal-head"><h3>Seven unseen pairs</h3><p>Drag the divider: a baseline on the left, SFMambaNet on the right.</p></div>
+      <div class="thumbs" role="tablist" aria-label="Image pair">
+        <button class="thumb on" data-id="s1" role="tab"><img src="assets/scenes/s1-l.webp" alt="" loading="lazy" /><img src="assets/scenes/s1-r.webp" alt="" loading="lazy" /><span>Reichstag</span></button>
+        <button class="thumb" data-id="s2" role="tab"><img src="assets/scenes/s2-l.webp" alt="" loading="lazy" /><img src="assets/scenes/s2-r.webp" alt="" loading="lazy" /><span>Buckingham Palace</span></button>
+        <button class="thumb" data-id="s3" role="tab"><img src="assets/scenes/s3-l.webp" alt="" loading="lazy" /><img src="assets/scenes/s3-r.webp" alt="" loading="lazy" /><span>Notre-Dame</span></button>
+        <button class="thumb" data-id="s4" role="tab"><img src="assets/scenes/s4-l.webp" alt="" loading="lazy" /><img src="assets/scenes/s4-r.webp" alt="" loading="lazy" /><span>Sacré-Cœur</span></button>
+        <button class="thumb" data-id="s5" role="tab"><img src="assets/scenes/s5-l.webp" alt="" loading="lazy" /><img src="assets/scenes/s5-r.webp" alt="" loading="lazy" /><span>Indoor scene 1</span></button>
+        <button class="thumb" data-id="s6" role="tab"><img src="assets/scenes/s6-l.webp" alt="" loading="lazy" /><img src="assets/scenes/s6-r.webp" alt="" loading="lazy" /><span>Indoor scene 2</span></button>
+        <button class="thumb" data-id="s7" role="tab"><img src="assets/scenes/s7-l.webp" alt="" loading="lazy" /><img src="assets/scenes/s7-r.webp" alt="" loading="lazy" /><span>Indoor scene 3</span></button>
+      </div>
+      <div class="theater cmp">
+        <div class="th-bar">
+          <div class="th-title"><b data-k="name">Reichstag</b><span data-k="set">YFCC100M · unseen scene</span></div>
+          <div class="pills" role="tablist" aria-label="Baseline">
+            <button class="pill" data-m="putative" role="tab">Putative</button>
+            <button class="pill" data-m="bclnet" role="tab">BCLNet</button>
+            <button class="pill on" data-m="matchmamba" role="tab">MatchMamba</button>
+          </div>
+          <div class="counts" aria-live="polite">
+            <span class="who" data-k="who">MatchMamba</span><span class="g"><i></i><b data-k="lg">214</b></span><span class="r"><i></i><b data-k="lr">58</b></span>
+            <span class="vs">vs</span>
+            <span class="who ours">SFMambaNet</span><span class="g"><i></i><b data-k="rg">212</b></span><span class="r"><i></i><b data-k="rr">38</b></span>
+          </div>
+        </div>
+        <div class="th-stage cmp-stage" id="cmpStage" style="aspect-ratio:2.6791">
+          <img class="l" style="left:0;width:49.768%" src="assets/scenes/s1-l.webp" alt="Reichstag, first view" loading="lazy" />
+          <img class="r" style="left:50.232%;width:49.768%" src="assets/scenes/s1-r.webp" alt="Reichstag, second view" loading="lazy" />
+          <canvas aria-hidden="true"></canvas>
+          <span class="cmp-tag l" data-k="tag">MatchMamba</span><span class="cmp-tag r">SFMambaNet</span>
+          <div class="cmp-handle" role="slider" tabindex="0" aria-label="Comparison divider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span></span></div>
+        </div>
+        <div class="th-foot"><span class="legend"><span class="g">correct, kept</span><span class="r">wrong, kept</span></span><span>Counts are the green and red lines the paper draws for each method · YFCC100M and SUN3D unknown splits (main text and Appendix G)</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 04 ANALYSIS ================= -->
+<section class="section" id="analysis">
+  <div class="container center">
+    <p class="eyebrow reveal">04 · Analysis</p>
+    <h2 class="reveal">Frequency, <em>not</em> capacity.</h2>
+    <p class="lead reveal">Controlled experiments ask why it works. Point-wise layers of exactly the gates' size lose most of the gain, a parameter-free low-pass filter keeps more of it, and the learned gates, left alone, become low-pass. Every number below is a five-seed mean.</p>
+  </div>
+  <div class="container">
+    <div class="an-grid" data-stagger>
+      <div class="card an-card fx reveal" id="ablation">
+        <span class="bc-k">Components</span>
+        <h3>What each module adds</h3>
+        <p>The baseline swaps LSGA and SIGM for identities. From known to unseen scenes the gain of LSGA shrinks while that of SIGM holds, so global frequency gating is what carries the model to new scenes.</p>
+        <div class="tabs" id="abTabs" role="tablist" aria-label="Split and threshold" style="margin-bottom:14px"></div>
+        <div class="wf" id="abRows"></div>
+        <p class="q" style="margin-top:16px">On unseen YFCC100M (mAP@5°), LSGA adds 8.84 points and SIGM another 8.93.</p>
+      </div>
+      <div class="card an-card fx reveal" id="gates">
+        <span class="bc-k">Gate controls</span>
+        <h3>Filtering beats capacity</h3>
+        <p>Same network, four gates. Point-wise MLPs with exactly the gates' parameter count recover little; a fixed low-pass filter with no parameters does better; learning the response adds the rest.</p>
+        <p class="q" style="margin-bottom:10px">Over identity gates on unseen YFCC100M: MLP +0.68 · low-pass +1.55 · learned +3.16</p>
+        <div class="dots"><svg id="gateSvg" viewBox="0 0 460 206" role="img" aria-label="mAP at 5 degrees on unseen YFCC100M and SUN3D for identity, fixed low-pass, point-wise MLP and learned spectral gates"></svg></div>
+      </div>
+      <div class="card an-card fx reveal" id="encoding">
+        <span class="bc-k">Encoding control</span>
+        <h3>Sinusoids, not dimensions</h3>
+        <p>Inside an unchanged attention, a linear lift to the same 128 dimensions gains almost nothing over raw coordinates, while Fourier features roughly triple the gain that raw coordinates bring over no explicit geometry.</p>
+        <p class="q" style="margin-bottom:10px">Over no explicit geometry on unseen YFCC100M: raw +0.80 · linear lift +0.89 · Fourier +2.81</p>
+        <div class="dots"><svg id="encSvg" viewBox="0 0 460 206" role="img" aria-label="mAP at 5 degrees on unseen YFCC100M and SUN3D for four geometric encodings"></svg></div>
+      </div>
+      <div class="card an-card fx reveal" id="energy">
+        <span class="bc-k">Inside the trained gate</span>
+        <h3>The learned gate is low-pass</h3>
+        <p>Nothing in training asks for a frequency response, yet the isolated first-stage gate keeps most of the low band and little of the high band. The network relies on that shape, not on energy.</p>
+        <div class="energy">
+          <div class="en-row"><span class="en-n">Low-band energy kept<small>input → output of the gate</small></span><span class="en-t"><i class="lo" style="--v:.58"></i></span><span class="en-v">58%</span></div>
+          <div class="en-row"><span class="en-n">High-band energy kept<small>concentrated at outlier positions</small></span><span class="en-t"><i class="hi" style="--v:.13;--rd2:.15s"></i></span><span class="en-v">13%</span></div>
+          <div class="en-sep"></div>
+          <div class="en-row"><span class="en-n">AP lost · gate removed<small>points, five seeds</small></span><span class="en-t"><i class="ap" style="--v:.884;--rd2:.3s"></i></span><span class="en-v">2.21</span></div>
+          <div class="en-row"><span class="en-n">AP lost · high-freq gains restored<small>shape broken, rest kept</small></span><span class="en-t"><i class="ap" style="--v:.736;--rd2:.45s"></i></span><span class="en-v">1.84</span></div>
+          <div class="en-row"><span class="en-n">AP lost · rescaled to equal energy<small>energy changed, shape kept</small></span><span class="en-t"><i class="ap" style="--v:.024;--rd2:.6s"></i></span><span class="en-v">0.06</span></div>
+        </div>
+        <p class="q" style="margin-top:12px">Along the learned order, an outlier position carries 2.19× the high-band energy of an inlier position.</p>
+      </div>
+    </div>
+    <div class="card callout fx reveal glow-border" id="shuffleCard">
+      <div><div class="big"><span class="n" data-count="0.08" data-dec="2">0.08</span><small>pp</small></div><div class="vs-line">vs <s>0.62</s> with identity gates</div></div>
+      <p><b>Gating also tames the scan order.</b> Mamba reads a sequence, but matches form a set. Shuffle all inputs twenty times and the pose accuracy of the gated model moves by only 0.08 points on YFCC100M and 0.06 on SUN3D, while the matches it keeps overlap by at least 98.5%. Along the cluster order, a shuffle only reorders matches inside a cluster, a high-frequency change that the gates remove.</p>
+      <div><div class="shuffle" id="shuffleViz" aria-hidden="true"></div><div class="shuffle-cap">a shuffle moves matches only inside their cluster</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 05 CODE ================= -->
+<section class="section" id="code">
+  <div class="container center">
+    <p class="eyebrow reveal">05 · Code</p>
+    <h2 class="reveal">Run it <em>yourself</em>.</h2>
+    <p class="lead reveal">The repository holds the data-preparation, training and evaluation code. Dump YFCC100M or SUN3D correspondences with the OANet protocol, then evaluate a checkpoint with RANSAC turned off.</p>
+  </div>
+  <div class="container">
+    <div class="code-grid">
+      <div class="term wide reveal">
+        <div class="term-bar"><span class="d"></span><span class="d"></span><span class="d"></span><span class="term-title">1 · environment</span><button class="term-copy" type="button" data-copy="t1">Copy</button></div>
+<pre id="t1"><span class="t-k">git</span> clone https://github.com/Kirito14IT/SFMambaNet.git
+<span class="t-k">cd</span> SFMambaNet
+<span class="t-k">conda</span> create -n sfmambanet python=3.10 -y
+<span class="t-k">conda</span> activate sfmambanet
+<span class="t-k">pip</span> install torch==2.1.1 --index-url https://download.pytorch.org/whl/cu118
+<span class="t-k">pip</span> install opencv-contrib-python==4.7.0.72 mamba-ssm==1.2.0.post1
+<span class="t-k">pip</span> install h5py matplotlib numpy six tensorboard thop tqdm</pre>
+      </div>
+      <div class="term reveal">
+        <div class="term-bar"><span class="d"></span><span class="d"></span><span class="d"></span><span class="term-title">2 · YFCC100M correspondences</span><button class="term-copy" type="button" data-copy="t2">Copy</button></div>
+<pre id="t2"><span class="t-c"># raw data from OANet's Google Drive (see the README):</span>
+<span class="t-c"># raw_data/yfcc100m and raw_data/pairs</span>
+<span class="t-k">mkdir</span> -p data_dump
+<span class="t-k">cd</span> dump_match
+<span class="t-k">python</span> <span class="t-f">extract_feature.py</span> --input_path ../raw_data/yfcc100m
+<span class="t-k">python</span> <span class="t-f">yfcc.py</span> --raw_data_path ../raw_data/ --dump_dir ../data_dump/
+<span class="t-k">cd</span> ..</pre>
+      </div>
+      <div class="term reveal">
+        <div class="term-bar"><span class="d"></span><span class="d"></span><span class="d"></span><span class="term-title">3 · evaluate without RANSAC</span><button class="term-copy" type="button" data-copy="t3">Copy</button></div>
+<pre id="t3"><span class="t-k">cd</span> core
+<span class="t-k">python</span> <span class="t-f">main.py</span> --run_mode=test \
+  --data_te=../data_dump/yfcc-sift-2000-test.hdf5 \
+  --model_path=<span class="t-s">/path/to/checkpoint_directory</span> \
+  --res_path=../outputs/yfcc_sift/test \
+  --log_base=../outputs/yfcc_sift \
+  --use_ransac=False --gpu_id=0</pre>
+      </div>
+    </div>
+    <p class="note reveal"><b>Availability.</b> The public repository is a code snapshot: data preparation, training and evaluation are included, but the model is not yet fully synchronized with the revised manuscript, and no pretrained checkpoint is released. The numbers on this page are the ones reported in the paper.</p>
+  </div>
+</section>
+
+<!-- ================= CITE ================= -->
+<section class="section" id="cite">
+  <div class="container center">
+    <p class="eyebrow reveal">Cite</p>
+    <h2 class="reveal">BibTeX</h2>
+  </div>
+  <div class="container">
+    <div class="cite reveal">
+      <div class="term">
+        <div class="term-bar"><span class="d"></span><span class="d"></span><span class="d"></span><span class="term-title">wang2026sfmambanet</span><button class="term-copy" type="button" data-copy="bib">Copy</button></div>
+<pre id="bib"><span class="t-f">@misc</span>{wang2026sfmambanet,
+  <span class="t-k">title</span>         = {<span class="t-s">Smooth Inliers, Erratic Outliers: Frequency-Aware Mamba for Two-View Correspondence Learning</span>},
+  <span class="t-k">author</span>        = {<span class="t-s">Wang, Zhihua and Gao, Yifeng and Feng, Yunhao and Pan, Rui and Ma, Zhouyuan and
+                   Zhao, Baiheng and Chen, Zixing and Li, Yanping and Liu, Yizhang and Ma, Xingjun</span>},
+  <span class="t-k">year</span>          = {<span class="t-s">2026</span>},
+  <span class="t-k">eprint</span>        = {<span class="t-s">2606.04493</span>},
+  <span class="t-k">archivePrefix</span> = {<span class="t-s">arXiv</span>},
+  <span class="t-k">primaryClass</span>  = {<span class="t-s">cs.CV</span>},
+  <span class="t-k">url</span>           = {<span class="t-s">https://arxiv.org/abs/2606.04493</span>}
+}</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="closing">
+  <div class="container">
+    <p class="reveal">Frequency is a natural language<br />for agreement between matches.</p>
+    <div class="cta reveal">
+      <a class="btn solid" href="https://arxiv.org/abs/2606.04493" target="_blank" rel="noopener">Read the paper</a>
+      <a class="btn" href="https://github.com/Kirito14IT/SFMambaNet" target="_blank" rel="noopener">Browse the code</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="foot">
+      <div>
+        <a class="brand" href="#top"><img src="assets/logo-64.png" alt="" width="30" height="30" /><b>SFMambaNet</b></a>
+        <p>Smooth inliers, erratic outliers: frequency-aware Mamba for <span class="nb">two-view</span> correspondence learning.</p>
+      </div>
+      <div class="foot-links">
+        <a href="https://arxiv.org/abs/2606.04493" target="_blank" rel="noopener">Paper</a>
+        <a href="https://github.com/Kirito14IT/SFMambaNet" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://kirito14it.github.io/">Zhihua Wang's homepage</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 SFMambaNet authors · Website design adapted from <a href="https://cua-lite.github.io/" target="_blank" rel="noopener">CUA-Lite</a>, used with permission.</span>
+      <a href="#top">Back to top ↑</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/scenes.js"></script>
+<script src="js/teaser.js"></script>
+<script src="js/site.js"></script>
+<script src="js/theater.js"></script>
+<script src="js/scan.js"></script>
+<script src="js/method.js"></script>
+<script src="js/charts.js"></script>
+</body>
+</html>

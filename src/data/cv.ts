@@ -5,6 +5,8 @@ const fzuKeyLabUrl = "https://ncip.fzu.edu.cn/index.htm";
 const xsafeclawUrl = "https://github.com/XSafeAI/XSafeClaw";
 const vulnseekerUrl = "https://github.com/Kirito14IT/VulnSeeker";
 const sfmambanetCodeUrl = "https://github.com/Kirito14IT/SFMambaNet";
+const sfmambanetProjectUrl = "https://kirito14it.github.io/SFMambaNet/";
+const sfmambanetProjectLogo = "/SFMambaNet/assets/logo-64.png";
 const teaiUrl = "https://teai.fudan.edu.cn/";
 const xingjunMaUrl = "http://xingjunma.com/";
 const yuGangJiangUrl = "https://baike.baidu.com/item/%E5%A7%9C%E8%82%B2%E5%88%9A/22131913";
@@ -540,7 +542,7 @@ const cvEn: CvData = {
       status: "Under review at IEEE Transactions on Image Processing (TIP) · arXiv preprint",
       role: "First author",
       url: "https://doi.org/10.48550/arXiv.2606.04493",
-      links: [{ label: "arXiv", url: "https://arxiv.org/abs/2606.04493" }, { label: "GitHub", url: sfmambanetCodeUrl }],
+      links: [{ label: "arXiv", url: "https://arxiv.org/abs/2606.04493" }, { label: "GitHub", url: sfmambanetCodeUrl }, { label: "Project Page", url: sfmambanetProjectUrl, logo: sfmambanetProjectLogo }],
       tags: ["Computer Vision", "Correspondence Pruning", "Mamba", "State Space Model", "Frequency Domain", "Graph Neural Networks", "Two-View Geometry"],
       ratings: ["SCI Zone 1", "CCF A"],
       frameworkImage: "/figures/sfmambanet-framework-20261118.png",
@@ -1038,7 +1040,7 @@ const cvZh: CvData = {
       status: "IEEE Transactions on Image Processing (TIP) 在审 · arXiv 预印本",
       role: "第一作者",
       url: "https://doi.org/10.48550/arXiv.2606.04493",
-      links: [{ label: "arXiv", url: "https://arxiv.org/abs/2606.04493" }, { label: "GitHub", url: sfmambanetCodeUrl }],
+      links: [{ label: "arXiv", url: "https://arxiv.org/abs/2606.04493" }, { label: "GitHub", url: sfmambanetCodeUrl }, { label: "项目主页", url: sfmambanetProjectUrl, logo: sfmambanetProjectLogo }],
       tags: ["计算机视觉", "对应关系剪枝", "Mamba", "状态空间模型", "频域", "图神经网络", "双视图几何"],
       ratings: ["SCI 一区", "CCF A"],
       frameworkImage: "/figures/sfmambanet-framework-20261118.png",

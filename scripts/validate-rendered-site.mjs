@@ -146,7 +146,7 @@ const expectedPublicationResources = [
   { url: "https://arxiv.org/abs/2611.01710", links: ["https://arxiv.org/abs/2611.01710", "https://github.com/Kirito14IT/CST-MIL", "https://kirito14it.github.io/CST/"] },
   { url: "/papers/scamweb.pdf", links: ["/papers/scamweb.pdf", "https://github.com/Kirito14IT/ScamWeb", "https://huggingface.co/datasets/kirco567/ScamWeb-Dataset"] },
   { url: "/papers/safecoderl.pdf", links: [] },
-  { url: "https://doi.org/10.48550/arXiv.2606.04493", links: ["https://arxiv.org/abs/2606.04493", "https://github.com/Kirito14IT/SFMambaNet"] },
+  { url: "https://doi.org/10.48550/arXiv.2606.04493", links: ["https://arxiv.org/abs/2606.04493", "https://github.com/Kirito14IT/SFMambaNet", "https://kirito14it.github.io/SFMambaNet/"] },
   { url: "/papers/mangrove-paper.pdf", links: ["/papers/mangrove-paper.pdf", "/papers/unv-certificate.pdf", "/papers/unv-thanks.pdf", "/papers/unv-assignment.pdf"] }
 ];
 const equal = (left, right) => JSON.stringify(left) === JSON.stringify(right);

@@ -53,6 +53,7 @@ const publicationCredits = {
     coFirstAuthors: ["Nan Li", "Zhihua Wang"],
     correspondingAuthor: "Songyang Wu",
     homepageRatings: ["AAAI 2027", "CCF A"],
+    homepagePriority: 1,
     date: "2026.08"
   },
   safeCodeRl: {
@@ -111,6 +112,7 @@ export type PublicationItem = {
   coFirstAuthors?: readonly string[];
   status: string;
   homepageStatus?: string;
+  homepagePriority?: number;
   role: string;
   date: string;
   url?: string;
@@ -530,7 +532,7 @@ const cvEn: CvData = {
       status: "Sensors, 26(11), 3502",
       role: "First author",
       url: safeCodeRlPaperUrl,
-      tags: ["AI Safety", "Multi-Agent Systems", "Constrained Reinforcement Learning", "Secure Code Generation", "LLM", "IoT/CPS Security", "Trustworthy AI", "Vulnerability Mitigation"],
+      tags: ["Code Generation", "LLM", "AI Safety", "Multi-Agent Systems", "Constrained Reinforcement Learning", "IoT/CPS Security", "Trustworthy AI", "Vulnerability Mitigation"],
       ratings: ["SCI Zone 3", "CCF C"],
       frameworkImage: "/figures/safecoderl-framework.png",
       frameworkAlt: "SafeCodeRL framework diagram showing IoT/CPS contexts, a five-agent closed loop, constraint-aware optimization, and training pipeline."
@@ -1029,7 +1031,7 @@ const cvZh: CvData = {
       status: "Sensors, 26(11), 3502",
       role: "第一作者",
       url: safeCodeRlPaperUrl,
-      tags: ["人工智能安全", "多智能体系统", "约束强化学习", "安全代码生成", "LLM", "IoT/CPS 安全", "可信人工智能", "漏洞缓解"],
+      tags: ["代码生成", "LLM", "人工智能安全", "多智能体系统", "约束强化学习", "IoT/CPS 安全", "可信人工智能", "漏洞缓解"],
       ratings: ["SCI 三区", "CCF C"],
       frameworkImage: "/figures/safecoderl-framework.png",
       frameworkAlt: "SafeCodeRL 框架图，展示 IoT/CPS 任务上下文、五智能体闭环、约束感知优化与训练流程。"

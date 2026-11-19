@@ -89,7 +89,7 @@ const workSection = section(homepage, "work-experience");
 const zhWorkSection = section(zhHomepage, "work-experience");
 const homeShortcutNav = navWithClass(homepage, "quick-jump-nav");
 const zhHomeShortcutNav = navWithClass(zhHomepage, "quick-jump-nav");
-const homeSectionOrder = ["about", "news", "publications", "projects", "education", "work-experience", "research-experience", "awards-skills", "services", "acknowledgements", "visitors"];
+const homeSectionOrder = ["about", "news", "projects", "publications", "education", "work-experience", "research-experience", "awards-skills", "services", "acknowledgements", "visitors"];
 const followsHomeSectionOrder = (ids) => JSON.stringify(ids) === JSON.stringify(homeSectionOrder);
 const homeShortcutOrder = homeSectionOrder.filter((id) => id !== "visitors");
 const meteorMarkup = homepage.match(/<div class="meteor-shower">([\s\S]*?)<\/div>/)?.[1] || "";

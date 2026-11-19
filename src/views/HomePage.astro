@@ -16,6 +16,9 @@ import { getUi, localizedPath, type Locale } from "@i18n/index";
 const { locale } = Astro.props as { locale: Locale };
 const profile = getProfile(locale);
 const { news, workExperiences, experiences, publications, awards, services } = getCvData(locale);
+const homePublications = [...publications].sort(
+  (left, right) => (right.homepagePriority ?? 0) - (left.homepagePriority ?? 0)
+);
 const copy = getUi(locale);
 const [fvl, teai] = profile.affiliations;
 const researchPrefix = locale === "zh" ? "我的研究兴趣包括" : "My research interests include";
@@ -23,8 +26,8 @@ const researchPrefix = locale === "zh" ? "我的研究兴趣包括" : "My resear
 const homeJumpLinks = [
   { label: copy.homeJump.about, href: "#about" },
   { label: copy.homeJump.news, href: "#news" },
-  { label: copy.homeJump.publications, href: "#publications" },
   { label: copy.homeJump.projects, href: "#projects" },
+  { label: copy.homeJump.publications, href: "#publications" },
   { label: copy.homeJump.education, href: "#education" },
   { label: copy.homeJump.work, href: "#work-experience" },
   { label: copy.homeJump.research, href: "#research-experience" },
@@ -75,9 +78,13 @@ const homeJumpLinks = [
     </div>
   </Section>
 
+  <Section id="projects" title={copy.sections.projects} icon="🚀" headingHref={localizedPath(locale, "/projects/")}>
+    <AISafetyHotProject locale={locale} />
+  </Section>
+
   <Section id="publications" title={copy.sections.publications} icon="📝">
     <div class="publication-list publication-list--home">
-      {publications.map((item) => (
+      {homePublications.map((item) => (
         <PublicationCard
           item={{
             ...item,
@@ -90,10 +97,6 @@ const homeJumpLinks = [
         />
       ))}
     </div>
-  </Section>
-
-  <Section id="projects" title={copy.sections.projects} icon="🚀" headingHref={localizedPath(locale, "/projects/")}>
-    <AISafetyHotProject locale={locale} />
   </Section>
 
   <Education locale={locale} compact />

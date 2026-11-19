@@ -599,7 +599,7 @@ const cvEn: CvData = {
     { html: `National Third Prize, National English Competition for College Students, <time datetime="2025">2025</time>` },
     { html: `Shanghai First Prize, National College Student Mathematics Competition, <time datetime="2024">2024</time>` },
     "First-author software copyright for a robust deep-learning watermark mobile application",
-    "Code Security Analysis System Based on CodeQL and LLMs (First Author)"
+    "Software Copyright: Code Security Analysis System Based on CodeQL and LLMs (First Author)"
   ],
   services: [
     {
@@ -1099,7 +1099,7 @@ const cvZh: CvData = {
     { html: `<time datetime="2025">2025</time> 年全国大学生英语竞赛全国三等奖` },
     { html: `<time datetime="2024">2024</time> 年全国大学生数学竞赛上海市一等奖` },
     "深度学习鲁棒水印移动应用软件著作权（第一作者）",
-    "基于 CodeQL 与 LLM 的代码安全分析系统（第一作者）"
+    "基于 CodeQL 与 LLM 的代码安全分析系统软件著作权（第一作者）"
   ],
   services: [
     {

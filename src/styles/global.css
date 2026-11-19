@@ -237,13 +237,7 @@ time, .timeline-date, .education-period, .article-date { font-style: italic; fon
 .last-updated time { font-variant-numeric: tabular-nums; }
 .footer-update-dot { display: none; }
 .visit-counter { display: inline-flex; align-items: center; }
-.visit-counter-toggle { display: inline-grid; place-items: center; width: 28px; height: 28px; padding: 3px; border: 0; background: transparent; color: var(--muted); }
-.visit-counter-toggle:hover { color: var(--blue); }
-.visit-eye { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-.visit-eye-open, .visit-counter.is-revealed .visit-eye-closed { display: none; }
-.visit-counter.is-revealed .visit-eye-open { display: block; }
-.visit-count-value { display: none; margin-left: 6px; }
-.visit-counter.is-revealed .visit-count-value { display: inline-flex; align-items: center; }
+.visit-count-value { display: inline-flex; align-items: center; }
 .visit-count-value img { display: block; height: 20px; width: auto; }
 .visit-count-fallback { font-size: 12px; }
 

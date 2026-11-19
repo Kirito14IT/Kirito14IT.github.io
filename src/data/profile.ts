@@ -1,6 +1,7 @@
 import type { Locale } from "@i18n/index";
 
 const socialProfiles = {
+  woa: "https://mp.weixin.qq.com/s/9fA_WfNMHl5YvtmtV_cwjA",
   douyin: "https://www.douyin.com/user/MS4wLjABAAAAUGvPhZRE2l6SIkWl-UGmjqijJv1pQ_63oDcA7cMT-kg",
   xiaohongshu: "https://www.xiaohongshu.com/user/profile/639c0cc20000000026005bed",
   x: "https://x.com/Kirito_BigTom",
@@ -84,6 +85,7 @@ export const profiles = {
         displayUrl: "Academic publications and citations"
       },
       { label: "Douyin", icon: "douyin", url: socialProfiles.douyin, displayUrl: "@Kirito14IT" },
+      { label: "WOA", icon: "woa", url: socialProfiles.woa, displayUrl: "WeChat Official Account" },
       { label: "RedNote", icon: "rednote", url: socialProfiles.xiaohongshu, displayUrl: "@998244353_plus" },
       { label: "LinkedIn", icon: "linkedin", url: socialProfiles.linkedin, displayUrl: "Zhihua Wang" },
       { label: "X", icon: "x", url: socialProfiles.x, displayUrl: "@Kirito_BigTom" }
@@ -137,6 +139,7 @@ export const profiles = {
         displayUrl: "学术论文与引用记录"
       },
       { label: "抖音", icon: "douyin", url: socialProfiles.douyin, displayUrl: "@Kirito14IT" },
+      { label: "WOA", icon: "woa", url: socialProfiles.woa, displayUrl: "微信公众号 · WeChat Official Account" },
       { label: "RedNote", icon: "rednote", url: socialProfiles.xiaohongshu, displayUrl: "@998244353_plus" },
       { label: "LinkedIn", icon: "linkedin", url: socialProfiles.linkedin, displayUrl: "Zhihua Wang" },
       { label: "X", icon: "x", url: socialProfiles.x, displayUrl: "@Kirito_BigTom" }

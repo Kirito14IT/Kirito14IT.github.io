@@ -24,6 +24,7 @@ compatibility; the legacy generic medal symbol remains an inline line icon in
 | `location.svg` | Authored orange/red location pin with a pale blue ground ellipse, following the user's supplied visual reference; not a third-party brand mark |
 | `icpc.png` | Three-color ICPC mark supplied by the user on 2026-11-13; original artwork retained without changes. [ICPC press resources](https://news.icpc.global/press/) |
 | `douyin.ico` | [Douyin favicon](https://www.douyin.com/favicon.ico) |
+| `wechat-official-account.png` | WeChat Official Account artwork supplied by the user on 2026-11-19; original PNG retained unchanged. An SVG viewport displays the circular symbol from the supplied banner. |
 | `rednote.ico` | [rednote favicon](https://www.xiaohongshu.com/favicon.ico) |
 | `usst.ico` | [USST official site favicon](https://www.usst.edu.cn/_upload/tpl/00/40/64/template64/favicon.ico) |
 | `deakin.png` | [Deakin 50 Years official site](https://50years.deakin.edu.au/), [site icon](https://50years.deakin.edu.au/wp-content/uploads/sites/341/2024/12/cropped-favicon-192x192.png) |

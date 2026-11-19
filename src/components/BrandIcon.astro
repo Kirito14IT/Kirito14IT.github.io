@@ -16,6 +16,7 @@ const assets: Record<string, string> = {
   github: "/brand-icons/github.svg",
   scholar: "/brand-icons/scholar.ico",
   douyin: "/brand-icons/douyin.ico",
+  woa: "/brand-icons/wechat-official-account.png",
   rednote: "/brand-icons/rednote.ico",
   x: "/brand-icons/x.png",
   linkedin: "/brand-icons/linkedin.png",
@@ -35,7 +36,17 @@ const lineIcons: Record<string, string> = {
 };
 ---
 
-{source ? (
+{name === "woa" ? (
+  <svg
+    class:list={["brand-icon", className]}
+    data-brand-icon={name}
+    viewBox="66 120 129 129"
+    width={width}
+    height={size}
+    style={`--brand-icon-size: ${size}px; --brand-icon-width: ${width}px`}
+    aria-hidden="true"
+  ><image href={source} width="547" height="365" /></svg>
+) : source ? (
   <img
     class:list={["brand-icon", className, { "brand-icon--cv-thumbnail": name === "cv" }]}
     data-brand-icon={name}

@@ -15,6 +15,7 @@ const gassUrl = "https://www.gass.ac.cn/gass/index.html";
 const scamWebUrl = "https://github.com/Kirito14IT/ScamWeb";
 const scamWebPaperUrl = "/papers/scamweb.pdf";
 const scamWebDatasetUrl = "https://huggingface.co/datasets/kirco567/ScamWeb-Dataset";
+const scamWebProject = { url: "https://kirito14it.github.io/ScamWeb/", logo: "/ScamWeb/assets/logo-64.png" };
 const usstAcmUrl = "https://cec.usst.edu.cn/2019/" + "0523/c6556a148258/page.htm";
 const embeddedCompetitionUrl = "https://www.socchina.net/home";
 const codeWisdomLabUrl = "http://www.se.fudan.edu.cn/";
@@ -519,7 +520,7 @@ const cvEn: CvData = {
       status: "AAAI 2027; Will be accepted(accept*4)",
       role: "Co-first author",
       url: scamWebPaperUrl,
-      links: [{ label: "Paper", url: scamWebPaperUrl }, { label: "GitHub", url: scamWebUrl }, { label: "Hugging Face", url: scamWebDatasetUrl }],
+      links: [{ label: "Paper", url: scamWebPaperUrl }, { label: "GitHub", url: scamWebUrl }, { label: "Hugging Face", url: scamWebDatasetUrl }, { label: "Project Page", ...scamWebProject }],
       datasetDownloads: { repo: "kirco567/ScamWeb-Dataset", fallback: 839 },
       tags: ["Multimodal Benchmark", "Cyber-enabled Fraud", "Grounded Understanding", "Evidence Localization", "LLM-VLM", "Trustworthy AI"],
       frameworkImage: "/figures/scamweb-dataset-overview.png",
@@ -1019,7 +1020,7 @@ const cvZh: CvData = {
       status: "AAAI 2027; Will be accepted(accept*4)",
       role: "共同第一作者",
       url: scamWebPaperUrl,
-      links: [{ label: "Paper", url: scamWebPaperUrl }, { label: "GitHub", url: scamWebUrl }, { label: "Hugging Face", url: scamWebDatasetUrl }],
+      links: [{ label: "Paper", url: scamWebPaperUrl }, { label: "GitHub", url: scamWebUrl }, { label: "Hugging Face", url: scamWebDatasetUrl }, { label: "项目主页", ...scamWebProject }],
       datasetDownloads: { repo: "kirco567/ScamWeb-Dataset", fallback: 839 },
       tags: ["多模态基准", "网络诈骗", "落地式理解", "证据定位", "LLM-VLM", "可信人工智能"],
       frameworkImage: "/figures/scamweb-dataset-overview.png",

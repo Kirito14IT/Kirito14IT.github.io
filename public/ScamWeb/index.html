@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ScamWeb — A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages</title>
+<meta name="description" content="ScamWeb pairs fraud webpages with URLs, titles, full-page screenshots and audited MHTML archives; 3,416 scam pages carry 5,489 expert evidence boxes with human-written rationales across 25 subtypes and 47 language labels. AAAI 2027." />
+<link rel="canonical" href="https://kirito14it.github.io/ScamWeb/" />
+<meta name="theme-color" content="#FFFFFF" />
+<link rel="preload" href="assets/fonts/heros-bold.woff" as="font" type="font/woff" crossorigin />
+<link rel="preload" href="assets/fonts/heros-regular.woff" as="font" type="font/woff" crossorigin />
+<link rel="preload" href="assets/fonts/heroscn-bold.woff" as="font" type="font/woff" crossorigin />
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png" />
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="ScamWeb — grounded understanding of cyber-enabled fraud webpages" />
+<meta property="og:description" content="5,658-page frozen benchmark, 25 scam subtypes, 5,489 expert evidence regions with rationales, and the ScamDet baseline. AAAI 2027." />
+<meta property="og:url" content="https://kirito14it.github.io/ScamWeb/" />
+<meta property="og:image" content="https://kirito14it.github.io/ScamWeb/assets/og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="ScamWeb — grounded understanding of cyber-enabled fraud webpages" />
+<meta name="twitter:description" content="Detect the scam, name its subtype, box the evidence, explain why. 5,658 pages, 25 subtypes, 47 language labels. AAAI 2027." />
+<meta name="twitter:image" content="https://kirito14it.github.io/ScamWeb/assets/og.png" />
+<link rel="stylesheet" href="css/style.css" />
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body id="top">
+<!-- ScamWeb project page. Page structure inspired by the CUA-Lite landing page (https://cua-lite.github.io/), used with its author's permission.
+     Every number on this page comes from the ScamWeb paper or the repository's metadata; scam URLs are defanged and never linked. -->
+
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></symbol>
+  <symbol id="i-github" viewBox="0 0 24 24"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></symbol>
+  <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></symbol>
+  <symbol id="i-quote" viewBox="0 0 24 24"><path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"/><path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="M12 8v4"/><path d="M12 16h.01"/></symbol>
+  <symbol id="i-expand" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+</svg>
+
+<div class="gridlines" aria-hidden="true"><div class="wrap"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav" id="nav">
+  <div class="progress" aria-hidden="true"><i></i></div>
+  <div class="wrap nav-in">
+    <a class="brand" href="#top" aria-label="ScamWeb, back to top"><img src="assets/logo-64.png" alt="" width="28" height="28" /><b>ScamWeb</b></a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="#dataset">Dataset</a>
+      <a href="#tasks">Tasks</a>
+      <a href="#scamdet">ScamDet</a>
+      <a href="#results">Results</a>
+      <a href="#cases">Cases</a>
+      <a href="#start">Get started</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn sm" href="/papers/scamweb.pdf" target="_blank" rel="noopener"><svg class="ic"><use href="#i-file"/></svg><span>Paper</span></a>
+      <a class="btn sm" href="https://github.com/Kirito14IT/ScamWeb" target="_blank" rel="noopener"><svg class="ic"><use href="#i-github"/></svg><span>Code</span></a>
+      <a class="btn sm hide-s" href="https://huggingface.co/datasets/kirco567/ScamWeb-Dataset" target="_blank" rel="noopener"><svg class="ic"><use href="#i-db"/></svg><span>Dataset</span></a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div class="wrap g hero-g">
+    <div class="hero-text">
+      <p class="venue rv"><span class="venue-mark" aria-hidden="true"></span>AAAI 2027</p>
+      <h1 class="rv"><span class="h1-word">ScamWeb</span></h1>
+      <p class="hero-sub rv">A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages</p>
+      <p class="hero-lede rv">Each scam page arrives with its URL, its title, a full-page screenshot and an audited MHTML archive. On 3,416 of them, domain experts boxed the deceptive regions and wrote down why. A model has to say whether the page is a scam, which of 25 subtypes it runs, where the evidence sits and what it shows.</p>
+      <div class="authors rv">
+        <p class="au-names"><a href="https://kirito14it.github.io/" target="_blank" rel="noopener">Zhihua Wang</a><sup>1,2*</sup>, <span>Nan Li</span><sup>2*</sup>, <span>Ziyang Chen</span><sup>3</sup>, <span>Yunhao Feng</span><sup>4</sup>, <span>Songyang Wu</span><sup>3†</sup></p>
+        <p class="au-aff"><span><sup>1</sup>University of Shanghai for Science and Technology</span><span><sup>2</sup>Fudan University</span><span><sup>3</sup>The Third Research Institute of the Ministry of Public Security</span><span><sup>4</sup>Alibaba Group</span></p>
+        <p class="au-note"><sup>*</sup>Equal contribution <span class="sep" aria-hidden="true"></span> <sup>†</sup>Corresponding author</p>
+      </div>
+      <div class="hero-cta rv">
+        <a class="btn primary" href="/papers/scamweb.pdf" target="_blank" rel="noopener"><svg class="ic"><use href="#i-file"/></svg><span>Paper</span></a>
+        <a class="btn" href="https://github.com/Kirito14IT/ScamWeb" target="_blank" rel="noopener"><svg class="ic"><use href="#i-github"/></svg><span>Code</span></a>
+        <a class="btn" href="https://huggingface.co/datasets/kirco567/ScamWeb-Dataset" target="_blank" rel="noopener"><svg class="ic"><use href="#i-db"/></svg><span>Dataset</span></a>
+        <a class="btn" href="#cite"><svg class="ic"><use href="#i-quote"/></svg><span>BibTeX</span></a>
+      </div>
+    </div>
+
+    <figure class="inspect rv" id="inspect" aria-labelledby="inspect-cap">
+      <div class="ins-inputs" aria-hidden="true">
+        <span class="ins-x">x = (</span>
+        <span class="chip" data-k="I"><b>I</b>screenshot</span>
+        <span class="chip" data-k="U"><b>U</b>URL</span>
+        <span class="chip" data-k="T"><b>T</b>title</span>
+        <span class="chip" data-k="S"><b>S</b>MHTML</span>
+        <span class="ins-x">)</span>
+      </div>
+      <div class="browser">
+        <div class="b-top" aria-hidden="true">
+          <span class="b-dots"><i></i><i></i><i></i></span>
+          <span class="b-tab" data-k="T"><span class="b-fav"></span><span class="b-tab-t">Unlock your financial potential</span></span>
+        </div>
+        <div class="b-bar" aria-hidden="true">
+          <span class="b-url" data-k="U">http://www.feworiesad<b>[.]</b>shop</span>
+          <span class="b-defang">defanged</span>
+        </div>
+        <div class="b-view" data-k="I">
+          <img src="assets/samples/fewori.webp" alt="Screenshot of the example storefront used in Figure 2 of the paper: a German-language shop with a furniture banner and a grid of unrelated products." width="872" height="744" fetchpriority="high" />
+          <svg class="b-ov" viewBox="0 0 872 520" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <linearGradient id="scanGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#E4002B" stop-opacity="0" />
+                <stop offset="1" stop-color="#E4002B" stop-opacity=".16" />
+              </linearGradient>
+            </defs>
+            <g class="scan"><rect x="0" y="-70" width="872" height="70" fill="url(#scanGrad)" /><rect class="scan-l" x="0" y="-2" width="872" height="2" /></g>
+            <g class="bx" data-i="1"><rect class="bx-f" x="4" y="4" width="864" height="66" /><rect class="bx-l" x="4" y="4" width="864" height="66" pathLength="1" /><g class="bx-t" transform="translate(836 9)"><rect width="26" height="26" /><text x="13" y="18.5">1</text></g></g>
+            <g class="bx" data-i="2"><rect class="bx-f" x="4" y="79" width="864" height="228" /><rect class="bx-l" x="4" y="79" width="864" height="228" pathLength="1" /><g class="bx-t" transform="translate(836 84)"><rect width="26" height="26" /><text x="13" y="18.5">2</text></g></g>
+            <g class="bx" data-i="3"><rect class="bx-f" x="4" y="303" width="864" height="166" /><rect class="bx-l" x="4" y="303" width="864" height="166" pathLength="1" /><g class="bx-t" transform="translate(836 308)"><rect width="26" height="26" /><text x="13" y="18.5">3</text></g></g>
+            <g class="bx" data-i="4"><rect class="bx-f" x="330" y="423" width="205" height="46" /><rect class="bx-l" x="330" y="423" width="205" height="46" pathLength="1" /><g class="bx-t" transform="translate(504 433)"><rect width="26" height="26" /><text x="13" y="18.5">4</text></g></g>
+          </svg>
+          <div class="b-src" data-k="S" aria-hidden="true">
+            <p class="b-src-h"><b>S</b> structured MHTML evidence</p>
+            <code>&lt;title&gt;&hellip;&lt;/title&gt;</code>
+            <code>&lt;a class=&hellip;&gt;&hellip;&lt;/a&gt;</code>
+            <code>&lt;span class=&hellip;&gt;&hellip;&lt;/span&gt;</code>
+            <code>&lt;div class=&hellip;&gt;</code>
+            <code>&nbsp;&nbsp;&lt;img src=&hellip;&gt;</code>
+            <code>&lt;/div&gt;</code>
+          </div>
+        </div>
+      </div>
+      <div class="ins-out">
+        <ol class="rats" aria-label="Rationales">
+          <li data-i="1"><span class="n">1</span>Unverifiable storefront identity</li>
+          <li data-i="2"><span class="n">2</span>Generic furniture hero image not aligned with catalog</li>
+          <li data-i="3"><span class="n">3</span>Incoherent product catalog</li>
+          <li data-i="4"><span class="n">4</span>Implausible pricing with strong inducement</li>
+        </ol>
+        <dl class="verdict">
+          <div data-v="1"><dt>Binary label</dt><dd class="v-scam">Scam</dd></div>
+          <div data-v="2"><dt>Scam subtype</dt><dd>Online Shopping Scam</dd></div>
+          <div data-v="3"><dt>Localized boxes</dt><dd>4 regions, 4 rationales</dd></div>
+        </dl>
+      </div>
+      <figcaption id="inspect-cap">ScamDet&rsquo;s grounded output for the example webpage in Figure&nbsp;2 of the paper. The URL is defanged.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ================= STATS ================= -->
+<section class="stats" aria-label="ScamWeb at a glance">
+  <div class="wrap g">
+    <div class="stat"><p class="stat-n num"><span data-count="5658">5,658</span></p><p class="stat-l">pages in the frozen benchmark</p></div>
+    <div class="stat"><p class="stat-n num red"><span data-count="3416">3,416</span></p><p class="stat-l">scam pages annotated by experts</p></div>
+    <div class="stat"><p class="stat-n num"><span data-count="2242">2,242</span></p><p class="stat-l">benign pages</p></div>
+    <div class="stat"><p class="stat-n num"><span data-count="25">25</span></p><p class="stat-l">scam subtypes</p></div>
+    <div class="stat"><p class="stat-n num"><span data-count="5489">5,489</span></p><p class="stat-l">expert evidence regions with rationales</p></div>
+    <div class="stat"><p class="stat-n num"><span data-count="47">47</span></p><p class="stat-l">language labels</p></div>
+  </div>
+</section>
+
+<!-- ================= BELT ================= -->
+<section class="belt" aria-label="Screenshots from the paper's figures">
+  <div class="belt-viewport">
+    <div class="belt-track">
+      <figure class="tile"><div class="tile-b"><i></i><i></i><i></i></div><img src="assets/samples/fewori.webp" alt="German-language storefront from Figure 2" width="872" height="744" loading="lazy" /><figcaption>German-language storefront <span>Figure 2</span></figcaption></figure>
+      <figure class="tile"><div class="tile-b"><i></i><i></i><i></i></div><img src="assets/samples/overview-1.webp" alt="French firewood shop with a crossed-out price" width="1062" height="564" loading="lazy" /><figcaption>French firewood shop <span>Figure 1</span></figcaption></figure>
+      <figure class="tile"><div class="tile-b"><i></i><i></i><i></i></div><img src="assets/samples/overview-2.webp" alt="Token airdrop page with a Connect Wallet button" width="1016" height="564" loading="lazy" /><figcaption>Token airdrop page <span>Figure 1</span></figcaption></figure>
+      <figure class="tile"><div class="tile-b"><i></i><i></i><i></i></div><img src="assets/cases/case-a.webp" alt="Case (a): online storefront with expert and predicted boxes" width="954" height="503" loading="lazy" /><figcaption>Case (a): all three outputs correct <span>Figure 4</span></figcaption></figure>
+      <figure class="tile"><div class="tile-b"><i></i><i></i><i></i></div><img src="assets/samples/overview-3.webp" alt="Trading platform landing page" width="1280" height="789" loading="lazy" /><figcaption>Trading platform <span>Figure 1</span></figcaption></figure>
+      <figure class="tile"><div class="tile-b"><i></i><i></i><i></i></div><img src="assets/samples/overview-4.webp" alt="Indonesian-language online poker site with deposit banners" width="1280" height="665" loading="lazy" /><figcaption>Indonesian-language poker site <span>Figure 1</span></figcaption></figure>
+      <figure class="tile"><div class="tile-b"><i></i><i></i><i></i></div><img src="assets/cases/case-c.webp" alt="Case (c): investment page misclassified as a cryptocurrency scam" width="948" height="533" loading="lazy" /><figcaption>Case (c): subtype misclassification <span>Figure 4</span></figcaption></figure>
+      <figure class="tile"><div class="tile-b"><i></i><i></i><i></i></div><img src="assets/samples/overview-5.webp" alt="Free game-skin offer page" width="1280" height="665" loading="lazy" /><figcaption>Free game-skin offer <span>Figure 1</span></figcaption></figure>
+      <figure class="tile"><div class="tile-b"><i></i><i></i><i></i></div><img src="assets/cases/case-d.webp" alt="Case (d): gambling page where predicted boxes cover only fragments" width="954" height="503" loading="lazy" /><figcaption>Case (d): boundary-displaced grounding <span>Figure 4</span></figcaption></figure>
+      <figure class="tile"><div class="tile-b"><i></i><i></i><i></i></div><img src="assets/samples/annotation-example.webp" alt="Expert annotation interface with boxed regions on an investment page" width="892" height="555" loading="lazy" /><figcaption>Expert annotation interface <span>Figure 1</span></figcaption></figure>
+      <figure class="tile"><div class="tile-b"><i></i><i></i><i></i></div><img src="assets/cases/case-b.webp" alt="Case (b): corporate-looking page that the cascade passed as benign" width="954" height="501" loading="lazy" /><figcaption>Case (b): binary false negative <span>Figure 4</span></figcaption></figure>
+    </div>
+  </div>
+  <p class="wrap belt-note">Screenshots from Figures 1, 2 and 4 of the paper. Every scam URL on this page is defanged and none is linked.</p>
+</section>
+
+<!-- ================= 01 MOTIVATION ================= -->
+<section id="problem" class="sec">
+  <div class="wrap">
+    <header class="sec-head g">
+      <div class="folio rv"><span class="folio-n">01</span><span class="folio-t">Motivation</span></div>
+      <div class="sec-title rv">
+        <h2>Fraud webpages are built to pass as legitimate.</h2>
+        <p class="deck">Public fraud datasets mostly cover phishing or brand impersonation and label whole pages. ScamWeb asks how a page deceives: which scheme it runs, which regions carry the deception, and why those regions matter.</p>
+      </div>
+    </header>
+
+    <div class="g losses">
+      <div class="loss rv">
+        <p class="loss-n num">$<span data-count="20.9" data-dec="1">20.9</span>B</p>
+        <p class="loss-l">U.S. cybercrime losses reported in 2025, with cyber-enabled fraud accounting for more than 85% of the total.</p>
+        <p class="src">FBI Internet Crime Complaint Center, 2025 Internet Crime Report</p>
+      </div>
+      <div class="loss rv">
+        <p class="loss-n num">$<span data-count="442">442</span>B</p>
+        <p class="loss-l">Estimated global losses to scams in the same year.</p>
+        <p class="src">Global Anti-Scam Alliance and Feedzai, Global State of Scams 2025</p>
+      </div>
+      <div class="loss-side rv">
+        <p>Scam pages are short-lived: many disappear before anyone can collect them. ScamWeb captures each live page as a full-page screenshot and a single-file MHTML archive, and recovers dead ones from the Internet Archive, so the evidence outlives the site.</p>
+      </div>
+    </div>
+
+    <div class="cmp-wrap rv">
+      <div class="cmp-head">
+        <h3>Representative datasets for cyber-enabled fraud</h3>
+        <p class="legend"><span class="lg"><svg class="mk" viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4.5"/></svg>full support</span><span class="lg"><svg class="mk" viewBox="0 0 16 16"><circle cx="8" cy="8" r="4.2"/></svg>partial support</span><span class="lg"><svg class="mk" viewBox="0 0 16 16"><path d="M4.5 8h7"/></svg>not available</span></p>
+      </div>
+      <div class="cmp-scroll"><table class="cmp" id="cmp-table"><caption class="sr">Comparison of representative datasets for cyber-enabled fraud (Table 1 of the paper)</caption></table></div>
+      <p class="note">Table 1 of the paper. Numbers in brackets count languages or subtypes. ScamWeb is the only dataset with region annotations.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 02 DATASET ================= -->
+<section id="dataset" class="sec panel">
+  <div class="wrap">
+    <header class="sec-head g">
+      <div class="folio rv"><span class="folio-n">02</span><span class="folio-t">Dataset</span></div>
+      <div class="sec-title rv">
+        <h2>Collected live, recovered from the archive, annotated by experts.</h2>
+        <p class="deck">From roughly 100,000 candidate URLs to a 5,658-page frozen benchmark. Every kept page has a full-page screenshot and a single-file MHTML archive, so its visual appearance and DOM survive the site going offline.</p>
+      </div>
+    </header>
+
+    <ol class="flow rv" aria-label="Collection and recovery pipeline">
+      <li class="fl">
+        <p class="fl-k">Sources</p>
+        <p class="fl-n num">6</p>
+        <p class="fl-l">public source types</p>
+        <ul class="fl-list"><li>Official blacklists</li><li>Community reports</li><li>Security vendor feeds</li><li>Social media</li><li>Public datasets</li><li>NGO disclosures</li></ul>
+      </li>
+      <li class="fl">
+        <p class="fl-k">Candidates</p>
+        <p class="fl-n num">&asymp;100K</p>
+        <p class="fl-l">candidate URLs collected between 2025-11-30 and 2026-02-26</p>
+      </li>
+      <li class="fl">
+        <p class="fl-k">Capture</p>
+        <p class="fl-n num"><span data-count="10041">10,041</span></p>
+        <p class="fl-l">webpages accessible or recoverable, each archived as a screenshot and an MHTML file</p>
+        <p class="fl-sub"><b class="num">4,693</b> recovered through the Internet Archive Wayback Machine</p>
+      </li>
+      <li class="fl">
+        <p class="fl-k">Verification</p>
+        <p class="fl-n num"><span data-count="7784">7,784</span></p>
+        <p class="fl-l">unique fraudulent webpages after manual verification and domain-level deduplication</p>
+      </li>
+      <li class="fl fl-end" data-ev="Expert gold">
+        <p class="fl-k">Annotation</p>
+        <p class="fl-n num red"><span data-count="3416">3,416</span></p>
+        <p class="fl-l">annotated independently by two domain experts; a third resolves disagreements</p>
+        <p class="fl-sub"><b class="num">4,368</b> machine-annotated pages stay outside the frozen benchmark</p>
+        <p class="fl-sub"><b class="num">+2,242</b> benign pages from LegitPhish</p>
+      </li>
+    </ol>
+
+    <div class="funnel rv" aria-hidden="true">
+      <div class="fu" style="--w:100%"><i></i><span>&asymp;100K candidates</span></div>
+      <div class="fu" style="--w:10.04%"><i></i><span>10,041 captured</span></div>
+      <div class="fu" style="--w:7.78%"><i></i><span>7,784 verified</span></div>
+      <div class="fu red" style="--w:3.42%"><i></i><span>3,416 expert-annotated</span></div>
+    </div>
+    <p class="note rv">Bars share one linear scale.</p>
+
+    <div class="g comp">
+      <div class="comp-donut rv">
+        <h3>What the collection contains</h3>
+        <div class="donut-wrap"><svg id="donut" viewBox="0 0 320 320" role="img" aria-label="Donut chart: 3,416 expert-annotated scam pages, 2,242 benign pages and 4,368 machine-annotated scam pages, 10,026 webpages in total"></svg></div>
+        <ul class="dlegend">
+          <li><i class="sw red"></i><b class="num">3,416</b> scam pages, expert-annotated</li>
+          <li><i class="sw ink"></i><b class="num">2,242</b> benign pages</li>
+          <li><i class="sw hatch"></i><b class="num">4,368</b> scam pages, machine-annotated (auxiliary)</li>
+        </ul>
+        <p class="note">The red and black arcs form the 5,658-page frozen benchmark.</p>
+      </div>
+      <div class="comp-bars rv">
+        <div class="bars-head"><h3>25 subtypes, long-tailed</h3><p class="note">Expert-annotated pages per subtype. Tags give the evidence modality the paper lists for representative types (Table 2).</p></div>
+        <ol class="sbars" id="subtype-bars"></ol>
+      </div>
+    </div>
+
+    <div class="g comp2">
+      <div class="langs rv">
+        <h3>47 language labels</h3>
+        <p class="note">Single languages and multilingual combinations across the expert-annotated pages.</p>
+        <ol class="lbars" id="lang-bars"></ol>
+      </div>
+      <div class="boxes rv">
+        <h3>One to four evidence regions per page</h3>
+        <p class="note">5,489 expert boxes over 3,416 scam pages, each with a human-written rationale.</p>
+        <div class="bpp" id="boxes-per-page"></div>
+      </div>
+    </div>
+    <div class="lmarquee rv" aria-hidden="true"><div class="lm-track" id="lang-marquee"></div></div>
+
+    <div class="modal rv">
+      <h3>Where the evidence lives</h3>
+      <div class="mod-grid">
+        <div class="mod"><p class="mod-k">Text (URL)</p><p>Phishing; Website Hijacking Scam; Business Impersonation Scam</p></div>
+        <div class="mod"><p class="mod-k">Text (title)</p><p>Fake News Website Scam; Technical Support Scam; Lottery / Prize Scam</p></div>
+        <div class="mod"><p class="mod-k">Vision</p><p>Online Shopping Scam; Cryptocurrency Investment Scam; Online Investment Scam; Online Gambling Scam</p></div>
+        <div class="mod"><p class="mod-k">Text&ndash;vision</p><p>Task-Based Commission Scam; Romance Scam; Sextortion; Fake Streaming Service Scam</p></div>
+        <div class="mod"><p class="mod-k">Code (MHTML)</p><p>Spoofed Login Page; Bank Impersonation Scam; Online Loan Scam</p></div>
+        <div class="mod mod-g" data-ev=""><p class="mod-k">Grounding target</p><p><b>Vision:</b> deceptive screenshot regions as bounding boxes. <b>Text:</b> an expert rationale for each region.</p></div>
+      </div>
+      <p class="note">Table 2 of the paper: representative scam types by the modality that carries their evidence.</p>
+      <button class="figbtn" type="button" data-lightbox="assets/figures/dataset-overview.webp" data-cap="Figure 1 of the paper: data sources, collection and recovery, processed artifacts, annotation, composition and samples."><svg class="ic"><use href="#i-expand"/></svg>View the paper&rsquo;s dataset figure</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 03 FOUR VIEWS ================= -->
+<section id="views" class="sec">
+  <div class="wrap">
+    <header class="sec-head g">
+      <div class="folio rv"><span class="folio-n">03</span><span class="folio-t">Record</span></div>
+      <div class="sec-title rv">
+        <h2>One webpage, four views, one answer key.</h2>
+        <p class="deck">A record is x&nbsp;=&nbsp;(I,&nbsp;U,&nbsp;T,&nbsp;S): the full-page screenshot, the URL, the page title, and trusted content extracted from the archived MHTML. Scam pages add a subtype and a set of evidence regions, each a box in screenshot coordinates paired with a rationale.</p>
+      </div>
+    </header>
+
+    <div class="g views">
+      <div class="stack-stage rv" aria-hidden="true">
+        <div class="stack" id="stack">
+          <div class="lyr l-s"><p class="lyr-h"><b>S</b> MHTML / DOM</p><code>&lt;title&gt;&hellip;&lt;/title&gt;</code><code>&lt;a class=&hellip;&gt;</code><code>&lt;span class=&hellip;&gt;</code><code>&lt;div class=&hellip;&gt;&lt;img src=&hellip;&gt;</code><code>&lt;/div&gt;</code></div>
+          <div class="lyr l-i"><img src="assets/samples/fewori.webp" alt="" width="872" height="744" loading="lazy" /></div>
+          <div class="lyr l-ut"><div class="ut-tab"><span></span>Unlock your financial potential</div><div class="ut-url">http://www.feworiesad[.]shop</div></div>
+          <div class="lyr l-g"><i style="--x:0.5%;--y:0.6%;--w:99%;--h:12.6%"></i><i style="--x:0.5%;--y:13.6%;--w:99%;--h:44%"></i><i style="--x:0.5%;--y:58.2%;--w:99%;--h:32%"></i><i style="--x:37.8%;--y:81.3%;--w:23.6%;--h:8.9%"></i></div>
+        </div>
+        <ul class="stack-labels">
+          <li class="sl-g"><b>G</b> evidence regions + rationales</li>
+          <li class="sl-ut"><b>U&nbsp;T</b> URL and page title</li>
+          <li class="sl-i"><b>I</b> full-page screenshot</li>
+          <li class="sl-s"><b>S</b> trusted MHTML content</li>
+        </ul>
+      </div>
+      <div class="formal rv">
+        <div class="eq">
+          <p class="eq-l"><span class="v">x</span> = (<span class="v">I</span>, <span class="v">U</span>, <span class="v">T</span>, <span class="v">S</span>)</p>
+          <p class="eq-l">(<span class="v">y</span>, <span class="v">c</span>, <span class="v">G</span>) =
+            <span class="cases"><span>(1, <span class="v">c</span>, {(<span class="v">b<sub>j</sub></span>, <span class="v">r<sub>j</sub></span>)}<sub><span class="v">j</span>=1</sub><sup><span class="v">N</span></sup>)&ensp;if <span class="v">x</span> is fraudulent</span><span>(0, &empty;, &empty;)&ensp;otherwise</span></span>
+          </p>
+          <p class="eq-n"><span class="v">y</span> is the binary label, <span class="v">c</span> one of 25 subtypes, <span class="v">b<sub>j</sub></span> a box in screenshot coordinates (x<sub>min</sub>, y<sub>min</sub>, x<sub>max</sub>, y<sub>max</sub>) and <span class="v">r<sub>j</sub></span> its expert rationale.</p>
+        </div>
+        <h3>Quality control</h3>
+        <ol class="qc">
+          <li><b>No leakage.</b> Benchmark metadata, ground-truth labels, boxes and rationales never enter model inputs.</li>
+          <li><b>Geometry checks.</b> Every annotation box is validated for geometric consistency.</li>
+          <li><b>MHTML audit.</b> An independent audit checks each archive against the captured page. Only verified archives, or ones with explainable redirects, become model input.</li>
+        </ol>
+        <div class="audit">
+          <div class="au-bar" aria-hidden="true"><i style="--w:96.89%"></i><i class="b" style="--w:2.85%"></i><i class="c" style="--w:0.27%"></i></div>
+          <ul class="au-lg">
+            <li><b class="num">5,482</b> pages with trusted MHTML evidence</li>
+            <li><b class="num">161</b> archive mismatches</li>
+            <li><b class="num">15</b> missing or corrupt archives</li>
+          </ul>
+          <p class="note">All 5,658 records stay in the evaluation. The 176 untrusted archives are withheld from model input only.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 04 GROUNDSCAM ================= -->
+<section id="tasks" class="sec panel">
+  <div class="wrap">
+    <header class="sec-head g">
+      <div class="folio rv"><span class="folio-n">04</span><span class="folio-t">Tasks</span></div>
+      <div class="sec-title rv">
+        <h2>GroundScam: four linked tasks, one prediction.</h2>
+        <p class="deck">For every page a model predicts (&ycirc;,&nbsp;&ccirc;,&nbsp;&Gcirc;). The tasks are coupled: a page judged benign gets no subtype and no evidence, so an early mistake propagates.</p>
+      </div>
+    </header>
+    <ol class="tasks g" id="tasks-row">
+      <li class="task rv" data-t="1">
+        <p class="task-n">i</p>
+        <h3>Fraud detection</h3>
+        <div class="tvis tv-bin" aria-hidden="true"><div class="tb-page"><i></i><i></i><i></i><i></i></div><div class="tb-sw"><span>benign</span><span>scam</span></div></div>
+        <p class="task-o">Output: scam or benign</p>
+        <p class="task-m">Accuracy, precision, recall, F1</p>
+      </li>
+      <li class="task rv" data-t="2">
+        <p class="task-n">ii</p>
+        <h3>Subtype classification</h3>
+        <div class="tvis tv-sub" aria-hidden="true"><div class="ts-win"></div><ul class="ts-list" id="ticker"></ul></div>
+        <p class="task-o">Output: one of 25 subtypes</p>
+        <p class="task-m">Accuracy, macro precision, macro recall, macro F1</p>
+      </li>
+      <li class="task rv" data-t="3">
+        <p class="task-n">iii</p>
+        <h3>Evidence grounding</h3>
+        <div class="tvis tv-iou" aria-hidden="true">
+          <svg id="iou-svg" viewBox="0 0 240 150"><rect class="iou-page" x="1" y="1" width="238" height="148" /><g class="iou-lines"><rect x="16" y="16" width="120" height="8" /><rect x="16" y="32" width="80" height="6" /><rect x="16" y="112" width="200" height="6" /><rect x="16" y="124" width="150" height="6" /></g><rect class="iou-gold" x="60" y="48" width="110" height="52" /><rect class="iou-pred" x="80" y="58" width="110" height="52" /></svg>
+          <p class="iou-read"><span>IoU</span> <b class="num" id="iou-val">0.00</b> <em id="iou-flag">below 0.5</em></p>
+        </div>
+        <p class="task-o">Output: regions in screenshot space</p>
+        <p class="task-m">mIoU, P/R/F1 at IoU 0.5, page recall at 0.3 and 0.5</p>
+      </li>
+      <li class="task rv" data-t="4">
+        <p class="task-n">iv</p>
+        <h3>Rationale generation</h3>
+        <div class="tvis tv-rat" aria-hidden="true"><div class="tr-box"><span>4</span></div><p class="tr-txt">Implausible pricing with strong inducement</p><div class="tr-cov"><i></i></div></div>
+        <p class="task-o">Output: an explanation per region</p>
+        <p class="task-m">ROUGE-L, multilingual BERTScore, grounded coverage</p>
+      </li>
+    </ol>
+    <p class="note rv">The grounding panel illustrates the IoU criterion with moving boxes; the readout is the live IoU of the two boxes drawn.</p>
+  </div>
+</section>
+
+<!-- ================= 05 SCAMDET ================= -->
+<section id="scamdet" class="sec">
+  <div class="wrap">
+    <header class="sec-head g">
+      <div class="folio rv"><span class="folio-n">05</span><span class="folio-t">Baseline</span></div>
+      <div class="sec-title rv">
+        <h2>ScamDet reads the page four ways, then decides in stages.</h2>
+        <p class="deck">A training-free LLM&ndash;VLM baseline. Four analysis modules examine the URL, the persuasive text, the visual layout and their cross-modal consistency. A cascade then detects, classifies, grounds and explains. GPT-4o-mini runs URL and textual analysis; Qwen3-VL-Flash runs visual analysis and downstream reasoning, at temperature 0 with Qwen reasoning disabled.</p>
+      </div>
+    </header>
+
+    <div class="sd rv" id="sd">
+      <div class="sd-view">
+        <div class="sd-diagram" id="sd-diagram">
+          <div class="sd-row sd-in">
+            <p class="sd-cap">Inputs</p>
+            <span class="sd-chip" data-s="in"><b>U</b> URL</span><span class="sd-chip" data-s="in"><b>T</b> title</span><span class="sd-chip" data-s="in"><b>I</b> screenshot</span><span class="sd-chip" data-s="in"><b>S</b> MHTML</span>
+          </div>
+          <div class="sd-row sd-mods">
+            <p class="sd-cap">Analysis modules</p>
+            <div class="mod-card" data-s="au"><p class="mc-h"><b>A<sub>u</sub></b> URL evidence</p><p class="mc-io">GPT-4o-mini &middot; reads U, S</p><ul><li>Suspicious domain</li><li>Newly registered or low-trust signals</li><li>URL and brand inconsistency</li></ul></div>
+            <div class="mod-card" data-s="at"><p class="mc-h"><b>A<sub>t</sub></b> Textual persuasion</p><p class="mc-io">GPT-4o-mini &middot; reads T, S</p><ul><li>Aggressive purchase inducement</li><li>Deceptive marketing language</li><li>Urgency or scarcity cues</li></ul></div>
+            <div class="mod-card" data-s="av"><p class="mc-h"><b>A<sub>v</sub></b> Visual layout</p><p class="mc-io">Qwen3-VL-Flash &middot; reads I</p><ul><li>Inconsistent product catalog</li><li>Implausible prices</li><li>Repeated or unrelated titles</li></ul></div>
+            <div class="mod-card" data-s="ac"><p class="mc-h"><b>A<sub>c</sub></b> Cross-modal consistency</p><p class="mc-io">Qwen3-VL-Flash &middot; reads I, S, A<sub>u</sub>, A<sub>t</sub>, A<sub>v</sub></p><ul><li>Cross-modal mismatch</li><li>Weak brand trust, incoherent catalog</li><li>URL, title and visual inconsistency</li></ul></div>
+          </div>
+          <div class="sd-row sd-cascade">
+            <p class="sd-cap">Cascade</p>
+            <div class="st-card" data-s="s1"><p class="st-k">Stage 1</p><p class="st-h">Fraud detection</p><p class="st-f">&ycirc; &isin; {0, 1}</p></div>
+            <div class="st-card" data-s="s2"><p class="st-k">Stage 2</p><p class="st-h">Subtype</p><p class="st-f">&ccirc; &isin; {1, &hellip;, 25}</p></div>
+            <div class="st-card" data-s="s3"><p class="st-k">Stage 3</p><p class="st-h">Evidence grounding</p><p class="st-f">boxes on full-page and cropped views, mapped back to the screenshot</p></div>
+            <div class="st-card" data-s="s4"><p class="st-k">Stage 4</p><p class="st-h">Rationales</p><p class="st-f">one per predicted box</p></div>
+            <div class="st-out" data-s="out"><p class="st-k">Output</p><p class="st-h" id="sd-out">&Ocirc; = (&ycirc;, &ccirc;, &Gcirc;)</p></div>
+          </div>
+          <p class="sd-stop" data-s="stop">If &ycirc; = 0 the cascade stops: &ccirc; = &empty;, &Gcirc; = &empty;.</p>
+        </div>
+        <img class="sd-paper" src="assets/figures/scamdet-overview.webp" alt="Figure 2 of the paper: ScamDet overview with multimodal inputs, evidence analysis modules and the staged cascade" width="2000" height="1203" loading="lazy" />
+      </div>
+      <div class="sd-foot">
+        <p class="note" id="sd-status">Animation: the page passes all four stages.</p>
+        <div class="seg" role="group" aria-label="Diagram view"><button type="button" class="on" data-view="anim" aria-pressed="true">Animation</button><button type="button" data-view="paper" aria-pressed="false">Paper figure</button></div>
+      </div>
+    </div>
+    <p class="note rv">The code repository implements ScamDet as the <code>scammark</code> Python package.</p>
+  </div>
+</section>
+
+<!-- ================= 06 RESULTS ================= -->
+<section id="results" class="sec panel">
+  <div class="wrap">
+    <header class="sec-head g">
+      <div class="folio rv"><span class="folio-n">06</span><span class="folio-t">Results</span></div>
+      <div class="sec-title rv">
+        <h2>Detection is largely tractable. Grounding is not.</h2>
+        <p class="deck">ScamDet on the full benchmark, zero-shot. It flags almost every scam page, yet its boxes rarely match the experts&rsquo;: 0.173 mIoU and 5.5% F1 at IoU 0.5.</p>
+      </div>
+    </header>
+
+    <div class="score g rv">
+      <div class="sc">
+        <p class="sc-k">Fraud detection <span>5,658 pages</span></p>
+        <dl><div><dt>Accuracy</dt><dd class="num" data-count="68.3" data-dec="1">68.3</dd></div><div><dt>Precision</dt><dd class="num" data-count="66.1" data-dec="1">66.1</dd></div><div class="hl r"><dt>Recall</dt><dd class="num" data-count="97.2" data-dec="1">97.2</dd></div><div><dt>F1</dt><dd class="num" data-count="78.7" data-dec="1">78.7</dd></div></dl>
+      </div>
+      <div class="sc">
+        <p class="sc-k">Subtype <span>3,416 scam pages</span></p>
+        <dl><div class="hl"><dt>Accuracy</dt><dd class="num" data-count="63.7" data-dec="1">63.7</dd></div><div><dt>Macro P</dt><dd class="num" data-count="52.2" data-dec="1">52.2</dd></div><div><dt>Macro R</dt><dd class="num" data-count="37.4" data-dec="1">37.4</dd></div><div><dt>Macro F1</dt><dd class="num" data-count="34.5" data-dec="1">34.5</dd></div></dl>
+      </div>
+      <div class="sc">
+        <p class="sc-k">Grounding <span>3,416 scam pages</span></p>
+        <dl><div class="hl r"><dt>mIoU</dt><dd class="num" data-count="0.173" data-dec="3">0.173</dd></div><div><dt>P / R @0.5</dt><dd class="num">3.5 / 12.4</dd></div><div><dt>F1 @0.5</dt><dd class="num" data-count="5.5" data-dec="1">5.5</dd></div><div><dt>Page R @0.3 / 0.5</dt><dd class="num">23.5 / 14.5</dd></div></dl>
+      </div>
+      <div class="sc">
+        <p class="sc-k">Rationales <span>IoU-matched regions</span></p>
+        <dl><div><dt>ROUGE-L</dt><dd class="num" data-count="13.4" data-dec="1">13.4</dd></div><div class="hl"><dt>BERTScore</dt><dd class="num" data-count="87.6" data-dec="1">87.6</dd></div><div><dt>Coverage</dt><dd class="num" data-count="12.4" data-dec="1">12.4</dd></div></dl>
+      </div>
+    </div>
+    <p class="note rv">Percentages except mIoU. Full-benchmark run reported in Tables 3 and 4 of the paper.</p>
+
+    <!-- binary -->
+    <div class="res-block g">
+      <div class="rb-text rv">
+        <h3 class="rb-h">5,658 pages, one square each.</h3>
+        <p>Colour is the truth, fill is ScamDet&rsquo;s call. It catches 3,321 of the 3,416 scam pages, but it also flags 1,700 of the 2,242 benign ones. Recall is 97.2; precision is 66.1.</p>
+        <ul class="dots-lg">
+          <li><i class="d tp"></i><b class="num">3,321</b> scam pages flagged</li>
+          <li><i class="d fn"></i><b class="num">95</b> scam pages missed</li>
+          <li><i class="d fp"></i><b class="num">1,700</b> benign pages flagged</li>
+          <li><i class="d tn"></i><b class="num">542</b> benign pages passed</li>
+        </ul>
+        <p class="note">95% bootstrap intervals: accuracy 67.0&ndash;69.4, precision 64.7&ndash;67.4, recall 96.7&ndash;97.8, F1 77.7&ndash;79.6 (Table 7 and Supplementary E.1).</p>
+      </div>
+      <div class="rb-vis rv">
+        <canvas id="dots" role="img" aria-label="Unit chart of 5,658 pages: 3,321 scam pages flagged, 95 missed, 1,700 benign pages flagged, 542 passed"></canvas>
+        <div class="phish" id="phish"></div>
+        <p class="note">Task-specific phishing detectors (Table 3) reach higher binary accuracy, but they are built for phishing detection alone; ScamDet also classifies subtypes, grounds evidence and explains.</p>
+      </div>
+    </div>
+
+    <!-- leaderboard -->
+    <div class="lb rv" id="leaderboard">
+      <div class="lb-head">
+        <div><h3 class="rb-h">Against eight frontier models</h3><p class="note">Zero-shot, single-model comparison on the 3,324-page scam subset (Table 5). Choose a metric; the bars re-sort.</p></div>
+        <div class="lb-tabs" role="tablist" aria-label="Metric" id="lb-tabs"></div>
+      </div>
+      <ol class="lb-rows" id="lb-rows"></ol>
+      <details class="lb-full"><summary>Full Table 5</summary><div class="cmp-scroll"><table class="t5" id="t5"></table></div><p class="note">Valid = valid structured output rate; scam R = scam recall; tokens in millions (total) and per page. Bold marks the best value in each column.</p></details>
+    </div>
+
+    <!-- bubble -->
+    <div class="res-block g bub-block">
+      <div class="rb-text rv">
+        <h3 class="rb-h">Naming the scheme is not finding the evidence.</h3>
+        <p>Across the 25 subtypes, subtype F1 and grounding F1 barely move together (Spearman &rho; = 0.13). Online Shopping Scam reaches 86.3 subtype F1 but 3.9 grounding F1; Social Media Scam and Spoofed Login Page ground better than they classify.</p>
+        <div class="spot" id="spot" aria-live="polite"></div>
+        <p class="note">Marker area scales with log(1 + N). Dashed lines: macro subtype F1 34.5 and overall grounding F1 5.5. Values from Tables 8 and 10.</p>
+      </div>
+      <div class="rb-vis rv">
+        <div class="bub-wrap"><svg id="bubble" viewBox="0 0 640 460" role="img" aria-label="Scatter plot of subtype F1 against grounding F1 for 25 scam subtypes"></svg><div class="bub-tip" id="bub-tip" hidden></div></div>
+        <div class="seg sm" role="group" aria-label="Figure view"><button type="button" class="on" data-bview="live" aria-pressed="true">Interactive</button><button type="button" data-bview="paper" aria-pressed="false">Paper figure</button></div>
+        <img class="bub-paper" src="assets/figures/subtype-grounding-tradeoff.webp" alt="Figure 3 of the paper: subtype classification F1 against region grounding F1 across 25 subtypes" width="1400" height="1248" loading="lazy" hidden />
+      </div>
+    </div>
+
+    <!-- denominators -->
+    <div class="den rv" id="den">
+      <h3 class="rb-h">19,173 predicted boxes, 680 matches.</h3>
+      <div class="den-rows">
+        <div class="den-r"><p class="den-k">Expert boxes</p><div class="den-bar" style="--n:5489"><i class="m" style="--v:680"></i><i class="x" style="--v:4809"></i></div><p class="den-v"><b class="num">5,489</b> <span>680 matched, 4,809 missed</span></p></div>
+        <div class="den-r"><p class="den-k">Predicted boxes</p><div class="den-bar" style="--n:19173"><i class="m" style="--v:680"></i><i class="u" style="--v:17660"></i><i class="h" style="--v:833"></i></div><p class="den-v"><b class="num">19,173</b> <span>680 matched, 17,660 unmatched, 833 invalid</span></p></div>
+      </div>
+      <p class="note">Matches at IoU 0.5 in the end-to-end run (Table 9). Invalid boxes count as false positives, so the 18,493 false positives include all 833. Bars share one scale.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 07 CASES ================= -->
+<section id="cases" class="sec">
+  <div class="wrap">
+    <header class="sec-head g">
+      <div class="folio rv"><span class="folio-n">07</span><span class="folio-t">Cases</span></div>
+      <div class="sec-title rv">
+        <h2>Where it goes right, and three ways it goes wrong.</h2>
+        <p class="deck">Four cases from Figure 4 of the paper. Blue solid boxes are expert annotations; orange dashed boxes are ScamDet predictions.</p>
+      </div>
+    </header>
+    <div class="cases g rv" id="case-viewer">
+      <div class="case-stage">
+        <div class="cs-frame"><img id="case-img" src="assets/cases/case-a.webp" alt="" width="954" height="503" /></div>
+        <div class="cs-prog" aria-hidden="true"><i id="case-prog"></i></div>
+      </div>
+      <ol class="case-list" role="tablist" aria-label="Case studies">
+        <li><button type="button" role="tab" aria-selected="true" data-case="0"><span class="cl-k">(a)</span><span class="cl-t">Correct binary, subtype and grounding</span></button></li>
+        <li><button type="button" role="tab" aria-selected="false" data-case="1"><span class="cl-k">(b)</span><span class="cl-t">Binary false negative</span></button></li>
+        <li><button type="button" role="tab" aria-selected="false" data-case="2"><span class="cl-k">(c)</span><span class="cl-t">Subtype misclassification</span></button></li>
+        <li><button type="button" role="tab" aria-selected="false" data-case="3"><span class="cl-k">(d)</span><span class="cl-t">Boundary-displaced grounding</span></button></li>
+      </ol>
+      <div class="case-text" aria-live="polite">
+        <ul class="case-chips" id="case-chips"></ul>
+        <p id="case-desc"></p>
+        <button class="figbtn" type="button" data-lightbox="assets/figures/case-study-grid.webp" data-cap="Figure 4 of the paper: four representative cases. Blue solid boxes are expert annotations; orange dashed boxes are ScamDet predictions."><svg class="ic"><use href="#i-expand"/></svg>View Figure 4 of the paper</button>
+      </div>
+    </div>
+    <div class="lessons g rv">
+      <p class="lessons-k">Three recurring challenges</p>
+      <ol>
+        <li>Deceptive webpages closely mimic legitimate visual conventions.</li>
+        <li>Semantically related fraud subtypes share much of their vocabulary.</li>
+        <li>Predicted evidence regions often differ from expert annotations in spatial granularity.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 08 GET STARTED ================= -->
+<section id="start" class="sec panel">
+  <div class="wrap">
+    <header class="sec-head g">
+      <div class="folio rv"><span class="folio-n">08</span><span class="folio-t">Get started</span></div>
+      <div class="sec-title rv">
+        <h2>Stream records without downloading 29.73&nbsp;GB.</h2>
+        <p class="deck">The Hugging Face release holds the 5,658-page benchmark in the <code>samples</code> configuration and supporting annotation files in <code>artifacts</code>, both under the <code>full</code> split: 79 Zstd-compressed Parquet shards, about 29.73&nbsp;GB, with original media stored as bytes.</p>
+      </div>
+    </header>
+    <div class="g start">
+      <div class="code rv">
+        <div class="tabs" role="tablist" aria-label="Code examples">
+          <button type="button" role="tab" aria-selected="true" aria-controls="tab-py" id="t-py">Load the data</button>
+          <button type="button" role="tab" aria-selected="false" aria-controls="tab-sh" id="t-sh">Set up the code</button>
+          <button type="button" role="tab" aria-selected="false" aria-controls="tab-val" id="t-val">Validate offline</button>
+        </div>
+        <div class="tabpanel" role="tabpanel" id="tab-py" aria-labelledby="t-py">
+          <button class="copy" type="button" data-copy="code-py" aria-label="Copy code"><svg class="ic"><use href="#i-copy"/></svg><span>Copy</span></button>
+<pre id="code-py"><code><span class="c"># pip install datasets</span>
+
+<span class="k">from</span> datasets <span class="k">import</span> load_dataset
+
+pages = load_dataset(
+    <span class="s">"kirco567/ScamWeb-Dataset"</span>, <span class="s">"samples"</span>, split=<span class="s">"full"</span>, streaming=<span class="k">True</span>
+)
+page = next(iter(pages))
+print(page[<span class="s">"sample_id"</span>], page[<span class="s">"category"</span>])</code></pre>
+        </div>
+        <div class="tabpanel" role="tabpanel" id="tab-sh" aria-labelledby="t-sh" hidden>
+          <button class="copy" type="button" data-copy="code-sh" aria-label="Copy code"><svg class="ic"><use href="#i-copy"/></svg><span>Copy</span></button>
+<pre id="code-sh"><code>git clone https://github.com/Kirito14IT/ScamWeb.git
+cd ScamWeb
+python3.12 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -e .</code></pre>
+        </div>
+        <div class="tabpanel" role="tabpanel" id="tab-val" aria-labelledby="t-val" hidden>
+          <button class="copy" type="button" data-copy="code-val" aria-label="Copy code"><svg class="ic"><use href="#i-copy"/></svg><span>Copy</span></button>
+<pre id="code-val"><code><span class="c"># unit suite with fake clients: no paid API calls</span>
+python -m unittest \
+  tests.test_scammark \
+  tests.test_scamweb_dataset \
+  tests.test_scammark_evaluation \
+  tests.test_paper_baselines
+
+<span class="c"># Full-V2 preflight (Linux): checks the frozen inputs, issues no API requests</span>
+python -m scammark.run_experiment \
+  --config configs/qwen3_dashscope_server_full_v2.toml \
+  --full \
+  --validate-only</code></pre>
+        </div>
+      </div>
+      <div class="facts rv">
+        <dl>
+          <div><dt><code>samples</code></dt><dd><b class="num">5,658</b> rows: metadata, screenshot, MHTML and expert annotations</dd></div>
+          <div><dt><code>artifacts</code></dt><dd><b class="num">7,845</b> rows: machine annotations, collection workbook, annotation documentation</dd></div>
+          <div><dt>Supervised split</dt><dd>Fixed 70&nbsp;/&nbsp;15&nbsp;/&nbsp;15 partition, versioned in the code repository</dd></div>
+          <div><dt>Reproducibility</dt><dd>Seed 2027, temperature 0, hashed prompts and inputs, checkpointed API stages</dd></div>
+          <div><dt>Licenses</dt><dd>Code under Apache-2.0; dataset terms on the Hugging Face dataset card</dd></div>
+        </dl>
+        <div class="links">
+          <a class="btn" href="https://huggingface.co/datasets/kirco567/ScamWeb-Dataset" target="_blank" rel="noopener"><svg class="ic"><use href="#i-db"/></svg><span>Dataset card</span></a>
+          <a class="btn" href="https://github.com/Kirito14IT/ScamWeb" target="_blank" rel="noopener"><svg class="ic"><use href="#i-github"/></svg><span>Code repository</span></a>
+        </div>
+      </div>
+    </div>
+    <div class="safety rv">
+      <svg class="ic big" aria-hidden="true"><use href="#i-shield"/></svg>
+      <div>
+        <h3>Handle with care</h3>
+        <ul>
+          <li>ScamWeb is intended solely for defensive research on cyber-enabled fraud.</li>
+          <li>Scam pages may contain deceptive, explicit or otherwise harmful content. Never open collected MHTML as trusted local content; process raw pages in an isolated research environment.</li>
+          <li>Automated detection produces false positives, notably for legitimate niche or minority-owned businesses. Deployments need human review and subgroup evaluation across languages.</li>
+        </ul>
+        <p><a href="https://github.com/Kirito14IT/ScamWeb/blob/main/SECURITY.md" target="_blank" rel="noopener">Read SECURITY.md<svg class="ic"><use href="#i-arrow"/></svg></a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 09 CITE ================= -->
+<section id="cite" class="sec">
+  <div class="wrap">
+    <header class="sec-head g">
+      <div class="folio rv"><span class="folio-n">09</span><span class="folio-t">Citation</span></div>
+      <div class="sec-title rv"><h2>Cite ScamWeb.</h2></div>
+    </header>
+    <div class="bib rv">
+      <button class="copy" type="button" data-copy="bibtex" aria-label="Copy BibTeX"><svg class="ic"><use href="#i-copy"/></svg><span>Copy</span></button>
+<pre id="bibtex"><code>@inproceedings{wang2027scamweb,
+  title     = {ScamWeb: A Multimodal Benchmark for Grounded Understanding of Cyber-enabled Fraud Webpages},
+  author    = {Wang, Zhihua and Li, Nan and Chen, Ziyang and Feng, Yunhao and Wu, Songyang},
+  booktitle = {Proceedings of the AAAI Conference on Artificial Intelligence},
+  year      = {2027}
+}</code></pre>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap g foot-g">
+    <div class="foot-brand"><img src="assets/logo-128.png" alt="" width="44" height="44" loading="lazy" /><div><p class="fb-t">ScamWeb</p><p class="fb-s">AAAI 2027</p></div></div>
+    <ul class="foot-links">
+      <li><a href="/papers/scamweb.pdf" target="_blank" rel="noopener">Paper</a></li>
+      <li><a href="https://github.com/Kirito14IT/ScamWeb" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a href="https://huggingface.co/datasets/kirco567/ScamWeb-Dataset" target="_blank" rel="noopener">Hugging Face</a></li>
+      <li><a href="https://kirito14it.github.io/" target="_blank" rel="noopener">Zhihua Wang&rsquo;s homepage</a></li>
+    </ul>
+    <p class="foot-note">Page structure inspired by <a href="https://cua-lite.github.io/" target="_blank" rel="noopener">CUA-Lite</a>, used with its author&rsquo;s permission. Set in TeX Gyre Heros (GUST Font License).</p>
+  </div>
+</footer>
+
+<button class="motion" id="motion" type="button" aria-pressed="false" aria-label="Pause motion" title="Pause motion"><svg class="ic" aria-hidden="true"><use href="#i-pause"/></svg><span>Pause motion</span></button>
+
+<dialog class="lightbox" id="lightbox" aria-label="Figure">
+  <form method="dialog"><button class="lb-close" aria-label="Close"><svg class="ic"><use href="#i-x"/></svg></button></form>
+  <img id="lightbox-img" alt="" />
+  <p id="lightbox-cap"></p>
+</dialog>
+
+<script src="js/data.js" defer></script>
+<script src="js/main.js" defer></script>
+<script src="js/hero.js" defer></script>
+<script src="js/charts.js" defer></script>
+<script src="js/flow.js" defer></script>
+</body>
+</html>

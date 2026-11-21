@@ -188,13 +188,18 @@ h1 { font-size: clamp(60px, 7.5vw, 112px); line-height: .84; letter-spacing: -.0
 /* ---------- belt ---------- */
 .belt { padding: 40px 0 22px; overflow: hidden; }
 .belt-viewport { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); }
-.belt-track { display: flex; width: max-content; animation: belt 95s linear infinite; }
+.belt-viewport { display: grid; row-gap: 18px; }
+.belt-row { overflow: hidden; }
+.belt-track { display: flex; width: max-content; animation: belt 120s linear infinite; }
+.belt-row--rev { margin-left: -142px; }
+.belt-row--rev .belt-track { animation-name: beltrev; animation-duration: 132s; }
 .belt-viewport:hover .belt-track { animation-play-state: paused; }
 @keyframes belt { to { transform: translateX(-50%); } }
-.tile { flex: none; width: 300px; margin: 0 18px 0 0; }
+@keyframes beltrev { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+.tile { flex: none; width: 268px; margin: 0 16px 0 0; }
 .tile-b { display: flex; gap: 5px; align-items: center; height: 18px; padding: 0 8px; border: 1px solid var(--rule-2); border-bottom: 0; background: var(--panel-solid); }
 .tile-b i { width: 6px; height: 6px; border-radius: 50%; background: #D0D0D5; }
-.tile img { display: block; width: 100%; height: 172px; object-fit: cover; object-position: top; border: 1px solid var(--rule-2); background: #fff; }
+.tile img { display: block; width: 100%; height: 150px; object-fit: cover; object-position: top; border: 1px solid var(--rule-2); background: #fff; }
 .tile figcaption { display: flex; justify-content: space-between; gap: 10px; margin-top: 8px; font-size: 12.5px; color: var(--ink-2); }
 .tile figcaption span { flex: none; color: var(--ink-3); }
 .belt-note { margin-top: 16px; font-size: 12.5px; color: var(--ink-3); }
@@ -337,7 +342,7 @@ table.cmp { width: 100%; min-width: 880px; border-collapse: collapse; font-size:
 .mod p:not(.mod-k) { font-size: 14px; color: var(--ink-2); line-height: 1.45; }
 .mod-g { background: var(--red-05); }
 .mod-g .mod-k { color: var(--red); }
-.figbtn { display: inline-flex; align-items: center; gap: 8px; height: 38px; margin-top: 20px; padding: 0 14px; border: 1.5px solid var(--ink); background: #fff; color: var(--ink); font: 700 14px var(--sans); cursor: pointer; }
+.figbtn { display: inline-flex; align-items: center; gap: 8px; height: 38px; margin: 20px 10px 0 0; padding: 0 14px; text-decoration: none; border: 1.5px solid var(--ink); background: #fff; color: var(--ink); font: 700 14px var(--sans); cursor: pointer; }
 .figbtn:hover { background: var(--ink); color: #fff; }
 
 /* ---------- 03 four views ---------- */
@@ -655,6 +660,17 @@ pre .c { color: var(--ink-3); }
 .safety a { display: inline-flex; align-items: center; gap: 4px; font-weight: 700; }
 .safety a .ic { width: 15px; height: 15px; }
 
+.viewer { position: relative; background: #fff; border: 1.5px solid var(--ink); }
+.viewer-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 16px; padding: 10px 14px; border-bottom: 1px solid var(--rule); }
+.vb-t { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; font-size: 14px; }
+.vb-t span { color: var(--ink-2); font-size: 13px; }
+.vb-a { display: inline-flex; align-items: center; gap: 4px; font-size: 13.5px; font-weight: 700; }
+.vb-a .ic { width: 15px; height: 15px; }
+.viewer-frame { position: relative; height: 560px; background: var(--panel-solid); }
+.vf-wait { position: absolute; inset: 0; display: grid; place-items: center; font-size: 14px; color: var(--ink-3); }
+.viewer-frame iframe { position: relative; display: block; width: 100%; height: 100%; border: 0; }
+.viewer-note { margin: 12px 0 48px; }
+
 /* ---------- 09 cite ---------- */
 .bib { position: relative; background: #fff; border: 1.5px solid var(--ink); }
 .bib pre { padding-right: 96px; }
@@ -779,6 +795,10 @@ html.paused *, html.paused *::before, html.paused *::after { animation-play-stat
   .b-src code { font-size: 10px; }
   .b-defang { display: none; }
   .motion span { display: none; }
+  .viewer-frame { height: 480px; }
+  .tile { width: 224px; }
+  .tile img { height: 124px; }
+  .belt-row--rev { margin-left: -112px; }
   #bubble .tkl { font-size: 19px; }
   #bubble .axl { font-size: 20px; }
   #bubble .refl { font-size: 18px; }
@@ -791,7 +811,8 @@ html.paused *, html.paused *::before, html.paused *::after { animation-play-stat
   html { scroll-behavior: auto; }
   .js .gridlines i { animation: none; transform: none; }
   .belt-track, .lm-track { animation: none; }
-  .belt-viewport, .lmarquee { overflow-x: auto; }
+  .belt-row, .lmarquee { overflow-x: auto; }
+  .belt-row--rev { margin-left: 0; }
   .flow::before, .sd-diagram::before { animation: none; }
   .stack, .lyr, .stack-labels li { animation: none; }
   .stack { transform: translateY(-46%) rotateX(57deg) rotateZ(-36deg); }

@@ -154,8 +154,13 @@
       track.appendChild(c);
     });
     track.setAttribute('data-duped', '1');
+    // The CSS loop may have started before the clones existed; restart it so
+    // translateX(-50%) is measured against the doubled track.
+    track.style.animation = 'none';
+    void track.offsetWidth;
+    track.style.animation = '';
   };
-  if (!reduced) SW.dupe(document.querySelector('.belt-track'));
+  if (!reduced) document.querySelectorAll('.belt-track').forEach(function (t) { SW.dupe(t); });
 
   /* copy buttons */
   document.querySelectorAll('[data-copy]').forEach(function (btn) {

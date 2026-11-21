@@ -332,6 +332,7 @@
         <div class="mod mod-g" data-ev=""><p class="mod-k">Grounding target</p><p><b>Vision:</b> deceptive screenshot regions as bounding boxes. <b>Text:</b> an expert rationale for each region.</p></div>
       </div>
       <p class="note">Table 2 of the paper: representative scam types by the modality that carries their evidence.</p>
+      <a class="figbtn" href="#viewer"><svg class="ic"><use href="#i-db"/></svg>Browse the records in the dataset viewer</a>
       <button class="figbtn" type="button" data-lightbox="assets/figures/dataset-overview.webp" data-cap="Figure 1 of the paper: data sources, collection and recovery, processed artifacts, annotation, composition and samples."><svg class="ic"><use href="#i-expand"/></svg>View the paper&rsquo;s dataset figure</button>
     </div>
   </div>
@@ -616,10 +617,22 @@
     <header class="sec-head g">
       <div class="folio rv"><span class="folio-n">08</span><span class="folio-t">Get started</span></div>
       <div class="sec-title rv">
-        <h2>Stream records without downloading 29.73&nbsp;GB.</h2>
-        <p class="deck">The Hugging Face release holds the 5,658-page benchmark in the <code>samples</code> configuration and supporting annotation files in <code>artifacts</code>, both under the <code>full</code> split: 79 Zstd-compressed Parquet shards, about 29.73&nbsp;GB, with original media stored as bytes.</p>
+        <h2>Browse the records, or stream them without downloading 29.73&nbsp;GB.</h2>
+        <p class="deck">The Hugging Face release holds the 5,658-page benchmark in the <code>samples</code> configuration and supporting annotation files in <code>artifacts</code>, both under the <code>full</code> split: 79 Zstd-compressed Parquet shards, about 29.73&nbsp;GB, with original media stored as bytes. A 1&nbsp;MB <code>preview</code> configuration repeats the records&rsquo; text fields for the viewer below.</p>
       </div>
     </header>
+    <div class="viewer rv" id="viewer" data-ev="Live from Hugging Face">
+      <div class="viewer-bar">
+        <p class="vb-t"><b>Dataset viewer</b><span>kirco567/ScamWeb-Dataset &middot; <code>preview</code> &middot; <code>full</code></span></p>
+        <a class="vb-a" href="https://huggingface.co/datasets/kirco567/ScamWeb-Dataset/viewer/preview/full" target="_blank" rel="noopener">Open on Hugging Face<svg class="ic"><use href="#i-arrow"/></svg></a>
+      </div>
+      <div class="viewer-frame">
+        <p class="vf-wait" aria-hidden="true">Loading the Hugging Face dataset viewer&hellip;</p>
+        <iframe src="https://huggingface.co/datasets/kirco567/ScamWeb-Dataset/embed/viewer/preview/full" title="Hugging Face dataset viewer: kirco567/ScamWeb-Dataset, preview configuration, full split" width="100%" height="560" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      </div>
+    </div>
+    <p class="note viewer-note rv">The official Hugging Face viewer, loaded from huggingface.co. It shows the <code>preview</code> subset: the metadata and expert annotations of all 5,658 records, scam pages first. Screenshots and MHTML archives live in <code>samples</code>. Scam URLs appear there as plain text: open them only inside an isolated research environment.</p>
+
     <div class="g start">
       <div class="code rv">
         <div class="tabs" role="tablist" aria-label="Code examples">
@@ -668,6 +681,7 @@ python -m scammark.run_experiment \
         <dl>
           <div><dt><code>samples</code></dt><dd><b class="num">5,658</b> rows: metadata, screenshot, MHTML and expert annotations</dd></div>
           <div><dt><code>artifacts</code></dt><dd><b class="num">7,845</b> rows: machine annotations, collection workbook, annotation documentation</dd></div>
+          <div><dt><code>preview</code></dt><dd><b class="num">5,658</b> rows: the records&rsquo; text fields and expert annotations, 1&nbsp;MB, for browsing</dd></div>
           <div><dt>Supervised split</dt><dd>Fixed 70&nbsp;/&nbsp;15&nbsp;/&nbsp;15 partition, versioned in the code repository</dd></div>
           <div><dt>Reproducibility</dt><dd>Seed 2027, temperature 0, hashed prompts and inputs, checkpointed API stages</dd></div>
           <div><dt>Licenses</dt><dd>Code under Apache-2.0; dataset terms on the Hugging Face dataset card</dd></div>

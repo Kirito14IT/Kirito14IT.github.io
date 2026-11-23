@@ -18,7 +18,7 @@ const labels = {
   </nav>
   {languages.map((language, index) => {
     const resume = manifest.resumes[labels[language].manifestKey];
-    const url = `${resume.path}?v=${resume.sha256.slice(0, 12)}`;
+    const versionedUrl = `${resume.path}?v=${resume.sha256.slice(0, 12)}`;
     return (
       <section id={`resume-${language}`} class="resume-panel" aria-labelledby={`resume-title-${language}`}>
         <header class="resume-panel-header">
@@ -30,11 +30,11 @@ const labels = {
             </p>
           </div>
           <div class="resume-actions">
-            <a class="button primary" href={url} target="_blank" rel="noopener noreferrer">{isChinese ? "新窗口打开" : "Open PDF"}</a>
-            <a class="button ghost" href={url} download={labels[language].filename}>{isChinese ? "下载 PDF" : "Download PDF"}</a>
+            <a class="button primary" href={resume.path} target="_blank" rel="noopener noreferrer">{isChinese ? "新窗口打开" : "Open PDF"}</a>
+            <a class="button ghost" href={versionedUrl} download={labels[language].filename}>{isChinese ? "下载 PDF" : "Download PDF"}</a>
           </div>
         </header>
-        <iframe class="resume-preview" src={`${url}#view=FitH`} title={`${labels[language].title} PDF`} loading={index === 0 ? "eager" : "lazy"}></iframe>
+        <iframe class="resume-preview" src={`${versionedUrl}#view=FitH`} title={`${labels[language].title} PDF`} loading={index === 0 ? "eager" : "lazy"}></iframe>
         <p class="resume-help">{isChinese ? "若浏览器无法显示预览，可点击上方按钮打开或下载。" : "If the preview is unavailable, use the buttons above to open or download the PDF."}</p>
       </section>
     );

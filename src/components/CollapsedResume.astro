@@ -7,7 +7,7 @@ import type { Locale } from "@i18n/index";
 const { locale } = Astro.props as { locale: Locale };
 const isChinese = locale === "zh";
 const resume = manifest.resumes.zh;
-const url = `${resume.path}?v=${resume.sha256.slice(0, 12)}`;
+const versionedUrl = `${resume.path}?v=${resume.sha256.slice(0, 12)}`;
 ---
 
 <details class="collapsed-resume" data-collapsed-resume>
@@ -18,12 +18,12 @@ const url = `${resume.path}?v=${resume.sha256.slice(0, 12)}`;
   <div class="collapsed-resume-content">
     <p class="collapsed-meta">{isChinese ? "最近更新：" : "Last updated: "}<time datetime={resume.updatedDate}>{resume.updatedDate.replaceAll("-", ".")}</time> · PDF · {resume.pageCount} {isChinese ? "页" : resume.pageCount === 1 ? "page" : "pages"}</p>
     <div class="collapsed-actions">
-      <a class="button ghost" href={url} target="_blank" rel="noopener noreferrer">{isChinese ? "新窗口打开" : "Open PDF"}</a>
-      <a class="button ghost" href={url} download="ZhihuaWang_cv_cn_concise.pdf">{isChinese ? "下载精简版" : "Download concise CV"}</a>
+      <a class="button ghost" href={resume.path} target="_blank" rel="noopener noreferrer">{isChinese ? "新窗口打开" : "Open PDF"}</a>
+      <a class="button ghost" href={versionedUrl} download="ZhihuaWang_cv_cn_concise.pdf">{isChinese ? "下载精简版" : "Download concise CV"}</a>
     </div>
     <div data-collapsed-preview></div>
     <template data-collapsed-template>
-      <iframe src={`${url}#view=FitH`} title={isChinese ? "精简版中文简历 PDF" : "Concise Chinese CV PDF"} class="collapsed-preview"></iframe>
+      <iframe src={`${versionedUrl}#view=FitH`} title={isChinese ? "精简版中文简历 PDF" : "Concise Chinese CV PDF"} class="collapsed-preview"></iframe>
     </template>
     <p class="collapsed-meta">{isChinese ? "若浏览器无法显示预览，可点击上方按钮打开或下载。" : "If the preview is unavailable, use the buttons above to open or download the PDF."}</p>
   </div>
